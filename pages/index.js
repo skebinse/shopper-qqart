@@ -3,16 +3,16 @@ import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '../styles/join.module.css'
 import {useEffect} from "react";
-import {useRouter} from "next/router";
 import Common from "../js/common";
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home(props) {
 
-  const $cmm = Common();
 
   useEffect(() => {
+
+    const $cmm = Common();
 
     $cmm.checkLogin();
   }, []);

@@ -4,7 +4,7 @@ import styles from "../../styles/join.module.css"
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import Head from "next/head";
-import Common, {$cmm} from "../../js/common";
+import Common from "../../js/common";
 import {useS3Upload} from "next-s3-upload";
 
 export default function Info() {
@@ -112,7 +112,7 @@ export default function Info() {
                     success: res => {
 
                         $cmm.util.setLs($cmm.Cont.LOING_INFO, res);
-                        $cmm.goPage('/');
+                        $cmm.goPage('./comp');
                     }
                 });
             };
@@ -137,7 +137,7 @@ export default function Info() {
     return (
         <div className={styles.join}>
             <Head>
-                <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+                <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" defer></script>
             </Head>
             <HeadTitle />
             <NaviStep step={3} />

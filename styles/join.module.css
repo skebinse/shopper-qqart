@@ -68,3 +68,9 @@
 .join .popup{top: 100%;position: fixed;transition: all 0.5s;width: 100%;height: 100%;background-color: #ececec;opacity: 0}
 .join .popup.active{top: 0;opacity: 1}
 .join .daumPost > div{width: 100% !important;}
+
+.join > img{margin: 140px auto 0;display: block;}
+.join > h3{color: #373454;font-size: 24px;font-weight: 500;padding-top: 54px;width: 100%;text-align: center;}
+.join > p{color: #373454;font-size: 14px;font-weight: 300;text-align: center;padding-top: 13px;}
+.join > p em{color: #02B763}
+.join > a{background-color: #02B763;border-radius: 12px;color: #FFFFFF;font-size: 16px;font-weight: 700;padding: 15px 24px;margin: 40px auto 0;display: table;}

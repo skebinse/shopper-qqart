@@ -3,6 +3,7 @@ import Head from "next/head";
 import {useEffect} from "react";
 import Common from "../../js/common";
 import {useRouter} from "next/navigation";
+import Image from "next/image";
 
 export default function Login(props) {
 
@@ -67,14 +68,14 @@ export default function Login(props) {
     return (
         <>
             <Head>
-                <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+                <script src="https://developers.kakao.com/sdk/js/kakao.js" async></script>
             </Head>
             <div className={styles.login}>
-                <img src="/assets/images/logoGreen.svg" />
+                <Image alt={'로고'} src="/assets/images/logoGreen.svg" width={241} height={52} />
                 <h3>로그인</h3>
                 <p>퀵퀵카트 쇼퍼는 SNS로 로그인하여 간편하게 서비스를 이용하실 수 있습니다.</p>
                 <button type={'button'} onClick={kakaoLoing}>
-                    <img alt="카카오톡 아이콘" src="/assets/images/icon/iconKakaotalk.svg" />
+                    <Image alt="카카오톡 아이콘" src="/assets/images/icon/iconKakaotalk.svg" width={33.5} height={22.6} />
                         카카오톡으로 로그인
                 </button>
             </div>

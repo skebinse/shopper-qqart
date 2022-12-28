@@ -148,7 +148,8 @@ export const $cmm = {
          * @returns {any}
          */
         getLs : function(key) {
-            return JSON.parse(localStorage.getItem(key));
+            console.log(window)
+            return JSON.parse(window.localStorage.getItem(key));
         },
 
         /**
@@ -157,7 +158,7 @@ export const $cmm = {
          * @param val
          */
         setLs : function(key, val) {
-            localStorage.setItem(key, JSON.stringify(val));
+            window.localStorage.setItem(key, JSON.stringify(val));
         },
 
         /**
@@ -165,7 +166,7 @@ export const $cmm = {
          * @param key
          */
         rmLs : function(key) {
-            localStorage.removeItem(key);
+            window.localStorage.removeItem(key);
         },
     },
 

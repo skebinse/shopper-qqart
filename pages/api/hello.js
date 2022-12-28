@@ -7,12 +7,13 @@ export default async function handler(req, res) {
 
   await getConnectPol(async conn => {
 
+      console.log(req.query);
       try {
           const [rows, fields] = await conn.query('select * from T_USER_INFO limit 10');
 
           res.status(200).json(rows);
       } catch (e) {
-          console.log(e);
+
           res.status(500).json({msg: '에러에러'});
       }
 

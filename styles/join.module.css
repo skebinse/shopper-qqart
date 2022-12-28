@@ -1,0 +1,70 @@
+.step{display: flex;padding: 0 17px;}
+.step span{background-color: #E4E4E4;border-radius: 6px;display: inline-block;height: 7px;width: 100%;margin-right: 12px;}
+.step span.on{background-color: #02B763;}
+.step span:last-child{margin-right: 0;}
+
+.join .content{padding: 17px 17px 100px;}
+.join .content > h3{color: #333333;font-size: 18px;font-weight: 700;}
+.join .content > p{color: #333333;font-size: 13px;padding-top: 5px;}
+.join .content ul.clau{border-radius: 12px; border: 1px solid #E4E4E4;background-color: #FFFFFF;margin-top: 30px}
+.join .content ul.clau li{border-bottom: 1px solid #E4E4E4;display: flex;padding: 16px;}
+.join .content ul.clau li:first-child,
+.join .content ul.clau li:last-child{border-bottom: none;}
+.join .content ul.clau li input{}
+.join .content ul.clau li label{color: #171F24;font-size: 15px;flex:1;padding-left: 34px;display: table;}
+.join .content ul.clau li label em{color: #F4997A;}
+.join .content ul.clau li label span{color: #333333;font-size: 13px;opacity: 0.5;padding-top: 5px;display: block;}
+.join .content ul.clau li a{color: #02B763;font-size: 15px;}
+.join .content .btnArea{background-color: #ffffff;box-shadow: #0000000D 0px -5px 16px;padding: 17px;position: fixed;bottom: 0;left:0;width: calc(100% - 34px);}
+.join .content .btnArea button{background-color: #02B763;border-radius: 12px;color: #FFFFFF;font-size: 16px;font-weight: 500;padding: 17px;width: 100%;border: none;}
+.join .content .btnArea button:disabled{opacity: 0.4}
+
+.join .content ul.form{border-radius: 12px; border: 1px solid #E4E4E4;background-color: #FFFFFF;margin-top: 30px}
+.join .content ul.form li{padding: 16px;}
+.join .content ul.form li label{color: #333333;font-size: 13px;display: block}
+.join .content ul.form li div{padding-top: 25px;display: flex;align-items: center;}
+.join .content ul.form li div input{border: none;font-size: 17px;width: 100%;align-items: end;padding: 0;}
+.join .content ul.form li div input:focus{outline: none;}
+.join .content ul.form li div button{background-color: #CDCDCD;border-radius: 99px;padding: 6px 6px;border: none;display: flex;}
+.join .content ul.form li div span{color: #02B763;font-size: 12px;}
+.join .content ul.form li div a{color: #333333;font-size: 14px;width: 60px;padding-left: 24px;}
+
+.join .content ul.cetino{border-radius: 12px; border: 1px solid #E4E4E4;background-color: #FFFFFF;margin-top: 30px}
+.join .content ul.cetino li{padding: 16px;}
+.join .content ul.cetino li label{color: #333333;font-size: 13px;display: block}
+.join .content ul.cetino li div{padding-top: 25px;display: flex;align-items: center;}
+.join .content ul.cetino li div input{border: none;font-size: 17px;width: 100%;align-items: end;padding: 0;}
+.join .content ul.cetino li div input:focus{outline: none;}
+.join .content ul.cetino li div button{background-color: #CDCDCD;border-radius: 99px;padding: 6px 6px;border: none;display: flex;}
+.join .content ul.cetino li div span{color: #02B763;font-size: 12px;}
+.join .content ul.cetino li div a{color: #333333;font-size: 14px;width: 60px;padding-left: 24px;}
+
+.join .content ul.info{padding: 24px 0 6px;}
+.join .content ul.info li{border-radius: 12px;border: solid 1px #E4E4E4;padding: 11px 17px 16px;margin-top: 14px;background-color: #ffffff;}
+.join .content ul.info li.error{margin-bottom: 40px;border: solid 2px #F4997A;}
+.join .content ul.info li label{color: #333333;font-size: 13px;}
+.join .content ul.info li > span{color: #333333;font-size: 17px;display: block;padding-top: 25px;opacity: 0.5}
+.join .content ul.info li > span.error{display: none;}
+.join .content ul.info li.error > span.error{display: block;color: #F4997A;font-size: 14px;font-weight: 300;position: absolute;}
+.join .content ul.info li > div > div{display: flex;padding-top: 21px;}
+.join .content ul.info li > div > div span{color: #333333;font-size: 17px;flex: 1;}
+.join .content ul.info li > div > div button{border: 1px solid #CDCDCD;border-radius: 6px;color: #333333;font-size: 12px;padding: 7px 16px;background-color: #ffffff;}
+.join .content ul.info li > div > span{color: #333333;font-size: 17px;display: block;padding-top: 10px;}
+.join .content ul.info li > div > input{border: none;color: #333333;font-size: 17px;margin-top: 14px;width: 100%;}
+.join .content ul.info li > div > input:focus{outline: none;}
+.join .content ul.info li > div > input::placeholder{font-weight: 300;opacity: 0.5;}
+.join .content ul.info li > div > button{background-color: #FFFFFF;border: 1px solid #CDCDCD;color: #333333;font-size: 12px;padding: 7px 17px;border-radius: 6px;}
+.join .content ul.info li > div > textarea{border: none;color: #333333;font-size: 17px;margin-top: 14px;width: 100%;}
+.join .content ul.info li > div > textarea::placeholder{font-weight: 300;opacity: 0.5;}
+.join .content ul.info li > div > span{color: #333333;font-size: 17px;font-weight: 300;text-align: right;}
+.join .content ul.info li > div.zip{display: flex;align-items: center;padding-top: 10px;}
+.join .content ul.info li > div.zip p{flex: 1;padding-right: 10px;}
+.join .content ul.info li > div.zip p span{color: #333333;opacity: 0.5;font-size: 17px;font-weight: 300;}
+.join .content .profile{text-align: center;}
+.join .content .profile img{width: 96px;height: 96px;border-radius: 100%;display: block;margin: 0 auto;margin: 32px auto 13px;}
+.join .content .profile input{display: none}
+.join .content .profile label{border: 1px solid #CDCDCD;border-radius: 6px;color: #333333;font-size: 16px;padding: 11px 14px;background-color: #ffffff;font-weight: 700;display: inline-block;}
+.join .content .infoTxt{color: #F4997A;font-size: 14px;font-weight: 700;text-align: center}
+.join .popup{top: 100%;position: fixed;transition: all 0.5s;width: 100%;height: 100%;background-color: #ececec;opacity: 0}
+.join .popup.active{top: 0;opacity: 1}
+.join .daumPost > div{width: 100% !important;}

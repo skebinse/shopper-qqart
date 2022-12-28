@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35">
+  <g id="btn_back" transform="translate(0 -1.78)">
+    <g id="box" transform="translate(0 1.78)" fill="#fff" stroke="#cdcdcd" stroke-width="1" stroke-dasharray="0 0">
+      <rect width="35" height="35" rx="10" stroke="none"/>
+      <rect x="0.5" y="0.5" width="34" height="34" rx="9.5" fill="none"/>
+    </g>
+    <path id="패스_3202" data-name="패스 3202" d="M16.251,7.75H2.568l6.5-6.469A.75.75,0,1,0,8.009.219L.226,7.966a.744.744,0,0,0,0,1.068l7.783,7.747a.75.75,0,1,0,1.058-1.062L2.568,9.25H16.251a.75.75,0,0,0,0-1.5" transform="translate(9 10.78)" fill="#333"/>
+  </g>
+</svg>

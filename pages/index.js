@@ -1,16 +1,20 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/join.module.css'
 import {useEffect} from "react";
 import {useRouter} from "next/router";
+import Common from "../js/common";
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+export default function Home(props) {
+
+  const $cmm = Common();
 
   useEffect(() => {
-    fetch('/api/hello').then(res => res.json()).then(res => console.log(res));
+
+    $cmm.checkLogin();
   }, []);
 
   return (

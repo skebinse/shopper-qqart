@@ -1,0 +1,12 @@
+<svg id="check_on" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="bg" d="M19,24H5a5.006,5.006,0,0,1-5-5V5A5.006,5.006,0,0,1,5,0H19a5.006,5.006,0,0,1,5,5V19A5.006,5.006,0,0,1,19,24ZM7.334,10.97a1.333,1.333,0,0,0-.928,2.291l3.125,3.03a1.334,1.334,0,0,0,1.857,0l6.875-6.667a1.333,1.333,0,0,0-1.857-1.914l-5.947,5.766-2.2-2.13A1.326,1.326,0,0,0,7.334,10.97Z" fill="#02b763"/>
+    </clipPath>
+  </defs>
+  <g id="Component_Checkbox_Checked" data-name="Component/Checkbox/Checked" clip-path="url(#clip-path)">
+    <g id="Color_indigo" data-name="Color/🎨indigo" transform="translate(-4 -4)">
+      <rect id="bg-2" data-name="bg" width="32" height="32" fill="#02b763"/>
+    </g>
+  </g>
+</svg>

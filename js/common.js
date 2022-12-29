@@ -148,7 +148,7 @@ export const $cmm = {
          * @returns {any}
          */
         getLs : function(key) {
-            console.log(window)
+
             return JSON.parse(window.localStorage.getItem(key));
         },
 
@@ -267,7 +267,7 @@ const Common = () => {
      * @returns {boolean}
      */
     $cmm.checkLogin = () => {
-        console.log('checkLogin')
+
         const isLogin = !!$cmm.util.getLs($cmm.Cont.LOING_INFO) && !!$cmm.util.getLs($cmm.Cont.LOING_INFO).SHPR_ID;
         if(!isLogin && !!router) {
 

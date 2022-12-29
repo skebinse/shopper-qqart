@@ -2,19 +2,21 @@ import Common from "../../js/common";
 import Link from "next/link";
 import styles from "../../styles/join.module.css"
 import {useEffect, useState} from "react";
+import Image from "next/image";
 
 export default function Comp() {
 
-    const $cmm = Common();
     const [shprNcnm, setShprNcnm] = useState();
 
     useEffect(() => {
+        const $cmm = Common();
+
         setShprNcnm($cmm.getLoginInfo('SHPR_NCNM'))
     }, []);
 
     return (
         <div className={styles.join}>
-            <img src="/assets/images/logoGreen.svg" />
+            <Image alt={'로고'} src="/assets/images/logoGreen.svg" width={241} height={52} />
             <h3>쇼퍼 등록 완료</h3>
             <p>
                 <em>{shprNcnm}</em>님의 첫 출발을 진심으로<br/>

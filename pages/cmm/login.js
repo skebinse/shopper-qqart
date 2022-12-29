@@ -1,13 +1,10 @@
 import styles from "../../styles/login.module.css";
 import Head from "next/head";
-import {useEffect} from "react";
 import Common from "../../js/common";
-import {useRouter} from "next/navigation";
 import Image from "next/image";
 
 export default function Login(props) {
 
-    const router = useRouter();
     const $cmm = Common();
     /**
      * 카카오 로그인
@@ -17,6 +14,8 @@ export default function Login(props) {
         if(!!window.Kakao && !window.Kakao.isInitialized()) {
             window.Kakao.init(process.env.NEXT_PUBLIC_KAKA0_KEY);
         }
+
+        console.log('kako', process.env.NEXT_PUBLIC_KAKA0_KEY);
 
         window.Kakao.Auth.login({
             success: function(authObj) {

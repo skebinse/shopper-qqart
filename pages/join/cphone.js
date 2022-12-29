@@ -6,6 +6,7 @@ import Common from "../../js/common";
 import {useRouter} from "next/router";
 import {smsSend} from "../../util/smsUtil";
 import {hash} from "../../util/securityUtil";
+import Image from "next/image";
 
 export default function CphoneAhrz() {
 
@@ -60,7 +61,7 @@ export default function CphoneAhrz() {
                             <input id="cphoneNo" value={cphoneNo} onChange={e => setCphoneNo(e.target.value)} type="tel" onKeyUp={$cmm.event.formatTelEvent}
                                    placeholder="휴대폰 번호를 입력해주세요" maxLength={13} />
                             <button type="button" className={delClass} onClick={() => setCphoneNo('')}>
-                                <img alt="삭제" src="/assets/images/icon/iconDel.svg" />
+                                <Image alt={'삭제'} src="/assets/images/icon/iconDel.svg" width={8} height={8} />
                             </button>
                         </div>
                     </li>

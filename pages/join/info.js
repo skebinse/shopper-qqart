@@ -6,6 +6,7 @@ import {useRouter} from "next/router";
 import Head from "next/head";
 import Common from "../../js/common";
 import {useS3Upload} from "next-s3-upload";
+import Image from "next/image";
 
 export default function Info() {
 
@@ -14,18 +15,12 @@ export default function Info() {
     const [prflPrvImg, setPrflPrvImg] = useState('');
     const [popupClass, setPopupClass] = useState('');
     const [joinInfo, setJoinInfo] = useState({
-        cphoneNo: '',
+        cphoneNo: router.query.cphoneNo,
         userNcnm: '',
         shprSfitdText: '',
         profile: '',
     });
     const {uploadToS3} = useS3Upload();
-
-    useEffect(() => {
-        setJoinInfo(prevState => ({...prevState, cphoneNo: router.query.cphoneNo}));
-
-        console.log(router.query);
-    }, []);
 
     useEffect(() => {
         console.log(joinInfo);
@@ -144,7 +139,7 @@ export default function Info() {
             <div className={styles.content}>
                 <h3>기본 정보 설정</h3>
                 <div className={styles.profile}>
-                    <img src={!!prflPrvImg ? prflPrvImg : "/assets/images/img/noProfile.svg"} />
+                    <Image src={!!prflPrvImg ? prflPrvImg : "/assets/images/img/noProfile.svg"} alt={'프로필 사진'} />
                     <input id={'inpFile'} type={"file"} accept={'image/*'} onChange={fileChage} />
                     <label htmlFor={'inpFile'}>
                         사진업로드

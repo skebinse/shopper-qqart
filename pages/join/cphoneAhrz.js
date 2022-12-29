@@ -4,7 +4,6 @@ import styles from "../../styles/join.module.css";
 import {useEffect, useState} from "react";
 import Common from "../../js/common";
 import {useRouter} from "next/router";
-import {smsSend} from "../../util/smsUtil";
 import {hash} from "../../util/securityUtil";
 
 export default function CphoneAhrz(props) {
@@ -19,35 +18,41 @@ export default function CphoneAhrz(props) {
     const [authNoHash, setAuthNoHash] = useState(router.query.authNoHash);
     const [timer, setTimer] = useState(null);
 
-    /**
-     * 재전송 시간 설정
-     */
-    const setVldTime = () => {
+    // init
+    useEffect(() => {
 
-        if(!!timer) {
+        // // 재전송 시간 설정
+        // if(!!timer) {
+        //
+        //     setTimer(prevState => clearInterval(prevState));
+        // }
+        // setTimer(prevState => setInterval(() => {
+        //
+        //     setVldtSs(prevState => {
+        //
+        //         if(prevState <= 1) {
+        //
+        //             setTimer(prevState => clearInterval(prevState));
+        //             $cmm.alert('인증번호 유효기간이 지났습니다. 재전송을 클릭하시기 바랍니다.');
+        //         }
+        //
+        //         return prevState - 1;
+        //     });
+        // }, 1000));
 
-            setTimer(prevState => clearInterval(prevState));
-        }
-
-        setTimer(prevState => setInterval(() => {
+        const timer = setInterval(() => {
 
             setVldtSs(prevState => {
 
-                if(prevState <= 1) {
+                if(prevState <= 0) {
 
-                    setTimer(prevState => clearInterval(prevState));
+                    clearInterval(timer);
                     $cmm.alert('인증번호 유효기간이 지났습니다. 재전송을 클릭하시기 바랍니다.');
                 }
 
                 return prevState - 1;
             });
-        }, 1000));
-    };
-
-    // init
-    useEffect(() => {
-
-        setVldTime();
+        }, 1000);
     }, []);
 
     // 재전송 시간 변경

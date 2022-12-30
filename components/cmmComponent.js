@@ -9,7 +9,7 @@ export default function CmmComponent() {
      */
     const alertOk = () => {
 
-        setSAlert(prevState => ({...prevState, show: false, title: '경고', txt: ''}));
+        setSAlert(prevState => ({...prevState, show: false, title: '알림', txt: ''}));
         !!sAlert.callback && sAlert.callback();
     };
 
@@ -38,7 +38,7 @@ export default function CmmComponent() {
                         <h3>{sAlert.title}</h3>
                     }
                     <p dangerouslySetInnerHTML={{__html: sAlert.txt.replace(/\n/g, '<br/>')}}></p>
-                    <button type={"button"} onClick={alertOk}>확인</button>
+                    <button className={'button'} type={"button"} onClick={alertOk}>확인</button>
                 </div>
             </div>
         }
@@ -50,8 +50,8 @@ export default function CmmComponent() {
                     }
                     <p dangerouslySetInnerHTML={{__html: sConfirm.txt.replace(/\n/g, '<br/>')}}></p>
                     <div>
-                        <button type={"button"} className={'cancel'} onClick={() => confirmClick(false)}>취소</button>
-                        <button type={"button"} className={'ok'} onClick={() => confirmClick(true)}>확인</button>
+                        <button className={'button white mr16'} type={"button"}  onClick={() => confirmClick(false)}>취소</button>
+                        <button className={'button'} type={"button"} onClick={() => confirmClick(true)}>확인</button>
                     </div>
                 </div>
             </div>

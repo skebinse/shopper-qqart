@@ -42,7 +42,7 @@ export default function CphoneAhrz() {
             },
             success: res => {
 
-                $cmm.goPage('./cphoneAhrz', {...router.query, cphoneNo, authNoHash: res})
+                $cmm.goPage('./cphoneAhrz', {...router.query, cphoneNo: cphoneNo.replace(/-/g, ''), authNoHash: res})
             }
         });
     };

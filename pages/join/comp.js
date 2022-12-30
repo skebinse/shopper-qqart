@@ -6,13 +6,13 @@ import Image from "next/image";
 
 export default function Comp() {
 
+    const $cmm = Common();
     const [shprNcnm, setShprNcnm] = useState();
 
     useEffect(() => {
-        const $cmm = Common();
 
-        setShprNcnm($cmm.getLoginInfo('SHPR_NCNM'))
-    }, []);
+        setShprNcnm($cmm.getLoginInfo('SHPR_NCNM'));
+    }, [$cmm]);
 
     return (
         <div className={styles.join}>

@@ -2,10 +2,19 @@ import styles from "../../styles/login.module.css";
 import Head from "next/head";
 import Common from "../../js/common";
 import Image from "next/image";
+import {useEffect} from "react";
 
 export default function Login(props) {
 
     const $cmm = Common();
+
+    useEffect(() => {
+
+        if(!!window.Kakao && !window.Kakao.isInitialized()) {
+            window.Kakao.init(process.env.NEXT_PUBLIC_KAKA0_KEY);
+        }
+    }, []);
+
     /**
      * 카카오 로그인
      */
@@ -14,8 +23,6 @@ export default function Login(props) {
         if(!!window.Kakao && !window.Kakao.isInitialized()) {
             window.Kakao.init(process.env.NEXT_PUBLIC_KAKA0_KEY);
         }
-
-        console.log('kako', process.env.NEXT_PUBLIC_KAKA0_KEY);
 
         window.Kakao.Auth.login({
             success: function(authObj) {
@@ -34,7 +41,7 @@ export default function Login(props) {
 
                             if(!!account.profile) {
                                 const profile = account.profile;
-                                param.userNcnm = !!profile.nickname ? profile.nickname : '';
+                                // param.userNcnm = !!profile.nickname ? profile.nickname : '';
                                 param.userPrfl = !!profile.profile_image_url ? profile.profile_image_url : '';
                                 param.userTnalPrfl = !!profile.thumbnail_image_url ? profile.thumbnail_image_url : param.profileImg;
                             }
@@ -44,11 +51,15 @@ export default function Login(props) {
                             url: '/api/login',
                             data: param,
                             success: res => {
-                                console.log(res);
+
                                 // 가입되지 않은 계정
                                 if(res.IS_LOGIN === 0) {
 
                                     $cmm.goPage('/join/clauAgr', param);
+                                } else {
+
+                                    $cmm.util.setLs($cmm.Cont.LOING_INFO, res);
+                                    $cmm.goPage('/');
                                 }
                             }
                         });

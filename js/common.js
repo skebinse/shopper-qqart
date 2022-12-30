@@ -1,6 +1,7 @@
 import {useGlobal} from "../context/globalContext";
 import {useS3Upload} from "next-s3-upload";
 import {useRouter} from "next/router";
+import {useCallback, useEffect} from "react";
 
 export const $cmm = {
 
@@ -30,6 +31,10 @@ export const $cmm = {
             headers: {},
             body: _options.body,
         };
+
+        if($cmm.checkLogin()) {
+            init.headers['X-ENC-USER-ID'] = $cmm.getLoginInfo('ENC_SHPR_ID');
+        }
 
         // JSON 타입일 경우
         if(_options.dataType === 'json') {
@@ -83,6 +88,46 @@ export const $cmm = {
 
             return loginInfo;
         }
+    },
+
+    /**
+     * 컴포넌트 - 날짜
+     */
+    date: {
+
+        /**
+         * 현재 날짜 를 YYYYMMDD 형태로 반환한다.
+         *
+         * @memberOf $comm.date
+         * @param {String} div  옵션  : 계산 후 반환될 년, 월, 일 사이 구분자(구분자가 필요없으면 "")
+         * @param {String} optValue 시간, 분, 초까지 표시. 옵션 H:시, M:분 , S:초
+         *
+         * @returns 현재 날짜 기간
+         */
+        getToday: function (div, optValue) {
+
+            div = div === undefined ? '-' : div;
+
+            const date = new Date().toLocaleDateString().replace(/\./g, '').replace(/\s/g, div)
+            if(!optValue) {
+
+                return date;
+            } else {
+
+                const hhmmss = new Date().toTimeString().split(' ')[0];
+
+                if(optValue === 'H') {
+
+                    return `${date} ${hhmmss.substring(0, 2)}`;
+                } else if(optValue === 'M') {
+
+                    return `${date} ${hhmmss.substring(0, 5)}`;
+                } else {
+
+                    return `${date} ${hhmmss}`;
+                }
+            }
+        },
     },
 
     /**
@@ -197,10 +242,10 @@ const Common = () => {
      * @param txt
      * @param callback
      */
-    $cmm.alert = (txt, callback) => {
+    $cmm.alert = useCallback((txt, callback) => {
 
         setSAlert(prevState => ({...prevState, show: true, txt, callback}))
-    };
+    }, []);
 
     /**
      * Confirm
@@ -208,17 +253,17 @@ const Common = () => {
      * @param callbackOk
      * @param callbackCancel
      */
-    $cmm.confirm = (txt, callbackOk, callbackCancel) => {
+    $cmm.confirm = useCallback((txt, callbackOk, callbackCancel) => {
 
         setSConfirm(prevState => ({...prevState, show: true, txt, callbackOk, callbackCancel}));
-    };
+    }, []);
 
     /**
      * 파일 업로드
      * @param files
      * @param callback
      */
-    $cmm.upload = (files, callback) => {
+    $cmm.upload = useCallback((files, callback) => {
 
         (async () => {
 
@@ -226,11 +271,11 @@ const Common = () => {
             const func = async (file) => {
 
                 const upload = await uploadToS3(file);
-                const pathIdx = upload.key.match(/\/[0-9]{6}\//).index;
-                console.log(file)
+                const pathIdx = upload.key.match(/\/[0-9]{2}\//).index;
+
                 upload.atchFileActlNm = file.name;
-                upload.atchFileSrvrNm = upload.key.substring(pathIdx + 8);
-                upload.atchFileSrvrPath = upload.key.substring(0, pathIdx + 7);
+                upload.atchFileSrvrNm = upload.key.substring(pathIdx + 4);
+                upload.atchFileSrvrPath = upload.key.substring(0, pathIdx + 3);
                 upload.atchFileEts = file.name.substring(file.name.lastIndexOf('.') + 1);
                 upload.atchFileSiz = file.size;
 
@@ -258,33 +303,33 @@ const Common = () => {
                 }
             });
         })();
-    };
+    }, []);
 
 
     /**
      * 로그인 여부
-     * @param isMove
+     * @param isMove142
      * @returns {boolean}
      */
-    $cmm.checkLogin = () => {
+    $cmm.checkLogin = useCallback((isMove) => {
 
-        const isLogin = !!$cmm.util.getLs($cmm.Cont.LOING_INFO) && !!$cmm.util.getLs($cmm.Cont.LOING_INFO).SHPR_ID;
-        if(!isLogin && !!router) {
+        const isLogin = !!$cmm.util.getLs($cmm.Cont.LOING_INFO) && !!$cmm.util.getLs($cmm.Cont.LOING_INFO).ENC_SHPR_ID;
+        if(!isLogin && !!isMove) {
 
             $cmm.alert('로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.', function () {
-                router.push('/cmm/login')
+                router.push('/cmm/login');
             });
         }
 
         return isLogin;
-    };
+    }, []);
 
     /**
      * 화면 이동
      * @param url
      * @param param
      */
-    $cmm.goPage = (url, param) => {
+    $cmm.goPage = useCallback((url, param) => {
 
         if(!!param) {
 
@@ -296,7 +341,7 @@ const Common = () => {
 
             router.push(url);
         }
-    };
+    }, []);
 
     return $cmm;
 };

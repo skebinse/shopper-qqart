@@ -1,7 +1,7 @@
 import HeadTitle from "../../components/headTitle";
 import NaviStep from "../../components/naviStep";
 import styles from "../../styles/join.module.css";
-import {useEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useMemo, useState} from "react";
 import Common from "../../js/common";
 import {useRouter} from "next/router";
 import {hash} from "../../util/securityUtil";
@@ -17,28 +17,10 @@ export default function CphoneAhrz(props) {
     const [cetino, setCetino] = useState('');
     const [authNoHash, setAuthNoHash] = useState(router.query.authNoHash);
     const [timer, setTimer] = useState(null);
+    const cphoneNo = $cmm.util.hyphenTel(router.query.cphoneNo);
 
     // init
     useEffect(() => {
-
-        // // 재전송 시간 설정
-        // if(!!timer) {
-        //
-        //     setTimer(prevState => clearInterval(prevState));
-        // }
-        // setTimer(prevState => setInterval(() => {
-        //
-        //     setVldtSs(prevState => {
-        //
-        //         if(prevState <= 1) {
-        //
-        //             setTimer(prevState => clearInterval(prevState));
-        //             $cmm.alert('인증번호 유효기간이 지났습니다. 재전송을 클릭하시기 바랍니다.');
-        //         }
-        //
-        //         return prevState - 1;
-        //     });
-        // }, 1000));
 
         const timer = setInterval(() => {
 
@@ -53,13 +35,17 @@ export default function CphoneAhrz(props) {
                 return prevState - 1;
             });
         }, 1000);
-    }, []);
+        return () => {
+
+            clearInterval(timer);
+        }
+    }, [$cmm]);
 
     // 재전송 시간 변경
     useEffect(() => {
 
         setVldtMiSs($cmm.util.lpad(String(Math.floor(vldtSs / 60)), 2, '0') + ':' + $cmm.util.lpad(String(Math.floor(vldtSs % 60)), 2, '0'));
-    }, [vldtSs]);
+    }, [vldtSs, $cmm]);
 
     // 인증번호 변경
     useEffect(() => {
@@ -106,7 +92,7 @@ export default function CphoneAhrz(props) {
             <NaviStep step={2} />
             <div className={styles.content}>
                 <h3>인증번호 입력</h3>
-                <p>{$cmm.util.hyphenTel(router.query.cphoneNo)} 로 인증번호를 전송했습니다.<br/> 인증번호를 입력해주세요.</p>
+                <p>{cphoneNo} 로 인증번호를 전송했습니다.<br/> 인증번호를 입력해주세요.</p>
                 <ul className={styles.cetino}>
                     <li>
                         <label>인증번호</label>
@@ -121,7 +107,6 @@ export default function CphoneAhrz(props) {
                     <button disabled={btnDisabled} type={"button"} onClick={cetionCheckClick}>다음으로</button>
                 </div>
             </div>
-
         </div>
     );
 }

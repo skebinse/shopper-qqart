@@ -11,10 +11,9 @@ const pool = createPool({
     queueLimit: 0,
 });
 
-console.log('pool connect');
-
 export async function getConnectPol(callback) {
     const conn = await pool.getConnection(async conn => conn);
+
     await callback(conn);
 
     conn.release();

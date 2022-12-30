@@ -9,6 +9,8 @@ a{color: #000000;text-decoration: none;}
 li{list-style-type: none;}
 ul{padding:0;}
 em{font-style: normal;}
+.mr10{margin-right: 10px !important;}
+.mr16{margin-right: 16px !important;}
 
 /* headTitle */
 .headTitle{padding: 17px;background-color: #FFFFFF;position: sticky;top:0;}
@@ -19,6 +21,9 @@ em{font-style: normal;}
 .naviStep span.on{background-color: #02B763;}
 .naviStep span:last-child{margin-right: 0;}
 
+/* button */
+.button{border: none;background-color: #02B763;border-radius: 12px;color: #FFFFFF;font-size: 16px;font-weight: 700;width: 100%;padding: 14px 0;}
+.button.white{background-color: #FFFFFF;border: #E4E4E4 1px solid;color: #333333;}
 
 /* input - checkbox */
 input[type=checkbox]{display: none;}
@@ -31,6 +36,15 @@ input[type=checkbox]:disabled+label{opacity: 0.5;}
 .alertArea > div,.confirmArea > div{background-color: #FFFFFF;border-radius: 12px;width: calc(100% - 68px);margin: auto 0;padding: 24px 17px;}
 .alertArea > div h3,.confirmArea > div h3{color: #373454;font-size: 18px;font-weight: 500;text-align: center;padding-top: 8px;}
 .alertArea > div p,.confirmArea > div > p{color: #373454;font-size: 14px;text-align: center;padding: 24px 0;}
-.alertArea > div button, .confirmArea > div button{border: none;background-color: #02B763;border-radius: 12px;color: #FFFFFF;font-size: 16px;font-weight: 700;width: 100%;padding: 14px 0;}
 .confirmArea > div > div{display: flex;}
-.confirmArea > div button.cancel{background-color: #FFFFFF;border: #E4E4E4 1px solid;color: #333333;margin-right: 16px;}
+
+/* 배치 리스트 */
+.btch{padding: 0 17px;}
+.btch li{background-color: #FFFFFF;border-radius: 12px;box-shadow: #00000033 0px 0px 16px;margin-bottom: 24px;padding: 18px 15px 25px 19px;}
+.btch li .priceArea{display: flex;align-items: center;}
+.btch li .priceArea p{color: #333333;font-size: 24px;font-weight: 700;flex: 1;}
+.btch li .priceArea img{border-radius: 100%;}
+.btch li .delyArea{padding-top: 12px;display: flex;align-items: center;}
+.btch li .delyArea span{color: #333333;font-size: 16px;padding-left: 8px;padding-right: 40px;}
+.btch li h5{color: #333333;font-size: 16px;font-weight: 700;padding-top: 12px;}
+.btch li p{color: #333333;font-size: 16px;padding-top: 5px;}

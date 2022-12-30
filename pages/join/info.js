@@ -23,6 +23,15 @@ export default function Info() {
     const {uploadToS3} = useS3Upload();
 
     useEffect(() => {
+
+        if(!$cmm.checkLogin() && !router.query.userCrctno) {
+            $cmm.alert('로그인정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {
+                $cmm.goPage('/cmm/login');
+            });
+        }
+    }, [$cmm, router.query.userCrctno]);
+
+    useEffect(() => {
         console.log(joinInfo);
     }, [joinInfo]);
 
@@ -97,35 +106,47 @@ export default function Info() {
         if(!joinInfo.profile) {
 
             $cmm.alert('사진을 등록해 주세요.');
+        } else if(!joinInfo.userNcnm){
+
+            $cmm.alert('닉네임을 입력해 주세요.');
+        } else if(!joinInfo.shprSfitdText){
+
+            $cmm.alert('자기소개를 입력해 주세요.');
+        } else if(!joinInfo.userZipc){
+
+            $cmm.alert('지역을 선택해 주세요.');
         } else {
 
-            const call = param => {
+            $cmm.confirm('가입 진행하겠습니까?', () => {
 
-                $cmm.ajax({
-                    url: '/api/cmm/join',
-                    data: param,
-                    success: res => {
+                const call = param => {
 
-                        $cmm.util.setLs($cmm.Cont.LOING_INFO, res);
-                        $cmm.goPage('./comp');
-                    }
-                });
-            };
+                    $cmm.ajax({
+                        url: '/api/cmm/join',
+                        data: param,
+                        success: res => {
 
-            if(!!joinInfo.atchFileUuid) {
+                            $cmm.util.setLs($cmm.Cont.LOING_INFO, res);
+                            $cmm.goPage('./comp');
+                        }
+                    });
+                };
 
-                call({...joinInfo, ...router.query});
-            } else {
+                if(!!joinInfo.atchFileUuid) {
 
-                $cmm.upload(joinInfo.profile, res => {
+                    call({...joinInfo, ...router.query});
+                } else {
 
-                    const param = {...joinInfo, ...router.query};
-                    param.atchFileUuid = res.atchFileUuid;
-                    setJoinInfo(prevState => ({...prevState, atchFileUuid: res.atchFileUuid}));
+                    $cmm.upload(joinInfo.profile, res => {
 
-                    call(param);
-                });
-            }
+                        const param = {...joinInfo, ...router.query};
+                        param.atchFileUuid = res.atchFileUuid;
+                        setJoinInfo(prevState => ({...prevState, atchFileUuid: res.atchFileUuid}));
+
+                        call(param);
+                    });
+                }
+            });
         }
     };
 
@@ -139,7 +160,7 @@ export default function Info() {
             <div className={styles.content}>
                 <h3>기본 정보 설정</h3>
                 <div className={styles.profile}>
-                    <Image src={!!prflPrvImg ? prflPrvImg : "/assets/images/img/noProfile.svg"} alt={'프로필 사진'} />
+                    <Image src={!!prflPrvImg ? prflPrvImg : "/assets/images/img/noProfile.svg"} alt={'프로필 사진'} width={96} height={96} />
                     <input id={'inpFile'} type={"file"} accept={'image/*'} onChange={fileChage} />
                     <label htmlFor={'inpFile'}>
                         사진업로드

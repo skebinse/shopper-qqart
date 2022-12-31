@@ -1,12 +1,13 @@
 import styles from "../../styles/login.module.css";
 import Head from "next/head";
-import Common from "../../js/common";
 import Image from "next/image";
 import {useEffect} from "react";
+import $cmm from "../../js/common";
+import useCommon from "../../hooks/useCommon";
 
 export default function Login(props) {
 
-    const $cmm = Common();
+    const {goPage, alert} = useCommon();
 
     useEffect(() => {
 
@@ -55,18 +56,18 @@ export default function Login(props) {
                                 // 가입되지 않은 계정
                                 if(res.IS_LOGIN === 0) {
 
-                                    $cmm.goPage('/join/clauAgr', param);
+                                    goPage('/join/clauAgr', param);
                                 } else {
 
                                     $cmm.util.setLs($cmm.Cont.LOING_INFO, res);
-                                    $cmm.goPage('/');
+                                    goPage('/');
                                 }
                             }
                         });
                     },
                     fail: function(res) {
 
-                        $cmm.alert('로그인에 실패하였습니다.<br>' + JSON.stringify(res));
+                        alert('로그인에 실패하였습니다.<br>' + JSON.stringify(res));
                     }
                 });
             },
@@ -91,11 +92,4 @@ export default function Login(props) {
             </div>
         </>
     );
-}
-
-export async function getStaticProps(context) {
-    console.log('getStaticProps')
-    return {
-        props: {},
-    }
 }

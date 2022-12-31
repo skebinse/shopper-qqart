@@ -4,14 +4,15 @@ import styles from "../../styles/join.module.css"
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import Head from "next/head";
-import Common from "../../js/common";
-import {useS3Upload} from "next-s3-upload";
 import Image from "next/image";
+import useShopS3Upload from "../../hooks/useShopS3Upload";
+import useCommon from "../../hooks/useCommon";
+import $cmm from "../../js/common";
 
 export default function Info() {
 
     const router = useRouter();
-    const $cmm = Common();
+    const shopS3Upload = useShopS3Upload();
     const [prflPrvImg, setPrflPrvImg] = useState('');
     const [popupClass, setPopupClass] = useState('');
     const [joinInfo, setJoinInfo] = useState({
@@ -20,16 +21,16 @@ export default function Info() {
         shprSfitdText: '',
         profile: '',
     });
-    const {uploadToS3} = useS3Upload();
+    const {alert, goPage, confirm} = useCommon();
 
     useEffect(() => {
 
         if(!$cmm.checkLogin() && !router.query.userCrctno) {
-            $cmm.alert('로그인정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {
-                $cmm.goPage('/cmm/login');
+            alert('로그인정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {
+                goPage('/cmm/login');
             });
         }
-    }, [$cmm, router.query.userCrctno]);
+    }, [router.query.userCrctno, alert, goPage]);
 
     useEffect(() => {
         console.log(joinInfo);
@@ -88,11 +89,11 @@ export default function Info() {
                             }));
                         } else {
 
-                            $cmm.alert('주소 입력에 실패하였습니다.');
+                            alert('주소 입력에 실패하였습니다.');
                         }
                     })
                     .catch(err => {
-                        $cmm.alert('주소 입력에 실패하였습니다.');
+                        alert('주소 입력에 실패하였습니다.');
                     });
             }
         }).embed(divDaumPost);
@@ -105,19 +106,19 @@ export default function Info() {
 
         if(!joinInfo.profile) {
 
-            $cmm.alert('사진을 등록해 주세요.');
+            alert('사진을 등록해 주세요.');
         } else if(!joinInfo.userNcnm){
 
-            $cmm.alert('닉네임을 입력해 주세요.');
+            alert('닉네임을 입력해 주세요.');
         } else if(!joinInfo.shprSfitdText){
 
-            $cmm.alert('자기소개를 입력해 주세요.');
+            alert('자기소개를 입력해 주세요.');
         } else if(!joinInfo.userZipc){
 
-            $cmm.alert('지역을 선택해 주세요.');
+            alert('지역을 선택해 주세요.');
         } else {
 
-            $cmm.confirm('가입 진행하겠습니까?', () => {
+            confirm('가입 진행하겠습니까?', () => {
 
                 const call = param => {
 
@@ -127,7 +128,7 @@ export default function Info() {
                         success: res => {
 
                             $cmm.util.setLs($cmm.Cont.LOING_INFO, res);
-                            $cmm.goPage('./comp');
+                            goPage('./comp');
                         }
                     });
                 };
@@ -137,7 +138,7 @@ export default function Info() {
                     call({...joinInfo, ...router.query});
                 } else {
 
-                    $cmm.upload(joinInfo.profile, res => {
+                    shopS3Upload(joinInfo.profile, res => {
 
                         const param = {...joinInfo, ...router.query};
                         param.atchFileUuid = res.atchFileUuid;

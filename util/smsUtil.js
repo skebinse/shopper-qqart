@@ -1,5 +1,5 @@
 
-import {$cmm} from "../js/common";
+import $cmm from "../js/common";
 /**
  SMS 발송
  * @param receiver

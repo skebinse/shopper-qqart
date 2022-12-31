@@ -1,21 +1,22 @@
 import {useEffect, useState} from "react";
-import Common from "../js/common";
 import styles from "/styles/index.module.css"
 import Image from "next/image";
+import {useRouter} from "next/router";
+import $cmm from "../js/common";
+import useCommon from "../hooks/useCommon";
 
 export default function Index(props) {
 
-    const $cmm = Common();
+    const router = useRouter();
     const [addr, setAddr] = useState('');
     const [tabIdx, setTabIdx] = useState(0);
     const [btchList, setBtchList] = useState([]);
-    const [ingBtchList, setIngBtchList] = useState([]);
+    const [btchAcpList, setBtchAcpList] = useState([]);
+    const {goCheckLogin, goPage, alert} = useCommon();
 
     useEffect(() => {
 
-        console.log('skebinse', process.env.NEXT_PUBLIC_RUN_MODE);
         const call = () => {
-
             let shprAddr = $cmm.getLoginInfo('SHPR_ADDR');
             shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
             shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
@@ -23,44 +24,45 @@ export default function Index(props) {
             setAddr(shprAddr);
         };
 
-        if($cmm.checkLogin(true)) {
+        goCheckLogin();
 
-            if($cmm.date.getToday('') !== $cmm.getLoginInfo('LOING_DT')) {
+        if($cmm.date.getToday('') !== $cmm.getLoginInfo('LOING_DT')) {
 
-                $cmm.ajax({
-                    url: '/api/login',
-                    data: {
-                        shprCrctno: $cmm.getLoginInfo('SHPR_CRCTNO'),
-                    },
-                    success: res => {
+            $cmm.ajax({
+                url: '/api/login',
+                data: {
+                    shprCrctno: $cmm.getLoginInfo('SHPR_CRCTNO'),
+                },
+                success: res => {
 
-                        // 가입되지 않은 계정
-                        if(res.IS_LOGIN === 0) {
+                    // 가입되지 않은 계정
+                    if(res.IS_LOGIN === 0) {
 
-                            $cmm.alert('로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.', function () {
-                                router.push('/cmm/login');
-                            });
-                        } else {
+                        alert('로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.', function () {
 
-                            $cmm.util.setLs($cmm.Cont.LOING_INFO, res);
-                            call();
-                        }
+                            goPage('/cmm/login');
+                        });
+                    } else {
+
+                        $cmm.util.setLs($cmm.Cont.LOING_INFO, res);
+                        call();
                     }
-                });
-            } else {
+                }
+            });
+        } else {
 
-                call();
-            }
+            call();
         }
 
         $cmm.ajax({
             url: '/api/oder/btchList',
             success: res => {
 
-                setBtchList(res);
+                setBtchList(res.btchList);
+                setBtchAcpList(res.btchAcpList);
             }
         });
-    }, [$cmm]);
+    }, [goCheckLogin, goPage, alert]);
 
     return (
         <>
@@ -69,8 +71,8 @@ export default function Index(props) {
                 <span>{addr}<Image alt={'열기'} src={'/assets/images/icon/iconDel.svg'} width={10.4} height={6} /></span>
             </div>
             <div className={styles.btnArea}>
-                <button className={'button mr10 ' + (tabIdx === 0 ? '' : 'white')}>모든 배치 {btchList.length}</button>
-                <button className={'button ' + (tabIdx === 0 ? 'white' : '')}>진행중 배치 {ingBtchList.length}</button>
+                <button className={'button mr10 ' + (tabIdx === 0 ? '' : 'white')} onClick={() => setTabIdx(0)}>모든 배치 {btchList.length}</button>
+                <button className={'button ' + (tabIdx === 0 ? 'white' : '')} onClick={() => setTabIdx(1)}>진행중 배치 {btchAcpList.length}</button>
             </div>
             {tabIdx === 0 &&
                 <ul className={'btch'}>
@@ -94,7 +96,7 @@ export default function Index(props) {
             }
             {tabIdx === 1 &&
                 <ul className={'btch'}>
-                    {ingBtchList.map((item, idx) => (
+                    {btchAcpList.map((item, idx) => (
                         <li key={'ingBtch' + idx}>
                             <div className={'priceArea'}>
                                 <p>{item.DELY_AMT}원</p>

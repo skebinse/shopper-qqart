@@ -1,23 +1,22 @@
 import HeadTitle from "../../components/headTitle";
 import NaviStep from "../../components/naviStep";
 import styles from "../../styles/join.module.css";
-import {useCallback, useContext, useEffect, useMemo, useState} from "react";
-import Common from "../../js/common";
+import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {hash} from "../../util/securityUtil";
+import $cmm from "../../js/common";
+import useCommon from "../../hooks/useCommon";
 
 export default function CphoneAhrz(props) {
 
     const router = useRouter();
-    const $cmm = Common();
 
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [vldtMiSs, setVldtMiSs] = useState('03:00');
     const [vldtSs, setVldtSs] = useState(180);
     const [cetino, setCetino] = useState('');
     const [authNoHash, setAuthNoHash] = useState(router.query.authNoHash);
-    const [timer, setTimer] = useState(null);
     const cphoneNo = $cmm.util.hyphenTel(router.query.cphoneNo);
+    const {alert, goPage} = useCommon();
 
     // init
     useEffect(() => {
@@ -29,7 +28,7 @@ export default function CphoneAhrz(props) {
                 if(prevState <= 0) {
 
                     clearInterval(timer);
-                    $cmm.alert('인증번호 유효기간이 지났습니다. 재전송을 클릭하시기 바랍니다.');
+                    alert('인증번호 유효기간이 지났습니다. 재전송을 클릭하시기 바랍니다.');
                 }
 
                 return prevState - 1;
@@ -39,13 +38,13 @@ export default function CphoneAhrz(props) {
 
             clearInterval(timer);
         }
-    }, [$cmm]);
+    }, [alert]);
 
     // 재전송 시간 변경
     useEffect(() => {
 
         setVldtMiSs($cmm.util.lpad(String(Math.floor(vldtSs / 60)), 2, '0') + ':' + $cmm.util.lpad(String(Math.floor(vldtSs % 60)), 2, '0'));
-    }, [vldtSs, $cmm]);
+    }, [vldtSs]);
 
     // 인증번호 변경
     useEffect(() => {
@@ -74,16 +73,25 @@ export default function CphoneAhrz(props) {
      */
     const cetionCheckClick = () => {
 
-        if(hash(cetino) === authNoHash) {
+        $cmm.ajax({
+            url: '/api/cmm/authNo',
+            data: {
+                cetino,
+                authNoHash,
+            },
+            success: res => {
+                if(res) {
 
-            $cmm.alert('인증되었습니다.', () => {
+                    alert('인증되었습니다.', () => {
 
-                $cmm.goPage('./info', {...router.query, cphoneNo: router.query.cphoneNo});
-            });
-        } else {
+                        goPage('./info', {...router.query, cphoneNo: router.query.cphoneNo});
+                    });
+                } else {
 
-            $cmm.alert('인증번호가 다릅니다.');
-        }
+                    alert('인증번호가 다릅니다.');
+                }
+            }
+        });
     };
 
     return (

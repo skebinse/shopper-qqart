@@ -2,20 +2,19 @@ import HeadTitle from "../../components/headTitle";
 import NaviStep from "../../components/naviStep";
 import styles from "../../styles/join.module.css";
 import {useEffect, useState} from "react";
-import Common from "../../js/common";
 import {useRouter} from "next/router";
-import {smsSend} from "../../util/smsUtil";
-import {hash} from "../../util/securityUtil";
 import Image from "next/image";
+import $cmm from "../../js/common";
+import useCommon from "../../hooks/useCommon";
 
 export default function CphoneAhrz() {
 
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [delClass, setDelClass] = useState('d-none');
     const [cphoneNo, setCphoneNo] = useState('');
+    const {goPage} = useCommon();
 
     const router = useRouter();
-    const $cmm = Common();
 
     useEffect(() => {
 
@@ -42,7 +41,7 @@ export default function CphoneAhrz() {
             },
             success: res => {
 
-                $cmm.goPage('./cphoneAhrz', {...router.query, cphoneNo: cphoneNo.replace(/-/g, ''), authNoHash: res})
+                goPage('./cphoneAhrz', {...router.query, cphoneNo: cphoneNo.replace(/-/g, ''), authNoHash: res})
             }
         });
     };

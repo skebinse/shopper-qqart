@@ -1,18 +1,17 @@
-import Common from "../../js/common";
 import Link from "next/link";
 import styles from "../../styles/join.module.css"
 import {useEffect, useState} from "react";
 import Image from "next/image";
+import $cmm from "../../js/common";
 
 export default function Comp() {
 
-    const $cmm = Common();
     const [shprNcnm, setShprNcnm] = useState();
 
     useEffect(() => {
 
         setShprNcnm($cmm.getLoginInfo('SHPR_NCNM'));
-    }, [$cmm]);
+    }, []);
 
     return (
         <div className={styles.join}>

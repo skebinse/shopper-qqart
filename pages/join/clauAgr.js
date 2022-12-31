@@ -4,13 +4,13 @@ import NaviStep from "../../components/naviStep";
 import Link from "next/link";
 import {useState} from "react";
 import {useRouter} from "next/router";
-import Common from "../../js/common";
+import useCommon from "../../hooks/useCommon";
 
 export default function ClauAgr() {
 
     const [btnDisabled, setBtnDisabled] = useState(true);
     const router = useRouter();
-    const $cmm = Common();
+    const {goPage} = useCommon();
 
     /**
      * 전체 약관 동의
@@ -35,9 +35,9 @@ export default function ClauAgr() {
     /**
      * 화면 이동
      */
-    const goPage =() => {
+    const goPageClick =() => {
 
-        $cmm.goPage('/join/cphone', router.query);
+        goPage('/join/cphone', router.query);
     };
 
     return (
@@ -84,7 +84,7 @@ export default function ClauAgr() {
                     </li>
                 </ul>
                 <div className={styles.btnArea}>
-                    <button disabled={btnDisabled} type={"button"} onClick={goPage}>동의합니다.</button>
+                    <button disabled={btnDisabled} type={"button"} onClick={goPageClick}>동의합니다.</button>
                 </div>
             </div>
         </div>

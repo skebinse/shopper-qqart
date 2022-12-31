@@ -1,9 +1,9 @@
 import {useGlobal} from "../context/globalContext";
-import {useS3Upload} from "next-s3-upload";
+// import {useS3Upload} from "next-s3-upload";
 import {useRouter} from "next/router";
-import {useCallback, useEffect} from "react";
+import {useCallback} from "react";
 
-export const $cmm = {
+const $cmm = {
 
     /**
      * 전역 변수 및 상수
@@ -88,6 +88,17 @@ export const $cmm = {
 
             return loginInfo;
         }
+    },
+
+    /**
+     * 로그인 여부
+     * @returns {boolean}
+     */
+    checkLogin: () => {
+
+        const isLogin = !!$cmm.util.getLs($cmm.Cont.LOING_INFO) && !!$cmm.util.getLs($cmm.Cont.LOING_INFO).ENC_SHPR_ID;
+
+        return isLogin;
     },
 
     /**
@@ -231,119 +242,4 @@ export const $cmm = {
     },
 };
 
-const Common = () => {
-
-    const {setSAlert, setSConfirm} = useGlobal();
-    const {uploadToS3} = useS3Upload();
-    const router = useRouter();
-
-    /**
-     * Alert
-     * @param txt
-     * @param callback
-     */
-    $cmm.alert = useCallback((txt, callback) => {
-
-        setSAlert(prevState => ({...prevState, show: true, txt, callback}))
-    }, []);
-
-    /**
-     * Confirm
-     * @param txt
-     * @param callbackOk
-     * @param callbackCancel
-     */
-    $cmm.confirm = useCallback((txt, callbackOk, callbackCancel) => {
-
-        setSConfirm(prevState => ({...prevState, show: true, txt, callbackOk, callbackCancel}));
-    }, []);
-
-    /**
-     * 파일 업로드
-     * @param files
-     * @param callback
-     */
-    $cmm.upload = useCallback((files, callback) => {
-
-        (async () => {
-
-            const uploadList = [];
-            const func = async (file) => {
-
-                const upload = await uploadToS3(file);
-                const pathIdx = upload.key.match(/\/[0-9]{2}\//).index;
-
-                upload.atchFileActlNm = file.name;
-                upload.atchFileSrvrNm = upload.key.substring(pathIdx + 4);
-                upload.atchFileSrvrPath = upload.key.substring(0, pathIdx + 3);
-                upload.atchFileEts = file.name.substring(file.name.lastIndexOf('.') + 1);
-                upload.atchFileSiz = file.size;
-
-                uploadList.push(upload);
-            }
-
-            if(Array.isArray(files)) {
-
-                for await (const file of files) {
-
-                    await func(file);
-                }
-            } else {
-
-                await func(files);
-            }
-
-            $cmm.ajax({
-                url: '/api/cmm/upload',
-                dataType: 'json',
-                data: uploadList,
-                success: res => {
-
-                    !!callback && callback(res);
-                }
-            });
-        })();
-    }, []);
-
-
-    /**
-     * 로그인 여부
-     * @param isMove142
-     * @returns {boolean}
-     */
-    $cmm.checkLogin = useCallback((isMove) => {
-
-        const isLogin = !!$cmm.util.getLs($cmm.Cont.LOING_INFO) && !!$cmm.util.getLs($cmm.Cont.LOING_INFO).ENC_SHPR_ID;
-        if(!isLogin && !!isMove) {
-
-            $cmm.alert('로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.', function () {
-                router.push('/cmm/login');
-            });
-        }
-
-        return isLogin;
-    }, []);
-
-    /**
-     * 화면 이동
-     * @param url
-     * @param param
-     */
-    $cmm.goPage = useCallback((url, param) => {
-
-        if(!!param) {
-
-            router.push({
-                pathname: url,
-                query: param
-            }, url);
-        } else {
-
-            router.push(url);
-        }
-    }, []);
-
-    return $cmm;
-};
-
-export default Common;
+export default $cmm;

@@ -53,7 +53,7 @@ export default function BtchComp() {
                 }
             }
         });
-    }, [fontAjax, alert, goPage]);
+    }, [fontAjax, alert, goPage, compOderUserId]);
 
     return (
         <div className={styles.compDtpt}>

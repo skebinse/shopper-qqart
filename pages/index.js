@@ -56,7 +56,7 @@ export default function Index(props) {
                 }
             });
         }
-    }, [fontAjax, setIsLoading]);
+    }, [fontAjax, setIsLoading, isInit]);
 
     useEffect(() => {
 

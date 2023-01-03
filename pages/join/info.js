@@ -56,7 +56,7 @@ export default function Info() {
             });
         }
 
-    }, [router.query.userCrctno, alert, goPage]);
+    }, [router.query.userCrctno, alert, goPage, fontAjax]);
 
     /**
      * 프로필 변경

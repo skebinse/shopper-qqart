@@ -61,7 +61,7 @@
 .join .content ul.info li > div.zip p{flex: 1;padding-right: 10px;}
 .join .content ul.info li > div.zip p span{color: #333333;opacity: 0.5;font-size: 17px;font-weight: 300;}
 .join .content .profile{text-align: center;}
-.join .content .profile img{width: 96px;height: 96px;border-radius: 100%;display: block;margin: 0 auto;margin: 32px auto 13px;}
+.join .content .profile img{width: 96px;height: 96px;border-radius: 100%;display: block;margin: 0 auto;margin: 32px auto 13px;object-fit: cover;}
 .join .content .profile input{display: none}
 .join .content .profile label{border: 1px solid #CDCDCD;border-radius: 6px;color: #333333;font-size: 16px;padding: 11px 14px;background-color: #ffffff;font-weight: 700;display: inline-block;}
 .join .content .infoTxt{color: #F4997A;font-size: 14px;font-weight: 700;text-align: center}

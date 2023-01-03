@@ -12,7 +12,7 @@ export default function CphoneAhrz() {
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [delClass, setDelClass] = useState('d-none');
     const [cphoneNo, setCphoneNo] = useState('');
-    const {goPage} = useCommon();
+    const {goPage, fontAjax} = useCommon();
 
     const router = useRouter();
 
@@ -34,7 +34,7 @@ export default function CphoneAhrz() {
      */
     const cetinoClick = () => {
 
-        $cmm.ajax({
+        fontAjax({
             url: '/api/cmm/smsCetinoSend',
             data: {
                 cphoneNo

@@ -1,5 +1,5 @@
 import '../styles/globals.css'
-import App from "next/app";
+import '../public/assets/css/blueimp-gallery.min.css';
 import {GlobalProvider} from "../context/globalContext";
 import CmmComponent from "../components/cmmComponent";
 import {useEffect} from "react";

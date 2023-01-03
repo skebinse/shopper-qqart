@@ -11,10 +11,13 @@ ul{padding:0;}
 em{font-style: normal;}
 .mr10{margin-right: 10px !important;}
 .mr16{margin-right: 16px !important;}
+.colorGreen{color: #02B763 !important;}
+.bold{font-weight: 700 !important;}
 
 /* headTitle */
 .headTitle{padding: 17px;background-color: #FFFFFF;position: sticky;top:0;}
-.headTitle h3{position: absolute;top: 0;text-align: center;width: calc(100% - 104px);margin: 17px 35px;}
+.headTitle h3{position: absolute;top: 0;text-align: center;width: calc(100% - 104px);margin: 20px 35px;}
+.headTitle h3.close{margin: 17px 35px;}
 
 .naviStep{display: flex;padding: 0 17px;}
 .naviStep span{background-color: #E4E4E4;border-radius: 6px;display: inline-block;height: 7px;margin-right: 12px;width: 100%;}
@@ -24,6 +27,7 @@ em{font-style: normal;}
 /* button */
 .button{border: none;background-color: #02B763;border-radius: 12px;color: #FFFFFF;font-size: 16px;font-weight: 700;width: 100%;padding: 14px 0;}
 .button.white{background-color: #FFFFFF;border: #E4E4E4 1px solid;color: #333333;}
+.button.short{padding: 7px 11px;width: auto;font-size: 12px;font-weight: 400;border: #CDCDCD 1px solid;border-radius: 6px;}
 
 /* input - checkbox */
 input[type=checkbox]{display: none;}
@@ -32,7 +36,7 @@ input[type=checkbox]:checked+label {background-image: url('/assets/images/icon/i
 input[type=checkbox]:disabled+label{opacity: 0.5;}
 
 /* alert confirm */
-.alertArea,.confirmArea{position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0, 0, 0, 0.8);padding: 0 17px;display: flex;flex-direction: column;}
+.alertArea,.confirmArea{position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0, 0, 0, 0.8);padding: 0 17px;display: flex;flex-direction: column;z-index: 999;}
 .alertArea > div,.confirmArea > div{background-color: #FFFFFF;border-radius: 12px;width: calc(100% - 68px);margin: auto 0;padding: 24px 17px;}
 .alertArea > div h3,.confirmArea > div h3{color: #373454;font-size: 18px;font-weight: 500;text-align: center;padding-top: 8px;}
 .alertArea > div p,.confirmArea > div > p{color: #373454;font-size: 14px;text-align: center;padding: 24px 0;}
@@ -41,10 +45,70 @@ input[type=checkbox]:disabled+label{opacity: 0.5;}
 /* 배치 리스트 */
 .btch{padding: 0 17px;}
 .btch li{background-color: #FFFFFF;border-radius: 12px;box-shadow: #00000033 0px 0px 16px;margin-bottom: 24px;padding: 18px 15px 25px 19px;}
+.btch li.noData{box-shadow: none;background: none;text-align: center;padding-top: 40px;}
+.btch li.noData p {padding-top: 45px;color: #333333;font-size: 20px;}
 .btch li .priceArea{display: flex;align-items: center;}
 .btch li .priceArea p{color: #333333;font-size: 24px;font-weight: 700;flex: 1;}
-.btch li .priceArea img{border-radius: 100%;}
+.btch li .priceArea img{border-radius: 100%;object-fit: cover;}
 .btch li .delyArea{padding-top: 12px;display: flex;align-items: center;}
 .btch li .delyArea span{color: #333333;font-size: 16px;padding-left: 8px;padding-right: 40px;}
 .btch li h5{color: #333333;font-size: 16px;font-weight: 700;padding-top: 12px;}
 .btch li p{color: #333333;font-size: 16px;padding-top: 5px;}
+.btch li button{background-color: #E4E4E4;color: rgba(51, 51, 51, 0.6);margin-top: 24px;}
+
+/* bottomMenu */
+.bottonMenu{position: fixed;bottom: 0;width: 100%;background-color: #FFFFFF;box-shadow: #0000000D 0px -5px 16px;}
+.bottonMenu ul{display: flex;}
+.bottonMenu ul li{width: 100%;text-align: center;padding: 13px 0 10px;}
+.bottonMenu ul li span{color: #333333;font-size: 10px;display: block;}
+.bottonMenu ul li.on span{color: #02B763;}
+
+
+/* loading bar */
+.loader{position: fixed;top: 0;left: 0;width: 100%;height: 100%;z-index: 1000;display: flex;align-items: center;justify-content: center;flex-direction: column;}
+.loader img{display: block;animation: animImgloader 1s ease-in infinite;height: 30px;width: 30px}
+.loader span{font-size: 40px;display: inline-block;font-family: Arial, Helvetica, sans-serif;font-weight: bold;color: #FFFFFF;letter-spacing: 2px;position: relative;text-shadow: #00000029 3px 3px 16px;}
+.loader span::after {content: 'Shopper';position: absolute;left: 0;top: 0;color: #02B763;width: 100%;height: 100%;overflow: hidden;box-sizing: border-box;animation: animloader 1s ease-in infinite;}
+@keyframes animloader {
+    0% {width: 0%;}
+    100% {width: 100%;}
+}
+@keyframes animImgloader {
+    0% {padding-left: 0;}
+    100% {padding-left: 150px;}
+}
+
+/* ul */
+.topTitleUl{border-bottom: 1px solid #E4E4E4;padding-bottom: 8px;}
+.topTitleUl > li{text-align: center;padding-bottom: 16px;}
+.topTitleUl > li h5{color: #333333;font-size: 16px;}
+.topTitleUl > li p{color: #333333;font-size: 24px;font-weight: 700;}
+
+.formUl{padding-top: 24px;}
+.formUl > li{padding-bottom: 16px;}
+.formUl > li h5{color: #333333;font-size: 16px;font-weight: 700;}
+.formUl > li p{color: #333333;font-size: 14px;display: flex;align-items: center;padding-top: 5px;}
+.formUl > li p img{padding-left: 8px;}
+.formUl > li .swiper{padding-top: 5px;}
+
+.prodUl{}
+.prodUl > li{display: flex;align-items: center;border-bottom: 1px solid #E4E4E4;padding: 17px 0;}
+.prodUl > li img{border-radius: 10px;margin-right: 10px;}
+.prodUl > li span{color: #333333;font-size: 15px;}
+.prodUl > li span.prodNm{flex: 1;padding-right: 10px;}
+.prodUl > li span.prodCnt{font-size: 14px;}
+.prodUl > li span.prodAmt{font-size: 13px;width: 95px;text-align: right;}
+
+.ulType01{padding-top: 8px;}
+.ulType01 > li{background-color: #FFFFFF;}
+.ulType01 > li a{display: flex;align-items: center;padding: 26px 17px 25px 33px;}
+.ulType01 > li a h5{color: #333333;font-size: 15px;flex: 1;}
+
+/* 하단 버튼 */
+.btnBottomArea{background-color: #ffffff;box-shadow: #0000000D 0px -5px 16px;padding: 17px;position: fixed;bottom: 0;left:0;width: calc(100% - 34px);z-index: 1;}
+
+/* swiper */
+.swiper-wrapper .swiper-slide{width: 85%;padding-right: 10px;}
+.swiper-wrapper .swiper-slide .imgZoomArea{position: relative;}
+.swiper-wrapper .swiper-slide .imgZoomArea .img{border-radius: 10px;width: 100%;object-fit: cover;}
+.swiper-wrapper .swiper-slide .imgZoomArea .zoom{position: absolute;right: 11px; bottom: 13px;border-radius: 0;}

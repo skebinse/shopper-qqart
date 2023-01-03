@@ -11,10 +11,38 @@ const pool = createPool({
     queueLimit: 0,
 });
 
-export async function getConnectPol(callback) {
+/**
+ * Connect Pool
+ * @param callback
+ * @returns {Promise<void>}
+ */
+export async function getConnectPool(callback) {
     const conn = await pool.getConnection(async conn => conn);
 
     await callback(conn);
 
     conn.release();
+}
+
+/**
+ * 결과 값
+ *
+ * @param data
+ * @param code
+ * @param msg
+ * @returns {{data, resultCode: string, resultMsg}}
+ */
+export function result(data, code = '0000', msg) {
+
+    if(!!data && (!!data.RESULT_CODE || !!data.resultCode)) {
+
+        code = (data.RESULT_CODE || data.resultCode);
+        msg = (data.RESULT_MSG || data.resultMsg);
+    }
+
+    return {
+        data: data,
+        resultCode: code,
+        resultMsg: msg,
+    }
 }

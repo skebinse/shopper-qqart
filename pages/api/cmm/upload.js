@@ -1,4 +1,4 @@
-import {getConnectPol} from "../db";
+import {getConnectPool, result} from "../db";
 import {uuid} from "next-s3-upload";
 
 export default async function Upload(req, res) {
@@ -7,7 +7,7 @@ export default async function Upload(req, res) {
 
     const atchFileUuid = uuid();
 
-    await getConnectPol(async conn => {
+    await getConnectPool(async conn => {
 
         const data = JSON.parse(req.body);
         try {
@@ -42,11 +42,10 @@ export default async function Upload(req, res) {
                 `, [atchFileUuid, atchFileUuid, item.atchFileActlNm, item.atchFileSrvrNm, item.atchFileSrvrPath, item.atchFileEts, item.atchFileSiz]);
             }
 
-            res.status(200).json({atchFileUuid: atchFileUuid});
+            res.status(200).json(result({atchFileUuid: atchFileUuid}));
         } catch (e) {
 
-            console.log(e)
-            res.status(500).json({resultCode: '9999', reulstMsg: '오류가 발생했습니다.'});
+            res.status(500).json(result('', '9999', '오류가 발생했습니다.'));
         }
     });
     console.log(fileList)

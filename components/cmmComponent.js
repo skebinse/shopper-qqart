@@ -1,8 +1,9 @@
 import {useGlobal} from "../context/globalContext";
+import Image from "next/image";
 
 export default function CmmComponent() {
 
-    const {sAlert, setSAlert, sConfirm, setSConfirm} = useGlobal();
+    const {sAlert, setSAlert, sConfirm, setSConfirm, isLoading} = useGlobal();
 
     /**
      * Alert 확인
@@ -37,7 +38,7 @@ export default function CmmComponent() {
                     {sAlert.title &&
                         <h3>{sAlert.title}</h3>
                     }
-                    <p dangerouslySetInnerHTML={{__html: sAlert.txt.replace(/\n/g, '<br/>')}}></p>
+                    <p dangerouslySetInnerHTML={{__html: !!sAlert.txt ? sAlert.txt.replace(/\n/g, '<br/>') : ''}}></p>
                     <button className={'button'} type={"button"} onClick={alertOk}>확인</button>
                 </div>
             </div>
@@ -54,6 +55,14 @@ export default function CmmComponent() {
                         <button className={'button'} type={"button"} onClick={() => confirmClick(true)}>확인</button>
                     </div>
                 </div>
+            </div>
+        }
+        {isLoading &&
+            <div className="loader">
+                <span>
+                    Shopper
+                    <Image alt={'로딩 이미지'} src={'/assets/images/icon/iconDistance2.svg'} width={24} height={14.8} />
+                </span>
             </div>
         }
     </>

@@ -18,10 +18,12 @@ export default function Info() {
     const [joinInfo, setJoinInfo] = useState({
         cphoneNo: router.query.cphoneNo,
         userNcnm: '',
+        addrTxt: '<span>주소를 입력해주세요.</span>',
         shprSfitdText: '',
         profile: '',
+        isLogin: true,
     });
-    const {alert, goPage, confirm} = useCommon();
+    const {alert, goPage, confirm, fontAjax} = useCommon();
 
     useEffect(() => {
 
@@ -29,12 +31,32 @@ export default function Info() {
             alert('로그인정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {
                 goPage('/cmm/login');
             });
-        }
-    }, [router.query.userCrctno, alert, goPage]);
+        } else {
 
-    useEffect(() => {
-        console.log(joinInfo);
-    }, [joinInfo]);
+            fontAjax({
+                url: '/api/cmm/user',
+                success: res => {
+
+                    setJoinInfo({
+                        isLogin: $cmm.checkLogin(),
+                        userCrctno: res.SHPR_CRCTNO,
+                        userNcnm: res.SHPR_NCNM,
+                        shprSfitdText: res.SHPR_SFITD_TEXT,
+                        profile: res.SHPR_NCNM,
+                        addrTxt: res.SHPR_ADDR,
+                        userStdoCd: res.SHPR_STDO_CD,
+                        userZipc: res.SHPR_ZIPC,
+                        userAddr: res.SHPR_ADDR,
+                        userAddrLat: res.SHPR_ADDR_LAT,
+                        userAddrLot: res.SHPR_ADDR_LOT,
+                        atchFileUuid: res.SHPR_PRFL_ATCH_FILE_UUID,
+                    });
+                    setPrflPrvImg($cmm.getLoginInfo('SHPR_PRFL_FILE'));
+                }
+            });
+        }
+
+    }, [router.query.userCrctno, alert, goPage]);
 
     /**
      * 프로필 변경
@@ -67,16 +89,16 @@ export default function Info() {
             oncomplete: function(data) {
                 // 팝업 close
                 setPopupClass('');
-                psArea.innerHTML = data.roadAddress;
+                setJoinInfo(prevState => ({...prevState, addrTxt: data.roadAddress}));
 
-                const options = {
-                    method: 'GET',
-                    headers: {accept: 'application/json', appKey: 'l7xx7eddba679e184d3287a0a2a7b191d865'}
-                };
-
-                fetch(`https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?addressFlag=F02&coordType=WGS84GEO&version=1&fullAddr=${encodeURIComponent(data.roadAddress)}&page=1&count=20`, options)
-                    .then(response => response.json())
-                    .then(res => {
+                fontAjax({
+                    url: `https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?addressFlag=F02&coordType=WGS84GEO&version=1&fullAddr=${encodeURIComponent(data.roadAddress)}&page=1&count=20`,
+                    headers: {
+                        appKey: process.env.NEXT_PUBLIC_TMAP_KEY
+                    },
+                    isExtr: true,
+                    contextType: 'application/json',
+                    success: res => {
 
                         if(!!res.coordinateInfo && !!res.coordinateInfo.coordinate && res.coordinateInfo.coordinate.length > 0) {
                             setJoinInfo(prevState => ({
@@ -91,10 +113,12 @@ export default function Info() {
 
                             alert('주소 입력에 실패하였습니다.');
                         }
-                    })
-                    .catch(err => {
+                    },
+                    error: res => {
+
                         alert('주소 입력에 실패하였습니다.');
-                    });
+                    },
+                });
             }
         }).embed(divDaumPost);
     };
@@ -118,17 +142,20 @@ export default function Info() {
             alert('지역을 선택해 주세요.');
         } else {
 
-            confirm('가입 진행하겠습니까?', () => {
+            confirm(joinInfo.isLogin ? '개인정보를 수정하시겠습니까?' : '가입 진행하겠습니까?', () => {
 
                 const call = param => {
 
-                    $cmm.ajax({
+                    fontAjax({
                         url: '/api/cmm/join',
                         data: param,
                         success: res => {
 
                             $cmm.util.setLs($cmm.Cont.LOING_INFO, res);
-                            goPage('./comp');
+                            if(!!res && !joinInfo.isLogin) {
+
+                                goPage('./comp');
+                            }
                         }
                     });
                 };
@@ -156,10 +183,14 @@ export default function Info() {
             <Head>
                 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" defer></script>
             </Head>
-            <HeadTitle />
-            <NaviStep step={3} />
-            <div className={styles.content}>
-                <h3>기본 정보 설정</h3>
+            <HeadTitle title={joinInfo.isLogin ? '개인정보수정' : ''} />
+            {!joinInfo.isLogin &&
+                <NaviStep step={3} />
+            }
+            <div className={styles.content} style={joinInfo.isLogin ? {paddingTop: '0px'} : {}}>
+                {!joinInfo.isLogin &&
+                    <h3>기본 정보 설정</h3>
+                }
                 <div className={styles.profile}>
                     <Image src={!!prflPrvImg ? prflPrvImg : "/assets/images/img/noProfile.svg"} alt={'프로필 사진'} width={96} height={96} />
                     <input id={'inpFile'} type={"file"} accept={'image/*'} onChange={fileChage} />
@@ -189,7 +220,7 @@ export default function Info() {
                     <li>
                         <label>현재 지역 설정</label>
                         <div className={styles.zip}>
-                            <p id="psArea"><span>주소를 입력해주세요.</span></p>
+                            <p dangerouslySetInnerHTML={{__html: joinInfo.addrTxt}}></p>
                             <button type={'button'} onClick={daumPostClick}>주소검색</button>
                         </div>
                     </li>

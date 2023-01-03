@@ -1,9 +1,10 @@
-import {createContext, useContext, useState} from "react";
+import {createContext, useContext, useEffect, useState} from "react";
 
 const GlobalContext = createContext();
 
 export function GlobalProvider({children}) {
 
+    const [isLoading, setIsLoading] = useState(false);
     const [sAlert, setSAlert] = useState({
         show: false,
         title: '알림',
@@ -19,7 +20,7 @@ export function GlobalProvider({children}) {
     });
 
     return (
-        <GlobalContext.Provider value={{sAlert, setSAlert, sConfirm, setSConfirm}}>
+        <GlobalContext.Provider value={{sAlert, setSAlert, sConfirm, setSConfirm, isLoading, setIsLoading}}>
             {children}
         </GlobalContext.Provider>
     )

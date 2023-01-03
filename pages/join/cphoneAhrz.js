@@ -16,7 +16,7 @@ export default function CphoneAhrz(props) {
     const [cetino, setCetino] = useState('');
     const [authNoHash, setAuthNoHash] = useState(router.query.authNoHash);
     const cphoneNo = $cmm.util.hyphenTel(router.query.cphoneNo);
-    const {alert, goPage} = useCommon();
+    const {alert, goPage, fontAjax} = useCommon();
 
     // init
     useEffect(() => {
@@ -57,7 +57,7 @@ export default function CphoneAhrz(props) {
      */
     const cetinoRtrnClick = () => {
 
-        $cmm.ajax({
+        fontAjax({
             url: '/api/cmm/smsCetinoSend',
             data: {
                 cphoneNo: router.query.cphoneNo
@@ -73,7 +73,7 @@ export default function CphoneAhrz(props) {
      */
     const cetionCheckClick = () => {
 
-        $cmm.ajax({
+        fontAjax({
             url: '/api/cmm/authNo',
             data: {
                 cetino,

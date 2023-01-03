@@ -1,8 +1,8 @@
-import {getConnectPol} from "../db";
+import {getConnectPool, result} from "../db";
 
 export default async function handler(req, res) {
 
-    await getConnectPol(async conn => {
+    await getConnectPool(async conn => {
 
         const param = req.body;
         let query = `
@@ -10,12 +10,18 @@ export default async function handler(req, res) {
                  , AA.SHOP_NM
                  , AA.PROD_CNT
                  , AA.SHOP_FULL_ADDR
+                 , AA.ODER_USER_ID
+                 , AA.ODER_KD
                  , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
                  , FORMAT(fnGetDelyDtcAmt(CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10), 0) AS DELY_AMT
                  , fnGetAtchFileList(AA.SHOP_RRSN_ATCH_FILE_UUID) AS SHOP_RRSN_ATCH_FILE_LIST
               FROM (
                 SELECT AA.ODER_MNGR_RGI_YN
-                     , AA.ODER_REQ_YMD
+                     , CASE WHEN AA.ODER_MNGR_RGI_YN = 'Y'
+                         THEN AA.ODER_REQ_YMD
+                       ELSE DATE_ADD(AA.ODER_REQ_YMD, INTERVAL 9 HOUR) END AS ODER_REQ_YMD
+                     , AA.ODER_USER_ID
+                     , AA.ODER_KD
                      , BB.SHOP_NM
                      , BB.SHOP_RRSN_ATCH_FILE_UUID
                      , CONCAT(BB.SHOP_ADDR, ' ' , BB.SHOP_DTPT_ADDR) AS SHOP_FULL_ADDR
@@ -48,7 +54,7 @@ export default async function handler(req, res) {
                    AND AA.ODER_REQ_YMD IS NOT NULL
                    AND AA.ODER_REQ_APV_DT IS NULL
                ) AA
-         WHERE (AA.PROD_CNT > 0 OR AA.ODER_MNGR_RGI_YN = 'Y')
+         WHERE (AA.PROD_CNT > 0 OR AA.ODER_KD = 'PIUP')
            AND AA.SLIN_DTC < 10000
       ORDER BY AA.ODER_REQ_YMD DESC
         `;
@@ -60,12 +66,18 @@ export default async function handler(req, res) {
                  , AA.SHOP_NM
                  , AA.PROD_CNT
                  , AA.SHOP_FULL_ADDR
+                 , AA.ODER_USER_ID
+                 , AA.ODER_KD
                  , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
                  , FORMAT(fnGetDelyDtcAmt(CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10), 0) AS DELY_AMT
                  , fnGetAtchFileList(AA.SHOP_RRSN_ATCH_FILE_UUID) AS SHOP_RRSN_ATCH_FILE_LIST
               FROM (
                 SELECT AA.ODER_MNGR_RGI_YN
-                     , AA.ODER_REQ_YMD
+                     , CASE WHEN AA.ODER_MNGR_RGI_YN = 'Y'
+                         THEN AA.ODER_REQ_YMD
+                       ELSE DATE_ADD(AA.ODER_REQ_YMD, INTERVAL 9 HOUR) END AS ODER_REQ_YMD
+                     , AA.ODER_USER_ID
+                     , AA.ODER_KD
                      , BB.SHOP_NM
                      , BB.SHOP_RRSN_ATCH_FILE_UUID
                      , CONCAT(BB.SHOP_ADDR, ' ' , BB.SHOP_DTPT_ADDR) AS SHOP_FULL_ADDR
@@ -97,17 +109,16 @@ export default async function handler(req, res) {
                    AND AA.SHPR_ID = EE.SHPR_ID
                  WHERE AA.ODER_ID IS NULL
                    AND AA.ODER_REQ_YMD IS NOT NULL
+                   AND AA.ODER_PGRS_STAT IN ('03', '04', '05')
                ) AA
       ORDER BY AA.ODER_REQ_YMD DESC
         `;
 
         const [rows2] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
-        const reulst = {
+        res.status(200).json(result({
             btchList: rows,
             btchAcpList: rows2,
-        };
-
-        res.status(200).json(reulst);
+        }));
     });
 }

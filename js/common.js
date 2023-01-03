@@ -1,7 +1,3 @@
-import {useGlobal} from "../context/globalContext";
-// import {useS3Upload} from "next-s3-upload";
-import {useRouter} from "next/router";
-import {useCallback} from "react";
 
 const $cmm = {
 
@@ -11,11 +7,12 @@ const $cmm = {
     Cont: {
         LOING_INFO: 'shooperLoginInfo',
     },
+
     /**
      * ajax 통신
      * @param options
      */
-    ajax: (options) => {
+    ajax: async (options) => {
 
         const _options = {
             method: 'POST',
@@ -32,7 +29,7 @@ const $cmm = {
             body: _options.body,
         };
 
-        if($cmm.checkLogin()) {
+        if(typeof window !== 'undefined' && $cmm.checkLogin()) {
             init.headers['X-ENC-USER-ID'] = $cmm.getLoginInfo('ENC_SHPR_ID');
         }
 
@@ -56,20 +53,41 @@ const $cmm = {
             init.body = !!_options.data ? new URLSearchParams(_options.data) : undefined;
         }
 
-        fetch(_options.url, init).then(res => res.json())
-            .then(data => {
-                if(!!_options.success) {
+        const res = await fetch(_options.url, init);
+        const data = await res.json();
 
-                    _options.success(data)
-                }
-            })
-            .catch(err => {
+        if(data.resultCode === '0000') {
 
-                if(!!_options.error) {
+            if(!!_options.success) {
 
-                    _options.error();
-                }
-            });
+                _options.success(data.data);
+            }
+            return [data.data];
+        } else {
+
+            alert(data.resultMsg);
+        }
+        // fetch(_options.url, init).then(res => res.json())
+        //     .then(res => {
+        //
+        //         if(res.resultCode === '0000') {
+        //
+        //             if(!!_options.success) {
+        //
+        //                 _options.success(res.data);
+        //             }
+        //         } else {
+        //
+        //             alert(res.resultMsg);
+        //         }
+        //     })
+        //     .catch(err => {
+        //
+        //         if(!!_options.error) {
+        //
+        //             _options.error();
+        //         }
+        //     });
     },
 
     /**
@@ -118,8 +136,9 @@ const $cmm = {
         getToday: function (div, optValue) {
 
             div = div === undefined ? '-' : div;
+            const TIME_ZONE = 3240 * 10000;
+            const date = new Date(+new Date() + TIME_ZONE).toISOString().split('T')[0].replace(/-/g, div);
 
-            const date = new Date().toLocaleDateString().replace(/\./g, '').replace(/\s/g, div)
             if(!optValue) {
 
                 return date;
@@ -145,6 +164,37 @@ const $cmm = {
      * Util
      */
     util: {
+
+        /**
+         * 숫자만 추출
+         *
+         * @memberOf $comm.util
+         * @param val
+         * @returns {*|string}
+         */
+        getNumber: function (val) {
+
+            return !!val ? Number(String(val).replace(/[^-0-9.]/g, "")) : 0;
+        },
+
+        /**
+         * 콤마
+         * @memberOf $comm.util
+         * @param val
+         * @returns {*|string}
+         */
+        comma: function (val) {
+
+            val = !val ? '' : String(val);
+            let dec = '';
+
+            if(val.indexOf('.') > -1) {
+                dec = val.substring(val.indexOf('.'));
+                val = val.replaceAll(dec, '');
+            }
+
+            return !!val ? String(this.getNumber(val)).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + dec : '';
+        },
 
         /**
          * 메일 형식 체크
@@ -224,6 +274,21 @@ const $cmm = {
         rmLs : function(key) {
             window.localStorage.removeItem(key);
         },
+
+        /**
+         * Image Zoom
+         * @param idx
+         */
+        showImageZoom :(list, idx) => {
+
+            const imgs = [];
+            list.forEach(url => {
+
+                imgs.push({href: url});
+            });
+
+            window.blueimp.Gallery(imgs, {index: idx});
+        }
     },
 
     /**

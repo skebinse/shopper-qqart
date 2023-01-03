@@ -1,10 +1,8 @@
-import formidable from "formidable"
-import Upload from "./upload";
-import {getConnectPol} from "../db";
+import {getConnectPool, result} from "../db";
 
 export default async function handler(req, res) {
 
-    await getConnectPol(async conn => {
+    await getConnectPool(async conn => {
 
         const param = req.body;
 
@@ -14,7 +12,7 @@ export default async function handler(req, res) {
             param.userAddrLot, '', '', param.atchFileUuid, param.shprSfitdText, process.env.ENC_KEY
         ]);
 
-        res.status(200).json(rows[0][0]);
+        res.status(200).json(result(rows[0][0]));
     });
 
 }

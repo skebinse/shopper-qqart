@@ -1,0 +1,23 @@
+.bodyBg{background-color: #F8F8F8;}
+
+.btchInfo{padding: 0 0 90px;}
+.btchInfo > ul{margin-left: 17px;margin-right: 17px;}
+
+.btchIng{padding: 0 17px;}
+.btchIng .step{text-align: center;}
+.btchIng .step img:first-child{padding-right: 20px;}
+.btchIng .step img:last-child{padding-left: 20px;}
+.btchIng > ul{padding-bottom: 90px;}
+.btchIng > ul .uploadArea{}
+.btchIng > ul .uploadArea > div{display: flex;padding-top: 5px;flex-direction: row;flex-wrap: wrap;}
+.btchIng > ul .uploadArea > div label{background-color: #F8F8F8;border-radius: 12px;display: block;padding: 25px 37px;}
+.btchIng > ul .uploadArea input{display: none;}
+.btchIng > ul .uploadArea > div > div{position: relative;margin-right: 19px;}
+.btchIng > ul .uploadArea > div > div .vchrImg{border-radius: 12px;object-fit: cover;}
+.btchIng > ul .uploadArea > div > div .del{position: absolute;top: 0;right: 0;}
+
+.btchArea{padding-top: 24px;}
+
+.compDtpt{}
+.compDtpt .content{padding: 0 17px;}
+.compDtpt .content > ul{padding-top: 24px;}

@@ -7,7 +7,7 @@ import useCommon from "../../hooks/useCommon";
 
 export default function Login(props) {
 
-    const {goPage, alert} = useCommon();
+    const {goPage, alert, fontAjax} = useCommon();
 
     useEffect(() => {
 
@@ -48,7 +48,7 @@ export default function Login(props) {
                             }
                         }
 
-                        $cmm.ajax({
+                        fontAjax({
                             url: '/api/login',
                             data: param,
                             success: res => {

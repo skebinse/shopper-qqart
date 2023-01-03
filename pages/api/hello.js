@@ -1,11 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 import {createPool} from "mysql2/promise";
-import {getConnectPol} from "./db";
+import {getConnectPool} from "./db";
 
 export default async function handler(req, res) {
 
-  await getConnectPol(async conn => {
+  await getConnectPool(async conn => {
 
       console.log(req.query);
       try {

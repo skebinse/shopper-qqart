@@ -5,7 +5,9 @@ export default function Document() {
 
   return (
     <Html lang="en">
-      <Head />
+      <Head >
+          <link rel="shortcut icon" href="/assets/images/logo.svg" />
+      </Head>
       <body>
         <Main />
         <NextScript />

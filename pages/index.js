@@ -20,13 +20,13 @@ export default function Index(props) {
         btchList: [],
         btchAcpList: [],
     });
-    const {goCheckLogin, goPage, alert, fontAjax} = useCommon();
+    const {fontAjax} = useCommon();
     const {setIsLoading} = useGlobal();
 
     /**
      * 배치 리스트 조회
      */
-    const callBtchList = useCallback(() => {
+    const callBtchList = useCallback(isInit => {
 
         if(!isInit) {
 
@@ -51,12 +51,11 @@ export default function Index(props) {
                 url: '/api/btch/btchList',
                 success: res => {
 
-                    setIsInit(false);
                     setBtchInfo({btchList: res.btchList, btchAcpList: res.btchAcpList});
                 }
             });
         }
-    }, [fontAjax, setIsLoading, isInit]);
+    }, [fontAjax, setIsLoading]);
 
     useEffect(() => {
 
@@ -66,48 +65,21 @@ export default function Index(props) {
 
         setWindowHeight(window.outerHeight);
 
-        const call = () => {
+        console.log('init')
+
+        if($cmm.checkLogin()) {
+
             let shprAddr = $cmm.getLoginInfo('SHPR_ADDR');
             shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
             shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
 
             setAddr(shprAddr);
-        };
 
-        // 로그인 체크
-        goCheckLogin();
-
-        if($cmm.date.getToday('-') !== $cmm.getLoginInfo('LOING_DT')) {
-
-            fontAjax({
-                url: '/api/login',
-                data: {
-                    encShprId: $cmm.getLoginInfo('ENC_SHPR_ID'),
-                },
-                success: res => {
-
-                    // 가입되지 않은 계정
-                    if(res.IS_LOGIN === 0) {
-
-                        alert('로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.', function () {
-
-                            goPage('/cmm/login');
-                        });
-                    } else {
-
-                        $cmm.util.setLs($cmm.Cont.LOING_INFO, res);
-                        call();
-                    }
-                }
-            });
-        } else {
-
-            call();
+            // 배치 리스트 조회
+            callBtchList(true);
+            setIsInit(false);
         }
-
-        // 배치 리스트 조회
-        callBtchList(true);
-    }, [goCheckLogin, goPage, alert, router.query.tabIdx, fontAjax, callBtchList]);
+    }, [router.query.tabIdx, callBtchList]);
 
 
     return (

@@ -6,10 +6,6 @@ import {useEffect} from "react";
 
 export default function MyApp({ Component, pageProps }) {
 
-    useEffect(() => {
-        console.log('app');
-    }, []);
-
   return (
     <GlobalProvider>
       <Component {...pageProps} />

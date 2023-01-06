@@ -184,6 +184,12 @@ export default function IngOderUserId() {
                                 <h5>배달 시간</h5>
                                 <p>{btchInfo.oderDelySlctVal}</p>
                             </li>
+                            {!!btchInfo.ODER_RRV_ID &&
+                                <li>
+                                    <h5>스토어 적립</h5>
+                                    <p>{btchInfo.ODER_RRV_ID}</p>
+                                </li>
+                            }
                         </>
                     }
                     {btchInfo.ODER_PGRS_STAT === '05' &&
@@ -224,6 +230,12 @@ export default function IngOderUserId() {
                                 </li>
                             }
                         </>
+                    }
+                    {btchInfo.ODER_PGRS_STAT === '04' && !!btchInfo.ODER_RRV_ID &&
+                        <li>
+                            <h5>스토어 적립</h5>
+                            <p>{btchInfo.ODER_RRV_ID}</p>
+                        </li>
                     }
                     {btchInfo.ODER_PGRS_STAT !== '03' && prodList.length > 0 &&
                         <li>

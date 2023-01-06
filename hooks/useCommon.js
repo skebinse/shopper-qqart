@@ -121,14 +121,17 @@ export default function useCommon() {
      * @param isMove142
      * @returns {boolean}
      */
-    const goCheckLogin = useCallback((isMove) => {
+    const goCheckLogin = useCallback(() => {
 
+        const isLogin = $cmm.checkLogin();
         if(!$cmm.checkLogin()) {
 
             alert('로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.', function () {
                 router.push('/cmm/login');
             });
         }
+
+        return isLogin;
     }, []);
 
     /**

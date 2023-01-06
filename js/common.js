@@ -18,6 +18,7 @@ const $cmm = {
             method: 'POST',
             contextType: 'application/x-www-form-urlencoded',
             dataType: '',
+            isExtr: false,
             body: undefined,
         };
 
@@ -56,38 +57,26 @@ const $cmm = {
         const res = await fetch(_options.url, init);
         const data = await res.json();
 
-        if(data.resultCode === '0000') {
+        if(!!_options.isExtr) {
 
-            if(!!_options.success) {
-
-                _options.success(data.data);
-            }
-            return [data.data];
+            _options.success(data);
         } else {
 
-            alert(data.resultMsg);
+            if(data.resultCode === '0000') {
+
+                if(!!_options.success) {
+
+                    _options.success(data.data);
+                }
+                return [data.data];
+            } else {
+
+                if(!!_options.error) {
+
+                    _options.error(data.resultMsg);
+                }
+            }
         }
-        // fetch(_options.url, init).then(res => res.json())
-        //     .then(res => {
-        //
-        //         if(res.resultCode === '0000') {
-        //
-        //             if(!!_options.success) {
-        //
-        //                 _options.success(res.data);
-        //             }
-        //         } else {
-        //
-        //             alert(res.resultMsg);
-        //         }
-        //     })
-        //     .catch(err => {
-        //
-        //         if(!!_options.error) {
-        //
-        //             _options.error();
-        //         }
-        //     });
     },
 
     /**

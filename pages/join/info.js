@@ -33,27 +33,30 @@ export default function Info() {
             });
         } else {
 
-            fontAjax({
-                url: '/api/cmm/user',
-                success: res => {
+            if(!!$cmm.checkLogin()) {
 
-                    setJoinInfo({
-                        isLogin: $cmm.checkLogin(),
-                        userCrctno: res.SHPR_CRCTNO,
-                        userNcnm: res.SHPR_NCNM,
-                        shprSfitdText: res.SHPR_SFITD_TEXT,
-                        profile: res.SHPR_NCNM,
-                        addrTxt: res.SHPR_ADDR,
-                        userStdoCd: res.SHPR_STDO_CD,
-                        userZipc: res.SHPR_ZIPC,
-                        userAddr: res.SHPR_ADDR,
-                        userAddrLat: res.SHPR_ADDR_LAT,
-                        userAddrLot: res.SHPR_ADDR_LOT,
-                        atchFileUuid: res.SHPR_PRFL_ATCH_FILE_UUID,
-                    });
-                    setPrflPrvImg($cmm.getLoginInfo('SHPR_PRFL_FILE'));
-                }
-            });
+                fontAjax({
+                    url: '/api/cmm/user',
+                    success: res => {
+
+                        setJoinInfo({
+                            isLogin: $cmm.checkLogin(),
+                            userCrctno: res.SHPR_CRCTNO,
+                            userNcnm: res.SHPR_NCNM,
+                            shprSfitdText: res.SHPR_SFITD_TEXT,
+                            profile: res.SHPR_NCNM,
+                            addrTxt: res.SHPR_ADDR,
+                            userStdoCd: res.SHPR_STDO_CD,
+                            userZipc: res.SHPR_ZIPC,
+                            userAddr: res.SHPR_ADDR,
+                            userAddrLat: res.SHPR_ADDR_LAT,
+                            userAddrLot: res.SHPR_ADDR_LOT,
+                            atchFileUuid: res.SHPR_PRFL_ATCH_FILE_UUID,
+                        });
+                        setPrflPrvImg($cmm.getLoginInfo('SHPR_PRFL_FILE'));
+                    }
+                });
+            }
         }
 
     }, [router.query.userCrctno, alert, goPage, fontAjax]);

@@ -4,7 +4,7 @@ import styles from "../../styles/join.module.css";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import Image from "next/image";
-import $cmm from "../../js/common";
+import cmm from "../../js/common";
 import useCommon from "../../hooks/useCommon";
 
 export default function CphoneAhrz() {
@@ -12,7 +12,7 @@ export default function CphoneAhrz() {
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [delClass, setDelClass] = useState('d-none');
     const [cphoneNo, setCphoneNo] = useState('');
-    const {goPage, fontAjax} = useCommon();
+    const {goPage} = useCommon();
 
     const router = useRouter();
 
@@ -34,7 +34,7 @@ export default function CphoneAhrz() {
      */
     const cetinoClick = () => {
 
-        fontAjax({
+        cmm.ajax({
             url: '/api/cmm/smsCetinoSend',
             data: {
                 cphoneNo
@@ -57,7 +57,7 @@ export default function CphoneAhrz() {
                     <li>
                         <label>휴대폰 번호</label>
                         <div>
-                            <input id="cphoneNo" value={cphoneNo} onChange={e => setCphoneNo(e.target.value)} type="tel" onKeyUp={$cmm.event.formatTelEvent}
+                            <input id="cphoneNo" value={cphoneNo} onChange={e => setCphoneNo(e.target.value)} type="tel" onKeyUp={cmm.event.formatTelEvent}
                                    placeholder="휴대폰 번호를 입력해주세요" maxLength={13} />
                             <button type="button" className={delClass} onClick={() => setCphoneNo('')}>
                                 <Image alt={'삭제'} src="/assets/images/icon/iconDel.svg" width={8} height={8} />

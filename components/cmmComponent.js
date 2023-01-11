@@ -32,6 +32,8 @@ export default function CmmComponent() {
     };
 
     return <>
+        <div id={'alertArea'} />
+        <div id={'loadingArea'} />
         {sAlert.show &&
             <div className={'alertArea'}>
                 <div>

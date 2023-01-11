@@ -7,7 +7,7 @@ import Head from "next/head";
 import Image from "next/image";
 import useShopS3Upload from "../../hooks/useShopS3Upload";
 import useCommon from "../../hooks/useCommon";
-import $cmm from "../../js/common";
+import cmm from "../../js/common";
 
 export default function Info() {
 
@@ -21,26 +21,26 @@ export default function Info() {
         addrTxt: '<span>주소를 입력해주세요.</span>',
         shprSfitdText: '',
         profile: '',
-        isLogin: true,
+        isLogin: false,
     });
-    const {alert, goPage, confirm, fontAjax} = useCommon();
+    const {goPage} = useCommon();
 
     useEffect(() => {
 
-        if(!$cmm.checkLogin() && !router.query.userCrctno) {
-            alert('로그인정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {
+        if(!cmm.checkLogin() && !router.query.userCrctno) {
+            cmm.alert('로그인정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {
                 goPage('/cmm/login');
             });
         } else {
 
-            if(!!$cmm.checkLogin()) {
+            if(!!cmm.checkLogin()) {
 
-                fontAjax({
+                cmm.ajax({
                     url: '/api/cmm/user',
                     success: res => {
 
                         setJoinInfo({
-                            isLogin: $cmm.checkLogin(),
+                            isLogin: cmm.checkLogin(),
                             userCrctno: res.SHPR_CRCTNO,
                             userNcnm: res.SHPR_NCNM,
                             shprSfitdText: res.SHPR_SFITD_TEXT,
@@ -53,13 +53,13 @@ export default function Info() {
                             userAddrLot: res.SHPR_ADDR_LOT,
                             atchFileUuid: res.SHPR_PRFL_ATCH_FILE_UUID,
                         });
-                        setPrflPrvImg($cmm.getLoginInfo('SHPR_PRFL_FILE'));
+                        setPrflPrvImg(cmm.getLoginInfo('SHPR_PRFL_FILE'));
                     }
                 });
             }
         }
 
-    }, [router.query.userCrctno, alert, goPage, fontAjax]);
+    }, [router.query.userCrctno, goPage]);
 
     /**
      * 프로필 변경
@@ -94,7 +94,7 @@ export default function Info() {
                 setPopupClass('');
                 setJoinInfo(prevState => ({...prevState, addrTxt: data.roadAddress}));
 
-                fontAjax({
+                cmm.ajax({
                     url: `https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?addressFlag=F02&coordType=WGS84GEO&version=1&fullAddr=${encodeURIComponent(data.roadAddress)}&page=1&count=20`,
                     headers: {
                         appKey: process.env.NEXT_PUBLIC_TMAP_KEY
@@ -133,31 +133,37 @@ export default function Info() {
 
         if(!joinInfo.profile) {
 
-            alert('사진을 등록해 주세요.');
+            cmm.alert('사진을 등록해 주세요.');
         } else if(!joinInfo.userNcnm){
 
-            alert('닉네임을 입력해 주세요.');
+            cmm.alert('닉네임을 입력해 주세요.');
         } else if(!joinInfo.shprSfitdText){
 
-            alert('자기소개를 입력해 주세요.');
+            cmm.alert('자기소개를 입력해 주세요.');
         } else if(!joinInfo.userZipc){
 
-            alert('지역을 선택해 주세요.');
+            cmm.alert('지역을 선택해 주세요.');
         } else {
 
-            confirm(joinInfo.isLogin ? '개인정보를 수정하시겠습니까?' : '가입 진행하겠습니까?', () => {
+            cmm.confirm(joinInfo.isLogin ? '개인정보를 수정하시겠습니까?' : '가입 진행하겠습니까?', () => {
 
                 const call = param => {
 
-                    fontAjax({
+                    cmm.ajax({
                         url: '/api/cmm/join',
                         data: param,
                         success: res => {
 
-                            $cmm.util.setLs($cmm.Cont.LOING_INFO, res);
+                            cmm.util.setLs(cmm.Cont.LOING_INFO, res);
                             if(!!res && !joinInfo.isLogin) {
 
                                 goPage('./comp');
+                            } else {
+
+                                cmm.alert('수정 되었습니다.', () => {
+
+                                    router.reload();
+                                });
                             }
                         }
                     });

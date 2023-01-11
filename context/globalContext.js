@@ -1,6 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import $cmm from "../js/common";
+import cmm from "../js/common";
 import useCommon from "../hooks/useCommon";
 
 const GlobalContext = createContext();
@@ -28,9 +28,9 @@ export function GlobalProvider({children}) {
 
         if(notLoginList.indexOf(router.route) === -1) {
 
-            console.log('is loing', $cmm.checkLogin())
+            console.log('is loing', cmm.checkLogin())
             // 로그인 체크
-            if(!$cmm.checkLogin()) {
+            if(!cmm.checkLogin()) {
 
                 setSAlert(prevState => ({
                     ...prevState,
@@ -38,12 +38,12 @@ export function GlobalProvider({children}) {
                     txt: '로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.',
                     callback: () => router.push('/cmm/login'),
                 }));
-            } else if($cmm.date.getToday('') !== $cmm.getLoginInfo('LOING_DT')) {
+            } else if(cmm.date.getToday('') !== cmm.getLoginInfo('LOING_DT')) {
 
-                $cmm.ajax({
+                cmm.ajax({
                     url: '/api/login',
                     data: {
-                        encShprId: $cmm.getLoginInfo('ENC_SHPR_ID'),
+                        encShprId: cmm.getLoginInfo('ENC_SHPR_ID'),
                     },
                     success: res => {
 
@@ -58,7 +58,7 @@ export function GlobalProvider({children}) {
                             }));
                         } else {
 
-                            $cmm.util.setLs($cmm.Cont.LOING_INFO, res);
+                            cmm.util.setLs(cmm.Cont.LOING_INFO, res);
                             router.reload();
                         }
                     }

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import HeadTitle from "../../../components/headTitle";
 import useCommon from "../../../hooks/useCommon";
 import Image from "next/image";
-import $cmm from "../../../js/common";
+import cmm from "../../../js/common";
 import {Swiper, SwiperSlide} from "swiper/react";
 import 'swiper/css';
 import {useRouter} from "next/router";
@@ -20,13 +20,13 @@ export default function IngOderUserId() {
     const [piupImgList, setPiupImgList] = useState([]);
     const [vchrImgList, setVchrImgList] = useState([]);
     const [vchrPrvImgList, setVchrPrvImgList] = useState([]);
-    const {fontAjax, alert, goPage, confirm} = useCommon();
+    const {goPage} = useCommon();
     const shopS3Upload = useShopS3Upload();
     const {ingOderUserId} = router.query;
 
     useEffect(() => {
 
-        fontAjax({
+        cmm.ajax({
             url: `/api/btch/ing/${ingOderUserId}`,
             success: res => {
 
@@ -68,14 +68,14 @@ export default function IngOderUserId() {
                     setBtchInfo(item);
                 } else {
 
-                    alert('배달이 완료된 건입니다.', () => {
+                    cmm.alert('배달이 완료된 건입니다.', () => {
                         goPage('/');
                     });
                 }
             }
         });
 
-    }, [fontAjax, alert, goPage, ingOderUserId]);
+    }, [goPage, ingOderUserId]);
 
     /**
      * 진행
@@ -87,14 +87,14 @@ export default function IngOderUserId() {
 
             if(vchrImgList.length === 0) {
 
-                alert('아직 사진을 등록하지 않았습니다.\n사진을 등록해주세요.');
+                cmm.alert('아직 사진을 등록하지 않았습니다.\n사진을 등록해주세요.');
             } else {
 
-                confirm('배달을 완료하시겠습니까?', () => {
+                cmm.confirm('배달을 완료하시겠습니까?', () => {
 
                     shopS3Upload(vchrImgList, res => {
 
-                        fontAjax({
+                        cmm.ajax({
                             url: '/api/btch/ing/btchComp',
                             data: {
                                 oderUserId: ingOderUserId,
@@ -102,7 +102,7 @@ export default function IngOderUserId() {
                             },
                             success: res => {
 
-                                alert('배달을 완료하였습니다.\n수고하셨습니다.', () => {
+                                cmm.alert('배달을 완료하였습니다.\n수고하셨습니다.', () => {
                                     goPage('/');
                                 });
                             },
@@ -116,9 +116,9 @@ export default function IngOderUserId() {
             let msg = btchInfo.ODER_PGRS_STAT === '03' ? '스토어에 도착하셨나요?\n장보기를 시작하시겠습니까?' : '결제를 완료하였나요?\n지금부터 배달을 시작하시겠습니까?';
             let title = btchInfo.ODER_PGRS_STAT === '03' ? '장보기 시작' : '배달 시작';
 
-            confirm(msg, () => {
+            cmm.confirm(msg, () => {
 
-                fontAjax({
+                cmm.ajax({
                     url: '/api/btch/ing/btchStat',
                     data: {
                         oderUserId: ingOderUserId,
@@ -136,17 +136,20 @@ export default function IngOderUserId() {
      */
     const fileChage = e => {
 
-        const fileReader = new FileReader();
-
         if(e.target.files.length > 0) {
 
-            fileReader.onload = e => {
-                setVchrPrvImgList(prevState => [...prevState, e.target.result]);
-            };
+            for(let i = 0; i < e.target.files.length; i++) {
 
-            setVchrImgList(prevState => [...prevState, e.target.files[0]]);
+                const fileReader = new FileReader();
 
-            fileReader.readAsDataURL(e.target.files[0]);
+                fileReader.onload = e => {
+                    setVchrPrvImgList(prevState => [...prevState, e.target.result]);
+                };
+
+                setVchrImgList(prevState => [...prevState, e.target.files[i]]);
+
+                fileReader.readAsDataURL(e.target.files[i]);
+            }
         }
     };
 
@@ -173,7 +176,7 @@ export default function IngOderUserId() {
                                 <h5>주소</h5>
                                 <p>
                                     {btchInfo.SHOP_FULL_ADDR}
-                                    <Image alt={'주소 복사'} src={'/assets/images/btn/btnCopy.svg'} width={44} height={23} />
+                                    <Image alt={'주소 복사'} src={'/assets/images/btn/btnCopy.svg'} width={44} height={23} onClick={() => cmm.util.clipboard(btchInfo.SHOP_FULL_ADDR)}/>
                                 </p>
                             </li>
                             <li>
@@ -210,12 +213,12 @@ export default function IngOderUserId() {
                                 <h5>주소</h5>
                                 <p>
                                     {btchInfo.USER_FULL_ADDR}
-                                    <Image alt={'주소 복사'} src={'/assets/images/btn/btnCopy.svg'} width={44} height={23} />
+                                    <Image alt={'주소 복사'} src={'/assets/images/btn/btnCopy.svg'} width={44} height={23} onClick={() => cmm.util.clipboard(btchInfo.USER_FULL_ADDR)}/>
                                 </p>
                             </li>
                             <li>
                                 <h5>연락처</h5>
-                                <p className={'colorGreen bold'}>{$cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}</p>
+                                <p className={'colorGreen bold'}>{cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}</p>
                             </li>
                             {!!btchInfo.ODER_JOIN_ENTH_PW &&
                                 <li>
@@ -248,7 +251,7 @@ export default function IngOderUserId() {
                                         }
                                         <span className={'prodNm'}>{item.PROD_NM}</span>
                                         <span className={'prodCnt'}>{item.SPBK_CCN}</span>
-                                        <span className={'prodAmt'}>{!!item.SPBK_AMT ? $cmm.util.comma(item.SPBK_AMT) + '원' : '가격 미정'}</span>
+                                        <span className={'prodAmt'}>{!!item.SPBK_AMT ? cmm.util.comma(item.SPBK_AMT) + '원' : '가격 미정'}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -262,7 +265,7 @@ export default function IngOderUserId() {
                                     <SwiperSlide key={'prop' + idx}>
                                         <div className={'imgZoomArea'}>
                                             <Image className={'img'} alt={'영수증 이미지'} src={url} width={278} height={278} />
-                                            <Image stype={{position: 'absolute', left: 0}} className={'zoom'} onClick={() => $cmm.util.showImageZoom(piupImgList, idx)}
+                                            <Image stype={{position: 'absolute', left: 0}} className={'zoom'} onClick={() => cmm.util.showImageZoom(piupImgList, idx)}
                                                    alt={'확대 이미지'} src={'/assets/images/btn/btnZoom.svg'} width={24} height={24} />
                                         </div>
                                     </SwiperSlide>
@@ -273,7 +276,7 @@ export default function IngOderUserId() {
                     {btchInfo.ODER_PGRS_STAT === '05' &&
                         <li className={styles.uploadArea}>
                             <h5>사진 업로드</h5>
-                            <input type={'file'} id={'inpFile'} onChange={fileChage}/>
+                            <input type={'file'} id={'inpFile'} onChange={fileChage} multiple={true}/>
                             <div>
                                 {vchrPrvImgList.map((url, idx) => (
                                     <div key={'img' + idx}>

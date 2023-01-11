@@ -3,16 +3,16 @@ import BtchList from "../../../components/btchList";
 import HeadTitle from "../../../components/headTitle";
 import styles from "../../../styles/btch.module.css";
 import useCommon from "../../../hooks/useCommon";
+import cmm from "../../../js/common";
 
 export default function BtchComp() {
 
     const [btchList, setBtchList] = useState([]);
     const [isInit, setIsInit] = useState(true);
-    const {fontAjax} = useCommon();
 
     useEffect(() => {
 
-        fontAjax({
+        cmm.ajax({
             url: `/api/btch/btchCompList`,
             success: res => {
 
@@ -26,7 +26,7 @@ export default function BtchComp() {
 
             document.body.classList.remove(styles.bodyBg);
         };
-    }, [fontAjax]);
+    }, []);
 
     return (
         <div>

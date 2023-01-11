@@ -5,9 +5,9 @@ import useCommon from "../../../hooks/useCommon";
 import {useRouter} from "next/router";
 import Head from "next/head";
 import Image from "next/image";
-import $cmm from "../../../js/common";
 import {Swiper, SwiperSlide} from "swiper/react";
 import 'swiper/css';
+import cmm from "../../../js/common";
 
 export default function BtchComp() {
 
@@ -16,12 +16,12 @@ export default function BtchComp() {
     const [prodList, setProdList] = useState([]);
     const [piupImgList, setPiupImgList] = useState([]);
     const [cplImgList, setCplImgList] = useState([]);
-    const {fontAjax, alert, goPage} = useCommon();
+    const {goPage} = useCommon();
     const {compOderUserId} = router.query;
 
     useEffect(() => {
 
-        fontAjax({
+        cmm.ajax({
             url: `/api/btch/comp/${compOderUserId}`,
             success: res => {
 
@@ -47,13 +47,13 @@ export default function BtchComp() {
                     }
                 } else {
 
-                    alert('완료된 배치가 아니거나 잘못된 주소입니다.', () => {
+                    cmm.alert('완료된 배치가 아니거나 잘못된 주소입니다.', () => {
                         goPage('/');
                     });
                 }
             }
         });
-    }, [fontAjax, alert, goPage, compOderUserId]);
+    }, [goPage, compOderUserId]);
 
     return (
         <div className={styles.compDtpt}>
@@ -101,7 +101,7 @@ export default function BtchComp() {
                     </li>
                     <li>
                         <h5>연락처</h5>
-                        <p className={'colorGreen bold'}>{$cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}</p>
+                        <p className={'colorGreen bold'}>{cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}</p>
                     </li>
                     {!!btchInfo.ODER_DELY_REQ_MATT &&
                         <li>
@@ -120,7 +120,7 @@ export default function BtchComp() {
                                         }
                                         <span className={'prodNm'}>{item.PROD_NM}</span>
                                         <span className={'prodCnt'}>{item.SPBK_CCN}</span>
-                                        <span className={'prodAmt'}>{!!item.SPBK_AMT ? $cmm.util.comma(item.SPBK_AMT) + '원' : '가격 미정'}</span>
+                                        <span className={'prodAmt'}>{!!item.SPBK_AMT ? cmm.util.comma(item.SPBK_AMT) + '원' : '가격 미정'}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -134,7 +134,7 @@ export default function BtchComp() {
                                     <SwiperSlide key={'prop' + idx}>
                                         <div className={'imgZoomArea'}>
                                             <Image className={'img'} alt={'영수증 이미지'} src={url} width={278} height={278} />
-                                            <Image stype={{position: 'absolute', left: 0}} className={'zoom'} onClick={() => $cmm.util.showImageZoom(piupImgList, idx)}
+                                            <Image stype={{position: 'absolute', left: 0}} className={'zoom'} onClick={() => cmm.util.showImageZoom(piupImgList, idx)}
                                                    alt={'확대 이미지'} src={'/assets/images/btn/btnZoom.svg'} width={24} height={24} />
                                         </div>
                                     </SwiperSlide>
@@ -150,7 +150,7 @@ export default function BtchComp() {
                                     <SwiperSlide key={'prop' + idx}>
                                         <div className={'imgZoomArea'}>
                                             <Image className={'img'} alt={'영수증 이미지'} src={url} width={278} height={278} />
-                                            <Image stype={{position: 'absolute', left: 0}} className={'zoom'} onClick={() => $cmm.util.showImageZoom(cplImgList, idx)}
+                                            <Image stype={{position: 'absolute', left: 0}} className={'zoom'} onClick={() => cmm.util.showImageZoom(cplImgList, idx)}
                                                    alt={'확대 이미지'} src={'/assets/images/btn/btnZoom.svg'} width={24} height={24} />
                                         </div>
                                     </SwiperSlide>

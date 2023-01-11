@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Image from "next/image";
-import $cmm from "../../js/common";
+import cmm from "../../js/common";
 import styles from "../../styles/mypage.module.css"
 import BottomMenu from "../../components/bottomMenu";
 import Link from "next/link";
@@ -9,12 +9,12 @@ import useCommon from "../../hooks/useCommon";
 export default function MyPage() {
 
     const [myInfo, setMyInfo] = useState({});
-    const {confirm, goPage} = useCommon();
+    const {goPage} = useCommon();
 
     useEffect(() => {
 
         document.body.classList.add(styles.body);
-        setMyInfo($cmm.getLoginInfo());
+        setMyInfo(cmm.getLoginInfo());
         return () => {
 
             document.body.classList.remove(styles.body);
@@ -26,9 +26,9 @@ export default function MyPage() {
      */
     const logoutClick = () => {
 
-        confirm('로그아웃 하시겠습니까?', () => {
+        cmm.confirm('로그아웃 하시겠습니까?', () => {
 
-            $cmm.util.rmLs($cmm.Cont.LOING_INFO);
+            cmm.util.rmLs(cmm.Cont.LOING_INFO);
             goPage('/cmm/login');
         });
     };

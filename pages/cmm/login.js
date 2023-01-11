@@ -2,7 +2,7 @@ import styles from "../../styles/login.module.css";
 import Head from "next/head";
 import Image from "next/image";
 import {useEffect} from "react";
-import $cmm from "../../js/common";
+import cmm from "../../js/common";
 import useCommon from "../../hooks/useCommon";
 
 export default function Login(props) {
@@ -48,7 +48,7 @@ export default function Login(props) {
                             }
                         }
 
-                        fontAjax({
+                        cmm.ajax({
                             url: '/api/login',
                             data: param,
                             success: res => {
@@ -59,7 +59,7 @@ export default function Login(props) {
                                     goPage('/join/clauAgr', param);
                                 } else {
 
-                                    $cmm.util.setLs($cmm.Cont.LOING_INFO, res);
+                                    cmm.util.setLs(cmm.Cont.LOING_INFO, res);
                                     goPage('/');
                                 }
                             }
@@ -67,12 +67,12 @@ export default function Login(props) {
                     },
                     fail: function(res) {
 
-                        alert('로그인에 실패하였습니다.<br>' + JSON.stringify(res));
+                        cmm.alert('로그인에 실패하였습니다.<br>' + JSON.stringify(res));
                     }
                 });
             },
             fail: function(err) {
-                alert(JSON.stringify(err));
+                cmm.alert(JSON.stringify(err));
             },
         });
     };

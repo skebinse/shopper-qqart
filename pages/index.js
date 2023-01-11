@@ -2,7 +2,7 @@ import {useCallback, useEffect, useState} from "react";
 import styles from "/styles/index.module.css"
 import Image from "next/image";
 import {useRouter} from "next/router";
-import $cmm from "../js/common";
+import cmm from "../js/common";
 import useCommon from "../hooks/useCommon";
 import BtchList from "../components/btchList";
 import BottomMenu from "../components/bottomMenu";
@@ -20,8 +20,6 @@ export default function Index(props) {
         btchList: [],
         btchAcpList: [],
     });
-    const {fontAjax} = useCommon();
-    const {setIsLoading} = useGlobal();
 
     /**
      * 배치 리스트 조회
@@ -30,11 +28,11 @@ export default function Index(props) {
 
         if(!isInit) {
 
-            setIsLoading(true);
+            cmm.loading(true);
             setTimeout(() => {
 
                 // setBtchInfo({btchList: [], btchAcpList: []});
-                fontAjax({
+                cmm.ajax({
                     url: '/api/btch/btchList',
                     isLoaing: false,
                     success: res => {
@@ -43,11 +41,11 @@ export default function Index(props) {
                     }
                 });
 
-                setIsLoading(false);
+                cmm.loading(false);
             }, 950);
         } else {
 
-            fontAjax({
+            cmm.ajax({
                 url: '/api/btch/btchList',
                 success: res => {
 
@@ -55,7 +53,7 @@ export default function Index(props) {
                 }
             });
         }
-    }, [fontAjax, setIsLoading]);
+    }, []);
 
     useEffect(() => {
 
@@ -65,11 +63,9 @@ export default function Index(props) {
 
         setWindowHeight(window.outerHeight);
 
-        console.log('init')
+        if(cmm.checkLogin()) {
 
-        if($cmm.checkLogin()) {
-
-            let shprAddr = $cmm.getLoginInfo('SHPR_ADDR');
+            let shprAddr = cmm.getLoginInfo('SHPR_ADDR');
             shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
             shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
 

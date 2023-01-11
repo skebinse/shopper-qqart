@@ -1,11 +1,10 @@
 import {useS3Upload} from "next-s3-upload";
-import $cmm from "../js/common";
+import cmm from "../js/common";
 import useCommon from "./useCommon";
 
 export default function useShopS3Upload() {
 
     const {uploadToS3} = useS3Upload();
-    const {fontAjax} = useCommon();
 
     /**
      * 파일 업로드
@@ -40,7 +39,7 @@ export default function useShopS3Upload() {
             await func(files);
         }
 
-        fontAjax({
+        cmm.ajax({
             url: '/api/cmm/upload',
             dataType: 'json',
             data: uploadList,

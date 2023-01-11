@@ -1,5 +1,5 @@
 
-import $cmm from "../js/common";
+import cmm from "../js/common";
 /**
  SMS 발송
  * @param receiver
@@ -14,8 +14,10 @@ export function smsSend(receiver, msg, callback) {
         callback(true);
     } else {
 
-        $cmm.ajax({
+        cmm.ajax({
             url: 'https://apis.aligo.in/send/',
+            isLoaing: false,
+            isExtr: true,
             data: {
                 msg,
                 receiver,

@@ -16,7 +16,7 @@ export default async function handler(req, res) {
                      , AA.ODER_USER_ID
                      , AA.ODER_KD
                      , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
-                     , FORMAT(fnGetDelyDtcAmt(CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10), 0) AS DELY_AMT
+                     , FORMAT(fnGetDelyDtcAmt(AA.ODER_DELY_DTC), 0) AS DELY_AMT
                      , fnGetAtchFileList(AA.SHOP_RRSN_ATCH_FILE_UUID) AS SHOP_RRSN_ATCH_FILE_LIST
                   FROM (
                     SELECT AA.ODER_MNGR_RGI_YN
@@ -24,6 +24,7 @@ export default async function handler(req, res) {
                              THEN AA.ODER_REQ_YMD
                            ELSE DATE_ADD(AA.ODER_REQ_YMD, INTERVAL 9 HOUR) END AS ODER_REQ_YMD
                          , AA.ODER_USER_ID
+                         , AA.ODER_DELY_DTC
                          , AA.ODER_KD
                          , BB.SHOP_NM
                          , BB.SHOP_RRSN_ATCH_FILE_UUID

@@ -1,39 +1,48 @@
-
-const $cmm = {
+const cmm = {
 
     /**
      * 전역 변수 및 상수
      */
     Cont: {
-        LOING_INFO: 'shooperLoginInfo',
+        LOING_INFO: 'shopperLoginInfo',
     },
 
     /**
      * ajax 통신
      * @param options
      */
-    ajax: async (options) => {
+    ajax: (options) => {
 
         const _options = {
             method: 'POST',
             contextType: 'application/x-www-form-urlencoded',
             dataType: '',
+            isLoaing: true,
             isExtr: false,
+            headers: {},
             body: undefined,
         };
-
+        console.log(1)
         Object.entries(options).forEach(item => _options[item[0]] = item[1]);
 
+        if(!!_options.isLoaing) {
+
+            cmm.loading(true);
+        }
+
+        console.log(2)
         const init = {
             method: _options.method,
-            headers: {},
+            headers: _options.headers,
             body: _options.body,
         };
 
-        if(typeof window !== 'undefined' && $cmm.checkLogin()) {
-            init.headers['X-ENC-USER-ID'] = $cmm.getLoginInfo('ENC_SHPR_ID');
+        console.log(3)
+        if(!_options.isExtr && cmm.checkLogin()) {
+            init.headers['X-ENC-USER-ID'] = cmm.getLoginInfo('ENC_SHPR_ID');
         }
 
+        console.log(4)
         // JSON 타입일 경우
         if(_options.dataType === 'json') {
 
@@ -54,29 +63,103 @@ const $cmm = {
             init.body = !!_options.data ? new URLSearchParams(_options.data) : undefined;
         }
 
-        const res = await fetch(_options.url, init);
-        const data = await res.json();
+        console.log(5)
+        fetch(_options.url, init).then(res => res.json())
+            .then(res => {
 
-        if(!!_options.isExtr) {
+                if(!!_options.isExtr) {
 
-            _options.success(data);
-        } else {
+                    _options.success(res);
+                } else {
 
-            if(data.resultCode === '0000') {
+                    if(res.resultCode === '0000') {
 
-                if(!!_options.success) {
+                        if(!!_options.success) {
 
-                    _options.success(data.data);
+                            _options.success(res.data);
+                        }
+                    } else {
+
+                        cmm.alert(res.resultMsg);
+                    }
                 }
-                return [data.data];
-            } else {
+            })
+            .catch(err => {
 
                 if(!!_options.error) {
 
-                    _options.error(data.resultMsg);
+                    _options.error();
                 }
-            }
-        }
+            })
+            .finally(() => {
+
+                if(!!_options.isLoaing) {
+
+                    cmm.loading(false);
+                }
+            });
+        // const _options = {
+        //     method: 'POST',
+        //     contextType: 'application/x-www-form-urlencoded',
+        //     dataType: '',
+        //     isExtr: false,
+        //     body: undefined,
+        // };
+        //
+        // Object.entries(options).forEach(item => _options[item[0]] = item[1]);
+        // const init = {
+        //     method: _options.method,
+        //     headers: {},
+        //     body: _options.body,
+        // };
+        //
+        // if(typeof window !== 'undefined' && cmm.checkLogin()) {
+        //     init.headers['X-ENC-USER-ID'] = cmm.getLoginInfo('ENC_SHPR_ID');
+        // }
+        //
+        // // JSON 타입일 경우
+        // if(_options.dataType === 'json') {
+        //
+        //     init.headers.contextType = 'application/json';
+        //     init.body = JSON.stringify(_options.data);
+        // } else if(!!_options.formData) {
+        //
+        //     const formData = new FormData();
+        //
+        //     Object.entries(_options.formData).forEach(item => {
+        //         formData.append(item[0], item[1]);
+        //     });
+        //
+        //     init.body = formData;
+        // } else {
+        //
+        //     init.headers.contextType = _options.contextType;
+        //     init.body = !!_options.data ? new URLSearchParams(_options.data) : undefined;
+        // }
+        //
+        // const res = await fetch(_options.url, init);
+        // const data = await res.json();
+        //
+        // if(!!_options.isExtr) {
+        //
+        //     _options.success(data);
+        // } else {
+        //
+        //     if(data.resultCode === '0000') {
+        //
+        //         if(!!_options.success) {
+        //
+        //             _options.success(data.data);
+        //         }
+        //         return [data.data];
+        //     } else {
+        //
+        //         if(!!_options.error) {
+        //
+        //             _options.error(data.resultMsg);
+        //         }
+        //     }
+        // }
     },
 
     /**
@@ -86,7 +169,7 @@ const $cmm = {
      */
     getLoginInfo: function (key) {
 
-        const loginInfo = !!$cmm.util.getLs($cmm.Cont.LOING_INFO) ? $cmm.util.getLs($cmm.Cont.LOING_INFO) : {};
+        const loginInfo = !!cmm.util.getLs(cmm.Cont.LOING_INFO) ? cmm.util.getLs(cmm.Cont.LOING_INFO) : {};
 
         if(!!key) {
 
@@ -103,9 +186,94 @@ const $cmm = {
      */
     checkLogin: () => {
 
-        const isLogin = !!$cmm.util.getLs($cmm.Cont.LOING_INFO) && !!$cmm.util.getLs($cmm.Cont.LOING_INFO).ENC_SHPR_ID;
+        const isLogin = !!cmm.util.getLs(cmm.Cont.LOING_INFO) && !!cmm.util.getLs(cmm.Cont.LOING_INFO).ENC_SHPR_ID;
 
         return isLogin;
+    },
+
+    /**
+     * Alert
+     *
+     * @param txt
+     * @param callback
+     * @param title
+     */
+    alert: (txt, callback, title) => {
+
+        document.querySelector('#alertArea').innerHTML = `
+            <div class="confirmArea">
+                <div>
+                    <h3>${!!title ? title : '알림'}</h3>
+                    <p>${txt}</p>
+                    <div>
+                        <button class="button" type="button">확인</button>
+                    </div>
+                </div>
+            </div>`;
+
+        document.querySelector('#alertArea .button').addEventListener('click', () => {
+            document.querySelector('#alertArea').innerHTML = '';
+            !!callback && callback();
+        });
+    },
+
+    /**
+     * confirm
+     * @param txt
+     * @param callback
+     * @param title
+     */
+    confirm: (txt, callback, cancelCallback, title) => {
+
+        document.querySelector('#alertArea').innerHTML = `
+            <div class='confirmArea'>
+                <div>
+                    <h3>${!!title ? title : '알림'}</h3>
+                    <p>${txt}</p>
+                    <div>
+                        <button class='button white mr16' type={"button"}>취소</button>
+                        <button class='button' type={"button"}>확인</button>
+                    </div>
+                </div>
+            </div>`;
+
+        document.querySelectorAll('#alertArea .button').forEach(elet => {
+
+            elet.addEventListener('click', e => {
+
+                document.querySelector('#alertArea').innerHTML = '';
+
+                // 확인
+                if(e.target.classList.length === 1) {
+
+                    !!callback && callback();
+                } else {
+
+                    !!cancelCallback && cancelCallback();
+                }
+            });
+        });
+    },
+
+    /**
+     * 로딩바
+     * @param isShow
+     */
+    loading: isShow => {
+
+        if(!!isShow) {
+
+            document.querySelector('#loadingArea').innerHTML = `
+                <div class="loader">
+                    <span>
+                        Shopper
+                        <img alt='로딩 이미지' src='/assets/images/icon/iconDistance2.svg' />
+                    </span>
+                </div>`;
+        } else {
+
+            document.querySelector('#loadingArea').innerHTML = '';
+        }
     },
 
     /**
@@ -277,7 +445,20 @@ const $cmm = {
             });
 
             window.blueimp.Gallery(imgs, {index: idx});
-        }
+        },
+
+        /**
+         * 클립보드 복사
+         * @param value
+         */
+        clipboard: value => {
+
+            window.navigator.clipboard.writeText(value).then(() => {
+
+                cmm.alert('복사 되었습니다.');
+            });
+
+        },
     },
 
     /**
@@ -291,9 +472,9 @@ const $cmm = {
          */
         formatTelEvent: e => {
 
-            e.target.value = $cmm.util.hyphenTel(e.target.value);
+            e.target.value = cmm.util.hyphenTel(e.target.value);
         },
     },
 };
 
-export default $cmm;
+export default cmm;

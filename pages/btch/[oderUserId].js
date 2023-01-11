@@ -3,7 +3,7 @@ import useCommon from "../../hooks/useCommon";
 import {useRouter} from "next/router";
 import HeadTitle from "../../components/headTitle";
 import styles from "../../styles/btch.module.css";
-import $cmm from "../../js/common";
+import cmm from "../../js/common";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -15,12 +15,12 @@ export default function OderUserId(props) {
     const [btchInfo, setBtchInfo] = useState({});
     const [prodList, setProdList] = useState([]);
     const [piupImgList, setPiupImgList] = useState([]);
-    const {fontAjax, alert, goPage, confirm} = useCommon();
+    const {goPage} = useCommon();
     const {oderUserId} = router.query;
 
     useEffect(() => {
 
-        fontAjax({
+        cmm.ajax({
             url: `/api/btch/${oderUserId}`,
             success: res => {
 
@@ -40,32 +40,44 @@ export default function OderUserId(props) {
                         // 픽업 리스트
                         setPiupImgList(item.PIUP_VCHR_IMG.split(','));
                     }
+
+                    let oderDelySlctVal;
+                    switch (item.ODER_DELY_SLCT_VAL) {
+                        case 'imm' : oderDelySlctVal = '즉시 배달'; break;
+                        case '2Hour' : oderDelySlctVal = '2~3시간 내'; break;
+                        case 'today' : oderDelySlctVal = '오늘 안에만'; break;
+                        case 'resv' :
+                            oderDelySlctVal = `${item.ODER_DELY_YMD + ' ' + item.ODER_DELY_HH}`;
+                            break;
+                    }
+
+                    item.oderDelySlctVal = oderDelySlctVal;
                 } else {
 
-                    alert('배치가 완료된 건입니다.', () => {
+                    cmm.alert('배치가 완료된 건입니다.', () => {
                         goPage('/');
                     });
                 }
             }
         });
 
-    }, [fontAjax, alert, goPage, oderUserId]);
+    }, [goPage, oderUserId]);
 
     /**
      * 배치 수락
      */
     const btchAcpClick = () => {
 
-        confirm('정말로 배치를 수락하시겠습니까?', () => {
+        cmm.confirm('정말로 배치를 수락하시겠습니까?', () => {
 
-            fontAjax({
+            cmm.ajax({
                 url: '/api/btch/btchAcp',
                 data: {
                     oderUserId
                 },
                 success: res => {
 
-                    alert('배치 수락이 완료되었습니다.', () => {
+                    cmm.alert('배치 수락이 완료되었습니다.', () => {
 
                         goPage('/', {
                             tabIdx: 1,
@@ -106,6 +118,10 @@ export default function OderUserId(props) {
                     <p>{btchInfo.ODER_REQ_YMD}</p>
                 </li>
                 <li>
+                    <h5>배달 시간</h5>
+                    <p>{btchInfo.oderDelySlctVal}</p>
+                </li>
+                <li>
                     <h5>고객명</h5>
                     <p>{btchInfo.ODER_ACPP_NM}</p>
                 </li>
@@ -113,12 +129,12 @@ export default function OderUserId(props) {
                     <h5>주소</h5>
                     <p>
                         {btchInfo.USER_FULL_ADDR}
-                        <Image alt={'주소 복사'} src={'/assets/images/btn/btnCopy.svg'} width={44} height={23} />
+                        <Image alt={'주소 복사'} src={'/assets/images/btn/btnCopy.svg'} width={44} height={23} onClick={() => cmm.util.clipboard(btchInfo.USER_FULL_ADDR)} />
                     </p>
                 </li>
                 <li>
                     <h5>연락처</h5>
-                    <p className={'colorGreen bold'}>{$cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}</p>
+                    <p className={'colorGreen bold'}>{cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}</p>
                 </li>
                 {!!btchInfo.ODER_DELY_REQ_MATT &&
                     <li>
@@ -137,7 +153,7 @@ export default function OderUserId(props) {
                                     }
                                     <span className={'prodNm'}>{item.PROD_NM}</span>
                                     <span className={'prodCnt'}>{item.SPBK_CCN}</span>
-                                    <span className={'prodAmt'}>{!!item.SPBK_AMT ? $cmm.util.comma(item.SPBK_AMT) + '원' : '가격 미정'}</span>
+                                    <span className={'prodAmt'}>{!!item.SPBK_AMT ? cmm.util.comma(item.SPBK_AMT) + '원' : '가격 미정'}</span>
                                 </li>
                             ))}
                         </ul>
@@ -151,7 +167,7 @@ export default function OderUserId(props) {
                                 <SwiperSlide key={'prop' + idx}>
                                     <div className={'imgZoomArea'}>
                                         <Image className={'img'} alt={'영수증 이미지'} src={url} width={278} height={278} />
-                                        <Image stype={{position: 'absolute', left: 0}} className={'zoom'} onClick={() => $cmm.util.showImageZoom(piupImgList, idx)}
+                                        <Image stype={{position: 'absolute', left: 0}} className={'zoom'} onClick={() => cmm.util.showImageZoom(piupImgList, idx)}
                                                alt={'확대 이미지'} src={'/assets/images/btn/btnZoom.svg'} width={24} height={24} />
                                     </div>
                                 </SwiperSlide>
@@ -179,12 +195,6 @@ export default function OderUserId(props) {
 }
 
 export async function getServerSideProps(context) {
-
-    // const data = await $cmm.ajax({url: `${process.env.HOMEPAGE_URL}/api/btch/${context.query.oderUserId}`});
-    //
-    // return {
-    //     props: {data},
-    // }
 
     return {
         props: {},

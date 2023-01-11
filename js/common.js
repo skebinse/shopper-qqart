@@ -4,7 +4,7 @@ const cmm = {
      * 전역 변수 및 상수
      */
     Cont: {
-        LOING_INFO: 'shopperLoginInfo',
+        LOGIN_INFO: 'shopperLoginInfo',
     },
 
     /**
@@ -22,7 +22,7 @@ const cmm = {
             headers: {},
             body: undefined,
         };
-        console.log(1)
+
         Object.entries(options).forEach(item => _options[item[0]] = item[1]);
 
         if(!!_options.isLoaing) {
@@ -30,19 +30,16 @@ const cmm = {
             cmm.loading(true);
         }
 
-        console.log(2)
         const init = {
             method: _options.method,
             headers: _options.headers,
             body: _options.body,
         };
 
-        console.log(3)
         if(!_options.isExtr && cmm.checkLogin()) {
             init.headers['X-ENC-USER-ID'] = cmm.getLoginInfo('ENC_SHPR_ID');
         }
 
-        console.log(4)
         // JSON 타입일 경우
         if(_options.dataType === 'json') {
 
@@ -63,7 +60,6 @@ const cmm = {
             init.body = !!_options.data ? new URLSearchParams(_options.data) : undefined;
         }
 
-        console.log(5)
         fetch(_options.url, init).then(res => res.json())
             .then(res => {
 
@@ -98,68 +94,6 @@ const cmm = {
                     cmm.loading(false);
                 }
             });
-        // const _options = {
-        //     method: 'POST',
-        //     contextType: 'application/x-www-form-urlencoded',
-        //     dataType: '',
-        //     isExtr: false,
-        //     body: undefined,
-        // };
-        //
-        // Object.entries(options).forEach(item => _options[item[0]] = item[1]);
-        // const init = {
-        //     method: _options.method,
-        //     headers: {},
-        //     body: _options.body,
-        // };
-        //
-        // if(typeof window !== 'undefined' && cmm.checkLogin()) {
-        //     init.headers['X-ENC-USER-ID'] = cmm.getLoginInfo('ENC_SHPR_ID');
-        // }
-        //
-        // // JSON 타입일 경우
-        // if(_options.dataType === 'json') {
-        //
-        //     init.headers.contextType = 'application/json';
-        //     init.body = JSON.stringify(_options.data);
-        // } else if(!!_options.formData) {
-        //
-        //     const formData = new FormData();
-        //
-        //     Object.entries(_options.formData).forEach(item => {
-        //         formData.append(item[0], item[1]);
-        //     });
-        //
-        //     init.body = formData;
-        // } else {
-        //
-        //     init.headers.contextType = _options.contextType;
-        //     init.body = !!_options.data ? new URLSearchParams(_options.data) : undefined;
-        // }
-        //
-        // const res = await fetch(_options.url, init);
-        // const data = await res.json();
-        //
-        // if(!!_options.isExtr) {
-        //
-        //     _options.success(data);
-        // } else {
-        //
-        //     if(data.resultCode === '0000') {
-        //
-        //         if(!!_options.success) {
-        //
-        //             _options.success(data.data);
-        //         }
-        //         return [data.data];
-        //     } else {
-        //
-        //         if(!!_options.error) {
-        //
-        //             _options.error(data.resultMsg);
-        //         }
-        //     }
-        // }
     },
 
     /**
@@ -169,7 +103,7 @@ const cmm = {
      */
     getLoginInfo: function (key) {
 
-        const loginInfo = !!cmm.util.getLs(cmm.Cont.LOING_INFO) ? cmm.util.getLs(cmm.Cont.LOING_INFO) : {};
+        const loginInfo = !!cmm.util.getLs(cmm.Cont.LOGIN_INFO) ? cmm.util.getLs(cmm.Cont.LOGIN_INFO) : {};
 
         if(!!key) {
 
@@ -186,7 +120,7 @@ const cmm = {
      */
     checkLogin: () => {
 
-        const isLogin = !!cmm.util.getLs(cmm.Cont.LOING_INFO) && !!cmm.util.getLs(cmm.Cont.LOING_INFO).ENC_SHPR_ID;
+        const isLogin = !!cmm.util.getLs(cmm.Cont.LOGIN_INFO) && !!cmm.util.getLs(cmm.Cont.LOGIN_INFO).ENC_SHPR_ID;
 
         return isLogin;
     },
@@ -475,6 +409,101 @@ const cmm = {
             e.target.value = cmm.util.hyphenTel(e.target.value);
         },
     },
+    plugin: {
+
+        /**
+         * Daum Post
+         * @param elet
+         * @param callback
+         */
+        daumPost: (elet, callback) => {
+
+            new daum.Postcode({
+                oncomplete: function(data) {
+
+                    cmm.ajax({
+                        url: `https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?addressFlag=F02&coordType=WGS84GEO&version=1&fullAddr=${encodeURIComponent(data.roadAddress)}&page=1&count=20`,
+                        headers: {
+                            appKey: process.env.NEXT_PUBLIC_TMAP_KEY
+                        },
+                        isExtr: true,
+                        contextType: 'application/json',
+                        success: res => {
+
+                            if(!!res.coordinateInfo && !!res.coordinateInfo.coordinate && res.coordinateInfo.coordinate.length > 0) {
+
+                                callback({...data, newLon: res.coordinateInfo.coordinate[0], newLat: res.coordinateInfo.coordinate[0].newLat});
+                            } else {
+
+                                cmm.alert('주소 입력에 실패하였습니다.');
+                            }
+                        },
+                        error: res => {
+
+                            cmm.alert('주소 입력에 실패하였습니다.');
+                        },
+                    });
+                }
+            }).embed(elet);
+        },
+
+        /**
+         * Channel IO
+         */
+        channelIO: () => {
+
+            (function() {
+                let w = window;
+                if (w.ChannelIO) {
+
+                    return;
+                }
+                let ch = function() {
+                    ch.c(arguments);
+                };
+                ch.q = [];
+                ch.c = function(args) {
+                    ch.q.push(args);
+                };
+                w.ChannelIO = ch;
+                function l() {
+                    if (w.ChannelIOInitialized) {
+                        return;
+                    }
+                    w.ChannelIOInitialized = true;
+                    let s = document.createElement('script');
+                    s.type = 'text/javascript';
+                    s.async = true;
+                    s.src = 'https://cdn.channel.io/plugin/ch-plugin-web.js';
+                    s.charset = 'UTF-8';
+                    let x = document.getElementsByTagName('script')[0];
+                    x.parentNode.insertBefore(s, x);
+                }
+                if (document.readyState === 'complete') {
+                    l();
+                } else if (window.attachEvent) {
+                    window.attachEvent('onload', l);
+                } else {
+                    window.addEventListener('DOMContentLoaded', l, false);
+                    window.addEventListener('load', l, false);
+                }
+            })();
+
+            const options = {
+                "pluginKey": "0486be4e-a136-4c55-b767-f625b42e7a75"
+            };
+
+            if(cmm.checkLogin()) {
+
+                options.memberId = cmm.getLoginInfo('ENC_SHPR_ID');
+                options.profile = {
+                    name: cmm.getLoginInfo('SHPR_NCNM')
+                };
+            }
+
+            ChannelIO('boot', options);
+        }
+    }
 };
 
 export default cmm;

@@ -26,6 +26,8 @@ export default function IngOderUserId() {
 
     useEffect(() => {
 
+        cmm.plugin.channelIO();
+
         cmm.ajax({
             url: `/api/btch/ing/${ingOderUserId}`,
             success: res => {
@@ -47,9 +49,9 @@ export default function IngOderUserId() {
                     }
 
                     switch (item.ODER_PGRS_STAT) {
-                        case '03': setBtnText('장보기를 시작합니다.'); break;
-                        case '04': setBtnText('배달을 시작합니다.'); break;
-                        case '05': setBtnText('배달 완료'); break;
+                        case '03': setBtnText('장보기 시작'); setTitle('스토어로 이동 중'); break;
+                        case '04': setBtnText('배달 시작'); setTitle('장보는 중'); break;
+                        case '05': setBtnText('배달 완료'); setTitle('픽업하는 중'); break;
                     }
 
                     let oderDelySlctVal;
@@ -153,12 +155,25 @@ export default function IngOderUserId() {
         }
     };
 
+    /**
+     * 이미지 삭제
+     *
+     * @param idx
+     */
+    const imageDelHandler = imgIdx => {
+
+        setVchrPrvImgList(prevState => prevState.filter((value, idx) => idx !== imgIdx));
+        setVchrImgList(prevState => prevState.filter((value, idx) => idx !== imgIdx));
+    };
+
     return(
         <>
             <Head>
                 <script src="/assets/js/blueimp-gallery.min.js" defer></script>
             </Head>
-            <HeadTitle title={title} callbackClose={() => goPage('/')} />
+            <HeadTitle title={title} callbackClose={() => goPage('/')} >
+                {/*<button type={'button'} className={'btnBtchCancel'}>배치 취소</button>*/}
+            </HeadTitle>
             <div className={styles.btchIng}>
                 <div className={styles.step}>
                     <Image alt={'스토어 이동'} src={'/assets/images/img/step1On.svg'} width={48} height={48} />
@@ -213,7 +228,6 @@ export default function IngOderUserId() {
                                 <h5>주소</h5>
                                 <p>
                                     {btchInfo.USER_FULL_ADDR}
-                                    <Image alt={'주소 복사'} src={'/assets/images/btn/btnCopy.svg'} width={44} height={23} onClick={() => cmm.util.clipboard(btchInfo.USER_FULL_ADDR)}/>
                                 </p>
                             </li>
                             <li>
@@ -235,10 +249,20 @@ export default function IngOderUserId() {
                         </>
                     }
                     {btchInfo.ODER_PGRS_STAT === '04' && !!btchInfo.ODER_RRV_ID &&
-                        <li>
-                            <h5>스토어 적립</h5>
-                            <p>{btchInfo.ODER_RRV_ID}</p>
-                        </li>
+                        <>
+                            <li>
+                                <h5>고객명</h5>
+                                <p>{btchInfo.ODER_ACPP_NM}</p>
+                            </li>
+                            <li>
+                                <h5>연락처</h5>
+                                <p className={'colorGreen bold'}>{cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}</p>
+                            </li>
+                            <li>
+                                <h5>스토어 적립</h5>
+                                <p>{btchInfo.ODER_RRV_ID}</p>
+                            </li>
+                        </>
                     }
                     {btchInfo.ODER_PGRS_STAT !== '03' && prodList.length > 0 &&
                         <li>
@@ -281,7 +305,7 @@ export default function IngOderUserId() {
                                 {vchrPrvImgList.map((url, idx) => (
                                     <div key={'img' + idx}>
                                         <Image className={styles.vchrImg} src={url} alt={'영수증 사진'} width={96} height={72} />
-                                        <Image className={styles.del} src={'/assets/images/btn/btnDel.svg'} alt={'영수증 사진'} width={20} height={20} />
+                                        <Image className={styles.del} src={'/assets/images/btn/btnDel.svg'} alt={'영수증 사진'} width={20} height={20} onClick={() => imageDelHandler(idx)} />
                                     </div>
                                 ))}
                                 <label htmlFor={'inpFile'}>

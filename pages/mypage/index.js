@@ -28,7 +28,7 @@ export default function MyPage() {
 
         cmm.confirm('로그아웃 하시겠습니까?', () => {
 
-            cmm.util.rmLs(cmm.Cont.LOING_INFO);
+            cmm.util.rmLs(cmm.Cont.LOGIN_INFO);
             goPage('/cmm/login');
         });
     };

@@ -59,7 +59,7 @@ export default function Login(props) {
                                     goPage('/join/clauAgr', param);
                                 } else {
 
-                                    cmm.util.setLs(cmm.Cont.LOING_INFO, res);
+                                    cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
                                     goPage('/');
                                 }
                             }

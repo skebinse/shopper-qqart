@@ -1,7 +1,7 @@
 import {useRouter} from "next/navigation";
 import Image from "next/image";
 
-export default function HeadTitle({title, type, callbackClose}) {
+export default function HeadTitle({title, type, callbackClose, children}) {
 
     const router = useRouter();
 
@@ -20,6 +20,7 @@ export default function HeadTitle({title, type, callbackClose}) {
             {type === 'close' &&
                 <Image alt={'닫기'} src={'/assets/images/icon/iconClose.svg'} width={24} height={24} onClick={callbackClose} />
             }
+            {children}
         </div>
     );
 }

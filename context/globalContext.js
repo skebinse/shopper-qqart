@@ -58,7 +58,7 @@ export function GlobalProvider({children}) {
                             }));
                         } else {
 
-                            cmm.util.setLs(cmm.Cont.LOING_INFO, res);
+                            cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
                             router.reload();
                         }
                     }

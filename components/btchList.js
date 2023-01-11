@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function BtchList({list, href, classNm = '', noDataTxt = '현재 배치된 주문이 없습니다.',
+export default function BtchList({list, href, classNm = '', noDataTxt = '현재 접수된 배치가 없습니다.',
                                      isDtptBtn = false, dtptHref, isInit}) {
 
     return <>

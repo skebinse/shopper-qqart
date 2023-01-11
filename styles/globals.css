@@ -28,6 +28,7 @@ em{font-style: normal;}
 .button{border: none;background-color: #02B763;border-radius: 12px;color: #FFFFFF;font-size: 16px;font-weight: 700;width: 100%;padding: 14px 0;}
 .button.white{background-color: #FFFFFF;border: #E4E4E4 1px solid;color: #333333;}
 .button.short{padding: 7px 11px;width: auto;font-size: 12px;font-weight: 400;border: #CDCDCD 1px solid;border-radius: 6px;}
+.btnBtchCancel{color: #02B763;font-size: 14px;font-weight: 500;border: none;background: none;position: absolute;right: 17px;top: 25px;}
 
 /* input - checkbox */
 input[type=checkbox]{display: none;}
@@ -59,6 +60,7 @@ input[type=checkbox]:disabled+label{opacity: 0.5;}
 .btch li h5{color: #333333;font-size: 16px;font-weight: 700;padding-top: 12px;}
 .btch li p{color: #333333;font-size: 16px;padding-top: 5px;}
 .btch li button{background-color: #E4E4E4;color: rgba(51, 51, 51, 0.6);margin-top: 24px;}
+
 
 /* bottomMenu */
 .bottonMenu{position: fixed;bottom: 0;width: 100%;background-color: #FFFFFF;box-shadow: #0000000D 0px -5px 16px;}

@@ -64,11 +64,11 @@ export default function BtchComp() {
             <div className={styles.content}>
                 <ul className={'topTitleUl'}>
                     <li>
-                        <h5>서비스이용료</h5>
+                        <h5>배치 페이</h5>
                         <p>{btchInfo.DELY_AMT}원</p>
                     </li>
                     <li>
-                        <h5>스토어와 고객과의 거리</h5>
+                        <h5>스토어와 배송지 거리</h5>
                         <p>{btchInfo.ODER_DELY_DTC}Km</p>
                     </li>
                     <li>

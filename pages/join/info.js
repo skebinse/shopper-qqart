@@ -88,42 +88,21 @@ export default function Info() {
         // 팝업 오픈
         setPopupClass(styles.active);
 
-        new daum.Postcode({
-            oncomplete: function(data) {
-                // 팝업 close
-                setPopupClass('');
-                setJoinInfo(prevState => ({...prevState, addrTxt: data.roadAddress}));
+        cmm.plugin.daumPost(divDaumPost, data => {
 
-                cmm.ajax({
-                    url: `https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?addressFlag=F02&coordType=WGS84GEO&version=1&fullAddr=${encodeURIComponent(data.roadAddress)}&page=1&count=20`,
-                    headers: {
-                        appKey: process.env.NEXT_PUBLIC_TMAP_KEY
-                    },
-                    isExtr: true,
-                    contextType: 'application/json',
-                    success: res => {
+            // 팝업 close
+            setPopupClass('');
 
-                        if(!!res.coordinateInfo && !!res.coordinateInfo.coordinate && res.coordinateInfo.coordinate.length > 0) {
-                            setJoinInfo(prevState => ({
-                                ...prevState,
-                                userStdoCd: data.bcode,
-                                userZipc: data.zonecode,
-                                userAddr: data.roadAddress,
-                                userAddrLat: res.coordinateInfo.coordinate[0].newLon,
-                                userAddrLot: res.coordinateInfo.coordinate[0].newLat,
-                            }));
-                        } else {
-
-                            alert('주소 입력에 실패하였습니다.');
-                        }
-                    },
-                    error: res => {
-
-                        alert('주소 입력에 실패하였습니다.');
-                    },
-                });
-            }
-        }).embed(divDaumPost);
+            setJoinInfo(prevState => ({
+                ...prevState,
+                addrTxt: data.roadAddress,
+                userStdoCd: data.bcode,
+                userZipc: data.zonecode,
+                userAddr: data.roadAddress,
+                userAddrLat: data.newLon,
+                userAddrLot: data.newLat,
+            }));
+        });
     };
 
     /**
@@ -154,7 +133,7 @@ export default function Info() {
                         data: param,
                         success: res => {
 
-                            cmm.util.setLs(cmm.Cont.LOING_INFO, res);
+                            cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
                             if(!!res && !joinInfo.isLogin) {
 
                                 goPage('./comp');
@@ -234,7 +213,7 @@ export default function Info() {
                         </div>
                     </li>
                 </ul>
-                <p className={styles.infoTxt}>* 쇼퍼님의 현재 계신 곳을 중심으로 배치해줍니다.</p>
+                <p className={styles.infoTxt}>* 설정한 지역을 중심으로 배치를 확인하실 수 있습니다.</p>
                 <div className={styles.btnArea}>
                     <button type={"button"} onClick={joinCompClick}>설정완료</button>
                 </div>

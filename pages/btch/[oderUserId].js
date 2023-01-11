@@ -96,11 +96,11 @@ export default function OderUserId(props) {
             <HeadTitle type={'close'} callbackClose={() => goPage('/')} />
             <ul className={'topTitleUl'}>
                 <li>
-                    <h5>서비스이용료</h5>
+                    <h5>배치 페이</h5>
                     <p>{btchInfo.DELY_AMT}원</p>
                 </li>
                 <li>
-                    <h5>스토어와 고객과의 거리</h5>
+                    <h5>스토어와 배송지 거리</h5>
                     <p>{btchInfo.ODER_DELY_DTC}Km</p>
                 </li>
                 <li>
@@ -122,19 +122,11 @@ export default function OderUserId(props) {
                     <p>{btchInfo.oderDelySlctVal}</p>
                 </li>
                 <li>
-                    <h5>고객명</h5>
-                    <p>{btchInfo.ODER_ACPP_NM}</p>
-                </li>
-                <li>
-                    <h5>주소</h5>
+                    <h5>스토어 주소</h5>
                     <p>
                         {btchInfo.USER_FULL_ADDR}
                         <Image alt={'주소 복사'} src={'/assets/images/btn/btnCopy.svg'} width={44} height={23} onClick={() => cmm.util.clipboard(btchInfo.USER_FULL_ADDR)} />
                     </p>
-                </li>
-                <li>
-                    <h5>연락처</h5>
-                    <p className={'colorGreen bold'}>{cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}</p>
                 </li>
                 {!!btchInfo.ODER_DELY_REQ_MATT &&
                     <li>

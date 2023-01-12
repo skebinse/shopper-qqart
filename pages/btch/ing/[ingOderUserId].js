@@ -166,13 +166,41 @@ export default function IngOderUserId() {
         setVchrImgList(prevState => prevState.filter((value, idx) => idx !== imgIdx));
     };
 
+    /**
+     * 배치 취소
+     */
+    const btchCancelHandler = () => {
+
+        cmm.confirm('배치 수락을 정말 취소하시겠습니까?<br/><span>수락 취소 후 1시간동안 배치를 수락하실 수 없습니다.</span>', () => {
+
+            cmm.ajax({
+                url: '/api/btch/btchCan',
+                data: {
+                    oderUserId: btchInfo.ODER_USER_ID
+                },
+                success: res => {
+
+                    if(!!res.affectedRows) {
+
+                        cmm.alert('배치가 취소 되었습니다.', () => {
+
+                            router.push('/');
+                        });
+                    }
+                },
+            });
+        }, null, '배치 취소');
+    };
+
     return(
         <>
             <Head>
                 <script src="/assets/js/blueimp-gallery.min.js" defer></script>
             </Head>
             <HeadTitle title={title} callbackClose={() => goPage('/')} >
-                {/*<button type={'button'} className={'btnBtchCancel'}>배치 취소</button>*/}
+                {btchInfo.ODER_PGRS_STAT === '03' &&
+                    <button type={'button'} className={'btnBtchCancel'} onClick={btchCancelHandler}>배치 취소</button>
+                }
             </HeadTitle>
             <div className={styles.btchIng}>
                 <div className={styles.step}>

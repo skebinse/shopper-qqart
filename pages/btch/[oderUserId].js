@@ -124,8 +124,8 @@ export default function OderUserId(props) {
                 <li>
                     <h5>스토어 주소</h5>
                     <p>
-                        {btchInfo.USER_FULL_ADDR}
-                        <Image alt={'주소 복사'} src={'/assets/images/btn/btnCopy.svg'} width={44} height={23} onClick={() => cmm.util.clipboard(btchInfo.USER_FULL_ADDR)} />
+                        {btchInfo.SHOP_FULL_ADDR}
+                        <Image alt={'주소 복사'} src={'/assets/images/btn/btnCopy.svg'} width={44} height={23} onClick={() => cmm.util.clipboard(btchInfo.SHOP_FULL_ADDR)} />
                     </p>
                 </li>
                 {!!btchInfo.ODER_DELY_REQ_MATT &&

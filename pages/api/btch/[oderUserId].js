@@ -28,6 +28,7 @@ export default async function handler(req, res) {
                  , DD.USER_ADDR_LOT
                  , DD.USER_NCNM
                  , DD.USER_CPHONE_NO
+                 , CONCAT(BB.SHOP_ADDR, ' ' , BB.SHOP_DTPT_ADDR) AS SHOP_FULL_ADDR
                  , CONCAT(DD.USER_ADDR, ' ' , DD.USER_DTPT_ADDR) AS USER_FULL_ADDR
                  , fnGetCdNm(BB.SHOP_RRV_KD) AS SHOP_RRV_NM
                  , EE.ODER_USER_ID

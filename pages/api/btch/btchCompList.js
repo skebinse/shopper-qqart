@@ -18,9 +18,7 @@ export default async function handler(req, res) {
                      , fnGetAtchFileList(AA.SHOP_RRSN_ATCH_FILE_UUID) AS SHOP_RRSN_ATCH_FILE_LIST
                   FROM (
                     SELECT AA.ODER_MNGR_RGI_YN
-                         , CASE WHEN AA.ODER_MNGR_RGI_YN = 'Y'
-                             THEN AA.ODER_REQ_YMD
-                           ELSE DATE_ADD(AA.ODER_REQ_YMD, INTERVAL 9 HOUR) END AS ODER_REQ_YMD
+                         , AA.ODER_DELY_CPL_DT
                          , AA.ODER_USER_ID
                          , AA.ODER_DELY_DTC
                          , AA.ODER_KD
@@ -50,7 +48,7 @@ export default async function handler(req, res) {
                      WHERE AA.ODER_DELY_CPL_DT IS NOT NULL
                    ) AA
              WHERE (AA.PROD_CNT > 0 OR AA.ODER_KD = 'PIUP')
-          ORDER BY AA.ODER_REQ_YMD DESC
+          ORDER BY AA.ODER_DELY_CPL_DT DESC
                 `;
 
             const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);

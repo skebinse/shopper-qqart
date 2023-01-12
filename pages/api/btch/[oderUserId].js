@@ -45,7 +45,7 @@ export default async function handler(req, res) {
                  , EE.ODER_DELY_NNME_YN
                  , EE.ODER_RRV_ID
                  , EE.USER_CARD_ID
-                 , DATE_FORMAT(EE.ODER_DELY_YMD, '%y년 %m월 %d일')
+                 , DATE_FORMAT(EE.ODER_DELY_YMD, '%y년 %m월 %d일') AS ODER_DELY_YMD
                  , EE.ODER_DELY_HH
                  , EE.ODER_USER_COUP_ID_LIS
                  , EE.ODER_USE_POIN

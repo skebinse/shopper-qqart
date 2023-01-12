@@ -46,6 +46,9 @@ export default async function handler(req, res) {
                       FROM T_ODER_USER_INFO AA
                            INNER JOIN T_SHOP_MAG BB
                         ON BB.SHOP_ID = AA.SHOP_ID
+                           INNER JOIN T_USER_INFO CC
+                        ON CC.USER_ID = AA.USER_ID
+                       AND CC.USER_SCSS_YN = 'N'
                            LEFT OUTER JOIN
                             (
                             SELECT USER_ID
@@ -104,6 +107,9 @@ export default async function handler(req, res) {
                   FROM T_ODER_USER_INFO AA
                        INNER JOIN T_SHOP_MAG BB
                     ON BB.SHOP_ID = AA.SHOP_ID
+                       INNER JOIN T_USER_INFO CC
+                    ON CC.USER_ID = AA.USER_ID
+                   AND CC.USER_SCSS_YN = 'N'
                        LEFT OUTER JOIN
                         (
                         SELECT USER_ID

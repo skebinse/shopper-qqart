@@ -65,6 +65,7 @@ export default async function handler(req, res) {
                  LEFT OUTER JOIN T_USER_SPBK AA
               ON EE.USER_ID = AA.USER_ID
              AND EE.SHOP_ID = AA.SHOP_ID
+             AND EE.ODER_USER_ID = AA.ODER_USER_ID
              AND AA.SPBK_PGRS_STAT = '02'
                  LEFT OUTER JOIN T_SHOP_CL_PROD CC
               ON CC.PROD_ID = AA.PROD_ID

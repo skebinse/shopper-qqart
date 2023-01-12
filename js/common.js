@@ -432,7 +432,7 @@ const cmm = {
 
                             if(!!res.coordinateInfo && !!res.coordinateInfo.coordinate && res.coordinateInfo.coordinate.length > 0) {
 
-                                callback({...data, newLon: res.coordinateInfo.coordinate[0], newLat: res.coordinateInfo.coordinate[0].newLat});
+                                callback({...data, newLon: res.coordinateInfo.coordinate[0].newLon, newLat: res.coordinateInfo.coordinate[0].newLat});
                             } else {
 
                                 cmm.alert('주소 입력에 실패하였습니다.');

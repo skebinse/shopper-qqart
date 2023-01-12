@@ -4,8 +4,6 @@ export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
-        const param = req.body;
-
         try {
 
             let query =`
@@ -30,9 +28,6 @@ export default async function handler(req, res) {
                          , BB.SHOP_RRSN_ATCH_FILE_UUID
                          , CONCAT(BB.SHOP_ADDR, ' ' , BB.SHOP_DTPT_ADDR) AS SHOP_FULL_ADDR
                          , IFNULL(DD.PROD_CNT, 0) AS PROD_CNT
-                         , IFNULL(DD.SPBK_DELY_DTC, 0) AS SPBK_DELY_DTC
-                         , BB.SHOP_ADDR_LAT
-                         , BB.SHOP_ADDR_LOT
                          , ST_DISTANCE_SPHERE(POINT(BB.SHOP_ADDR_LAT, BB.SHOP_ADDR_LOT), POINT(EE.SHPR_ADDR_LAT, EE.SHPR_ADDR_LOT)) AS SLIN_DTC
                       FROM T_ODER_USER_INFO AA
                            INNER JOIN T_SHOP_MAG BB
@@ -41,28 +36,24 @@ export default async function handler(req, res) {
                             (
                             SELECT USER_ID
                                  , SHOP_ID
-                                 , SPBK_DELY_DTC
-                                 , ODER_USER_ID
+                                 , ODER_ID
                                  , COUNT(SHOP_ID) AS PROD_CNT
-                              FROM T_USER_SPBK
-                             WHERE SPBK_PGRS_STAT = '02'
+                              FROM T_ODER_DTPT
                           GROUP BY USER_ID
                                  , SHOP_ID
-                                 , SPBK_DELY_DTC
-                                 , ODER_USER_ID
+                                 , ODER_ID
                             ) DD
-                        ON AA.ODER_USER_ID = DD.ODER_USER_ID
+                        ON AA.ODER_ID = DD.ODER_ID
                            INNER JOIN T_SHPR_INFO EE
                         ON EE.SHPR_ID = fnDecrypt(?, ?)
                        AND EE.SHPR_ID = AA.SHPR_ID
                      WHERE AA.ODER_DELY_CPL_DT IS NOT NULL
                    ) AA
              WHERE (AA.PROD_CNT > 0 OR AA.ODER_KD = 'PIUP')
-               AND AA.SLIN_DTC < 10000
           ORDER BY AA.ODER_REQ_YMD DESC
                 `;
 
-            const [rows, fields] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
             res.status(200).json(result(rows));
         } catch (e) {

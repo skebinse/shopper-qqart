@@ -61,7 +61,7 @@ export default function Index(props) {
             setTabIdx(router.query.tabIdx);
         }
 
-        setWindowHeight(window.outerHeight);
+        setWindowHeight(window.outerHeight + 10);
 
         if(cmm.checkLogin()) {
 

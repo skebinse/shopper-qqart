@@ -9,7 +9,7 @@ export default async function handler(req, res) {
             SELECT IFNULL(TIMESTAMPDIFF(MINUTE, MAX(RGI_DT), NOW()), 60) AS MIN 
               FROM T_BTCH_CAN_HITY
              WHERE SHPR_ID = fnDecrypt(?, ?)
-               AND BTCH_SANCT_YN = 'Y'
+               AND BTCH_CAN_SANCT_YN = 'Y'
         `;
 
         const [row] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);

@@ -3,10 +3,8 @@ import styles from "/styles/index.module.css"
 import Image from "next/image";
 import {useRouter} from "next/router";
 import cmm from "../js/common";
-import useCommon from "../hooks/useCommon";
 import BtchList from "../components/btchList";
 import BottomMenu from "../components/bottomMenu";
-import {useGlobal} from "../context/globalContext";
 import Link from "next/link";
 
 export default function Index(props) {

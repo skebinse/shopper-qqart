@@ -33,9 +33,9 @@ export default function IngOderUserId() {
             success: res => {
 
                 if(!!res && res.length > 0) {
-
                     const item = res[0];
 
+                    console.log(item)
                     if(!!item.SPBK_ID) {
 
                         // 상품 리스트
@@ -221,6 +221,26 @@ export default function IngOderUserId() {
                                     {btchInfo.SHOP_FULL_ADDR}
                                     <Image alt={'주소 복사'} src={'/assets/images/btn/btnCopy.svg'} width={44} height={23} onClick={() => cmm.util.clipboard(btchInfo.SHOP_FULL_ADDR)}/>
                                 </p>
+                                <ul className={'naviLinkUl'}>
+                                    <li>
+                                        <a href={`kakaomap://route?ep=${btchInfo.SHOP_ADDR_LOT},${btchInfo.SHOP_ADDR_LAT}&by=CAR`} >
+                                            <img src={'/assets/images/icon/iconKakaonavi.svg'} />
+                                            카카오맵 연결하기
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href={`tmap://route?goalname=${btchInfo.SHOP_NM}&goaly=${btchInfo.SHOP_ADDR_LOT}&goalx=${btchInfo.SHOP_ADDR_LAT}`} >
+                                            <img src={'/assets/images/icon/iconTmap.png'} />
+                                            티맵 연결하기
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href={`nmap://route/car?dlat=${btchInfo.SHOP_ADDR_LOT}&dlng=${btchInfo.SHOP_ADDR_LAT}&dname=${btchInfo.SHOP_NM}`} >
+                                            <img src={'/assets/images/icon/iconNavermap.png'} />
+                                            네이버지도 연결하기
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li>
                                 <h5>주문 시간</h5>
@@ -256,7 +276,28 @@ export default function IngOderUserId() {
                                 <h5>주소</h5>
                                 <p>
                                     {btchInfo.USER_FULL_ADDR}
+                                    <Image alt={'주소 복사'} src={'/assets/images/btn/btnCopy.svg'} width={44} height={23} onClick={() => cmm.util.clipboard(btchInfo.USER_FULL_ADDR)} />
                                 </p>
+                                <ul className={'naviLinkUl'}>
+                                    <li>
+                                        <a href={`kakaomap://route?ep=${btchInfo.USER_ADDR_LOT},${btchInfo.USER_ADDR_LAT}&by=CAR`} >
+                                            <img src={'/assets/images/icon/iconKakaonavi.svg'} />
+                                            카카오맵 연결하기
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href={`tmap://route?goalname=${btchInfo.USER_NCNM} 고객&goaly=${btchInfo.USER_ADDR_LOT}&goalx=${btchInfo.USER_ADDR_LAT}`} >
+                                            <img src={'/assets/images/icon/iconTmap.png'} />
+                                            티맵 연결하기
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href={`nmap://route/car?dlat=${btchInfo.USER_ADDR_LOT}&dlng=${btchInfo.USER_ADDR_LAT}&dname=${btchInfo.USER_NCNM} 고객`} >
+                                            <img src={'/assets/images/icon/iconNavermap.png'} />
+                                            네이버지도 연결하기
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li>
                                 <h5>연락처</h5>

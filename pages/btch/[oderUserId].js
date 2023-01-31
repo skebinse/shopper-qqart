@@ -54,7 +54,7 @@ export default function OderUserId(props) {
                     item.oderDelySlctVal = oderDelySlctVal;
                 } else {
 
-                    cmm.alert('배치가 완료된 건입니다.', () => {
+                    cmm.alert('배치가 취소됐거나 이미 완료된 건입니다.', () => {
                         goPage('/');
                     });
                 }
@@ -96,11 +96,12 @@ export default function OderUserId(props) {
             <HeadTitle type={'close'} callbackClose={() => goPage('/')} />
             <ul className={'topTitleUl'}>
                 <li>
-                    <h5>배치 페이</h5>
+                    <h5>서비스이용료</h5>
                     <p>{btchInfo.DELY_AMT}원</p>
+                    <span className={styles.amt}>기본 요금 <em>{cmm.util.comma(cmm.util.getNumber(btchInfo.DELY_AMT) - btchInfo.ODER_SHPR_TIP_AMT)}원</em> + 팁 <em>{cmm.util.comma(btchInfo.ODER_SHPR_TIP_AMT)}원</em></span>
                 </li>
                 <li>
-                    <h5>스토어와 배송지 거리</h5>
+                    <h5>스토어와 고객과의 거리</h5>
                     <p>{btchInfo.ODER_DELY_DTC}Km</p>
                 </li>
                 <li>
@@ -127,6 +128,26 @@ export default function OderUserId(props) {
                         {btchInfo.SHOP_FULL_ADDR}
                         <Image alt={'주소 복사'} src={'/assets/images/btn/btnCopy.svg'} width={44} height={23} onClick={() => cmm.util.clipboard(btchInfo.SHOP_FULL_ADDR)} />
                     </p>
+                    <ul className={'naviLinkUl'}>
+                        <li>
+                            <a href={`kakaomap://route?ep=${btchInfo.SHOP_ADDR_LOT},${btchInfo.SHOP_ADDR_LAT}&by=CAR`} >
+                                <img src={'/assets/images/icon/iconKakaonavi.svg'} />
+                                카카오맵 연결하기
+                            </a>
+                        </li>
+                        <li>
+                            <a href={`tmap://route?goalname=${btchInfo.SHOP_NM}&goaly=${btchInfo.SHOP_ADDR_LOT}&goalx=${btchInfo.SHOP_ADDR_LAT}`} >
+                                <img src={'/assets/images/icon/iconTmap.png'} />
+                                티맵 연결하기
+                            </a>
+                        </li>
+                        <li>
+                            <a href={`nmap://route/car?dlat=${btchInfo.SHOP_ADDR_LOT}&dlng=${btchInfo.SHOP_ADDR_LAT}&dname=${btchInfo.SHOP_NM}`} >
+                                <img src={'/assets/images/icon/iconNavermap.png'} />
+                                네이버지도 연결하기
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 {!!btchInfo.ODER_DELY_REQ_MATT &&
                     <li>

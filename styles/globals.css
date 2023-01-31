@@ -119,3 +119,8 @@ input[type=checkbox]:disabled+label{opacity: 0.5;}
 .swiper-wrapper .swiper-slide .imgZoomArea{position: relative;}
 .swiper-wrapper .swiper-slide .imgZoomArea .img{border-radius: 10px;width: 100%;object-fit: cover;}
 .swiper-wrapper .swiper-slide .imgZoomArea .zoom{position: absolute;right: 11px; bottom: 13px;border-radius: 0;}
+
+/**/
+.naviLinkUl{padding-top: 8px;}
+.naviLinkUl li a{display: flex;align-items: center;padding-bottom: 8px;}
+.naviLinkUl li a img{width: 24px; height: 24px;padding-right: 8px;}

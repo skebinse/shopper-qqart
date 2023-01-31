@@ -2,6 +2,9 @@
 
 .btchInfo{padding: 0 0 90px;}
 .btchInfo > ul{margin-left: 17px;margin-right: 17px;}
+.btchInfo .amt{font-size: 14px;color: #333333;}
+.btchInfo .amt em{font-weight: 700;}
+.btchInfo :global .topTitleUl{background-color: #F8F8F8;border-radius: 25px;border: none;padding-top: 29px;}
 
 .btchIng{padding: 0 17px;}
 .btchIng .step{text-align: center;}

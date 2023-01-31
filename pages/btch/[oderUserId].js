@@ -131,19 +131,19 @@ export default function OderUserId(props) {
                     <ul className={'naviLinkUl'}>
                         <li>
                             <a href={`kakaomap://route?ep=${btchInfo.SHOP_ADDR_LOT},${btchInfo.SHOP_ADDR_LAT}&by=CAR`} >
-                                <img src={'/assets/images/icon/iconKakaonavi.svg'} />
+                                <Image alt={'카카오맵'} alt={'카카오맵'} src={'/assets/images/icon/iconKakaonavi.svg'} width={24} height={24} />
                                 카카오맵 연결하기
                             </a>
                         </li>
                         <li>
                             <a href={`tmap://route?goalname=${btchInfo.SHOP_NM}&goaly=${btchInfo.SHOP_ADDR_LOT}&goalx=${btchInfo.SHOP_ADDR_LAT}`} >
-                                <img src={'/assets/images/icon/iconTmap.png'} />
+                                <Image alt={'티맵'} src={'/assets/images/icon/iconTmap.png'} width={24} height={24} />
                                 티맵 연결하기
                             </a>
                         </li>
                         <li>
                             <a href={`nmap://route/car?dlat=${btchInfo.SHOP_ADDR_LOT}&dlng=${btchInfo.SHOP_ADDR_LAT}&dname=${btchInfo.SHOP_NM}`} >
-                                <img src={'/assets/images/icon/iconNavermap.png'} />
+                                <Image alt={'네이버지도'} src={'/assets/images/icon/iconNavermap.png'} width={24} height={24} />
                                 네이버지도 연결하기
                             </a>
                         </li>

@@ -131,7 +131,7 @@ export default function OderUserId(props) {
                     <ul className={'naviLinkUl'}>
                         <li>
                             <a href={`kakaomap://route?ep=${btchInfo.SHOP_ADDR_LOT},${btchInfo.SHOP_ADDR_LAT}&by=CAR`} >
-                                <Image alt={'카카오맵'} alt={'카카오맵'} src={'/assets/images/icon/iconKakaonavi.svg'} width={24} height={24} />
+                                <Image alt={'카카오맵'} src={'/assets/images/icon/iconKakaonavi.svg'} width={24} height={24} />
                                 카카오맵 연결하기
                             </a>
                         </li>

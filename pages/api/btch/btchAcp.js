@@ -12,6 +12,7 @@ export default async function handler(req, res) {
                   FROM T_ODER_USER_INFO
                  WHERE SHPR_ID = fnDecrypt(?, ?)
                    AND ODER_PGRS_STAT IN ('03', '04', '05')
+                   AND ODER_REQ_APV_MNGR_ID IS NULL
             `;
 
             let [rows, fields] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);

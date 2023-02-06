@@ -198,7 +198,7 @@ export default function IngOderUserId() {
                 <script src="/assets/js/blueimp-gallery.min.js" defer></script>
             </Head>
             <HeadTitle title={title} callbackClose={() => goPage('/')} >
-                {btchInfo.ODER_PGRS_STAT === '03' &&
+                {(btchInfo.ODER_PGRS_STAT === '03' && !btchInfo.ODER_REQ_APV_MNGR_ID) &&
                     <button type={'button'} className={'btnBtchCancel'} onClick={btchCancelHandler}>배치 취소</button>
                 }
             </HeadTitle>

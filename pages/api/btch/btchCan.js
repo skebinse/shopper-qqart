@@ -1,4 +1,5 @@
 import {getConnectPool, result} from "../db";
+import Login from "../../cmm/login";
 
 export default async function handler(req, res) {
 
@@ -10,12 +11,26 @@ export default async function handler(req, res) {
 
         try {
             let query =`
+                SELECT SHOP_ID
+                     , USER_ID
+                  FROM T_ODER_USER_INFO
+                 WHERE ODER_USER_ID = ?
+                   AND SHPR_ID = fnDecrypt(?, ?)
+            `;
+
+            const [oderRows] = await conn.query(query, [param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+
+            query =`
                 INSERT INTO T_BTCH_CAN_HITY (
+                        SHOP_ID,
+                        USER_ID,
                         SHPR_ID,
                         ODER_USER_ID,
                         RGI_DT,
                         RGI_ID
                 ) VALUES (
+                        ?,
+                        ?,
                         fnDecrypt(?, ?),
                         ?,
                         NOW(),
@@ -23,7 +38,7 @@ export default async function handler(req, res) {
                 )
             `;
 
-            const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            const [rows] = await conn.query(query, [oderRows[0].SHOP_ID, oderRows[0].USER_ID, req.headers['x-enc-user-id'], process.env.ENC_KEY, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
             query =`
                 UPDATE T_ODER_USER_INFO

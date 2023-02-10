@@ -59,7 +59,7 @@ export default function Index(props) {
             setTabIdx(router.query.tabIdx);
         }
 
-        setWindowHeight(window.outerHeight + 10);
+        // setWindowHeight(window.outerHeight + 10);
 
         if(cmm.checkLogin()) {
 
@@ -77,7 +77,8 @@ export default function Index(props) {
 
 
     return (
-        <div className={styles.index} style={{height: windowHeight}}>
+        // <div className={styles.index} style={{height: windowHeight}}>
+        <div className={styles.index}>
             <div className={styles.header}>
                 <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={113.6} height={24.5} />
                 <Link href={'/join/info'}>

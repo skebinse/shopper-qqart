@@ -35,7 +35,12 @@ export default function IngOderUserId() {
                 if(!!res && res.length > 0) {
                     const item = res[0];
 
-                    console.log(item)
+                    if('03|04|05'.indexOf(item.ODER_PGRS_STAT) === -1) {
+
+                        cmm.alert('이미 완료된 건이거나 삭제된 건입니다.');
+                        return;
+                    }
+
                     if(!!item.SPBK_ID) {
 
                         // 상품 리스트

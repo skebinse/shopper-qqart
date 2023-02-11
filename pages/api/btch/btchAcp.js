@@ -11,7 +11,7 @@ export default async function handler(req, res) {
             if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
                 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
             }
-            console.log(process.env.QQCART_URL + '/sendSmsNtfy.ax')
+
             cmm.ajax({
                 url: process.env.QQCART_URL + `/sendSmsNtfy.ax`,
                 isLoaing: false,

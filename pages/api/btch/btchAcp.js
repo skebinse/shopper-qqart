@@ -1,4 +1,5 @@
 import {getConnectPool, result} from "../db";
+import cmm from "../../../js/common";
 
 export default async function handler(req, res) {
 
@@ -7,6 +8,24 @@ export default async function handler(req, res) {
         const param = req.body;
 
         try {
+            if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
+                process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+            }
+            console.log(process.env.QQCART_URL + '/sendSmsNtfy.ax')
+            cmm.ajax({
+                url: process.env.QQCART_URL + `/sendSmsNtfy.ax`,
+                isLoaing: false,
+                isExtr: true,
+                data: {
+                    pgrsStat: 'btch',
+                    oderUserId: param.oderUserId,
+                },
+                success: res => {
+
+                    console.log(res)
+                }
+            });
+
             let query =`
                 SELECT COUNT(*) AS CNT
                   FROM T_ODER_USER_INFO

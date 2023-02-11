@@ -81,7 +81,7 @@ const cmm = {
                 }
             })
             .catch(err => {
-
+                console.log(err)
                 if(!!_options.error) {
 
                     _options.error();

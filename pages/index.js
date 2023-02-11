@@ -75,7 +75,6 @@ export default function Index(props) {
         }
     }, [router.query.tabIdx, callBtchList]);
 
-
     return (
         // <div className={styles.index} style={{height: windowHeight}}>
         <div className={styles.index}>

@@ -19,9 +19,11 @@ export default async function handler(req, res) {
 
             query = `
                 SELECT AA.ODER_MNGR_RGI_YN
+                     , AA.ODER_NO
                      , AA.SHOP_NM
                      , AA.PROD_CNT
                      , AA.SHOP_FULL_ADDR
+                     , AA.ODER_DELY_FULL_ADDR
                      , AA.ODER_USER_ID
                      , AA.ODER_KD
                      , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
@@ -32,6 +34,7 @@ export default async function handler(req, res) {
                          , CASE WHEN AA.ODER_MNGR_RGI_YN = 'Y'
                              THEN AA.ODER_REQ_YMD
                            ELSE DATE_ADD(AA.ODER_REQ_YMD, INTERVAL 9 HOUR) END AS ODER_REQ_YMD
+                         , AA.ODER_NO
                          , AA.ODER_USER_ID
                          , AA.ODER_DELY_DTC
                          , AA.ODER_KD
@@ -39,6 +42,7 @@ export default async function handler(req, res) {
                          , BB.SHOP_NM
                          , BB.SHOP_RRSN_ATCH_FILE_UUID
                          , CONCAT(BB.SHOP_ADDR, ' ' , BB.SHOP_DTPT_ADDR) AS SHOP_FULL_ADDR
+                         , CONCAT(AA.ODER_DELY_ADDR, ' ' , AA.ODER_DELY_DTPT_ADDR) AS ODER_DELY_FULL_ADDR
                          , IFNULL(DD.PROD_CNT, 0) AS PROD_CNT
                          , IFNULL(DD.SPBK_DELY_DTC, 0) AS SPBK_DELY_DTC
                          , BB.SHOP_ADDR_LAT
@@ -82,9 +86,11 @@ export default async function handler(req, res) {
 
         query = `
             SELECT AA.ODER_MNGR_RGI_YN
+                 , AA.ODER_NO
                  , AA.SHOP_NM
                  , AA.PROD_CNT
                  , AA.SHOP_FULL_ADDR
+                 , AA.ODER_DELY_FULL_ADDR
                  , AA.ODER_USER_ID
                  , AA.ODER_KD
                  , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
@@ -95,6 +101,7 @@ export default async function handler(req, res) {
                      , CASE WHEN AA.ODER_MNGR_RGI_YN = 'Y'
                          THEN AA.ODER_REQ_YMD
                        ELSE DATE_ADD(AA.ODER_REQ_YMD, INTERVAL 9 HOUR) END AS ODER_REQ_YMD
+                     , AA.ODER_NO
                      , AA.ODER_USER_ID
                      , AA.ODER_DELY_DTC
                      , AA.ODER_KD
@@ -102,6 +109,7 @@ export default async function handler(req, res) {
                      , BB.SHOP_NM
                      , BB.SHOP_RRSN_ATCH_FILE_UUID
                      , CONCAT(BB.SHOP_ADDR, ' ' , BB.SHOP_DTPT_ADDR) AS SHOP_FULL_ADDR
+                     , CONCAT(AA.ODER_DELY_ADDR, ' ' , AA.ODER_DELY_DTPT_ADDR) AS ODER_DELY_FULL_ADDR
                      , IFNULL(DD.PROD_CNT, 0) AS PROD_CNT
                      , IFNULL(DD.SPBK_DELY_DTC, 0) AS SPBK_DELY_DTC
                      , BB.SHOP_ADDR_LAT

@@ -54,9 +54,9 @@ export default function IngOderUserId() {
                     }
 
                     switch (item.ODER_PGRS_STAT) {
-                        case '03': setBtnText('장보기 시작'); setTitle('스토어로 이동 중'); break;
+                        case '03': setBtnText(item.ODER_KD === 'DELY' ? '장보기 시작' : '배달 시작'); setTitle('스토어로 이동 중'); break;
                         case '04': setBtnText('배달 시작'); setTitle('장보는 중'); break;
-                        case '05': setBtnText('배달 완료'); setTitle('픽업하는 중'); break;
+                        case '05': setBtnText('배달 완료'); setTitle('배달하는 중'); break;
                     }
 
                     let oderDelySlctVal;
@@ -122,6 +122,11 @@ export default function IngOderUserId() {
 
             let msg = btchInfo.ODER_PGRS_STAT === '03' ? '스토어에 도착하셨나요?\n장보기를 시작하시겠습니까?' : '결제를 완료하였나요?\n지금부터 배달을 시작하시겠습니까?';
             let title = btchInfo.ODER_PGRS_STAT === '03' ? '장보기 시작' : '배달 시작';
+            // 픽업일 경우
+            if(btchInfo.ODER_PGRS_STAT === '03' && btchInfo.ODER_KD === 'PIUP') {
+                msg = '스토어에 도착하셨나요?\n지금부터 배달을 시작하시겠습니까?';
+                title = '배달 시작'
+            }
 
             cmm.confirm(msg, () => {
 
@@ -129,7 +134,7 @@ export default function IngOderUserId() {
                     url: '/api/btch/ing/btchStat',
                     data: {
                         oderUserId: ingOderUserId,
-                        oderPgrsStat: btchInfo.ODER_PGRS_STAT === '03' ? '04' : '05',
+                        oderPgrsStat: (btchInfo.ODER_PGRS_STAT === '03' && btchInfo.ODER_KD === 'DELY') ? '04' : '05',
                     },
                     success: res => router.reload()
                 });
@@ -202,7 +207,7 @@ export default function IngOderUserId() {
             <Head>
                 <script src="/assets/js/blueimp-gallery.min.js" defer></script>
             </Head>
-            <HeadTitle title={title} callbackClose={() => goPage('/')} >
+            <HeadTitle title={title} callbackClose={() => goPage('/', {tabIdx: 1})} >
                 {(btchInfo.ODER_PGRS_STAT === '03' && !btchInfo.ODER_REQ_APV_MNGR_ID) &&
                     <button type={'button'} className={'btnBtchCancel'} onClick={btchCancelHandler}>배치 취소</button>
                 }
@@ -210,7 +215,9 @@ export default function IngOderUserId() {
             <div className={styles.btchIng}>
                 <div className={styles.step}>
                     <Image alt={'스토어 이동'} src={'/assets/images/img/step1On.svg'} width={48} height={48} />
-                    <Image alt={'장보기'} src={btchInfo.ODER_PGRS_STAT === '03' ? '/assets/images/img/step2Off.svg' : '/assets/images/img/step2On.svg'} width={48} height={48} />
+                    {btchInfo.ODER_KD === 'DELY' &&
+                        <Image alt={'장보기'} src={btchInfo.ODER_PGRS_STAT === '03' ? '/assets/images/img/step2Off.svg' : '/assets/images/img/step2On.svg'} width={48} height={48} />
+                    }
                     <Image alt={'배달'} src={btchInfo.ODER_PGRS_STAT === '05' ? '/assets/images/img/step3On.svg' : '/assets/images/img/step3Off.svg'} width={48} height={48} />
                 </div>
                 <ul className={'formUl'}>

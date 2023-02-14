@@ -90,7 +90,7 @@ export default function Index(props) {
             </div>
             <div className={styles.btchArea + ' ' +  (tabIdx === 0 ? '' : styles.ing)}>
                 <BtchList list={btchInfo.btchList} href={'/btch'} isInit={isInit} />
-                <BtchList list={btchInfo.btchAcpList} href={'/btch/ing'} isInit={isInit} noDataTxt={'현재 수락한 배치가 없습니다.'} />
+                <BtchList list={btchInfo.btchAcpList} href={'/btch/ing'} isInit={isInit} noDataTxt={'현재 수락한 배치가 없습니다.'} isIngBtch={true} />
             </div>
             <div className={styles.refresh} onClick={() => callBtchList()}>
                 <Image src={'/assets/images/icon/iconRefresh.svg'} alt={'새로고침'} width={18.5} height={18.5} />

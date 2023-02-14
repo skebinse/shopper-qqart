@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
             query = `
                 SELECT AA.ODER_MNGR_RGI_YN
-                     , AA.ODER_NO
+                     , AA.ODER_RPRE_NO
                      , AA.SHOP_NM
                      , AA.PROD_CNT
                      , AA.SHOP_FULL_ADDR
@@ -34,7 +34,7 @@ export default async function handler(req, res) {
                          , CASE WHEN AA.ODER_MNGR_RGI_YN = 'Y'
                              THEN AA.ODER_REQ_YMD
                            ELSE DATE_ADD(AA.ODER_REQ_YMD, INTERVAL 9 HOUR) END AS ODER_REQ_YMD
-                         , AA.ODER_NO
+                         , AA.ODER_RPRE_NO
                          , AA.ODER_USER_ID
                          , AA.ODER_DELY_DTC
                          , AA.ODER_KD
@@ -86,7 +86,7 @@ export default async function handler(req, res) {
 
         query = `
             SELECT AA.ODER_MNGR_RGI_YN
-                 , AA.ODER_NO
+                 , AA.ODER_RPRE_NO
                  , AA.SHOP_NM
                  , AA.PROD_CNT
                  , AA.SHOP_FULL_ADDR
@@ -101,7 +101,7 @@ export default async function handler(req, res) {
                      , CASE WHEN AA.ODER_MNGR_RGI_YN = 'Y'
                          THEN AA.ODER_REQ_YMD
                        ELSE DATE_ADD(AA.ODER_REQ_YMD, INTERVAL 9 HOUR) END AS ODER_REQ_YMD
-                     , AA.ODER_NO
+                     , AA.ODER_RPRE_NO
                      , AA.ODER_USER_ID
                      , AA.ODER_DELY_DTC
                      , AA.ODER_KD

@@ -28,10 +28,10 @@ export default function BtchList({list, href, classNm = '', noDataTxt = '현재 
                                 <Image alt={'상품 이미지'} src={'/assets/images/icon/iconProduct.svg'} width={17} height={18.4} />
                                 <span>{item.ODER_KD === 'PIUP' ? '픽업' : item.PROD_CNT + '개 상품'}</span>
                             </div>
-                            {!!item.ODER_NO &&
+                            {!!item.ODER_RPRE_NO &&
                                 <div className={'orderNo'}>
                                     <Image alt={'주문 정보'} src={'/assets/images/icon/iconInfo.svg'} width={17} height={18.4} />
-                                    <span>{item.ODER_NO}</span>
+                                    <span>{item.ODER_RPRE_NO}</span>
                                 </div>
                             }
                         </div>

@@ -13,6 +13,7 @@ export default function useShopS3Upload() {
      */
     return (async (files, callback) => {
 
+        cmm.loading(true);
         const uploadList = [];
         const func = async (file) => {
 

@@ -35,13 +35,12 @@ export default function BtchList({list, href, classNm = '', noDataTxt = '현재 
                                 </div>
                             }
                         </div>
-                        <h5>{item.SHOP_NM}</h5>
-                        {!isIngBtch &&
+                        <p>{item.ODER_DELY_FULL_ADDR}</p>
+                        <h5>
+                            <Image alt={'주문 정보'} src={'/assets/images/icon/iconStore.png'} width={20} height={20} />
+                            {item.SHOP_NM}
+                        </h5>
                         <p>{item.SHOP_FULL_ADDR}</p>
-                        }
-                        {isIngBtch &&
-                        <p>배송지 : {item.ODER_DELY_FULL_ADDR}</p>
-                        }
                         {isDtptBtn &&
                             <button type={'button'} className={'button'}>상세보기</button>
                         }

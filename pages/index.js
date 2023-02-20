@@ -48,6 +48,11 @@ export default function Index(props) {
                 success: res => {
 
                     setBtchInfo({btchList: res.btchList, btchAcpList: res.btchAcpList});
+
+                    // 진행중인 배치가 있을 경우
+                    if(res.btchAcpList.length > 0) {
+                        setTabIdx(1);
+                    }
                 }
             });
         }

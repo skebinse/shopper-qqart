@@ -17,6 +17,7 @@ export default async function handler(req, res) {
 
         if(row[0].MIN >= 60) {
 
+            // 미배치 리스트
             query = `
                 SELECT AA.ODER_MNGR_RGI_YN
                      , AA.ODER_RPRE_NO
@@ -84,6 +85,7 @@ export default async function handler(req, res) {
             [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
         }
 
+        // 배치 리스트
         query = `
             SELECT AA.ODER_MNGR_RGI_YN
                  , AA.ODER_RPRE_NO
@@ -143,7 +145,8 @@ export default async function handler(req, res) {
                    AND AA.ODER_REQ_YMD IS NOT NULL
                    AND AA.ODER_PGRS_STAT IN ('03', '04', '05')
                ) AA
-      ORDER BY AA.ODER_REQ_YMD DESC
+      ORDER BY AA.SLIN_DTC
+             , AA.ODER_REQ_YMD DESC
         `;
 
         const [rows2] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);

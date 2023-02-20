@@ -110,6 +110,7 @@ export default async function handler(req, res) {
                      , AA.ODER_SHPR_TIP_AMT
                      , BB.SHOP_NM
                      , BB.SHOP_RRSN_ATCH_FILE_UUID
+                     , AA.ODER_DELY_ADDR
                      , CONCAT(BB.SHOP_ADDR, ' ' , BB.SHOP_DTPT_ADDR) AS SHOP_FULL_ADDR
                      , CONCAT(AA.ODER_DELY_ADDR, ' ' , AA.ODER_DELY_DTPT_ADDR) AS ODER_DELY_FULL_ADDR
                      , IFNULL(DD.PROD_CNT, 0) AS PROD_CNT
@@ -145,7 +146,7 @@ export default async function handler(req, res) {
                    AND AA.ODER_REQ_YMD IS NOT NULL
                    AND AA.ODER_PGRS_STAT IN ('03', '04', '05')
                ) AA
-      ORDER BY AA.SLIN_DTC
+      ORDER BY AA.ODER_DELY_ADDR
              , AA.ODER_REQ_YMD DESC
         `;
 

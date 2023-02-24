@@ -36,9 +36,9 @@ export default async function handler(req, res) {
 
             let [rows, fields] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
-            if(rows[0].CNT >= 3) {
+            if(rows[0].CNT >= 5) {
 
-                res.status(200).json(result('', '9999', '배치 동시진행은 3건까지 가능합니다.'));
+                res.status(200).json(result('', '9999', '배치 동시진행은 5건까지 가능합니다.'));
                 return;
             }
 

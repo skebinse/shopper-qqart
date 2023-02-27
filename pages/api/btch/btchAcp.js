@@ -1,5 +1,6 @@
 import {getConnectPool, result} from "../db";
 import cmm from "../../../js/common";
+import {adminSendNtfy} from "../../../util/smsUtil";
 
 export default async function handler(req, res) {
 
@@ -82,6 +83,9 @@ export default async function handler(req, res) {
                 `;
 
             [rows, fields] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, req.headers['x-enc-user-id'], process.env.ENC_KEY, param.oderUserId]);
+
+            // admin 알림 발송
+            adminSendNtfy(conn, {ntfyType: 'btchAcp', oderUserId: param.oderUserId});
 
             res.status(200).json(result(rows));
         } catch (e) {

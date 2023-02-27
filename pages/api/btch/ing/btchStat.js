@@ -1,4 +1,5 @@
 import {getConnectPool, result} from "../../db";
+import {adminSendNtfy} from "../../../../util/smsUtil";
 
 export default async function handler(req, res) {
 
@@ -27,6 +28,12 @@ export default async function handler(req, res) {
             }
 
             const [rows, fields] = await conn.query(query, [param.oderPgrsStat, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+
+            if(param.oderPgrsStat === '05') {
+
+                // admin 알림 발송
+                adminSendNtfy(conn, {ntfyType: 'delyStrt', oderUserId: param.oderUserId});
+            }
 
             res.status(200).json(result(rows));
         } catch (e) {

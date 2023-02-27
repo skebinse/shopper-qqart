@@ -1,5 +1,6 @@
 import {getConnectPool, result} from "../../db";
 import cmm from "../../../../js/common";
+import {adminSendNtfy} from "../../../../util/smsUtil";
 
 export default async function handler(req, res) {
 
@@ -36,6 +37,9 @@ export default async function handler(req, res) {
                 `;
 
             const [rows, fields] = await conn.query(query, [param.atchFileUuid, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+
+            // admin 알림 발송
+            adminSendNtfy(conn, {ntfyType: 'delyCpl', oderUserId: param.oderUserId});
 
             res.status(200).json(result(rows));
         } catch (e) {

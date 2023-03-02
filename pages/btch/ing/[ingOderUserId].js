@@ -94,7 +94,10 @@ export default function IngOderUserId() {
 
             if(vchrImgList.length === 0) {
 
-                cmm.alert('아직 사진을 등록하지 않았습니다.\n사진을 등록해주세요.');
+                cmm.alert('아직 사진을 등록하지 않았습니다.\n사진을 등록해주세요.', () => {
+
+                    inpFile.click();
+                });
             } else {
 
                 cmm.confirm('배달을 완료하시겠습니까?', () => {
@@ -150,17 +153,24 @@ export default function IngOderUserId() {
 
         if(e.target.files.length > 0) {
 
+            let fileIdx = 0, uploadFile;
+            cmm.loading(true);
             for(let i = 0; i < e.target.files.length; i++) {
 
-                const fileReader = new FileReader();
+                uploadFile = e.target.files[i];
 
-                fileReader.onload = e => {
-                    setVchrPrvImgList(prevState => [...prevState, e.target.result]);
-                };
+                // 썸네일
+                cmm.util.getThumbFile({file: uploadFile, maxSize: 1024, type: uploadFile.type}).then(imgData => {
+                    fileIdx++;
+                    setVchrImgList(prevState => [...prevState, imgData.blob]);
+                    setVchrPrvImgList(prevState => [...prevState, window.URL.createObjectURL(imgData.blob)]);
 
-                setVchrImgList(prevState => [...prevState, e.target.files[i]]);
+                    if(fileIdx === e.target.files.length) {
 
-                fileReader.readAsDataURL(e.target.files[i]);
+                        e.target.value = '';
+                        cmm.loading(false);
+                    }
+                });
             }
         }
     };

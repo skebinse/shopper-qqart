@@ -12,11 +12,11 @@
 .btchIng .step img:last-child{padding-left: 20px;}
 .btchIng > ul{padding-bottom: 90px;}
 .btchIng > ul .uploadArea{}
-.btchIng > ul .uploadArea > div{display: flex;padding-top: 5px;flex-direction: row;flex-wrap: wrap;}
-.btchIng > ul .uploadArea > div label{background-color: #F8F8F8;border-radius: 12px;display: block;padding: 25px 37px;}
+.btchIng > ul .uploadArea > div{display: grid;padding-top: 5px;grid-template-columns: 1fr 1fr 1fr;grid-column-gap: 10px;}
+.btchIng > ul .uploadArea > div label{background-color: #F8F8F8;border-radius: 12px;display: flex;align-items: center;justify-content: center;height: 77px;}
 .btchIng > ul .uploadArea input{display: none;}
-.btchIng > ul .uploadArea > div > div{position: relative;margin-right: 19px;}
-.btchIng > ul .uploadArea > div > div .vchrImg{border-radius: 12px;object-fit: cover;}
+.btchIng > ul .uploadArea > div > div{position: relative;}
+.btchIng > ul .uploadArea > div > div .vchrImg{border-radius: 12px;object-fit: cover;width: 100%;}
 .btchIng > ul .uploadArea > div > div .del{position: absolute;top: 0;right: 0;}
 
 .btchArea{padding-top: 24px;}

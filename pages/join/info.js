@@ -71,12 +71,19 @@ export default function Info() {
 
         if(e.target.files.length > 0) {
 
-            fileReader.onload = e => {
-                setPrflPrvImg(e.target.result );
-            };
-            setJoinInfo(prevState => ({...prevState, profile: e.target.files[0], atchFileUuid: ''}));
+            cmm.loading(true);
+            const uploadFile = e.target.files[0];
 
-            fileReader.readAsDataURL(e.target.files[0]);
+            // 썸네일
+            cmm.util.getThumbFile({file: uploadFile, maxSize: 1024, type: uploadFile.type}).then(imgData => {
+
+                setJoinInfo(prevState => ({...prevState,
+                    profile: imgData.blob,
+                    atchFileUuid: ''}));
+                setPrflPrvImg(window.URL.createObjectURL(imgData.blob));
+
+                cmm.loading(false);
+            });
         }
     };
 

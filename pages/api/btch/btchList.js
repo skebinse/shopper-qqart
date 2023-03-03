@@ -5,7 +5,27 @@ export default async function handler(req, res) {
     await getConnectPool(async conn => {
 
         const param = req.body;
-        let query = `
+
+        let query = '';
+
+        if(param.isLog === 'true') {
+
+            const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
+            const ip = req.headers["x-real-ip"] || req.connection.remoteAddress;
+            const protocol = req ? 'https:' : 'http:'
+            const host = req
+                ? req.headers['x-forwarded-host'] || req.headers['host']
+                : window.location.host
+
+            query = `
+                INSERT INTO T_ACES_LOG(ACES_LOG_BROW, ACES_LOG_SCRN_URL, ACES_LOG_IP, SHPR_ID)
+                VALUES (?, ?, ?, fnDecrypt(?, ?))
+            `;
+
+            await conn.query(query, [userAgent, protocol + '//' + host, ip, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+        }
+
+        query = `
             SELECT IFNULL(TIMESTAMPDIFF(MINUTE, MAX(RGI_DT), NOW()), 60) AS MIN 
               FROM T_BTCH_CAN_HITY
              WHERE SHPR_ID = fnDecrypt(?, ?)

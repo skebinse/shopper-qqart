@@ -29,7 +29,6 @@ export default function Index(props) {
             cmm.loading(true);
             setTimeout(() => {
 
-                // setBtchInfo({btchList: [], btchAcpList: []});
                 cmm.ajax({
                     url: '/api/btch/btchList',
                     isLoaing: false,
@@ -43,9 +42,18 @@ export default function Index(props) {
             }, 950);
         } else {
 
+            let dateInfo = cmm.util.getLs('dateInfo');
+            dateInfo = dateInfo || {};
+
             cmm.ajax({
                 url: '/api/btch/btchList',
+                data:{
+                    isLog: dateInfo.log !== cmm.date.getToday('')
+                },
                 success: res => {
+
+                    dateInfo.log = cmm.date.getToday('');
+                    cmm.util.setLs('dateInfo', dateInfo);
 
                     setBtchInfo({btchList: res.btchList, btchAcpList: res.btchAcpList});
 

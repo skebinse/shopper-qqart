@@ -128,7 +128,7 @@ export default function OderUserId(props) {
                         {btchInfo.SHOP_FULL_ADDR}
                         <Image alt={'주소 복사'} src={'/assets/images/btn/btnCopy.svg'} width={44} height={23} onClick={() => cmm.util.clipboard(btchInfo.SHOP_FULL_ADDR)} />
                     </p>
-                    <ul className={'naviLinkUl'}>
+                    <ul className={'naviLinkUl d-none'}>
                         <li>
                             <a href={`kakaomap://route?ep=${btchInfo.SHOP_ADDR_LOT},${btchInfo.SHOP_ADDR_LAT}&by=CAR`} >
                                 <Image alt={'카카오맵'} src={'/assets/images/icon/iconKakaonavi.svg'} width={24} height={24} />

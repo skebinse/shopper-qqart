@@ -14,7 +14,7 @@ export default async function handler(req, res) {
                      , AA.ODER_USER_ID
                      , AA.ODER_KD
                      , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
-                     , FORMAT(fnGetDelyDtcAmt(AA.ODER_DELY_DTC) + AA.ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
+                     , FORMAT(fnGetDelyDtcAmt(AA.ODER_USER_ID, AA.SHPR_ID, AA.ODER_DELY_DTC) + AA.ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
                      , fnGetAtchFileList(AA.SHOP_RRSN_ATCH_FILE_UUID) AS SHOP_RRSN_ATCH_FILE_LIST
                   FROM (
                     SELECT AA.ODER_MNGR_RGI_YN
@@ -23,6 +23,7 @@ export default async function handler(req, res) {
                          , AA.ODER_DELY_DTC
                          , AA.ODER_SHPR_TIP_AMT
                          , AA.ODER_KD
+                         , AA.SHPR_ID
                          , BB.SHOP_NM
                          , BB.SHOP_RRSN_ATCH_FILE_UUID
                          , CONCAT(BB.SHOP_ADDR, ' ' , BB.SHOP_DTPT_ADDR) AS SHOP_FULL_ADDR

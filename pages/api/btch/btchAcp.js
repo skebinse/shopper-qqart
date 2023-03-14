@@ -77,12 +77,14 @@ export default async function handler(req, res) {
                 UPDATE T_ODER_USER_INFO
                    SET SHPR_ID = fnDecrypt(?, ?)
                      , ODER_REQ_APV_ID = fnDecrypt(?, ?)
+                     , ODER_SHPR_BAS_CHGE = (SELECT SHPR_BAS_CHGE FROM T_SHPR_INFO A WHERE SHPR_ID = fnDecrypt(?, ?))
+                     , ODER_QQCART_SHR = (SELECT SHPR_BAS_CHGE FROM T_SHPR_INFO A WHERE SHPR_ID = fnDecrypt(?, ?)) - IFNULL(ODER_SHOP_BAS_CHGE, 0)
                      , ODER_PGRS_STAT = '03'
                      , ODER_REQ_APV_DT = NOW()
                  WHERE ODER_USER_ID = ?
                 `;
 
-            [rows, fields] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, req.headers['x-enc-user-id'], process.env.ENC_KEY, param.oderUserId]);
+            [rows, fields] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, req.headers['x-enc-user-id'], process.env.ENC_KEY, req.headers['x-enc-user-id'], process.env.ENC_KEY, req.headers['x-enc-user-id'], process.env.ENC_KEY, param.oderUserId]);
 
             // admin 알림 발송
             adminSendNtfy(conn, {ntfyType: 'btchAcp', oderUserId: param.oderUserId});

@@ -58,7 +58,7 @@ export default async function handler(req, res) {
                  , CASE WHEN EE.ODER_MNGR_RGI_YN = 'Y'
                      THEN DATE_FORMAT(EE.ODER_REQ_YMD, '%y년 %m월 %d일 %H:%i')
                    ELSE DATE_FORMAT(DATE_ADD(EE.ODER_REQ_YMD, INTERVAL 9 HOUR), '%y년 %m월 %d일 %H:%i') END AS ODER_REQ_YMD
-                 , FORMAT(fnGetDelyDtcAmt(EE.ODER_DELY_DTC) + EE.ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
+                 , FORMAT(fnGetDelyDtcAmt(EE.ODER_USER_ID, fnDecrypt(?, ?), EE.ODER_DELY_DTC) + EE.ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
             FROM T_ODER_USER_INFO EE
                  INNER JOIN T_SHOP_MAG BB
               ON BB.SHOP_ID = EE.SHOP_ID
@@ -77,7 +77,7 @@ export default async function handler(req, res) {
         ORDER BY AA.SPBK_HNDC_PROD_NM
         `;
 
-        const [rows] = await conn.query(query, [oderUserId]);
+        const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, oderUserId]);
 
         res.status(200).json(result(rows));
     });

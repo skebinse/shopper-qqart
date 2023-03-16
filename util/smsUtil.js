@@ -53,6 +53,10 @@ export function smsSend(receiver, msg, callback) {
  */
 export async function adminSendNtfy(conn, options) {
 
+    if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
+        return;
+    }
+
     const notification = {
         icon: '/static/images/snsImage.png',
         data: JSON.stringify({url: process.env.QQCART_URL + '/znlrzkxm/mag/order.qq'})

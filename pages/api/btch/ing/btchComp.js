@@ -36,7 +36,12 @@ export default async function handler(req, res) {
                    AND SHPR_ID = fnDecrypt(?, ?)
                 `;
 
-            const [rows, fields] = await conn.query(query, [param.atchFileUuid, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            let [rows, fields] = await conn.query(query, [param.atchFileUuid, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+
+            // 쇼퍼 현재 주문 최대치 수정
+            query = 'CALL spModShprPsOderMxva(fnDecrypt(?, ?))';
+
+            await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
             // admin 알림 발송
             adminSendNtfy(conn, {ntfyType: 'delyCpl', oderUserId: param.oderUserId});

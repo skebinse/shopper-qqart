@@ -46,3 +46,27 @@ export function result(data, code = '0000', msg) {
         resultMsg: msg,
     }
 }
+
+/**
+ * 결과 값
+ *
+ * @param data
+ * @param code
+ * @param msg
+ * @returns {{data, resultCode: string, resultMsg}}
+ */
+export function resultOne(data, code = '0000', msg) {
+
+    data = !!data && data.length > 0 ? data[0] : data;
+    if(!!data && (!!data.RESULT_CODE || !!data.resultCode)) {
+
+        code = (data.RESULT_CODE || data.resultCode);
+        msg = (data.RESULT_MSG || data.resultMsg);
+    }
+
+    return {
+        data: data,
+        resultCode: code,
+        resultMsg: msg,
+    }
+}

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@next/font": "13.1.1",
+    "aws-sdk": "^2.1327.0",
     "eslint": "8.30.0",
     "eslint-config-next": "13.1.1",
     "formidable": "^2.1.1",

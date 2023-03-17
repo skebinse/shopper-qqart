@@ -3,8 +3,15 @@ import '../public/assets/css/blueimp-gallery.min.css';
 import {GlobalProvider} from "../context/globalContext";
 import CmmComponent from "../components/cmmComponent";
 import {useEffect} from "react";
+import firebaseInit from "../js/firebase";
+
 
 export default function MyApp({ Component, pageProps }) {
+
+    useEffect(() => {
+        console.log('MyApp');
+        firebaseInit();
+    }, []);
 
   return (
     <GlobalProvider>

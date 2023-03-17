@@ -1,7 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import cmm from "../js/common";
-import useCommon from "../hooks/useCommon";
 
 const GlobalContext = createContext();
 
@@ -28,7 +27,7 @@ export function GlobalProvider({children}) {
 
         if(notLoginList.indexOf(router.route) === -1) {
 
-            console.log('is loing', cmm.checkLogin())
+            console.log('isLogin', cmm.checkLogin())
             // 로그인 체크
             if(!cmm.checkLogin()) {
 
@@ -69,6 +68,13 @@ export function GlobalProvider({children}) {
 
     return (
         <GlobalContext.Provider value={{sAlert, setSAlert, sConfirm, setSConfirm, isLoading, setIsLoading}}>
+            <div className={'webPushDiv'}>
+                <div>
+                    <p id={'webPushTxt'}></p>
+                    <a id={'webPushHref'} href={''}></a>
+                </div>
+                <img src={'/assets/images/btn/btnDel.svg'} width={20} height={20} onClick={() => document.querySelector('.webPushDiv').classList = 'webPushDiv'} />
+            </div>
             {children}
         </GlobalContext.Provider>
     )

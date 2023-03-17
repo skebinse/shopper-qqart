@@ -23,7 +23,7 @@ export default function Index(props) {
      * 배치 리스트 조회
      */
     const callBtchList = useCallback(isInit => {
-
+        console.log('router', router)
         if(!isInit) {
 
             cmm.loading(true);
@@ -58,7 +58,11 @@ export default function Index(props) {
                     setBtchInfo({btchList: res.btchList, btchAcpList: res.btchAcpList});
 
                     // 진행중인 배치가 있을 경우
-                    if(res.btchAcpList.length > 0) {
+                    if(!!router.query.hasOwnProperty('tabIdx')) {
+
+                        setTabIdx(Number(router.query.tabIdx));
+                    } else if(res.btchAcpList.length > 0) {
+
                         setTabIdx(1);
                     }
                 }
@@ -68,10 +72,10 @@ export default function Index(props) {
 
     useEffect(() => {
 
-        if(!!router.query.tabIdx) {
-            setTabIdx(router.query.tabIdx);
-        }
-
+        // if(!!router.query.tabIdx) {
+        //     setTabIdx(router.query.tabIdx);
+        // }
+        console.log('init')
         // setWindowHeight(window.outerHeight + 10);
 
         if(cmm.checkLogin()) {
@@ -86,7 +90,7 @@ export default function Index(props) {
             callBtchList(true);
             setIsInit(false);
         }
-    }, [router.query.tabIdx, callBtchList]);
+    }, [callBtchList]);
 
     return (
         // <div className={styles.index} style={{height: windowHeight}}>
@@ -112,4 +116,11 @@ export default function Index(props) {
             <BottomMenu idx={0} />
         </div>
     )
+}
+
+export async function getServerSideProps(context) {
+
+    return {
+        props: {},
+    }
 }

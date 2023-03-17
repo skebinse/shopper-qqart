@@ -13,8 +13,8 @@ app.prepare().then(() => {
     const https = require("https");
     const fs = require("fs");
     const options = {
-        key: fs.readFileSync('./s-qqcart.sk-key.pem'),
-        cert: fs.readFileSync('./s-qqcart.sk.pem'),
+        key: fs.readFileSync('./localhost-key.pem'),
+        cert: fs.readFileSync('./localhost.pem'),
     };
     https
         .createServer(options, function (req, res) {

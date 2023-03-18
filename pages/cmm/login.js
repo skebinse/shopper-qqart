@@ -14,6 +14,8 @@ export default function Login(props) {
         if(!!window.Kakao && !window.Kakao.isInitialized()) {
             window.Kakao.init(process.env.NEXT_PUBLIC_KAKA0_KEY);
         }
+
+        cmm.util.setLs(cmm.Cont.WEB_TOKEN, '');
     }, []);
 
     /**

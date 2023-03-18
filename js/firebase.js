@@ -21,7 +21,7 @@ export default function firebaseInit() {
     const app = initializeApp(firebaseConfig);
     const messaging = getMessaging(app);
 
-    // 관리자 로그인 시
+    // 로그인 시
     if(cmm.checkLogin()) {
 
         Notification.requestPermission().then(permission => {
@@ -45,7 +45,16 @@ export default function firebaseInit() {
 
                     if(cmm.util.getLs(cmm.Cont.WEB_TOKEN) !== currentToken) {
 
-                        cmm.util.setLs(cmm.Cont.WEB_TOKEN, currentToken);
+                        cmm.ajax({
+                            url: '/api/cmm/modWebPushTkn',
+                            data: {
+                                webPushTkn: currentToken
+                            },
+                            success: res => {
+
+                                cmm.util.setLs(cmm.Cont.WEB_TOKEN, currentToken);
+                            }
+                        });
                         const topic = process.env.NEXT_PUBLIC_RUN_MODE;
 
                         fetch(`https://iid.googleapis.com/iid/v1/${currentToken}/rel/topics/${topic}shopper`, {

@@ -150,5 +150,5 @@ export async function adminSendNtfy(conn, options) {
         console.log('seccess :' + response);
     }).catch(function(error) {
         console.error(error);
-    })
+    });
 }

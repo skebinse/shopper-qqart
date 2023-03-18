@@ -23,7 +23,6 @@ export default function Index(props) {
      * 배치 리스트 조회
      */
     const callBtchList = useCallback(isInit => {
-        console.log('router', router)
         if(!isInit) {
 
             cmm.loading(true);

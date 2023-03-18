@@ -5,12 +5,13 @@ import CmmComponent from "../components/cmmComponent";
 import {useEffect} from "react";
 import firebaseInit from "../js/firebase";
 
-
 export default function MyApp({ Component, pageProps }) {
 
     useEffect(() => {
-        console.log('MyApp');
-        firebaseInit();
+
+        if(!!("Notification" in window)) {
+            firebaseInit();
+        }
     }, []);
 
   return (

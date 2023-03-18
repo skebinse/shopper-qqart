@@ -60,7 +60,7 @@ export default function Login(props) {
                                 } else {
 
                                     cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
-                                    goPage('/');
+                                    location.href = '/';
                                 }
                             }
                         });

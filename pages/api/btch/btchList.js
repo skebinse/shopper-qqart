@@ -98,7 +98,7 @@ export default async function handler(req, res) {
                        AND AA.ODER_REQ_APV_DT IS NULL
                    ) AA
              WHERE (AA.PROD_CNT > 0 OR AA.ODER_KD = 'PIUP')
-               AND AA.SLIN_DTC < 5000
+               AND AA.SLIN_DTC < 10000
                AND AA.ODER_REQ_YMD BETWEEN CONCAT(DATE_FORMAT(NOW(), '%Y-%m-%d'), ' 00:00:00') AND CONCAT(DATE_FORMAT(NOW(), '%Y-%m-%d'), ' 23:59:59')
           ORDER BY AA.ODER_REQ_YMD DESC
             `;

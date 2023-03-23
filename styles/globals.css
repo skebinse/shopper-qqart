@@ -130,7 +130,7 @@ input[type=checkbox]:disabled+label{opacity: 0.5;}
 .naviLinkUl li a img{width: 24px; height: 24px;padding-right: 8px;}
 
 /* push */
-.webPushDiv{background: #02B763;border-radius: 12px;padding: 20px 17px 20px 34px;position: fixed;top: 10px;width: calc(100% - 81px);z-index: 10;left: 15px;transition: all 0.5s;transform: translateY(-120%);}
+.webPushDiv{background: #02B763;border-radius: 12px;padding: 20px 17px 20px 34px;position: fixed;top: 0px;width: calc(100% - 81px);z-index: 10;left: 15px;transition: all 0.5s;transform: translateY(-120%);}
 .webPushDiv.active{transform: translateY(0%);}
 .webPushDiv div p{color: #FFFFFF;font-size: 14px;}
 .webPushDiv div a{color: #FFFFFF;border: none;background: none;font-size: 14px;padding: 0;}

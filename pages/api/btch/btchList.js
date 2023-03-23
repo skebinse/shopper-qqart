@@ -26,19 +26,32 @@ export default async function handler(req, res) {
         }
 
         query = `
+            SELECT SHPR_ACT_SPNS_DT
+              FROM T_SHPR_INFO
+             WHERE SHPR_ID = fnDecrypt(?, ?)
+        `;
+
+        const [actSpnsRow] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+
+        if(!!actSpnsRow[0].SHPR_ACT_SPNS_DT) {
+
+            res.status(200).json(result(null, '9999', '활동이 정지된 계정입니다.'));
+        } else {
+
+            query = `
             SELECT IFNULL(TIMESTAMPDIFF(MINUTE, MAX(RGI_DT), NOW()), 60) AS MIN 
               FROM T_BTCH_CAN_HITY
              WHERE SHPR_ID = fnDecrypt(?, ?)
                AND BTCH_CAN_SANCT_YN = 'Y'
-        `;
+            `;
 
-        const [row] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
-        let rows = [];
+            const [row] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            let rows = [];
 
-        if(row[0].MIN >= 60) {
+            if (row[0].MIN >= 60) {
 
-            // 미배치 리스트
-            query = `
+                // 미배치 리스트
+                query = `
                 SELECT AA.ODER_MNGR_RGI_YN
                      , AA.ODER_RPRE_NO
                      , AA.SHOP_NM
@@ -103,11 +116,11 @@ export default async function handler(req, res) {
           ORDER BY AA.ODER_REQ_YMD DESC
             `;
 
-            [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
-        }
+                [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            }
 
-        // 배치 리스트
-        query = `
+            // 배치 리스트
+            query = `
             SELECT AA.ODER_MNGR_RGI_YN
                  , AA.ODER_RPRE_NO
                  , AA.SHOP_NM
@@ -172,12 +185,13 @@ export default async function handler(req, res) {
              , AA.ODER_REQ_YMD DESC
         `;
 
-        const [rows2] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            const [rows2] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
-        res.status(200).json(result({
-            btchList: rows,
-            btchAcpList: rows2,
-            btchCanMin: row[0].MIN,
-        }));
+            res.status(200).json(result({
+                btchList: rows,
+                btchAcpList: rows2,
+                btchCanMin: row[0].MIN,
+            }));
+        }
     });
 }

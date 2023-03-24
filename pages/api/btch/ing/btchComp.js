@@ -9,6 +9,8 @@ export default async function handler(req, res) {
         const param = req.body;
 
         try {
+
+            await conn.beginTransaction();
             if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
                 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
             }
@@ -38,6 +40,11 @@ export default async function handler(req, res) {
 
             let [rows, fields] = await conn.query(query, [param.atchFileUuid, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
+            // 픽업 자동정산
+            query = `CALL spInsPiupAtmtAdj(?, fnDecrypt(?, ?), 'N')`;
+
+            await conn.query(query, [param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+
             // 쇼퍼 현재 주문 최대치 수정
             query = 'CALL spModShprPsOderMxva(fnDecrypt(?, ?))';
 
@@ -46,9 +53,12 @@ export default async function handler(req, res) {
             // admin 알림 발송
             adminSendNtfy(conn, {ntfyType: 'delyCpl', oderUserId: param.oderUserId});
 
+            await conn.commit();
             res.status(200).json(result(rows));
         } catch (e) {
-
+            if(conn) {
+                conn.rollback();
+            }
             console.log(e);
             res.status(500).json(result('', '9999', '오류가 발생했습니다.'));
         }

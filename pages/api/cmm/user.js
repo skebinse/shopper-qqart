@@ -7,6 +7,8 @@ export default async function handler(req, res) {
         try {
             const query =`
                 SELECT SHPR_CRCTNO
+                     , SHPR_LOGIN_ID
+                     , SHPR_SNS_TYPE
                      , SHPR_NCNM
                      , SHPR_PRFL_ATCH_FILE_UUID
                      , SHPR_STDO_CD

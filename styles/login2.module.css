@@ -1,0 +1,5 @@
+.login{text-align: center;padding-top: 140px;}
+.login h3{padding-top: 50px;font-size: 24px;font-weight: 500;}
+.login p{font-size: 14px;font-weight: 300;padding: 13px 42px 40px;line-height: 1.5;}
+.login button{justify-content: center;border: solid #E1E0F1 1px;border-radius: 12px;background-color: #FFFFFF;font-size: 15px;font-weight: 500;color: #333333;display: flex;align-items: center;padding: 22px 0;width: calc(100% - 34px);margin: 0 17px;}
+.login button img{padding-right: 9px;}

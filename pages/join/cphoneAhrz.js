@@ -84,7 +84,13 @@ export default function CphoneAhrz(props) {
 
                     cmm.alert('인증되었습니다.', () => {
 
-                        goPage('./info', {...router.query, cphoneNo: router.query.cphoneNo});
+                        if(!!router.query.basis) {
+
+                            goPage('./reg', {...router.query, cphoneNo: router.query.cphoneNo});
+                        } else {
+
+                            goPage('./info', {...router.query, cphoneNo: router.query.cphoneNo});
+                        }
                     });
                 } else {
 

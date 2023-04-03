@@ -8,6 +8,7 @@ import Image from "next/image";
 import useShopS3Upload from "../../hooks/useShopS3Upload";
 import useCommon from "../../hooks/useCommon";
 import cmm from "../../js/common";
+import Script from "next/script";
 
 export default function Info() {
 
@@ -17,6 +18,9 @@ export default function Info() {
     const [popupClass, setPopupClass] = useState('');
     const [joinInfo, setJoinInfo] = useState({
         cphoneNo: router.query.cphoneNo,
+        userId: '',
+        userPw: '',
+        userPwCfm: '',
         userNcnm: '',
         addrTxt: '<span>주소를 입력해주세요.</span>',
         shprSfitdText: '',
@@ -27,7 +31,7 @@ export default function Info() {
 
     useEffect(() => {
 
-        if(!cmm.checkLogin() && !router.query.userCrctno) {
+        if(!cmm.checkLogin() && !router.query.basis) {
             cmm.alert('로그인정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {
                 goPage('/cmm/login');
             });
@@ -43,7 +47,6 @@ export default function Info() {
                             isLogin: cmm.checkLogin(),
                             userCrctno: res.SHPR_CRCTNO,
                             userId: res.SHPR_LOGIN_ID,
-                            userSnsType: res.SHPR_SNS_TYPE,
                             userNcnm: res.SHPR_NCNM,
                             shprSfitdText: res.SHPR_SFITD_TEXT,
                             profile: res.SHPR_NCNM,
@@ -122,6 +125,21 @@ export default function Info() {
         if(!joinInfo.profile) {
 
             cmm.alert('사진을 등록해 주세요.');
+        } else if(!joinInfo.userId){
+
+            cmm.alert('아이디를 입력해 주세요.');
+        } else if(joinInfo.userId.length < 4){
+
+            cmm.alert('아이디는 최소 4자이상 입력해 주세요.');
+        } else if(!joinInfo.userPw){
+
+            cmm.alert('비밀번호를 입력해 주세요.');
+        } else if(joinInfo.userPw !== joinInfo.userPwCfm){
+
+            cmm.alert('비밀번호가 서로 다릅니다.');
+        } else if(!cmm.util.checkPassword(joinInfo.userPw)){
+
+            cmm.alert('비밀번호는 최소 6자리 이상으로\n알파벳, 숫자, 특수기호가 포함되어야 합니다.');
         } else if(!joinInfo.userNcnm){
 
             cmm.alert('닉네임을 입력해 주세요.');
@@ -136,7 +154,6 @@ export default function Info() {
             cmm.confirm(joinInfo.isLogin ? '개인정보를 수정하시겠습니까?' : '가입 진행하겠습니까?', () => {
 
                 const call = param => {
-
                     cmm.ajax({
                         url: '/api/cmm/join',
                         data: param,
@@ -148,7 +165,7 @@ export default function Info() {
                                 goPage('./comp');
                             } else {
 
-                                cmm.alert('수정 되었습니다.', () => {
+                                cmm.alert(`${joinInfo.isLogin ? '수정' : '가입'} 되었습니다.`, () => {
 
                                     router.reload();
                                 });
@@ -177,9 +194,6 @@ export default function Info() {
 
     return (
         <div className={styles.join}>
-            <Head>
-                <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" defer></script>
-            </Head>
             <HeadTitle title={joinInfo.isLogin ? '개인정보수정' : ''} />
             {!joinInfo.isLogin &&
                 <NaviStep step={3} />
@@ -196,6 +210,24 @@ export default function Info() {
                     </label>
                 </div>
                 <ul className={styles.info}>
+                    <li>
+                        <label>아이디</label>
+                        <div>
+                            <input value={joinInfo.userId} onChange={e => setJoinInfo(prevState => ({...prevState, userId: e.target.value}))} type="text"  placeholder="아이디를 입력해주세요" />
+                        </div>
+                    </li>
+                    <li>
+                        <label>비밀번호</label>
+                        <div>
+                            <input value={joinInfo.userPw} onChange={e => setJoinInfo(prevState => ({...prevState, userPw: e.target.value}))} type="password"  placeholder="비밀번호를 입력해주세요" />
+                        </div>
+                    </li>
+                    <li>
+                        <label>비밀번호 확인</label>
+                        <div>
+                            <input value={joinInfo.userPwCfm} onChange={e => setJoinInfo(prevState => ({...prevState, userPwCfm: e.target.value}))} type="password"  placeholder="비밀번호를 다시 입력해주세요" />
+                        </div>
+                    </li>
                     <li>
                         <label>닉네임</label>
                         <div>
@@ -231,6 +263,7 @@ export default function Info() {
                 <HeadTitle title={'우편번호 검색'} type={'close'} callbackClose={() => setPopupClass('')} />
                 <div className={styles.daumPost} id={'divDaumPost'}></div>
             </div>
+            <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" defer />
         </div>
     );
 }

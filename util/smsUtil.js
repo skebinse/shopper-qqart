@@ -10,7 +10,6 @@ export function smsSend(receiver, msg, callback) {
 
     if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
 
-        console.log(msg);
         callback(true);
     } else {
 
@@ -149,6 +148,6 @@ export async function adminSendNtfy(conn, options) {
     }).then(function(response) {
         console.log('seccess :' + response);
     }).catch(function(error) {
-        console.error(error);
+        console.error('error :' + error);
     });
 }

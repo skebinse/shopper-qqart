@@ -1,5 +1,14 @@
-.login{text-align: center;padding-top: 140px;}
-.login h3{padding-top: 50px;font-size: 24px;font-weight: 500;}
-.login p{font-size: 14px;font-weight: 300;padding: 13px 42px 40px;line-height: 1.5;}
-.login button{justify-content: center;border: solid #E1E0F1 1px;border-radius: 12px;background-color: #FFFFFF;font-size: 15px;font-weight: 500;color: #333333;display: flex;align-items: center;padding: 22px 0;width: calc(100% - 34px);margin: 0 17px;}
+.login{text-align: center;padding-top: 60px;}
+.login h3{padding-top: 20px;font-size: 24px;font-weight: 500;}
+.login p{font-size: 14px;font-weight: 300;padding: 13px 16px 40px;line-height: 1.5;text-align: right;display: block;}
 .login button img{padding-right: 9px;}
+.login ul.info{padding: 24px 16px 6px;}
+.login ul.info li{border-radius: 12px;border: solid 1px #E4E4E4;padding: 11px 17px 16px;margin-top: 14px;background-color: #ffffff;text-align: left;position: relative;height: 30px;}
+.login ul.info li label{color: #333333;font-size: 13px;position: absolute;font-size: 17px;top: 17px;left: 20px;transition: 0.3s all;}
+.login ul.info li.on label{font-size: 12px;top: 10px;left: 18px;}
+.login ul.info li > div{position: absolute;width: 90%;}
+.login ul.info li > div > input{border: none;color: #333333;font-size: 17px;margin-top: 14px;width: 100%;background: transparent;}
+.login ul.info li > div > input:focus{outline: none;}
+.login .btnArea{background-color: #ffffff;box-shadow: #0000000D 0px -5px 16px;padding: 17px;position: fixed;bottom: 0;left:0;width: calc(100% - 34px);}
+.login .btnArea button{background-color: #02B763;border-radius: 12px;color: #FFFFFF;font-size: 16px;font-weight: 500;padding: 17px;width: 100%;border: none;}
+.login .btnArea button:disabled{opacity: 0.4}

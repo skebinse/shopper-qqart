@@ -139,7 +139,7 @@ const cmm = {
             <div class="confirmArea">
                 <div>
                     <h3>${!!title ? title : '알림'}</h3>
-                    <p>${txt}</p>
+                    <p>${txt.replace(/\n/, '<br/>')}</p>
                     <div>
                         <button class="button" type="button">확인</button>
                     </div>
@@ -256,6 +256,17 @@ const cmm = {
      * Util
      */
     util: {
+
+        /**
+         * 비밀번호 체크
+         * 최소 6자리 이상 알파뱃, 숫자, 특수기호 포함
+         * @param str
+         * @returns {boolean}
+         */
+        checkPassword: function(str) {
+            const regExp = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/;
+            return regExp.test(str);
+        },
 
         /**
          * 숫자만 추출

@@ -67,7 +67,7 @@ export default function Index(props) {
                 }
             });
         }
-    }, []);
+    }, [router.query]);
 
     useEffect(() => {
 

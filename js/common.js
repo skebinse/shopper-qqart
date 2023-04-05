@@ -606,15 +606,9 @@ const cmm = {
          */
         getPushToken: callback => {
 
-            // App PUSH Token
-            window.getPushToken = token => {
-
-                cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
-                !!callback && callback();
-            };
-
             setTimeout(function(){
                 webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "getpushid","callback": "window.getPushToken"}));
+                setTimeout(callback, 500);
             },1500);
         }
     }

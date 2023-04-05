@@ -15,8 +15,16 @@ export default function MyApp({ Component, pageProps }) {
         }
 
         window.onPushMessage = data => {
+
+            console.log('data : ' + data);
             cmm.alert(JSON.stringify(data));
         };
+
+        window.getPushToken = token => {
+
+            console.log('token : ' + token);
+            cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
+        }
     }, []);
 
   return (

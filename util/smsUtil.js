@@ -10,6 +10,7 @@ export function smsSend(receiver, msg, callback) {
 
     if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
 
+        console.log(msg);
         callback(true);
     } else {
 

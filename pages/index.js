@@ -91,11 +91,40 @@ export default function Index(props) {
         }
     }, [callBtchList]);
 
+    const appTest = () => {
+
+        if(!!window.webkit) {
+
+            webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "getlocation","callback": "window.getPosition"}));
+        }
+    };
+
+    const appTest2 = () => {
+
+        if(!!window.webkit) {
+
+            webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "qrcamera","callback": "window.getQrCode"}));
+        }
+    };
+
+    useEffect(() => {
+
+        window.getPosition = (lat, lon) => {
+
+            cmm.alert(lat + ' : ' + lon);
+        };
+
+        window.getQrCode = (val) => {
+
+            cmm.alert(val);
+        };
+    }, []);
+
     return (
         // <div className={styles.index} style={{height: windowHeight}}>
         <div className={styles.index}>
             <div className={styles.header}>
-                <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={113.6} height={24.5} />
+                <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={113.6} height={24.5} onClick={appTest} />
                 <Link href={'/join/info'}>
                     <span>{addr}<Image alt={'열기'} src={'/assets/images/icon/iconAllowDown.svg'} width={10.4} height={6} /></span>
                 </Link>
@@ -110,7 +139,7 @@ export default function Index(props) {
             </div>
             <div className={styles.refresh} onClick={() => callBtchList()}>
                 <Image src={'/assets/images/icon/iconRefresh.svg'} alt={'새로고침'} width={18.5} height={18.5} />
-                <span>새로고침</span>
+                <span onClick={appTest2}>새로고침</span>
             </div>
             <BottomMenu idx={0} />
         </div>

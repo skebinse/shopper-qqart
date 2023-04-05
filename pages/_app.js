@@ -4,6 +4,7 @@ import {GlobalProvider} from "../context/globalContext";
 import CmmComponent from "../components/cmmComponent";
 import {useEffect} from "react";
 import firebaseInit from "../js/firebase";
+import cmm from "../js/common";
 
 export default function MyApp({ Component, pageProps }) {
 
@@ -12,6 +13,10 @@ export default function MyApp({ Component, pageProps }) {
         if(!!("Notification" in window)) {
             firebaseInit();
         }
+
+        window.onPushMessage = data => {
+            cmm.alert(JSON.stringify(data));
+        };
     }, []);
 
   return (

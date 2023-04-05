@@ -58,10 +58,6 @@ export function GlobalProvider({children}) {
 
         if(cmm.isApp()) {
 
-            window.onPushMessage = data => {
-                cmm.alert(JSON.stringify(data));
-            };
-
             // PUSH Token
             cmm.app.getPushToken(() => {
                 if(!!cmm.checkLogin() && cmm.date.getToday('') !== cmm.getLoginInfo('LOING_DT')) {

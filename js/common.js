@@ -216,6 +216,7 @@ const cmm = {
      * 앱여부
      */
     isApp: () => {
+
         return !!window.webkit;
     },
 

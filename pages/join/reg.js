@@ -25,12 +25,13 @@ export default function Info() {
         addrTxt: '<span>주소를 입력해주세요.</span>',
         shprSfitdText: '',
         profile: '',
-        appToken: cmm.isApp() ? cmm.util.getLs(cmm.Cont.APP_TOKEN) : '',
         isLogin: false,
     });
     const {goPage} = useCommon();
 
     useEffect(() => {
+
+        setJoinInfo(prevState => ({...prevState, appToken: cmm.isApp() ? cmm.util.getLs(cmm.Cont.APP_TOKEN) : ''}));
 
         if(!cmm.checkLogin() && !router.query.basis) {
             cmm.alert('로그인정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {
@@ -65,7 +66,7 @@ export default function Info() {
             }
         }
 
-    }, [router.query.userCrctno, goPage]);
+    }, [router.query.userCrctno, router.query.basis, goPage]);
 
     /**
      * 프로필 변경

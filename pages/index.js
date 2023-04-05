@@ -93,7 +93,7 @@ export default function Index(props) {
 
     const appTest = () => {
 
-        if(!!window.webkit) {
+        if(cmm.isApp()) {
 
             webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "getlocation","callback": "window.getPosition"}));
         }
@@ -101,7 +101,7 @@ export default function Index(props) {
 
     const appTest2 = () => {
 
-        if(!!window.webkit) {
+        if(cmm.isApp()) {
 
             webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "qrcamera","callback": "window.getQrCode"}));
         }

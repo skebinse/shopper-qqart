@@ -6,6 +6,7 @@ const cmm = {
     Cont: {
         LOGIN_INFO: 'shopperLoginInfo',
         WEB_TOKEN: 'webToken',
+        APP_TOKEN: 'appToken',
     },
 
     /**
@@ -209,6 +210,13 @@ const cmm = {
 
             document.querySelector('#loadingArea').innerHTML = '';
         }
+    },
+
+    /**
+     * 앱여부
+     */
+    isApp: () => {
+        return !!window.webkit;
     },
 
     /**
@@ -586,6 +594,27 @@ const cmm = {
             }
 
             ChannelIO('boot', options);
+        }
+    },
+
+    app: {
+
+        /**
+         * PUSH Token
+         * @param callback
+         */
+        getPushToken: callback => {
+
+            // App PUSH Token
+            window.getPushToken = token => {
+
+                cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
+                !!callback && callback();
+            };
+
+            setTimeout(function(){
+                webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "getpushid","callback": "window.getPushToken"}));
+            },1500);
         }
     }
 };

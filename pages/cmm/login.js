@@ -64,6 +64,7 @@ export default function Login(props) {
             data: {
                 userId: loginInfo.userId,
                 userPw: loginInfo.userPw,
+                appToken: cmm.util.getLs(cmm.Cont.APP_TOKEN),
             },
             success: res => {
 

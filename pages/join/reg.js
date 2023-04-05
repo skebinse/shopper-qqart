@@ -25,6 +25,7 @@ export default function Info() {
         addrTxt: '<span>주소를 입력해주세요.</span>',
         shprSfitdText: '',
         profile: '',
+        appToken: cmm.isApp() ? cmm.util.getLs(cmm.Cont.APP_TOKEN) : '',
         isLogin: false,
     });
     const {goPage} = useCommon();

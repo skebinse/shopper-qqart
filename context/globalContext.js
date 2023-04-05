@@ -23,7 +23,49 @@ export function GlobalProvider({children}) {
     });
     const notLoginList = ['/cmm/login', '/cmm/login2', '/join/clauAgr', '/join/cphone', '/join/cphoneAhrz', '/join/info', '/join/reg'];
 
+    /**
+     * 로그인 정보 갱신
+     */
+    const loginInfoRnw = () => {
+
+        cmm.ajax({
+            url: '/api/login',
+            data: {
+                encShprId: cmm.getLoginInfo('ENC_SHPR_ID'),
+                appToken: cmm.util.getLs(cmm.Cont.APP_TOKEN),
+            },
+            success: res => {
+
+                // 가입되지 않은 계정
+                if(res.IS_LOGIN === 0) {
+
+                    setSAlert(prevState => ({
+                        ...prevState,
+                        show: true,
+                        txt: '로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.',
+                        callback: () => router.push('/cmm/login'),
+                    }));
+                } else {
+
+                    cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
+                    router.reload();
+                }
+            }
+        });
+    };
+
     useEffect(() => {
+
+        if(cmm.isApp()) {
+            // PUSH Token
+            cmm.app.getPushToken(() => {
+                if(!!cmm.checkLogin() && cmm.date.getToday('') !== cmm.getLoginInfo('LOING_DT')) {
+
+                    // 로그인 정보 갱신
+                    loginInfoRnw();
+                }
+            });
+        }
 
         if(notLoginList.indexOf(router.route) === -1) {
 
@@ -38,29 +80,11 @@ export function GlobalProvider({children}) {
                 }));
             } else if(cmm.date.getToday('') !== cmm.getLoginInfo('LOING_DT')) {
 
-                cmm.ajax({
-                    url: '/api/login',
-                    data: {
-                        encShprId: cmm.getLoginInfo('ENC_SHPR_ID'),
-                    },
-                    success: res => {
+                if(!cmm.isApp()) {
 
-                        // 가입되지 않은 계정
-                        if(res.IS_LOGIN === 0) {
-
-                            setSAlert(prevState => ({
-                                ...prevState,
-                                show: true,
-                                txt: '로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.',
-                                callback: () => router.push('/cmm/login'),
-                            }));
-                        } else {
-
-                            cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
-                            router.reload();
-                        }
-                    }
-                });
+                    // 로그인 정보 갱신
+                    loginInfoRnw();
+                }
             }
         }
     }, []);

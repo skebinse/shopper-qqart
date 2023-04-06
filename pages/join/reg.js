@@ -74,8 +74,6 @@ export default function Info() {
      */
     const fileChage = e => {
 
-        const fileReader = new FileReader();
-
         if(e.target.files.length > 0) {
 
             cmm.loading(true);
@@ -130,9 +128,9 @@ export default function Info() {
         } else if(!joinInfo.userId){
 
             cmm.alert('아이디를 입력해 주세요.');
-        } else if(joinInfo.userId.length < 4){
+        } else if(!cmm.util.checkId(joinInfo.userId)){
 
-            cmm.alert('아이디는 최소 4자이상 입력해 주세요.');
+            cmm.alert('아이디는 최소 4자이상 \n알파벳, 숫자만 입력해 주세요.');
         } else if(!joinInfo.userPw){
 
             cmm.alert('비밀번호를 입력해 주세요.');

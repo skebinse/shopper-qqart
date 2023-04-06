@@ -267,6 +267,17 @@ const cmm = {
     util: {
 
         /**
+         * 아이디 체크
+         * 최소 4자리 이상 알파뱃, 숫자
+         * @param str
+         * @returns {boolean}
+         */
+        checkId: function(str) {
+            const regExp = /^[A-Za-z\d]{4,}$/;
+            return regExp.test(str);
+        },
+
+        /**
          * 비밀번호 체크
          * 최소 6자리 이상 알파뱃, 숫자, 특수기호 포함
          * @param str

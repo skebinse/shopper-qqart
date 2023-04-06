@@ -21,7 +21,7 @@ export function GlobalProvider({children}) {
         callbackOk: null,
         callbackCancel: null,
     });
-    const notLoginList = ['/cmm/login', '/cmm/login2', '/join/clauAgr', '/join/cphone', '/join/cphoneAhrz', '/join/info', '/join/reg'];
+    const notLoginList = ['/cmm/login', '/cmm/login2', '/join/clauAgr', '/join/cphone', '/join/cphoneAhrz', '/join/info', '/join/reg', '/join/clauSvcUtlz'];
 
     /**
      * 로그인 정보 갱신

@@ -93,18 +93,18 @@ export default function Index(props) {
 
     const appTest = () => {
 
-        if(cmm.isApp()) {
-
-            webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "getlocation","callback": "window.getPosition"}));
-        }
+        // if(cmm.isApp()) {
+        //
+        //     webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "getlocation","callback": "window.getPosition"}));
+        // }
     };
 
     const appTest2 = () => {
 
-        if(cmm.isApp()) {
-
-            webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "qrcamera","callback": "window.getQrCode"}));
-        }
+        // if(cmm.isApp()) {
+        //
+        //     webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "qrcamera","callback": "window.getQrCode"}));
+        // }
     };
 
     useEffect(() => {

@@ -18,8 +18,8 @@ export default function ClauAgr() {
     const allChkChange = e => {
 
         clauAgrChk02.checked = e.target.checked;
-        clauAgrChk03.checked = e.target.checked;
-        clauAgrChk04.checked = e.target.checked;
+        // clauAgrChk03.checked = e.target.checked;
+        // clauAgrChk04.checked = e.target.checked;
 
         setBtnDisabled(!e.target.checked);
     };
@@ -29,7 +29,8 @@ export default function ClauAgr() {
      */
     const chkChagne = () => {
 
-        setBtnDisabled(!(clauAgrChk02.checked && clauAgrChk03.checked));
+        // setBtnDisabled(!(clauAgrChk02.checked && clauAgrChk03.checked));
+        setBtnDisabled(!(clauAgrChk02.checked));
     };
 
     /**
@@ -60,25 +61,7 @@ export default function ClauAgr() {
                         <label htmlFor={'clauAgrChk02'}>
                             <p>서비스 이용약관 동의 <em>(필수)</em></p>
                         </label>
-                        <Link href={'/2'}>
-                            보기
-                        </Link>
-                    </li>
-                    <li>
-                        <input type={'checkbox'} id={'clauAgrChk03'} value={'03'} onChange={chkChagne} />
-                        <label htmlFor={'clauAgrChk03'}>
-                            <p>개인정보 수집 및 이용동의 <em>(필수)</em></p>
-                        </label>
-                        <Link href={'/2'}>
-                            보기
-                        </Link>
-                    </li>
-                    <li>
-                        <input type={'checkbox'} id={'clauAgrChk04'} value={'04'} onChange={chkChagne} />
-                        <label htmlFor={'clauAgrChk04'}>
-                            <p>이벤트 및 광고 수신동의 (선택)</p>
-                        </label>
-                        <Link href={'/2'}>
+                        <Link href={'/join/clauSvcUtlz'}>
                             보기
                         </Link>
                     </li>

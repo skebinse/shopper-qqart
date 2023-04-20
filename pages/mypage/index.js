@@ -33,12 +33,32 @@ export default function MyPage() {
         });
     };
 
+    /**
+     * 회원 탈퇴
+     */
+    const mbScssClick = () => {
+
+        cmm.confirm('탈퇴 하시겠습니까?', () => {
+
+            cmm.ajax({
+                url: '/api/cmm/mbScss',
+                success: res => {
+
+                    cmm.alert('탈퇴 되었습니다.', () => {
+
+                        goPage('/cmm/login');
+                    });
+                }
+            });
+        });
+    };
+
     return (
         <div className={styles.mypage}>
             <div className={styles.head}>
-               {!!myInfo.SHPR_PRFL_FILE &&
-                   <Image src={myInfo.SHPR_PRFL_FILE} width={48} height={48} alt={'프로필 사진'} />
-               }
+                {!!myInfo.SHPR_PRFL_FILE &&
+                    <Image src={myInfo.SHPR_PRFL_FILE} width={48} height={48} alt={'프로필 사진'} />
+                }
                 <p>
                     반갑습니다. 쇼퍼님!
                     <span>{myInfo.SHPR_NCNM}</span>
@@ -46,19 +66,20 @@ export default function MyPage() {
                 <Link href={'/join/info'}>
                     <button type={'button'} className={'button short white'} >개인정보 수정</button>
                 </Link>
-           </div>
-           <ul className={'ulType01'}>
-               <li>
-                   <Link href={'/btch/comp'}>
-                       <h5>완료된 배치</h5>
-                       <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
-                   </Link>
-               </li>
-           </ul>
-           <hr />
-           <div className={styles.logout}>
-               <button type={'button'} onClick={logoutClick}>로그아웃</button>
-           </div>
+            </div>
+            <ul className={'ulType01'}>
+                <li>
+                    <Link href={'/btch/comp'}>
+                        <h5>완료된 배치</h5>
+                        <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
+                    </Link>
+                </li>
+            </ul>
+            <hr />
+            <div className={styles.logout}>
+                <button type={'button'} onClick={logoutClick}>로그아웃</button>
+            </div>
+            <p onClick={mbScssClick}>회원 탈퇴</p>
             <div className={styles.info}>
                 <div>
                     <span>상호: (주) 베리비지비</span>

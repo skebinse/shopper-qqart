@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function Login(props) {
 
-    const {goPage, alert, fontAjax} = useCommon();
+    const {goPage} = useCommon();
     const [loginInfo, setLoginInfo] = useState({userId: '', userPw: ''});
     const [labelStyle, setLabelStyle] = useState(['', '']);
 
@@ -17,6 +17,7 @@ export default function Login(props) {
             window.Kakao.init(process.env.NEXT_PUBLIC_KAKA0_KEY);
         }
 
+        cmm.util.rmLs(cmm.Cont.LOGIN_INFO);
         cmm.util.setLs(cmm.Cont.WEB_TOKEN, '');
 
         userId.addEventListener('focus', () => {

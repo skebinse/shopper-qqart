@@ -7,6 +7,3 @@
 .mypage hr{background-color: #E4E4E4;height: 1px;width: 100%;margin: 0;border: none;}
 .mypage .logout{padding-top: 8px;}
 .mypage .logout button{color: #333333;font-size: 15px;background-color: #FFFFFF;border: none;padding: 20px 0;width: 100%;}
-.mypage .info{position: fixed;bottom: 60px;padding: 0 16px 16px;width: calc(100% - 32px);}
-.mypage .info > div span{color: #333333;display: block;padding-top: 5px;font-size: 12px;padding-right: 0;}
-.mypage .info > div:last-child{padding-top: 20px;}

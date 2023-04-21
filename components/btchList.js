@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import styles from "../styles/index.module.css";
+import React from "react";
 
 export default function BtchList({list, href, classNm = '', noDataTxt = '현재 접수된 배치가 없습니다.',
                                      isDtptBtn = false, isIngBtch = false, isInit}) {
@@ -47,6 +49,24 @@ export default function BtchList({list, href, classNm = '', noDataTxt = '현재 
                     </Link>
                 </li>
             ))}
+            {/*<li className={styles.info}>*/}
+            {/*    <div>*/}
+            {/*        <div>*/}
+            {/*            <span>상호: (주) 베리비지비</span>*/}
+            {/*            <span>대표 : 김채영</span>*/}
+            {/*            <span>사업장주소: 서울특별시 송파구 송이로 242, 602호</span>*/}
+            {/*            <span>사업자등록번호 : 664-88-02585</span>*/}
+            {/*            <span>대표전화번호: 1855-0582</span>*/}
+            {/*        </div>*/}
+            {/*        <div>*/}
+            {/*            <span>고객센터 운영시간 : 09:00 ~ 21:00(연중무휴)</span>*/}
+            {/*            <span>대표 이메일: <a href="mailto:qqcart.shop@gmail.com">qqcart.shop@gmail.com</a></span>*/}
+            {/*        </div>*/}
+            {/*        <div>*/}
+            {/*            <span>2023 © <em>퀵퀵카트 쇼퍼</em> All Rights Reserved.</span>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*</li>*/}
         </ul>
     </>
 }

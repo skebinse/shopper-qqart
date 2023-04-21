@@ -1,6 +1,6 @@
 import styles from "../../styles/login.module.css";
 import Image from "next/image";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import cmm from "../../js/common";
 import useCommon from "../../hooks/useCommon";
 import Link from "next/link";
@@ -106,6 +106,22 @@ export default function Login(props) {
                         회원가입
                     </span>
                 </p>
+                <div className={styles.cpnyInfo}>
+                    <div>
+                        <span>상호: (주) 베리비지비</span>
+                        <span>대표 : 김채영</span>
+                        <span>사업장주소: 서울특별시 송파구 송이로 242, 602호</span>
+                        <span>사업자등록번호 : 664-88-02585</span>
+                        <span>대표전화번호: 1855-0582</span>
+                    </div>
+                    <div>
+                        <span>고객센터 운영시간 : 09:00 ~ 21:00(연중무휴)</span>
+                        <span>대표 이메일: <a href="mailto:qqcart.shop@gmail.com">qqcart.shop@gmail.com</a></span>
+                    </div>
+                    <div>
+                        <span>2023 © <em>퀵퀵카트 쇼퍼</em> All Rights Reserved.</span>
+                    </div>
+                </div>
                 <div className={styles.btnArea}>
                     <button type={"button"} onClick={loginClick} disabled={!loginInfo.userId || !loginInfo.userPw}>로그인</button>
                 </div>

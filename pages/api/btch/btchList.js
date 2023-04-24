@@ -8,6 +8,7 @@ export default async function handler(req, res) {
 
         let query = '';
 
+        // 접속 로그
         if(param.isLog === 'true') {
 
             const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
@@ -25,6 +26,7 @@ export default async function handler(req, res) {
             await conn.query(query, [userAgent, protocol + '//' + host, ip, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
         }
 
+        // 정지 계정 확인
         query = `
             SELECT SHPR_ACT_SPNS_DT
               FROM T_SHPR_INFO
@@ -38,6 +40,7 @@ export default async function handler(req, res) {
             res.status(200).json(result(null, '9999', '활동이 정지된 계정입니다.'));
         } else {
 
+            // 배치 취소 패널티 확인
             query = `
             SELECT IFNULL(TIMESTAMPDIFF(MINUTE, MAX(RGI_DT), NOW()), 60) AS MIN 
               FROM T_BTCH_CAN_HITY
@@ -83,6 +86,7 @@ export default async function handler(req, res) {
                          , BB.SHOP_ADDR_LOT
                          , ST_DISTANCE_SPHERE(POINT(BB.SHOP_ADDR_LAT, BB.SHOP_ADDR_LOT), POINT(EE.SHPR_ADDR_LAT, EE.SHPR_ADDR_LOT)) AS SLIN_DTC
                          , EE.SHPR_ID
+                         , EE.SHPR_DELY_POS_DTC
                       FROM T_ODER_USER_INFO AA
                            INNER JOIN T_SHOP_MAG BB
                         ON BB.SHOP_ID = AA.SHOP_ID
@@ -111,7 +115,7 @@ export default async function handler(req, res) {
                        AND AA.ODER_REQ_APV_DT IS NULL
                    ) AA
              WHERE (AA.PROD_CNT > 0 OR AA.ODER_KD = 'PIUP')
-               AND AA.SLIN_DTC < 10000
+               AND AA.SLIN_DTC < AA.SHPR_DELY_POS_DTC * 1000
                AND AA.ODER_REQ_YMD BETWEEN CONCAT(DATE_FORMAT(NOW(), '%Y-%m-%d'), ' 00:00:00') AND CONCAT(DATE_FORMAT(NOW(), '%Y-%m-%d'), ' 23:59:59')
           ORDER BY AA.ODER_REQ_YMD DESC
             `;

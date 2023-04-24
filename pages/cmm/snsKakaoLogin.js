@@ -15,6 +15,12 @@ export default function Login(props) {
                 userSnsType: 'KAKAO',
             };
 
+            if(cmm.isApp() && !!cmm.util.getLs(cmm.Cont.APP_TOKEN)) {
+
+                // PUSH Token
+                param.appToken = cmm.util.getLs(cmm.Cont.APP_TOKEN);
+            }
+
             if(!!props.profile.kakao_account) {
 
                 const account = props.profile.kakao_account;

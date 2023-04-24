@@ -16,13 +16,21 @@ export default function MyApp({ Component, pageProps }) {
 
         window.onPushMessage = data => {
 
-            console.log('data : ' + data);
-            cmm.alert(JSON.stringify(data));
+            webPushTit.innerHTML = data.notification.title;
+            webPushTxt.innerHTML = data.notification.body;
+            if(!!data.notification.additionalData && !!data.notification.additionalData.custom_url) {
+
+                btnWebPushUrl.classList = '';
+                btnWebPushUrl.setAttribute('data-url', data.notification.additionalData.custom_url);
+            } else {
+
+                btnWebPushUrl.classList = 'd-none';
+            }
+            document.querySelector('.webPushDiv').classList = 'webPushDiv active';
         };
 
         window.getPushToken = token => {
 
-            console.log('token : ' + token);
             cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
         }
     }, []);

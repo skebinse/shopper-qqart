@@ -14,8 +14,10 @@ export default function Login(props) {
 
     useEffect(() => {
 
-        if(!!window.Kakao && !window.Kakao.isInitialized()) {
-            window.Kakao.init(process.env.NEXT_PUBLIC_KAKA0_KEY);
+        if(cmm.isApp() && !cmm.util.getLs(cmm.Cont.APP_TOKEN)) {
+
+            // PUSH Token
+            cmm.app.getPushToken();
         }
 
         cmm.util.rmLs(cmm.Cont.LOGIN_INFO);
@@ -86,64 +88,14 @@ export default function Login(props) {
     /**
      * 카카오 로그인
      */
-    const kakaoLoing = () => {
+    const kakaoLogin = () => {
 
         if(!!window.Kakao && !window.Kakao.isInitialized()) {
             window.Kakao.init(process.env.NEXT_PUBLIC_KAKA0_KEY);
         }
+
         window.Kakao.Auth.authorize({
             redirectUri: location.origin + '/cmm/snsKakaoLogin',
-        });
-        return;
-        window.Kakao.Auth.login({
-            success: function(authObj) {
-                Kakao.API.request({
-                    url: '/v2/user/me',
-                    success: function(res) {
-
-                        const param = {
-                            userCrctno: res.id,
-                            userSnsType: 'KAKAO',
-                        };
-
-                        if(!!res.kakao_account) {
-                            const account = res.kakao_account;
-                            param.userEmal = !!account.email ? account.email : '';
-
-                            if(!!account.profile) {
-                                const profile = account.profile;
-                                // param.userNcnm = !!profile.nickname ? profile.nickname : '';
-                                param.userPrfl = !!profile.profile_image_url ? profile.profile_image_url : '';
-                                param.userTnalPrfl = !!profile.thumbnail_image_url ? profile.thumbnail_image_url : param.profileImg;
-                            }
-                        }
-
-                        cmm.ajax({
-                            url: '/api/login',
-                            data: param,
-                            success: res => {
-
-                                // 가입되지 않은 계정
-                                if(res.IS_LOGIN === 0) {
-
-                                    goPage('/join/clauAgr', param);
-                                } else {
-
-                                    cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
-                                    location.href = '/';
-                                }
-                            }
-                        });
-                    },
-                    fail: function(res) {
-
-                        cmm.alert('로그인에 실패하였습니다.<br>' + JSON.stringify(res));
-                    }
-                });
-            },
-            fail: function(err) {
-                cmm.alert(JSON.stringify(err));
-            },
         });
     };
 
@@ -172,7 +124,7 @@ export default function Login(props) {
                         회원가입
                     </span>
                 </p>
-                <button className={styles.kakaoDiv} type={'button'} onClick={kakaoLoing}>
+                <button className={styles.kakaoDiv} type={'button'} onClick={kakaoLogin}>
                     <Image alt="카카오톡 아이콘" src="/assets/images/icon/iconKakaotalk.svg" width={33.5} height={22.6} />
                     카카오톡으로 로그인
                 </button>

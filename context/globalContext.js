@@ -94,10 +94,16 @@ export function GlobalProvider({children}) {
         <GlobalContext.Provider value={{sAlert, setSAlert, sConfirm, setSConfirm, isLoading, setIsLoading}}>
             <div className={'webPushDiv'}>
                 <div>
+                    <h5 id={'webPushTit'} data-id={1}></h5>
                     <p id={'webPushTxt'}></p>
-                    <a id={'webPushHref'} href={''}></a>
+                    <div>
+                        <button id={'btnWebPushUrl'} onClick={e => {
+                            router.push(e.target.getAttribute('data-url'));
+                            document.querySelector('.webPushDiv').classList = 'webPushDiv';
+                        }}>이동하기</button>
+                        <button onClick={() => document.querySelector('.webPushDiv').classList = 'webPushDiv'}>닫기</button>
+                    </div>
                 </div>
-                <img src={'/assets/images/btn/btnDel.svg'} width={20} height={20} onClick={() => document.querySelector('.webPushDiv').classList = 'webPushDiv'} />
             </div>
             {children}
         </GlobalContext.Provider>

@@ -7,7 +7,7 @@ export default async function handler(req, res) {
         const param = req.body;
 
         try {
-            const [rows] = await conn.query(`call spShprLogin(?, ?, ?, ?, ?, ?, ?)`, [param.encShprId, param.userCrctno, 'KAKAO', process.env.ENC_KEY, param.userId, param.userPw, (param.appToken === 'null' ? '' : param.appToken)]);
+            const [rows] = await conn.query(`call spShprLogin(?, ?, ?, ?, ?, ?, ?)`, [param.encShprId, param.userCrctno, param.userSnsType, process.env.ENC_KEY, param.userId, param.userPw, (param.appToken === 'null' ? '' : param.appToken)]);
 
             res.status(200).json(result(rows[0][0]));
         } catch (e) {

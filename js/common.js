@@ -27,7 +27,7 @@ const cmm = {
 
         Object.entries(options).forEach(item => _options[item[0]] = item[1]);
 
-        if(!!_options.isLoaing) {
+        if(!_options.isExtr && !!_options.isLoaing) {
 
             cmm.loading(true);
         }
@@ -49,13 +49,8 @@ const cmm = {
             init.body = JSON.stringify(_options.data);
         } else if(!!_options.formData) {
 
-            const formData = new FormData();
-
-            Object.entries(_options.formData).forEach(item => {
-                formData.append(item[0], item[1]);
-            });
-
-            init.body = formData;
+            // FormData로 변경
+            init.body = cmm.util.convertFormData(_options.formData);
         } else {
 
             init.headers.contextType = _options.contextType;
@@ -91,7 +86,7 @@ const cmm = {
             })
             .finally(() => {
 
-                if(!!_options.isLoaing) {
+                if(!_options.isExtr && !!_options.isLoaing) {
 
                     cmm.loading(false);
                 }
@@ -497,6 +492,21 @@ const cmm = {
                 reader.readAsDataURL(file);
             });
         },
+
+        /**
+         * FormData로 변경
+         * @returns {FormData}
+         */
+        convertFormData: data => {
+
+            const formData = new FormData();
+
+            Object.entries(data).forEach(item => {
+                formData.append(item[0], item[1]);
+            });
+
+            return formData;
+        }
     },
 
     /**

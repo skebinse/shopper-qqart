@@ -9,9 +9,11 @@
 .login ul.info li > div{position: absolute;width: 90%;}
 .login ul.info li > div > input{border: none;color: #333333;font-size: 17px;margin-top: 14px;width: 100%;background: transparent;}
 .login ul.info li > div > input:focus{outline: none;}
+.login .kakaoDiv{justify-content: center;border: solid #E1E0F1 1px;border-radius: 12px;background-color: #FFFFFF;font-size: 15px;font-weight: 500;color: #333333;display: flex;align-items: center;padding: 22px 0;width: calc(100% - 34px);margin: 0 17px;}
+.login .kakaoDiv img{padding-right: 9px;}
 .login .btnArea{background-color: #ffffff;box-shadow: #0000000D 0px -5px 16px;padding: 17px;position: fixed;bottom: 0;left:0;width: calc(100% - 34px);}
 .login .btnArea button{background-color: #02B763;border-radius: 12px;color: #FFFFFF;font-size: 16px;font-weight: 500;padding: 17px;width: 100%;border: none;}
 .login .btnArea button:disabled{opacity: 0.4}
-.login .cpnyInfo{padding: 0 16px 95px;width: calc(100% - 32px);box-shadow: none;border-radius: 0;text-align: left;}
+.login .cpnyInfo{padding: 50px 16px 95px;width: calc(100% - 32px);box-shadow: none;border-radius: 0;text-align: left;}
 .login .cpnyInfo > div span{color: #333333;display: block;padding-top: 5px;font-size: 12px;padding-right: 0;}
 .login .cpnyInfo > div:last-child{padding-top: 20px;}

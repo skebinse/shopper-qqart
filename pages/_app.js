@@ -36,6 +36,12 @@ export default function MyApp({ Component, pageProps }) {
 
             cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
         }
+
+        // if(cmm.isApp() && !cmm.util.getLs(cmm.Cont.APP_TOKEN)) {
+        //
+        //     // PUSH Token
+        //     cmm.app.getPushToken();
+        // }
     }, []);
 
   return (

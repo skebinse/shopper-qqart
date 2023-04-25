@@ -14,12 +14,6 @@ export default function Login(props) {
 
     useEffect(() => {
 
-        if(cmm.isApp() && !cmm.util.getLs(cmm.Cont.APP_TOKEN)) {
-
-            // PUSH Token
-            cmm.app.getPushToken();
-        }
-
         cmm.util.rmLs(cmm.Cont.JOIN_INFO);
         cmm.util.rmLs(cmm.Cont.LOGIN_INFO);
         cmm.util.setLs(cmm.Cont.WEB_TOKEN, '');

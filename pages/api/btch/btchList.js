@@ -35,7 +35,7 @@ export default async function handler(req, res) {
 
         const [actSpnsRow] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
-        if(!!actSpnsRow[0].SHPR_ACT_SPNS_DT) {
+        if(!!actSpnsRow[0] && !!actSpnsRow[0].SHPR_ACT_SPNS_DT) {
 
             res.status(200).json(result(null, '9999', '활동이 정지된 계정입니다.'));
         } else {

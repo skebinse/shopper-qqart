@@ -34,9 +34,11 @@ export default function MyApp({ Component, pageProps }) {
 
         window.getPushToken = token => {
 
+            cmm.alert('token : ' + token)
             cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
         }
-
+cmm.alert('cmm.isApp() : ' + cmm.isApp())
+cmm.alert('cmm.util.getLs(cmm.Cont.APP_TOKEN) : ' + cmm.util.getLs(cmm.Cont.APP_TOKEN))
         if(cmm.isApp() && !cmm.util.getLs(cmm.Cont.APP_TOKEN)) {
 
             // PUSH Token

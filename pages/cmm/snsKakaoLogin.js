@@ -14,9 +14,8 @@ export default function Login(props) {
                 userCrctno: props.profile.id,
                 userSnsType: 'KAKAO',
             };
-alert(cmm.isApp());
-alert(cmm.util.getLs(cmm.Cont.APP_TOKEN));
-            if(cmm.isApp() && !!cmm.util.getLs(cmm.Cont.APP_TOKEN)) {
+
+            if(!!cmm.util.getLs(cmm.Cont.APP_TOKEN)) {
 
                 // PUSH Token
                 param.appToken = cmm.util.getLs(cmm.Cont.APP_TOKEN);
@@ -34,7 +33,6 @@ alert(cmm.util.getLs(cmm.Cont.APP_TOKEN));
                 }
             }
 
-            alert(JSON.stringify(param));
             cmm.ajax({
                 url: '/api/login',
                 data: param,

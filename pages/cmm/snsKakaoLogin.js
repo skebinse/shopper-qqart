@@ -14,7 +14,8 @@ export default function Login(props) {
                 userCrctno: props.profile.id,
                 userSnsType: 'KAKAO',
             };
-
+alert(cmm.isApp());
+alert(cmm.util.getLs(cmm.Cont.APP_TOKEN));
             if(cmm.isApp() && !!cmm.util.getLs(cmm.Cont.APP_TOKEN)) {
 
                 // PUSH Token

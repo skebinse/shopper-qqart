@@ -33,6 +33,7 @@ export default function Login(props) {
                 }
             }
 
+            alert(JSON.stringify(param));
             cmm.ajax({
                 url: '/api/login',
                 data: param,

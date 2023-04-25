@@ -1,25 +1,26 @@
 import HeadTitle from "../../components/headTitle";
 import NaviStep from "../../components/naviStep";
 import styles from "../../styles/join.module.css";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useRouter} from "next/router";
 import cmm from "../../js/common";
 import useCommon from "../../hooks/useCommon";
 
 export default function CphoneAhrz(props) {
 
-    const router = useRouter();
-
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [vldtMiSs, setVldtMiSs] = useState('03:00');
     const [vldtSs, setVldtSs] = useState(180);
     const [cetino, setCetino] = useState('');
-    const [authNoHash, setAuthNoHash] = useState(router.query.authNoHash);
-    const cphoneNo = cmm.util.hyphenTel(router.query.cphoneNo);
+    const [authNoHash, setAuthNoHash] = useState('');
+    const [cphoneNo, setCphoneNo] = useState('');
     const {goPage} = useCommon();
 
     // init
     useEffect(() => {
+        console.log('init')
+        setAuthNoHash(cmm.util.getLs(cmm.Cont.JOIN_INFO).authNoHash);
+        setCphoneNo(cmm.util.getLs(cmm.Cont.JOIN_INFO).cphoneNo);
 
         const timer = setInterval(() => {
 
@@ -60,7 +61,7 @@ export default function CphoneAhrz(props) {
         cmm.ajax({
             url: '/api/cmm/smsCetinoSend',
             data: {
-                cphoneNo: router.query.cphoneNo
+                cphoneNo: cmm.util.getLs(cmm.Cont.JOIN_INFO).cphoneNo
             },
             success: res => {
                 setAuthNoHash(res);
@@ -84,12 +85,12 @@ export default function CphoneAhrz(props) {
 
                     cmm.alert('인증되었습니다.', () => {
 
-                        if(!!router.query.basis) {
+                        if(!!cmm.util.getLs(cmm.Cont.JOIN_INFO).basis) {
 
-                            goPage('./reg', {...router.query, cphoneNo: router.query.cphoneNo});
+                            goPage('./reg');
                         } else {
 
-                            goPage('./info', {...router.query, cphoneNo: router.query.cphoneNo});
+                            goPage('./info');
                         }
                     });
                 } else {

@@ -5,6 +5,7 @@ const cmm = {
      */
     Cont: {
         LOGIN_INFO: 'shopperLoginInfo',
+        JOIN_INFO: 'shopperJoinInfo',
         WEB_TOKEN: 'webToken',
         APP_TOKEN: 'appToken',
     },

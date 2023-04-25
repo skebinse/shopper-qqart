@@ -41,7 +41,8 @@ export default function Login(props) {
                     // 가입되지 않은 계정
                     if(res.IS_LOGIN === 0) {
 
-                        goPage('/join/clauAgr', param);
+                        cmm.util.setLs(cmm.Cont.JOIN_INFO, param);
+                        goPage('/join/clauAgr');
                     } else {
 
                         cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
@@ -50,7 +51,7 @@ export default function Login(props) {
                 }
             });
         }
-    }, []);
+    }, [props.profile, goPage]);
 
     return (
         <>

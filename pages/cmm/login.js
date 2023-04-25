@@ -20,6 +20,7 @@ export default function Login(props) {
             cmm.app.getPushToken();
         }
 
+        cmm.util.rmLs(cmm.Cont.JOIN_INFO);
         cmm.util.rmLs(cmm.Cont.LOGIN_INFO);
         cmm.util.setLs(cmm.Cont.WEB_TOKEN, '');
 
@@ -55,7 +56,8 @@ export default function Login(props) {
      */
     const regClick = () => {
 
-        goPage('/join/clauAgr', {basis: 'Y', userSnsType: 'ID_PW'});
+        cmm.util.setLs(cmm.Cont.JOIN_INFO, {basis: 'Y', userSnsType: 'ID_PW'});
+        goPage('/join/clauAgr');
     };
 
     /**

@@ -1,7 +1,7 @@
 import HeadTitle from "../../components/headTitle";
 import NaviStep from "../../components/naviStep";
 import styles from "../../styles/join.module.css"
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useRouter} from "next/router";
 import Head from "next/head";
 import Image from "next/image";
@@ -16,8 +16,8 @@ export default function Info() {
     const shopS3Upload = useShopS3Upload();
     const [prflPrvImg, setPrflPrvImg] = useState('');
     const [popupClass, setPopupClass] = useState('');
+    const [joinInfoLS, setJoinInfoLS] = useState('');
     const [joinInfo, setJoinInfo] = useState({
-        cphoneNo: router.query.cphoneNo,
         userId: '',
         userPw: '',
         userPwCfm: '',
@@ -31,9 +31,10 @@ export default function Info() {
 
     useEffect(() => {
 
+        setJoinInfoLS(cmm.util.getLs(cmm.Cont.JOIN_INFO));
         setJoinInfo(prevState => ({...prevState, appToken: cmm.isApp() ? cmm.util.getLs(cmm.Cont.APP_TOKEN) : ''}));
 
-        if(!cmm.checkLogin() && !router.query.basis) {
+        if(!cmm.checkLogin() && !cmm.util.getLs(cmm.Cont.JOIN_INFO).basis) {
             cmm.alert('로그인정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {
                 goPage('/cmm/login');
             });
@@ -176,12 +177,12 @@ export default function Info() {
 
                 if(!!joinInfo.atchFileUuid) {
 
-                    call({...joinInfo, ...router.query});
+                    call({...joinInfo, ...joinInfoLS});
                 } else {
 
                     shopS3Upload(joinInfo.profile, res => {
 
-                        const param = {...joinInfo, ...router.query};
+                        const param = {...joinInfo, ...joinInfoLS};
                         param.atchFileUuid = res.atchFileUuid;
                         setJoinInfo(prevState => ({...prevState, atchFileUuid: res.atchFileUuid}));
 

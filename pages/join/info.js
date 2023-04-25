@@ -1,13 +1,14 @@
 import HeadTitle from "../../components/headTitle";
 import NaviStep from "../../components/naviStep";
 import styles from "../../styles/join.module.css"
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useRouter} from "next/router";
 import Head from "next/head";
 import Image from "next/image";
 import useShopS3Upload from "../../hooks/useShopS3Upload";
 import useCommon from "../../hooks/useCommon";
 import cmm from "../../js/common";
+import Script from "next/script";
 
 export default function Info() {
 
@@ -15,8 +16,10 @@ export default function Info() {
     const shopS3Upload = useShopS3Upload();
     const [prflPrvImg, setPrflPrvImg] = useState('');
     const [popupClass, setPopupClass] = useState('');
+    const [joinInfoLS, setJoinInfoLS] = useState('');
     const [joinInfo, setJoinInfo] = useState({
-        cphoneNo: router.query.cphoneNo,
+        userId: '',
+        userPw: '',
         userNcnm: '',
         addrTxt: '<span>주소를 입력해주세요.</span>',
         shprSfitdText: '',
@@ -27,7 +30,9 @@ export default function Info() {
 
     useEffect(() => {
 
-        if(!cmm.checkLogin() && !router.query.userCrctno) {
+        setJoinInfoLS(cmm.util.getLs(cmm.Cont.JOIN_INFO));
+
+        if(!cmm.checkLogin() && !cmm.util.getLs(cmm.Cont.JOIN_INFO).userCrctno) {
             cmm.alert('로그인정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {
                 goPage('/cmm/login');
             });
@@ -61,7 +66,7 @@ export default function Info() {
             }
         }
 
-    }, [router.query.userCrctno, goPage]);
+    }, [goPage]);
 
     /**
      * 프로필 변경
@@ -143,6 +148,7 @@ export default function Info() {
                         success: res => {
 
                             cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
+                            cmm.util.rmLs(cmm.Cont.JOIN_INFO);
                             if(!!res && !joinInfo.isLogin) {
 
                                 goPage('./comp');
@@ -159,12 +165,12 @@ export default function Info() {
 
                 if(!!joinInfo.atchFileUuid) {
 
-                    call({...joinInfo, ...router.query});
+                    call({...joinInfo, ...joinInfoLS});
                 } else {
 
                     shopS3Upload(joinInfo.profile, res => {
 
-                        const param = {...joinInfo, ...router.query};
+                        const param = {...joinInfo, ...joinInfoLS};
                         param.atchFileUuid = res.atchFileUuid;
                         setJoinInfo(prevState => ({...prevState, atchFileUuid: res.atchFileUuid}));
 
@@ -177,9 +183,7 @@ export default function Info() {
 
     return (
         <div className={styles.join}>
-            <Head>
-                <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" defer></script>
-            </Head>
+            <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" defer/>
             <HeadTitle title={joinInfo.isLogin ? '개인정보수정' : ''} />
             {!joinInfo.isLogin &&
                 <NaviStep step={3} />
@@ -189,7 +193,7 @@ export default function Info() {
                     <h3>기본 정보 설정</h3>
                 }
                 <div className={styles.profile}>
-                    <Image src={!!prflPrvImg ? prflPrvImg : "/assets/images/img/noProfile.svg"} alt={'프로필 사진'} width={96} height={96} />
+                    <Image src={!!prflPrvImg ? prflPrvImg : "/assets/images/img/noProfile.svg"} priority={true} alt={'프로필 사진'} width={96} height={96} />
                     <input id={'inpFile'} type={"file"} accept={'image/*'} onChange={fileChage} />
                     <label htmlFor={'inpFile'}>
                         사진업로드

@@ -41,7 +41,12 @@ export default function CphoneAhrz() {
             },
             success: res => {
 
-                goPage('./cphoneAhrz', {...router.query, cphoneNo: cphoneNo.replace(/-/g, ''), authNoHash: res})
+                const joinInfoLS = cmm.util.getLs(cmm.Cont.JOIN_INFO);
+                joinInfoLS.cphoneNo = cphoneNo.replace(/-/g, '');
+                joinInfoLS.authNoHash = res;
+                cmm.util.setLs(cmm.Cont.JOIN_INFO, joinInfoLS);
+
+                goPage('./cphoneAhrz');
             }
         });
     };

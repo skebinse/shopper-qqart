@@ -16,7 +16,6 @@ export default function ClauAgr() {
      * 전체 약관 동의
      */
     const allChkChange = e => {
-
         clauAgrChk02.checked = e.target.checked;
         // clauAgrChk03.checked = e.target.checked;
         // clauAgrChk04.checked = e.target.checked;
@@ -38,7 +37,7 @@ export default function ClauAgr() {
      */
     const goPageClick =() => {
 
-        goPage('/join/cphone', router.query);
+        goPage('/join/cphone');
     };
 
     return (

@@ -90,6 +90,7 @@ export default function Login(props) {
             window.Kakao.init(process.env.NEXT_PUBLIC_KAKA0_KEY);
         }
 
+        cmm.loading(true);
         window.Kakao.Auth.authorize({
             redirectUri: location.origin + '/cmm/snsKakaoLogin',
         });

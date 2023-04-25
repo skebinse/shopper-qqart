@@ -16,17 +16,20 @@ export default function MyApp({ Component, pageProps }) {
 
         window.onPushMessage = data => {
 
-            webPushTit.innerHTML = data.notification.title;
-            webPushTxt.innerHTML = data.notification.body;
-            if(!!data.notification.additionalData && !!data.notification.additionalData.custom_url) {
+            if(cmm.checkLogin()) {
 
-                btnWebPushUrl.classList = '';
-                btnWebPushUrl.setAttribute('data-url', data.notification.additionalData.custom_url);
-            } else {
+                webPushTit.innerHTML = data.notification.title;
+                webPushTxt.innerHTML = data.notification.body;
+                if(!!data.notification.additionalData && !!data.notification.additionalData.custom_url) {
 
-                btnWebPushUrl.classList = 'd-none';
+                    btnWebPushUrl.classList = '';
+                    btnWebPushUrl.setAttribute('data-url', data.notification.additionalData.custom_url);
+                } else {
+
+                    btnWebPushUrl.classList = 'd-none';
+                }
+                document.querySelector('.webPushDiv').classList = 'webPushDiv active';
             }
-            document.querySelector('.webPushDiv').classList = 'webPushDiv active';
         };
 
         window.getPushToken = token => {

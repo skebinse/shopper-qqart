@@ -55,6 +55,7 @@ input[type=checkbox]:disabled+label{opacity: 0.5;}
 .btch li.noData p {padding-top: 45px;color: #333333;font-size: 20px;}
 .btch li .priceArea{display: flex;align-items: center;}
 .btch li .priceArea p{color: #333333;font-size: 24px;font-weight: 700;flex: 1;}
+.btch li .priceArea span{color:red;font-size: 14px;padding-left: 5px}
 .btch li .priceArea img{border-radius: 100%;object-fit: cover;}
 .btch li .delyArea{padding-top: 12px;display: flex;align-items: center;}
 .btch li .delyArea div{flex: 1;display: flex;align-items: center;justify-content: center;}

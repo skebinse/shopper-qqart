@@ -18,7 +18,12 @@ export default function BtchList({list, href, classNm = '', noDataTxt = '현재 
                 <li key={'btch' + idx}>
                     <Link href={href + '/' + item.ODER_USER_ID}>
                         <div className={'priceArea'}>
-                            <p>{item.DELY_AMT}원</p>
+                            <p>
+                                {item.DELY_AMT}원
+                                {item.ODER_DRC_LDTN_YN === 'N' &&
+                                    <span>(카드 단말기 필요)</span>
+                                }
+                            </p>
                             <Image alt={'상점 이미지'} src={item.SHOP_RRSN_ATCH_FILE_LIST} width={40} height={40} />
                         </div>
                         <div className={'delyArea'}>

@@ -55,6 +55,7 @@ export default async function handler(req, res) {
                  , EE.ODER_DELY_ADIX_DIS_AMT
                  , EE.ODER_KD
                  , EE.ODER_SHPR_TIP_AMT
+                 , EE.ODER_DRC_LDTN_YN
                  , CASE WHEN EE.ODER_MNGR_RGI_YN = 'Y'
                      THEN DATE_FORMAT(EE.ODER_REQ_YMD, '%y년 %m월 %d일 %H:%i')
                    ELSE DATE_FORMAT(DATE_ADD(EE.ODER_REQ_YMD, INTERVAL 9 HOUR), '%y년 %m월 %d일 %H:%i') END AS ODER_REQ_YMD

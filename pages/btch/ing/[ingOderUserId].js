@@ -233,6 +233,12 @@ export default function IngOderUserId() {
                 <ul className={'formUl'}>
                     {btchInfo.ODER_PGRS_STAT === '03' &&
                         <>
+                            {btchInfo.ODER_DRC_LDTN_YN === 'N' &&
+                                <li>
+                                    <h5>결제</h5>
+                                    <p style={{color: 'red'}}>카드 단말기 필요</p>
+                                </li>
+                            }
                             <li>
                                 <h5>스토어</h5>
                                 <p>{btchInfo.SHOP_NM}</p>
@@ -282,6 +288,12 @@ export default function IngOderUserId() {
                     }
                     {btchInfo.ODER_PGRS_STAT === '05' &&
                         <>
+                            {btchInfo.ODER_DRC_LDTN_YN === 'N' &&
+                                <li>
+                                    <h5>결제</h5>
+                                    <p style={{color: 'red'}}>카드 단말기 필요</p>
+                                </li>
+                            }
                             <li>
                                 <h5>배달 시간</h5>
                                 <p>{btchInfo.oderDelySlctVal}</p>

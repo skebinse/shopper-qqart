@@ -114,6 +114,12 @@ export default function OderUserId(props) {
                 </li>
             </ul>
             <ul className={'formUl'}>
+                {btchInfo.ODER_DRC_LDTN_YN === 'N' &&
+                    <li>
+                        <h5>결제</h5>
+                        <p style={{color: 'red'}}>카드 단말기 필요</p>
+                    </li>
+                }
                 <li>
                     <h5>주문 시간</h5>
                     <p>{btchInfo.ODER_REQ_YMD}</p>

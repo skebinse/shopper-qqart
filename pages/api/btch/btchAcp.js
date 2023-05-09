@@ -22,8 +22,6 @@ export default async function handler(req, res) {
                     oderUserId: param.oderUserId,
                 },
                 success: res => {
-
-                    console.log(res)
                 }
             });
 

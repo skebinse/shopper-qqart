@@ -100,7 +100,7 @@ export default function IngOderUserId() {
                 });
             } else {
 
-                cmm.confirm('배달을 완료하시겠습니까?', () => {
+                cmm.confirm('벨누르기 완료하셨나요?\n벨누르기 하지 않으면 배달 완료로\n 인정이 되지 않을 수 있으니 꼭 벨을 눌러주세요', () => {
 
                     shopS3Upload(vchrImgList, res => {
 

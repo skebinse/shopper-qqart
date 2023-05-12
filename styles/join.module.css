@@ -65,7 +65,7 @@
 .join .content .profile input{display: none}
 .join .content .profile label{border: 1px solid #CDCDCD;border-radius: 6px;color: #333333;font-size: 16px;padding: 11px 14px;background-color: #ffffff;font-weight: 700;display: inline-block;}
 .join .content .infoTxt{color: #F4997A;font-size: 14px;font-weight: 700;text-align: center}
-.join .popup{top: 100%;position: fixed;transition: all 0.5s;width: 100%;height: 100%;background-color: #ececec;opacity: 0}
+.join .popup{top: 100%;position: fixed;transition: all 0.5s;width: 100%;height: 100%;background-color: #ececec;opacity: 0;z-index: 1;}
 .join .popup.active{top: 0;opacity: 1}
 .join .daumPost > div{width: 100% !important;}
 

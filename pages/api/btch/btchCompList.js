@@ -4,6 +4,8 @@ export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
+        const param = req.body;
+
         try {
 
             let query =`
@@ -13,6 +15,8 @@ export default async function handler(req, res) {
                      , AA.SHOP_FULL_ADDR
                      , AA.ODER_USER_ID
                      , AA.ODER_KD
+                     , AA.ODER_ADJ_YN
+                     , DATE_FORMAT(AA.ODER_DELY_CPL_DT, '%m월 %d일') AS ODER_DELY_CPL_DT
                      , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
                      , FORMAT(fnGetDelyDtcAmt(AA.ODER_USER_ID, AA.SHPR_ID, AA.ODER_DELY_DTC) + AA.ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
                      , fnGetAtchFileList(AA.SHOP_RRSN_ATCH_FILE_UUID) AS SHOP_RRSN_ATCH_FILE_LIST
@@ -26,6 +30,7 @@ export default async function handler(req, res) {
                          , AA.SHPR_ID
                          , BB.SHOP_NM
                          , BB.SHOP_RRSN_ATCH_FILE_UUID
+                         , CC.ODER_ADJ_YN
                          , CONCAT(BB.SHOP_ADDR, ' ' , BB.SHOP_DTPT_ADDR) AS SHOP_FULL_ADDR
                          , ST_DISTANCE_SPHERE(POINT(BB.SHOP_ADDR_LAT, BB.SHOP_ADDR_LOT), POINT(EE.SHPR_ADDR_LAT, EE.SHPR_ADDR_LOT)) AS SLIN_DTC
                          , IFNULL((SELECT COUNT(*) FROM T_ODER_DTPT A1 WHERE A1.ODER_ID = AA.ODER_ID), 0) AS PROD_CNT
@@ -33,16 +38,22 @@ export default async function handler(req, res) {
                       FROM T_ODER_USER_INFO AA
                            INNER JOIN T_SHOP_MAG BB
                         ON BB.SHOP_ID = AA.SHOP_ID
+                           INNER JOIN T_ODER_INFO CC
+                        ON CC.ODER_ID = AA.ODER_ID
                            INNER JOIN T_SHPR_INFO EE
                         ON EE.SHPR_ID = fnDecrypt(?, ?)
                        AND EE.SHPR_ID = AA.SHPR_ID
                      WHERE AA.ODER_DELY_CPL_DT IS NOT NULL
+                       AND AA.ODER_DELY_CPL_DT BETWEEN 
+                                                DATE_ADD(STR_TO_DATE(?,'%Y-%m-%d %H:%i:%s'), INTERVAL 9 HOUR)
+                                               AND
+                                                DATE_ADD(STR_TO_DATE(?,'%Y-%m-%d %H:%i:%s'), INTERVAL 9 HOUR)
                    ) AA
              WHERE ((AA.PROD_CNT + AA.SPBK_CNT) > 0 OR AA.ODER_KD = 'PIUP')
           ORDER BY AA.ODER_DELY_CPL_DT DESC
                 `;
-
-            const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            console.log(query)
+            const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.formDt + ' 00:00:00', param.toDt + ' 23:59:59']);
 
             res.status(200).json(result(rows));
         } catch (e) {

@@ -8,6 +8,7 @@ const cmm = {
         JOIN_INFO: 'shopperJoinInfo',
         WEB_TOKEN: 'webToken',
         APP_TOKEN: 'appToken',
+        DAY_OF_WEEK: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
     },
 
     /**
@@ -222,15 +223,107 @@ const cmm = {
     date: {
 
         /**
+         * 문자열 날짜를 Date 타입으로 변환하여 반환.
+         * @param strDate
+         * @returns {null}
+         */
+        parseDate : function(strDate) {
+
+            let date = null;
+
+            strDate = strDate.replace(/[^0-9]/g, '');
+
+            // 날짜 설정.
+            if(strDate.length > 7) {
+                date = new Date(strDate.substring(0, 4), strDate
+                    .substring(4, 6) - 1, strDate.substring(6, 8));
+            }
+
+            // 시간 설정.
+            if(strDate.length > 13) {
+                date.setHours(strDate.substring(8, 10),
+                    strDate.substring(10, 12), strDate.substring(12, 14));
+            }
+
+            return date;
+        },
+
+        /**
+         * 날짜 계산 함수 - Date 함수로 반환
+         * @param selDate
+         * @param periodKind
+         * @param period
+         * @param div
+         */
+        calDateReturnDt : function(selDate, periodKind, period) {
+
+            return cmm.date.parseDate(cmm.date.calDate(selDate, periodKind, period, ''));
+        },
+
+        /**
+         * 날짜 계산 함수
+         * @param selDate : "YYYYMMDD"
+         * @param periodKind : "Y" or "M" or "D" 증감할것이 년인지 월인지 날짜인지
+         * @param period     : 계산할 값 양수이면 이후 음수이전 이전값
+         * @param div  옵션  : 계산 후 반환될 년, 월, 일 사이 구분자(구분자가 필요없으면 "")
+         * @returns {string}
+         */
+        calDate : function(selDate, periodKind, period, div) {
+
+            if(typeof selDate === 'object') {
+                selDate = selDate.getFullYear() +
+                    cmm.util.lpad(selDate.getMonth() + 1, 2, '0') +
+                    cmm.util.lpad(selDate.getDate(), 2, '0');
+            }
+
+            if(selDate === 'toDay') {
+                selDate = cmm.date.getToday('');
+            }
+
+            selDate = selDate.replace(/[^0-9]/g, '');
+
+            let cDate = new Date(selDate.substring(0, 4), selDate.substring(4, 6) - 1,
+                selDate.substring(6, 8));
+            period = Number(period);
+            periodKind = periodKind.toUpperCase();
+            if (periodKind == "D") {
+                cDate.setDate(cDate.getDate() + period);
+            }
+            if (periodKind == "M") {
+                cDate.setMonth(cDate.getMonth() + period);
+                // 현재달이 31 이고 이전 또는 이후 달에 31 이 없는경우 마지막 날로 설정
+                if(parseInt(selDate.substring(6, 8),10) > 20 && cDate.getDate() < 10){
+                    cDate.setDate(0);
+                }
+            }
+            if (periodKind == "Y") {
+                cDate.setFullYear(cDate.getFullYear() + period);
+            }
+
+            let rDate = new Date(cDate);
+            let strDate = new Array();
+
+            let year = rDate.getFullYear();
+            strDate[strDate.length] = year;
+
+            strDate[strDate.length] = cmm.util.lpad(String(rDate.getMonth() + 1), 2, "0");
+            strDate[strDate.length] = cmm.util.lpad(String(rDate.getDate()), 2, "0");
+
+            if (div == null) {
+                div = "";
+            }
+            return strDate.join(div);
+        },
+
+        /**
          * 현재 날짜 를 YYYYMMDD 형태로 반환한다.
          *
-         * @memberOf $comm.date
          * @param {String} div  옵션  : 계산 후 반환될 년, 월, 일 사이 구분자(구분자가 필요없으면 "")
          * @param {String} optValue 시간, 분, 초까지 표시. 옵션 H:시, M:분 , S:초
          *
          * @returns 현재 날짜 기간
          */
-        getToday: function (div, optValue) {
+        getToday: (div, optValue) => {
 
             div = div === undefined ? '-' : div;
             const TIME_ZONE = 3240 * 10000;
@@ -253,6 +346,39 @@ const cmm = {
 
                     return `${date} ${hhmmss}`;
                 }
+            }
+        },
+
+        /**
+         입력받은 월의 마지막 일자 반환.
+         * @param dateStr
+         * @returns {number|*}
+         */
+        getLastDay : dateStr => {
+
+            if(!!dateStr) {
+                dateStr = dateStr.replace(/-/g, "");
+                return (new Date(Number(dateStr.substring(0, 4)), Number(dateStr.substring(4, 6)), 0) ).getDate();
+            } else {
+
+                return dateStr;
+            }
+        },
+
+        /**
+         * 요일 index 반환: 0부터 일요일
+         * @param strDate
+         * @param type
+         * @returns {string|number}
+         */
+        getDayOfWeek : function(strDate, type) {
+
+            if(type === 'ko') {
+
+                return cmm.Cont.DAY_OF_WEEK[cmm.date.parseDate(strDate).getDay()];
+            } else {
+
+                return cmm.date.parseDate(strDate).getDay();
             }
         },
     },
@@ -304,7 +430,7 @@ const cmm = {
          */
         comma: function (val) {
 
-            val = !val ? '' : String(val);
+            val = (!val && val != '0') ? '' : String(val);
             let dec = '';
 
             if(val.indexOf('.') > -1) {
@@ -359,8 +485,8 @@ const cmm = {
                 return str;
             }
 
-            var sb = [];
-            for(var i=0;i < len-str.length; i+=padStr.length){
+            let sb = [];
+            for(let i=0;i < len-str.length; i+=padStr.length){
                 sb.push(padStr);
             }
             sb.push(str);
@@ -571,8 +697,7 @@ const cmm = {
                 let w = window;
                 if (w.ChannelIO) {
 
-                    return;
-                }
+                    return;}
                 let ch = function() {
                     ch.c(arguments);
                 };

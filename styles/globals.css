@@ -15,7 +15,7 @@ em{font-style: normal;}
 .bold{font-weight: 700 !important;}
 
 /* headTitle */
-.headTitle{padding: 17px;background-color: #FFFFFF;position: sticky;top:0;}
+.headTitle{padding: 17px;background-color: #FFFFFF;position: sticky;top:0;z-index: 1;}
 .headTitle h3{position: absolute;top: 0;text-align: center;width: calc(100% - 104px);margin: 20px 35px;}
 .headTitle h3.close{margin: 17px 35px;}
 

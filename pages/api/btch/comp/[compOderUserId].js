@@ -54,6 +54,7 @@ export default async function handler(req, res) {
                  , EE.ODER_JOIN_ENTH_PW
                  , EE.ODER_DELY_ADIX_DIS_AMT
                  , EE.ODER_KD
+                 , FF.ODER_ADJ_YN
                  , CASE WHEN EE.ODER_MNGR_RGI_YN = 'Y'
                      THEN DATE_FORMAT(EE.ODER_REQ_YMD, '%y년 %m월 %d일 %H:%i')
                    ELSE DATE_FORMAT(DATE_ADD(EE.ODER_REQ_YMD, INTERVAL 9 HOUR), '%y년 %m월 %d일 %H:%i') END AS ODER_REQ_YMD
@@ -62,6 +63,8 @@ export default async function handler(req, res) {
             FROM T_ODER_USER_INFO EE
                  INNER JOIN T_SHOP_MAG BB
               ON BB.SHOP_ID = EE.SHOP_ID
+                 INNER JOIN T_ODER_INFO FF
+              ON FF.ODER_ID = EE.ODER_ID
                  LEFT OUTER JOIN T_USER_SPBK AA
               ON EE.USER_ID = AA.USER_ID
              AND EE.SHOP_ID = AA.SHOP_ID

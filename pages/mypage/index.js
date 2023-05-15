@@ -80,7 +80,7 @@ export default function MyPage() {
                 <button type={'button'} onClick={logoutClick}>로그아웃</button>
             </div>
             <p onClick={mbScssClick}>회원 탈퇴</p>
-           <BottomMenu idx={1} />
+           <BottomMenu idx={2} />
        </div>
     );
 }

@@ -1,4 +1,4 @@
-.bodyBg{background-color: #FFFFFF;}
+.bodyBg{background-color: #F8F8F8;}
 
 .btchInfo{padding: 0 0 90px;}
 .btchInfo > ul{margin-left: 17px;margin-right: 17px;}
@@ -19,34 +19,7 @@
 .btchIng > ul .uploadArea > div > div .vchrImg{border-radius: 12px;object-fit: cover;width: 100%;}
 .btchIng > ul .uploadArea > div > div .del{position: absolute;top: 0;right: 0;}
 
-.btchArea{}
-.btchArea .searchDiv{display: flex;align-items: center;padding: 12px 20px;border-bottom: 1px solid #CCCCCC;position: sticky;top: 74px;background: #fff;z-index: 1;}
-.btchArea .searchDiv span{flex: 1;font-weight: 500;font-size: 14px;line-height: 17px;color: #333333;display: inline-block;text-align: center;}
-.btchArea .searchDiv img:last-child{transform: rotate(180deg)}
-.btchArea .searchDiv img.noVtlz{opacity: 0.3;}
-.btchArea .adjDiv{padding: 32px 20px;border-bottom: solid 8px #F2F2F2;}
-.btchArea .adjDiv h5{font-weight: 700;font-size: 14px;line-height: 17px;color: #333333;}
-.btchArea .adjDiv > p{font-weight: 700;font-size: 24px;line-height: 29px;color: #333333;padding-top: 8px;}
-.btchArea .adjDiv li{display: flex;font-weight: 400;font-size: 14px;line-height: 17px;color: #333333;padding-top: 20px;}
-.btchArea .adjDiv li p{flex: 1; text-align: right;}
-.btchArea .compListDiv{padding: 12px 20px;}
-.btchArea .compListDiv > ul > li{border-bottom: 1px solid #E6E6E6;padding: 20px 0;}
-.btchArea .compListDiv > ul > li.active{}
-.btchArea .compListDiv > ul > li h5{font-size: 12px;line-height: 14px;color: #333333;}
-.btchArea .compListDiv > ul > li div.smryDiv{display: flex;align-items: center;padding-top: 12px;}
-.btchArea .compListDiv > ul > li div.smryDiv p{font-weight: 700;font-size: 16px;line-height: 19px;color: #333333;flex: 1;}
-.btchArea .compListDiv > ul > li.active div.smryDiv p{color: #02B763;}
-.btchArea .compListDiv > ul > li div.smryDiv span{font-weight: 500;font-size: 14px;line-height: 17px;color: #333333;padding-right: 20px;}
-.btchArea .compListDiv > ul > li.active div.smryDiv span{color: #02B763;}
-.btchArea .compListDiv > ul > li div.smryDiv img{transform: rotate(270deg)}
-.btchArea .compListDiv > ul > li.active div.smryDiv img{transform: rotate(0)}
-.btchArea .compListDiv > ul > li div.dtptDiv{overflow: hidden;transition: max-height 0.2s ease-out;max-height: 0;}
-.btchArea .compListDiv > ul > li.active div.dtptDiv{max-height: 1000px;transition: max-height 0.3s ease-in;}
-.btchArea .compListDiv > ul > li div.dtptDiv ul{border-top: 1px solid #E6E6E6;margin-top: 20px;}
-.btchArea .compListDiv > ul > li div.dtptDiv li{padding-top: 32px;display: flex;}
-.btchArea .compListDiv > ul > li div.dtptDiv li:first-child{padding-top: 20px;}
-.btchArea .compListDiv > ul > li div.dtptDiv li span{font-size: 14px;line-height: 17px;color: #333333;}
-.btchArea .compListDiv > ul > li div.dtptDiv li span:first-child{flex: 1;}
+.btchArea{padding-top: 24px;}
 
 .compDtpt{}
 .compDtpt .content{padding: 0 17px;}

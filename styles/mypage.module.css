@@ -7,3 +7,35 @@
 .mypage hr{background-color: #E4E4E4;height: 1px;width: 100%;margin: 0;border: none;}
 .mypage .logout{padding-top: 8px;}
 .mypage .logout button{color: #333333;font-size: 15px;background-color: #FFFFFF;border: none;padding: 20px 0;width: 100%;}
+
+
+.btchAdjDiv .headTitle{padding: 20px 35px;background-color: #FFFFFF;position: sticky;top:0;z-index: 1;}
+.btchAdjDiv .headTitle h3{text-align: center;}
+.btchAdjDiv .btchArea{}
+.btchAdjDiv .btchArea .searchDiv{display: flex;align-items: center;padding: 12px 20px;border-bottom: 1px solid #CCCCCC;position: sticky;top: 67px;background: #fff;z-index: 1;}
+.btchAdjDiv .btchArea .searchDiv span{flex: 1;font-weight: 500;font-size: 14px;line-height: 17px;color: #333333;display: inline-block;text-align: center;}
+.btchAdjDiv .btchArea .searchDiv img:last-child{transform: rotate(180deg)}
+.btchAdjDiv .btchArea .searchDiv img.noVtlz{opacity: 0.3;}
+.btchAdjDiv .btchArea .adjDiv{padding: 32px 20px;border-bottom: solid 8px #F2F2F2;}
+.btchAdjDiv .btchArea .adjDiv h5{font-weight: 700;font-size: 14px;line-height: 17px;color: #333333;}
+.btchAdjDiv .btchArea .adjDiv > p{font-weight: 700;font-size: 24px;line-height: 29px;color: #333333;padding-top: 8px;}
+.btchAdjDiv .btchArea .adjDiv li{display: flex;font-weight: 400;font-size: 14px;line-height: 17px;color: #333333;padding-top: 20px;}
+.btchAdjDiv .btchArea .adjDiv li p{flex: 1; text-align: right;}
+.btchAdjDiv .btchArea .compListDiv{padding: 12px 20px;}
+.btchAdjDiv .btchArea .compListDiv > ul > li{border-bottom: 1px solid #E6E6E6;padding: 20px 0;}
+.btchAdjDiv .btchArea .compListDiv > ul > li.active{}
+.btchAdjDiv .btchArea .compListDiv > ul > li h5{font-size: 12px;line-height: 14px;color: #333333;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.smryDiv{display: flex;align-items: center;padding-top: 12px;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.smryDiv p{font-weight: 700;font-size: 16px;line-height: 19px;color: #333333;flex: 1;}
+.btchAdjDiv .btchArea .compListDiv > ul > li.active div.smryDiv p{color: #02B763;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.smryDiv span{font-weight: 500;font-size: 14px;line-height: 17px;color: #333333;padding-right: 20px;}
+.btchAdjDiv .btchArea .compListDiv > ul > li.active div.smryDiv span{color: #02B763;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.smryDiv img{transform: rotate(270deg)}
+.btchAdjDiv .btchArea .compListDiv > ul > li.active div.smryDiv img{transform: rotate(0)}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv{overflow: hidden;transition: max-height 0.2s ease-out;max-height: 0;}
+.btchAdjDiv .btchArea .compListDiv > ul > li.active div.dtptDiv{max-height: 1000px;transition: max-height 0.3s ease-in;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv ul{border-top: 1px solid #E6E6E6;margin-top: 20px;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv li{padding-top: 32px;display: flex;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv li:first-child{padding-top: 20px;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv li span{font-size: 14px;line-height: 17px;color: #333333;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv li span:first-child{flex: 1;}

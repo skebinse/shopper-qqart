@@ -50,14 +50,11 @@ export default function BtchAdj() {
                                 compList[compList.length - 1].amt += cmm.util.getNumber(item.DELY_AMT);
                                 compList[compList.length - 1].list.push(item);
                             }
-                            console.log(item.ODER_ADJ_YN === 'Y' ? cmm.util.getNumber(item.DELY_AMT) : 0)
-                            console.log(item.ODER_ADJ_YN === 'N' ? cmm.util.getNumber(item.DELY_AMT) : 0)
                             // 정산된 금액
                             totalAdjAmt += (item.ODER_ADJ_YN === 'Y' ? cmm.util.getNumber(item.DELY_AMT) : 0);
                             // 정산예정 금액
                             totalAmt += (item.ODER_ADJ_YN === 'N' ? cmm.util.getNumber(item.DELY_AMT) : 0);
                         });
-                        console.log(totalAdjAmt)
                         setBtchList({
                             compList,
                             summ: {
@@ -83,10 +80,6 @@ export default function BtchAdj() {
             document.body.classList.remove(styles.bodyBg);
         };
     }, []);
-
-    useEffect(() => {
-        console.log(btchList)
-    }, [btchList]);
 
     /**
      * 조회 일자 변경

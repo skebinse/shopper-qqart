@@ -16,7 +16,7 @@ export default async function handler(req, res) {
                      , AA.ODER_USER_ID
                      , AA.ODER_KD
                      , AA.ODER_ADJ_YN
-                     , DATE_FORMAT(AA.ODER_DELY_CPL_DT, '%m월 %d일') AS ODER_DELY_CPL_DT
+                     , DATE_FORMAT(DATE_ADD(AA.ODER_DELY_CPL_DT, INTERVAL 9 HOUR), '%m월 %d일') AS ODER_DELY_CPL_DT
                      , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
                      , FORMAT(fnGetDelyDtcAmt(AA.ODER_USER_ID, AA.SHPR_ID, AA.ODER_DELY_DTC) + AA.ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
                      , fnGetAtchFileList(AA.SHOP_RRSN_ATCH_FILE_UUID) AS SHOP_RRSN_ATCH_FILE_LIST
@@ -45,9 +45,9 @@ export default async function handler(req, res) {
                        AND EE.SHPR_ID = AA.SHPR_ID
                      WHERE AA.ODER_DELY_CPL_DT IS NOT NULL
                        AND AA.ODER_DELY_CPL_DT BETWEEN 
-                                                DATE_ADD(STR_TO_DATE(?,'%Y-%m-%d %H:%i:%s'), INTERVAL 9 HOUR)
+                                                DATE_ADD(STR_TO_DATE(?,'%Y-%m-%d %H:%i:%s'), INTERVAL -9 HOUR)
                                                AND
-                                                DATE_ADD(STR_TO_DATE(?,'%Y-%m-%d %H:%i:%s'), INTERVAL 9 HOUR)
+                                                DATE_ADD(STR_TO_DATE(?,'%Y-%m-%d %H:%i:%s'), INTERVAL -9 HOUR)
                    ) AA
              WHERE ((AA.PROD_CNT + AA.SPBK_CNT) > 0 OR AA.ODER_KD = 'PIUP')
           ORDER BY AA.ODER_DELY_CPL_DT DESC

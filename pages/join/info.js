@@ -32,6 +32,7 @@ export default function Info() {
     useEffect(() => {
 
         setJoinInfoLS(cmm.util.getLs(cmm.Cont.JOIN_INFO));
+        setJoinInfo(prevState => ({...prevState, appToken: !!cmm.util.getLs(cmm.Cont.APP_TOKEN) ? cmm.util.getLs(cmm.Cont.APP_TOKEN) : ''}));
 
         if(!cmm.checkLogin() && !cmm.util.getLs(cmm.Cont.JOIN_INFO).userCrctno) {
             cmm.alert('로그인정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {

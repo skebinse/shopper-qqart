@@ -6,6 +6,25 @@ import React from "react";
 export default function BtchList({list, href, classNm = '', noDataTxt = '현재 접수된 배치가 없습니다.',
                                      isDtptBtn = false, isIngBtch = false, isInit}) {
 
+    /**
+     * 예약 태그 생성
+     * @param item
+     */
+    const createTagResv = item => {
+
+        let oderDelySlctVal;
+        switch (item.ODER_DELY_SLCT_VAL) {
+            case 'imm' : oderDelySlctVal = '즉시 배달'; break;
+            case '2Hour' : oderDelySlctVal = '배달시간 : 2~3시간 내'; break;
+            case 'today' : oderDelySlctVal = '배달시간 : 오늘 안에만'; break;
+            case 'resv' :
+                oderDelySlctVal = `배달시간 : ${item.ODER_DELY_YMD + ' ' + item.ODER_DELY_HH}`;
+                break;
+        }
+
+        return oderDelySlctVal;
+    };
+
     return <>
         <ul className={'btch ' + classNm}>
             {list.length === 0 && !isInit &&
@@ -43,6 +62,9 @@ export default function BtchList({list, href, classNm = '', noDataTxt = '현재 
                             }
                         </div>
                         <p>{item.ODER_DELY_FULL_ADDR}</p>
+                        {item.ODER_DELY_SLCT_VAL !== 'imm' &&
+                            <p>{createTagResv(item)}</p>
+                        }
                         <h5>
                             <Image alt={'주문 정보'} src={'/assets/images/icon/iconStore.png'} width={20} height={20} />
                             {item.SHOP_NM}
@@ -54,24 +76,6 @@ export default function BtchList({list, href, classNm = '', noDataTxt = '현재 
                     </Link>
                 </li>
             ))}
-            {/*<li className={styles.info}>*/}
-            {/*    <div>*/}
-            {/*        <div>*/}
-            {/*            <span>상호: (주) 베리비지비</span>*/}
-            {/*            <span>대표 : 김채영</span>*/}
-            {/*            <span>사업장주소: 서울특별시 송파구 송이로 242, 602호</span>*/}
-            {/*            <span>사업자등록번호 : 664-88-02585</span>*/}
-            {/*            <span>대표전화번호: 1855-0582</span>*/}
-            {/*        </div>*/}
-            {/*        <div>*/}
-            {/*            <span>고객센터 운영시간 : 09:00 ~ 21:00(연중무휴)</span>*/}
-            {/*            <span>대표 이메일: <a href="mailto:qqcart.shop@gmail.com">qqcart.shop@gmail.com</a></span>*/}
-            {/*        </div>*/}
-            {/*        <div>*/}
-            {/*            <span>2023 © <em>퀵퀵카트 쇼퍼</em> All Rights Reserved.</span>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*</li>*/}
         </ul>
     </>
 }

@@ -24,6 +24,7 @@ export default function Info() {
         addrTxt: '<span>주소를 입력해주세요.</span>',
         shprSfitdText: '',
         profile: '',
+        shprDelyPosDtc: '10',
         isLogin: false,
     });
     const {goPage} = useCommon();
@@ -59,6 +60,7 @@ export default function Info() {
                             userAddrLat: res.SHPR_ADDR_LAT,
                             userAddrLot: res.SHPR_ADDR_LOT,
                             atchFileUuid: res.SHPR_PRFL_ATCH_FILE_UUID,
+                            shprDelyPosDtc: res.SHPR_DELY_POS_DTC,
                         });
                         setPrflPrvImg(cmm.getLoginInfo('SHPR_PRFL_FILE'));
                     }
@@ -136,6 +138,9 @@ export default function Info() {
         } else if(!joinInfo.userZipc){
 
             cmm.alert('지역을 선택해 주세요.');
+        } else if(!joinInfo.shprDelyPosDtc){
+
+            cmm.alert('반경(Km)을 입력해 주세요.');
         } else {
 
             cmm.confirm(joinInfo.isLogin ? '개인정보를 수정하시겠습니까?' : '가입 진행하겠습니까?', () => {
@@ -223,6 +228,12 @@ export default function Info() {
                         <div className={styles.zip}>
                             <p dangerouslySetInnerHTML={{__html: joinInfo.addrTxt}}></p>
                             <button type={'button'} onClick={daumPostClick}>주소검색</button>
+                        </div>
+                    </li>
+                    <li>
+                        <label>반경(Km)</label>
+                        <div>
+                            <input id="shprDelyPosDtc" value={joinInfo.shprDelyPosDtc} onChange={e => setJoinInfo(prevState => ({...prevState, shprDelyPosDtc: e.target.value}))} type="text" />
                         </div>
                     </li>
                 </ul>

@@ -22,6 +22,7 @@ export default async function handler(req, res) {
                      , SHPR_SFITD_TEXT
                      , SHPR_SCSS_YN
                      , SHPR_SCSS_YMD
+                     , SHPR_DELY_POS_DTC
                   FROM T_SHPR_INFO
                  WHERE SHPR_ID = fnDecrypt(?, ?)
                    AND SHPR_SCSS_YN = 'N'

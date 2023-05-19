@@ -14,6 +14,9 @@ export default function MyApp({ Component, pageProps }) {
             firebaseInit();
         }
 
+        // 채널톡
+        cmm.plugin.channelIO();
+
         window.onPushMessage = data => {
 
             if(cmm.checkLogin()) {

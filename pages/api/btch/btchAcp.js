@@ -13,24 +13,27 @@ export default async function handler(req, res) {
                 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
             }
 
-            cmm.ajax({
-                url: process.env.QQCART_URL + `/sendSmsNtfy.ax`,
-                isLoaing: false,
-                isExtr: true,
-                data: {
-                    pgrsStat: 'btch',
-                    oderUserId: param.oderUserId,
-                },
-                success: res => {
-                }
-            });
-
             const query = 'CALL spInsShprBtchAcp(fnDecrypt(?, ?), ?)';
 
             const [rows, fields] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.oderUserId]);
 
-            // admin 알림 발송
-            adminSendNtfy(conn, {ntfyType: 'btchAcp', oderUserId: param.oderUserId});
+            if(!rows[0]) {
+
+                cmm.ajax({
+                    url: process.env.QQCART_URL + `/sendSmsNtfy.ax`,
+                    isLoaing: false,
+                    isExtr: true,
+                    data: {
+                        pgrsStat: 'btch',
+                        oderUserId: param.oderUserId,
+                    },
+                    success: res => {
+                    }
+                });
+
+                // admin 알림 발송
+                adminSendNtfy(conn, {ntfyType: 'btchAcp', oderUserId: param.oderUserId});
+            }
 
             res.status(200).json(resultOne(rows[0]));
         } catch (e) {

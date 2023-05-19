@@ -26,8 +26,6 @@ export default function IngOderUserId() {
 
     useEffect(() => {
 
-        cmm.plugin.channelIO();
-
         cmm.ajax({
             url: `/api/btch/ing/${ingOderUserId}`,
             success: res => {
@@ -50,7 +48,7 @@ export default function IngOderUserId() {
                     if(!!item.PIUP_VCHR_IMG) {
 
                         // 픽업 리스트
-                        setPiupImgList([...item.PIUP_VCHR_IMG.split(','), ...item.PIUP_VCHR_IMG.split(',')]);
+                        setPiupImgList(item.PIUP_VCHR_IMG.split(','));
                     }
 
                     switch (item.ODER_PGRS_STAT) {

@@ -3,7 +3,6 @@ import NaviStep from "../../components/naviStep";
 import styles from "../../styles/join.module.css"
 import {useEffect, useRef, useState} from "react";
 import {useRouter} from "next/router";
-import Head from "next/head";
 import Image from "next/image";
 import useShopS3Upload from "../../hooks/useShopS3Upload";
 import useCommon from "../../hooks/useCommon";
@@ -16,7 +15,7 @@ export default function Info() {
     const shopS3Upload = useShopS3Upload();
     const [prflPrvImg, setPrflPrvImg] = useState('');
     const [popupClass, setPopupClass] = useState('');
-    const [joinInfoLS, setJoinInfoLS] = useState('');
+    const [joinInfoLS, setJoinInfoLS] = useState({});
     const [joinInfo, setJoinInfo] = useState({
         userId: '',
         userPw: '',
@@ -24,15 +23,22 @@ export default function Info() {
         addrTxt: '<span>주소를 입력해주세요.</span>',
         shprSfitdText: '',
         profile: '',
+        appToken: '',
         shprDelyPosDtc: '10',
         isLogin: false,
     });
     const {goPage} = useCommon();
 
     useEffect(() => {
+        console.log(joinInfo)
+    }, [joinInfo]);
 
-        setJoinInfoLS(cmm.util.getLs(cmm.Cont.JOIN_INFO));
-        setJoinInfo(prevState => ({...prevState, appToken: !!cmm.util.getLs(cmm.Cont.APP_TOKEN) ? cmm.util.getLs(cmm.Cont.APP_TOKEN) : ''}));
+    useEffect(() => {
+
+        if(!!cmm.util.getLs(cmm.Cont.JOIN_INFO)) {
+
+            setJoinInfoLS(cmm.util.getLs(cmm.Cont.JOIN_INFO));
+        }
 
         if(!cmm.checkLogin() && !cmm.util.getLs(cmm.Cont.JOIN_INFO).userCrctno) {
             cmm.alert('로그인정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {
@@ -150,7 +156,10 @@ export default function Info() {
 
                     cmm.ajax({
                         url: '/api/cmm/join',
-                        data: param,
+                        data: {
+                            ...param,
+                            appToken: (!!cmm.util.getLs(cmm.Cont.APP_TOKEN) ? cmm.util.getLs(cmm.Cont.APP_TOKEN) : ''),
+                        },
                         success: res => {
 
                             cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);

@@ -142,12 +142,14 @@ export default async function handler(req, res) {
                  , AA.ODER_USER_ID
                  , AA.ODER_KD
                  , AA.ODER_DRC_LDTN_YN
+                 , AA.ODER_DELY_SLCT_VAL
                  , DATE_FORMAT(AA.ODER_DELY_YMD, '%m월 %d일') AS ODER_DELY_YMD
-                 , AA.ODER_DELY_YMD
                  , AA.ODER_DELY_HH
                  , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
                  , FORMAT(fnGetDelyDtcAmt(AA.ODER_USER_ID, AA.SHPR_ID, AA.ODER_DELY_DTC) + AA.ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
                  , fnGetAtchFileList(AA.SHOP_RRSN_ATCH_FILE_UUID) AS SHOP_RRSN_ATCH_FILE_LIST
+                 , AA.ODER_PIUP_FRCS_MI
+                 , AA.BTCH_ACP_PGRS_MI
               FROM (
                 SELECT AA.ODER_MNGR_RGI_YN
                      , CASE WHEN AA.ODER_MNGR_RGI_YN = 'Y'
@@ -173,6 +175,8 @@ export default async function handler(req, res) {
                      , ST_DISTANCE_SPHERE(POINT(BB.SHOP_ADDR_LAT, BB.SHOP_ADDR_LOT), POINT(EE.SHPR_ADDR_LAT, EE.SHPR_ADDR_LOT)) AS SLIN_DTC
                      , EE.SHPR_ID
                      , AA.ODER_DRC_LDTN_YN
+                     , AA.ODER_PIUP_FRCS_MI
+                     , TIMESTAMPDIFF(MINUTE, AA.ODER_REQ_APV_DT, NOW()) AS BTCH_ACP_PGRS_MI
                   FROM T_ODER_USER_INFO AA
                        INNER JOIN T_SHOP_MAG BB
                     ON BB.SHOP_ID = AA.SHOP_ID

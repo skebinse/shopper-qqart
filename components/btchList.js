@@ -40,7 +40,7 @@ export default function BtchList({list, href, classNm = '', noDataTxt = '현재 
                             <p>
                                 {item.DELY_AMT}원
                                 {item.ODER_DRC_LDTN_YN === 'N' &&
-                                    <span>(카드 단말기 필요)</span>
+                                    <span>카드 단말기 필요</span>
                                 }
                             </p>
                             <Image alt={'상점 이미지'} src={item.SHOP_RRSN_ATCH_FILE_LIST} width={40} height={40} />
@@ -65,11 +65,24 @@ export default function BtchList({list, href, classNm = '', noDataTxt = '현재 
                         {item.ODER_DELY_SLCT_VAL !== 'imm' &&
                             <p>{createTagResv(item)}</p>
                         }
-                        <h5>
-                            <Image alt={'주문 정보'} src={'/assets/images/icon/iconStore.png'} width={20} height={20} />
-                            {item.SHOP_NM}
-                        </h5>
-                        <p>{item.SHOP_FULL_ADDR}</p>
+                        <div className={'storeArea'}>
+                                <h5>
+                                    {item.SHOP_NM}
+                                </h5>
+                                <p>{item.SHOP_FULL_ADDR}</p>
+                        </div>
+                        {!!item.ODER_PIUP_FRCS_MI && item.ODER_PIUP_FRCS_MI - item.BTCH_ACP_PGRS_MI >= 0 &&
+                            <div className={'piupRemMi ing'}>
+                                    <Image alt={'주문 정보'} src={'/assets/images/icon/iconWarningType01.svg'} width={17} height={17} />
+                                    {Math.abs(item.ODER_PIUP_FRCS_MI - item.BTCH_ACP_PGRS_MI)}분 남음
+                            </div>
+                        }
+                        {!!item.ODER_PIUP_FRCS_MI && item.ODER_PIUP_FRCS_MI - item.BTCH_ACP_PGRS_MI < 0 &&
+                            <div className={'piupRemMi'}>
+                                        <Image alt={'주문 정보'} src={'/assets/images/icon/iconWarning.svg'} width={17} height={17} />
+                                        {Math.abs(item.ODER_PIUP_FRCS_MI - item.BTCH_ACP_PGRS_MI)}분 지남
+                            </div>
+                        }
                         {isDtptBtn &&
                             <button type={'button'} className={'button'}>상세보기</button>
                         }

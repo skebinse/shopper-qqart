@@ -24,6 +24,9 @@ em{font-style: normal;}
 .naviStep span.on{background-color: #02B763;}
 .naviStep span:last-child{margin-right: 0;}
 
+/* select */
+select{border: 1px #CDCDCD solid;border-radius: 7px;padding: 15px 40px 15px 16px;;background: url('/assets/images/icon/iconSelectBoxArrow.svg') no-repeat;background-position-x: calc(100% - 16px);background-position-y: center;appearance: none;}
+
 /* button */
 .button{border: none;background-color: #02B763;border-radius: 12px;color: #FFFFFF;font-size: 16px;font-weight: 700;width: 100%;padding: 14px 0;}
 .button.white{background-color: #FFFFFF;border: #E4E4E4 1px solid;color: #333333;}
@@ -55,13 +58,18 @@ input[type=checkbox]:disabled+label{opacity: 0.5;}
 .btch li.noData p {padding-top: 45px;color: #333333;font-size: 20px;}
 .btch li .priceArea{display: flex;align-items: center;}
 .btch li .priceArea p{color: #333333;font-size: 24px;font-weight: 700;flex: 1;}
-.btch li .priceArea span{color:red;font-size: 14px;padding-left: 5px}
+.btch li .priceArea p span{color:#F4997A;font-size: 14px;padding-left: 5px}
 .btch li .priceArea img{border-radius: 100%;object-fit: cover;}
 .btch li .delyArea{padding-top: 12px;display: flex;align-items: center;}
 .btch li .delyArea div{flex: 1;display: flex;align-items: center;justify-content: center;}
 .btch li .delyArea div:first-child{justify-content: flex-start;}
 .btch li .delyArea div span{color: #333333;font-size: 16px;padding-left: 10px;}
 .btch li .delyArea div.orderNo span{padding-left: 5px;}
+.btch li .storeArea{background: #F8F8F8;border-radius: 8px;padding: 16px;margin-top: 16px;}
+.btch li .storeArea h5{padding: 0;}
+.btch li .piupRemMi{background: #FEF5F2;border-radius: 8px;padding: 16px;margin-top: 8px;font-weight: 700;font-size: 14px;line-height: 22px;color: #F4997A;display: flex;align-items: center;justify-content: center;}
+.btch li .piupRemMi.ing{background: #E6F8EF;color: #4ECD92;}
+.btch li .piupRemMi img{padding-right: 8px;}
 .btch li h5{color: #333333;font-size: 16px;font-weight: 700;padding-top: 12px;display: flex;align-items: center;}
 .btch li h5 img{padding-right: 12px;}
 .btch li p{color: #333333;font-size: 16px;padding-top: 5px;}

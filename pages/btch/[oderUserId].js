@@ -68,12 +68,18 @@ export default function OderUserId(props) {
      */
     const btchAcpClick = () => {
 
-        cmm.confirm('정말로 배치를 수락하시겠습니까?', () => {
+        cmm.confirm(`배치를 수락하시려면\n 픽업예상 시간을 선택해 주세요.
+                        <select id="oderPiupFrcsMi" style="width: 100%;margin-top: 16px;">
+                            <option value="15">15분</option>
+                            <option value="30">30분</option>
+                            <option value="45">45분</option>
+                        </select>`, () => {
 
             cmm.ajax({
                 url: '/api/btch/btchAcp',
                 data: {
-                    oderUserId
+                    oderUserId,
+                    oderPiupFrcsMi: oderPiupFrcsMi.value
                 },
                 success: res => {
 

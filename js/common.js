@@ -174,8 +174,6 @@ const cmm = {
 
             elet.addEventListener('click', e => {
 
-                document.querySelector('#alertArea').innerHTML = '';
-
                 // 확인
                 if(e.target.classList.length === 1) {
 
@@ -184,6 +182,8 @@ const cmm = {
 
                     !!cancelCallback && cancelCallback();
                 }
+
+                document.querySelector('#alertArea').innerHTML = '';
             });
         });
     },

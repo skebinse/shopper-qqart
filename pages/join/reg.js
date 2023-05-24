@@ -214,7 +214,7 @@ export default function Info() {
                     <li>
                         <label>아이디</label>
                         <div>
-                            <input value={joinInfo.userId} onChange={e => setJoinInfo(prevState => ({...prevState, userId: e.target.value}))} type="text"  placeholder="아이디를 입력해주세요" />
+                            <input value={joinInfo.userId} onChange={e => setJoinInfo(prevState => ({...prevState, userId: e.target.value}))} type="text"  placeholder="아이디를 입력해주세요" maxLength={8} />
                         </div>
                     </li>
                     <li>

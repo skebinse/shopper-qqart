@@ -13,9 +13,9 @@ export default async function handler(req, res) {
                 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
             }
 
-            const query = 'CALL spInsShprBtchAcp(fnDecrypt(?, ?), ?)';
+            const query = 'CALL spInsShprBtchAcp(fnDecrypt(?, ?), ?, ?)';
 
-            const [rows, fields] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.oderUserId]);
+            const [rows, fields] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.oderUserId, param.oderPiupFrcsMi]);
 
             if(!rows[0]) {
 

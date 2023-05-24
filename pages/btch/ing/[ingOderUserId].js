@@ -237,6 +237,15 @@ export default function IngOderUserId() {
                                     <p style={{color: 'red'}}>카드 단말기 필요</p>
                                 </li>
                             }
+                            {!!btchInfo.ODER_PIUP_FRCS_MI &&
+                                <li>
+                                    <h5>픽업남은시간</h5>
+                                    <p>
+                                        <Image style={{paddingLeft: 0,paddingRight: '8px'}} alt={'주문 정보'} src={'/assets/images/icon/iconWarning.svg'} width={17} height={17} />
+                                        <span style={{color: '#F4997A'}}>{Math.abs(btchInfo.ODER_PIUP_FRCS_MI - btchInfo.BTCH_ACP_PGRS_MI)}분 {btchInfo.ODER_PIUP_FRCS_MI - btchInfo.BTCH_ACP_PGRS_MI >= 0 ? '남음' : '지남'}</span>
+                                    </p>
+                                </li>
+                            }
                             <li>
                                 <h5>스토어</h5>
                                 <p>{btchInfo.SHOP_NM}</p>

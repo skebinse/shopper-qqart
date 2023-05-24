@@ -218,7 +218,7 @@ export default function Info() {
                     <li>
                         <label>닉네임</label>
                         <div>
-                            <input id="ncnm" value={joinInfo.userNcnm} onChange={e => setJoinInfo(prevState => ({...prevState, userNcnm: e.target.value}))} type="text"  placeholder="닉네임을 입력해주세요" />
+                            <input id="ncnm" value={joinInfo.userNcnm} onChange={e => setJoinInfo(prevState => ({...prevState, userNcnm: e.target.value}))} type="text"  placeholder="닉네임을 입력해주세요" maxLength={8} />
                         </div>
                     </li>
                     <li>

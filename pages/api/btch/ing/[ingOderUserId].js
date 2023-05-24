@@ -9,77 +9,79 @@ export default async function handler(req, res) {
         console.log(ingOderUserId);
 
         let query = `
-           SELECT EE.SHOP_ID
+           SELECT AA.SHOP_ID
                  , BB.SHOP_NM
-                 , AA.PROD_ID
-                 , AA.SPBK_AMT
-                 , AA.SPBK_DELY_DTC
-                 , AA.SPBK_DELY_ACTL_DTC
+                 , CC.PROD_ID
+                 , CC.SPBK_AMT
+                 , CC.SPBK_DELY_DTC
+                 , CC.SPBK_DELY_ACTL_DTC
                  , BB.SHOP_SBSN_STRT_HH
                  , BB.SHOP_SBSN_END_HH
-                 , AA.SPBK_PGRS_STAT
+                 , CC.SPBK_PGRS_STAT
                  , fnGetAtchFileList(BB.SHOP_RRSN_ATCH_FILE_UUID) AS SHOP_IMG
-                 , fnGetAtchFileList(CC.PROD_RRSN_ATCH_FILE_UUID) AS PROD_IMG
-                 , fnGetAtchFileList(EE.ODER_PIUP_VCHR_ATCH_FILE_UUID) AS PIUP_VCHR_IMG
-                 , AA.SPBK_CCN
-                 , AA.SPBK_ID
-                 , IFNULL(CC.PROD_NM, AA.SPBK_HNDC_PROD_NM) AS PROD_NM
-                 , IFNULL(CC.PROD_DIS_PRICE, CC.PROD_PRICE) AS PROD_PRICE
+                 , fnGetAtchFileList(DD.PROD_RRSN_ATCH_FILE_UUID) AS PROD_IMG
+                 , fnGetAtchFileList(AA.ODER_PIUP_VCHR_ATCH_FILE_UUID) AS PIUP_VCHR_IMG
+                 , CC.SPBK_CCN
+                 , CC.SPBK_ID
+                 , IFNULL(DD.PROD_NM, CC.SPBK_HNDC_PROD_NM) AS PROD_NM
+                 , IFNULL(DD.PROD_DIS_PRICE, DD.PROD_PRICE) AS PROD_PRICE
                  , BB.SHOP_ADDR_LAT
                  , BB.SHOP_ADDR_LOT
-                 , DD.USER_ADDR_LAT
-                 , DD.USER_ADDR_LOT
-                 , DD.USER_NCNM
-                 , DD.USER_CPHONE_NO
+                 , EE.USER_ADDR_LAT
+                 , EE.USER_ADDR_LOT
+                 , EE.USER_NCNM
+                 , EE.USER_CPHONE_NO
                  , CONCAT(BB.SHOP_ADDR, ' ' , BB.SHOP_DTPT_ADDR) AS SHOP_FULL_ADDR
                  , fnGetCdNm(BB.SHOP_RRV_KD) AS SHOP_RRV_NM
-                 , EE.ODER_USER_ID
-                 , EE.ODER_ACPP_NM
-                 , EE.ODER_ACPP_CPHONE_NO
-                 , EE.ODER_DELY_STDO_CD
-                 , EE.ODER_DELYD_ZIPC
-                 , EE.ODER_DELY_ADDR
-                 , EE.ODER_DELY_DTPT_ADDR
-                 , CONCAT(EE.ODER_DELY_ADDR, ' ' , EE.ODER_DELY_DTPT_ADDR) AS USER_FULL_ADDR
-                 , EE.ODER_DELY_ADDR_LAT
-                 , EE.ODER_DELY_ADDR_LOT
-                 , EE.ODER_DELY_SLCT_VAL
-                 , EE.ODER_DELY_REQ_MATT
-                 , EE.ODER_DELY_NNME_YN
-                 , EE.ODER_RRV_ID
-                 , EE.USER_CARD_ID
-                 , DATE_FORMAT(EE.ODER_DELY_YMD, '%y년 %m월 %d일') AS ODER_DELY_YMD
-                 , EE.ODER_DELY_HH
-                 , EE.ODER_USER_COUP_ID_LIS
-                 , EE.ODER_USE_POIN
-                 , EE.ODER_LDTN_SLCT_VAL
-                 , EE.ODER_DELY_DTC
-                 , EE.ODER_JOIN_ENTH_PW
-                 , EE.ODER_DELY_ADIX_DIS_AMT
-                 , EE.ODER_KD
-                 , EE.ODER_PGRS_STAT
-                 , EE.ODER_REQ_APV_MNGR_ID
-                 , EE.ODER_DRC_LDTN_YN
-                 , CASE WHEN EE.ODER_MNGR_RGI_YN = 'Y'
-                     THEN DATE_FORMAT(EE.ODER_REQ_YMD, '%y년 %m월 %d일 %H:%i')
-                   ELSE DATE_FORMAT(DATE_ADD(EE.ODER_REQ_YMD, INTERVAL 9 HOUR), '%y년 %m월 %d일 %H:%i') END AS ODER_REQ_YMD
-            FROM T_ODER_USER_INFO EE
+                 , AA.ODER_USER_ID
+                 , AA.ODER_ACPP_NM
+                 , AA.ODER_ACPP_CPHONE_NO
+                 , AA.ODER_DELY_STDO_CD
+                 , AA.ODER_DELYD_ZIPC
+                 , AA.ODER_DELY_ADDR
+                 , AA.ODER_DELY_DTPT_ADDR
+                 , CONCAT(AA.ODER_DELY_ADDR, ' ' , AA.ODER_DELY_DTPT_ADDR) AS USER_FULL_ADDR
+                 , AA.ODER_DELY_ADDR_LAT
+                 , AA.ODER_DELY_ADDR_LOT
+                 , AA.ODER_DELY_SLCT_VAL
+                 , AA.ODER_DELY_REQ_MATT
+                 , AA.ODER_DELY_NNME_YN
+                 , AA.ODER_RRV_ID
+                 , AA.USER_CARD_ID
+                 , DATE_FORMAT(AA.ODER_DELY_YMD, '%y년 %m월 %d일') AS ODER_DELY_YMD
+                 , AA.ODER_DELY_HH
+                 , AA.ODER_USER_COUP_ID_LIS
+                 , AA.ODER_USE_POIN
+                 , AA.ODER_LDTN_SLCT_VAL
+                 , AA.ODER_DELY_DTC
+                 , AA.ODER_JOIN_ENTH_PW
+                 , AA.ODER_DELY_ADIX_DIS_AMT
+                 , AA.ODER_KD
+                 , AA.ODER_PGRS_STAT
+                 , AA.ODER_REQ_APV_MNGR_ID
+                 , AA.ODER_DRC_LDTN_YN
+                 , CASE WHEN AA.ODER_MNGR_RGI_YN = 'Y'
+                     THEN DATE_FORMAT(AA.ODER_REQ_YMD, '%y년 %m월 %d일 %H:%i')
+                   ELSE DATE_FORMAT(DATE_ADD(AA.ODER_REQ_YMD, INTERVAL 9 HOUR), '%y년 %m월 %d일 %H:%i') END AS ODER_REQ_YMD
+                 , AA.ODER_PIUP_FRCS_MI
+                 , TIMESTAMPDIFF(MINUTE, AA.ODER_REQ_APV_DT, NOW()) AS BTCH_ACP_PGRS_MI
+            FROM T_ODER_USER_INFO AA
                  INNER JOIN T_SHOP_MAG BB
-              ON BB.SHOP_ID = EE.SHOP_ID
-                 LEFT OUTER JOIN T_USER_SPBK AA
+              ON BB.SHOP_ID = AA.SHOP_ID
+                 LEFT OUTER JOIN T_USER_SPBK CC
+              ON AA.USER_ID = CC.USER_ID
+             AND AA.SHOP_ID = CC.SHOP_ID
+             AND AA.ODER_USER_ID = CC.ODER_USER_ID
+             AND CC.SPBK_PGRS_STAT = '02'
+                 LEFT OUTER JOIN T_SHOP_CL_PROD DD
+              ON DD.PROD_ID = CC.PROD_ID
+                 LEFT OUTER JOIN T_USER_INFO EE
               ON EE.USER_ID = AA.USER_ID
-             AND EE.SHOP_ID = AA.SHOP_ID
-             AND EE.ODER_USER_ID = AA.ODER_USER_ID
-             AND AA.SPBK_PGRS_STAT = '02'
-                 LEFT OUTER JOIN T_SHOP_CL_PROD CC
-              ON CC.PROD_ID = AA.PROD_ID
-                 LEFT OUTER JOIN T_USER_INFO DD
-              ON DD.USER_ID = EE.USER_ID
-           WHERE EE.ODER_USER_ID = ?
-             AND EE.SHPR_ID = fnDecrypt(?, ?)
-        ORDER BY AA.SPBK_HNDC_PROD_NM
+           WHERE AA.ODER_USER_ID = ?
+             AND AA.SHPR_ID = fnDecrypt(?, ?)
+        ORDER BY CC.SPBK_HNDC_PROD_NM
         `;
-
+        console.log(query)
         const [rows] = await conn.query(query, [ingOderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
         res.status(200).json(result(rows));

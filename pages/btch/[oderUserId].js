@@ -73,6 +73,7 @@ export default function OderUserId(props) {
                             <option value="15">15분</option>
                             <option value="30">30분</option>
                             <option value="45">45분</option>
+                            <option value="60">60분</option>
                         </select>`, () => {
 
             cmm.ajax({

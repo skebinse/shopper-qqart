@@ -125,7 +125,7 @@ export default async function handler(req, res) {
              WHERE (AA.PROD_CNT > 0 OR AA.ODER_KD = 'PIUP')
                AND AA.SLIN_DTC < AA.SHPR_DELY_POS_DTC * 1000
                AND AA.ODER_REQ_YMD BETWEEN CONCAT(DATE_FORMAT(NOW(), '%Y-%m-%d'), ' 00:00:00') AND CONCAT(DATE_FORMAT(NOW(), '%Y-%m-%d'), ' 23:59:59')
-          ORDER BY AA.ODER_REQ_YMD DESC
+          ORDER BY AA.ODER_REQ_YMD
             `;
 
                 [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
@@ -158,6 +158,7 @@ export default async function handler(req, res) {
                      , AA.ODER_RPRE_NO
                      , AA.ODER_USER_ID
                      , AA.ODER_DELY_DTC
+                     , AA.ODER_REQ_APV_DT
                      , AA.ODER_KD
                      , AA.ODER_SHPR_TIP_AMT
                      , AA.ODER_DELY_SLCT_VAL
@@ -205,8 +206,8 @@ export default async function handler(req, res) {
                    AND AA.ODER_REQ_YMD IS NOT NULL
                    AND AA.ODER_PGRS_STAT IN ('03', '04', '05')
                ) AA
-      ORDER BY AA.ODER_DELY_ADDR
-             , AA.ODER_REQ_YMD DESC
+      ORDER BY AA.ODER_REQ_APV_DT
+             , AA.ODER_REQ_YMD
         `;
 
             const [rows2] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);

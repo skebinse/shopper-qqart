@@ -6,8 +6,6 @@ export default async function handler(req, res) {
 
         const {ingOderUserId} = req.query;
 
-        console.log(ingOderUserId);
-
         let query = `
            SELECT AA.SHOP_ID
                  , BB.SHOP_NM
@@ -60,6 +58,8 @@ export default async function handler(req, res) {
                  , AA.ODER_PGRS_STAT
                  , AA.ODER_REQ_APV_MNGR_ID
                  , AA.ODER_DRC_LDTN_YN
+                 , AA.ODER_DELY_MENS
+                 , AA.ODER_DELY_ARTG
                  , CASE WHEN AA.ODER_MNGR_RGI_YN = 'Y'
                      THEN DATE_FORMAT(AA.ODER_REQ_YMD, '%y년 %m월 %d일 %H:%i')
                    ELSE DATE_FORMAT(DATE_ADD(AA.ODER_REQ_YMD, INTERVAL 9 HOUR), '%y년 %m월 %d일 %H:%i') END AS ODER_REQ_YMD

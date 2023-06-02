@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/index.module.css";
-import React from "react";
+import React, {useEffect} from "react";
 
 export default function BtchList({list, href, classNm = '', noDataTxt = '현재 접수된 배치가 없습니다.',
                                      isDtptBtn = false, isIngBtch = false, isInit}) {
@@ -34,7 +34,12 @@ export default function BtchList({list, href, classNm = '', noDataTxt = '현재 
                 </li>
             }
             {list.map((item, idx) => (
-                <li key={'btch' + idx}>
+                <li key={'btch' + idx} className={[
+                    (!!item.BTCH_RGI_PGRS_MI && item.BTCH_RGI_PGRS_MI >= 0) ? 'ing' :
+                        (((!!item.BTCH_RGI_PGRS_MI && item.BTCH_RGI_PGRS_MI < 0)) ? 'warning' : ''),
+                    isIngBtch ? 'btchIng' : 'btchWait'
+                ].join(' ')
+                }>
                     <Link href={href + '/' + item.ODER_USER_ID}>
                         <div className={'priceArea'}>
                             <p>
@@ -71,16 +76,28 @@ export default function BtchList({list, href, classNm = '', noDataTxt = '현재 
                                 </h5>
                                 <p>{item.SHOP_FULL_ADDR}</p>
                         </div>
+                        {!!item.BTCH_RGI_PGRS_MI && item.BTCH_RGI_PGRS_MI >= 0 &&
+                            <div className={'piupRemMi'}>
+                                <Image alt={'주문 정보'} src={'/assets/images/icon/iconWarningType01.svg'} width={17} height={17} />
+                                {Math.abs(item.BTCH_RGI_PGRS_MI)}분 남음
+                            </div>
+                        }
+                        {!!item.BTCH_RGI_PGRS_MI && item.BTCH_RGI_PGRS_MI < 0 &&
+                            <div className={'piupRemMi'}>
+                                <Image alt={'주문 정보'} src={'/assets/images/icon/iconWarning.svg'} width={17} height={17} />
+                                {Math.abs(item.BTCH_RGI_PGRS_MI)}분 지남
+                            </div>
+                        }
                         {!!item.ODER_PIUP_FRCS_MI && item.ODER_PIUP_FRCS_MI - item.BTCH_ACP_PGRS_MI >= 0 &&
                             <div className={'piupRemMi ing'}>
-                                    <Image alt={'주문 정보'} src={'/assets/images/icon/iconWarningType01.svg'} width={17} height={17} />
-                                    {Math.abs(item.ODER_PIUP_FRCS_MI - item.BTCH_ACP_PGRS_MI)}분 남음
+                                <Image alt={'주문 정보'} src={'/assets/images/icon/iconWarningType01.svg'} width={17} height={17} />
+                                {Math.abs(item.ODER_PIUP_FRCS_MI - item.BTCH_ACP_PGRS_MI)}분 남음
                             </div>
                         }
                         {!!item.ODER_PIUP_FRCS_MI && item.ODER_PIUP_FRCS_MI - item.BTCH_ACP_PGRS_MI < 0 &&
                             <div className={'piupRemMi'}>
-                                        <Image alt={'주문 정보'} src={'/assets/images/icon/iconWarning.svg'} width={17} height={17} />
-                                        {Math.abs(item.ODER_PIUP_FRCS_MI - item.BTCH_ACP_PGRS_MI)}분 지남
+                                <Image alt={'주문 정보'} src={'/assets/images/icon/iconWarning.svg'} width={17} height={17} />
+                                {Math.abs(item.ODER_PIUP_FRCS_MI - item.BTCH_ACP_PGRS_MI)}분 지남
                             </div>
                         }
                         {isDtptBtn &&

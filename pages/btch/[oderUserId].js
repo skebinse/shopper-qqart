@@ -68,12 +68,20 @@ export default function OderUserId(props) {
      */
     const btchAcpClick = () => {
 
+        let options = `<option value="15">15분</option>
+                        <option value="30" selected >30분</option>
+                        <option value="45">45분</option>
+                        <option value="60">60분</option>`;
+
+        // 급한 배달건일 경우
+        if(!!btchInfo.BTCH_RGI_PGRS_MI) {
+
+            options = `<option value="${btchInfo.BTCH_RGI_PGRS_MI}">${btchInfo.BTCH_RGI_PGRS_MI}분</option>`;
+        }
+
         cmm.confirm(`배치를 수락하시려면\n 픽업예상 시간을 선택해 주세요.
                         <select id="oderPiupFrcsMi" style="width: 100%;margin-top: 16px;">
-                            <option value="15">15분</option>
-                            <option value="30" selected >30분</option>
-                            <option value="45">45분</option>
-                            <option value="60">60분</option>
+                            ${options}
                         </select>`, () => {
 
             cmm.ajax({
@@ -135,6 +143,18 @@ export default function OderUserId(props) {
                     <h5>배달 시간</h5>
                     <p>{btchInfo.oderDelySlctVal}</p>
                 </li>
+                {!!btchInfo.ODER_DELY_ARTG &&
+                    <li>
+                        <h5>배달 물품</h5>
+                        <p>{btchInfo.ODER_DELY_ARTG}</p>
+                    </li>
+                }
+                {!!btchInfo.ODER_DELY_MENS &&
+                    <li>
+                        <h5>배달 수단</h5>
+                        <p>{btchInfo.ODER_DELY_MENS}</p>
+                    </li>
+                }
                 <li>
                     <h5>스토어 주소</h5>
                     <p>

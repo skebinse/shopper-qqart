@@ -40,26 +40,28 @@
 .join .content ul.cetino li div a{color: #333333;font-size: 14px;width: 60px;padding-left: 24px;}
 
 .join .content ul.info{padding: 24px 0 6px;}
-.join .content ul.info li{border-radius: 12px;border: solid 1px #E4E4E4;padding: 11px 17px 16px;margin-top: 14px;background-color: #ffffff;}
-.join .content ul.info li.error{margin-bottom: 40px;border: solid 2px #F4997A;}
-.join .content ul.info li label{color: #333333;font-size: 13px;}
-.join .content ul.info li > span{color: #333333;font-size: 17px;display: block;padding-top: 25px;opacity: 0.5}
-.join .content ul.info li > span.error{display: none;}
-.join .content ul.info li.error > span.error{display: block;color: #F4997A;font-size: 14px;font-weight: 300;position: absolute;}
-.join .content ul.info li > div > div{display: flex;padding-top: 21px;}
-.join .content ul.info li > div > div span{color: #333333;font-size: 17px;flex: 1;}
-.join .content ul.info li > div > div button{border: 1px solid #CDCDCD;border-radius: 6px;color: #333333;font-size: 12px;padding: 7px 16px;background-color: #ffffff;}
-.join .content ul.info li > div > span{color: #333333;font-size: 17px;display: block;padding-top: 10px;}
-.join .content ul.info li > div > input{border: none;color: #333333;font-size: 17px;margin-top: 14px;width: 100%;}
-.join .content ul.info li > div > input:focus{outline: none;}
-.join .content ul.info li > div > input::placeholder{font-weight: 300;opacity: 0.5;}
-.join .content ul.info li > div > button{background-color: #FFFFFF;border: 1px solid #CDCDCD;color: #333333;font-size: 12px;padding: 7px 17px;border-radius: 6px;}
-.join .content ul.info li > div > textarea{border: none;color: #333333;font-size: 17px;margin-top: 14px;width: 100%;}
-.join .content ul.info li > div > textarea::placeholder{font-weight: 300;opacity: 0.5;}
-.join .content ul.info li > div > span{color: #333333;font-size: 17px;font-weight: 300;text-align: right;}
-.join .content ul.info li > div.zip{display: flex;align-items: center;padding-top: 10px;}
-.join .content ul.info li > div.zip p{flex: 1;padding-right: 10px;}
-.join .content ul.info li > div.zip p span{color: #333333;opacity: 0.5;font-size: 17px;font-weight: 300;}
+.join .content ul.info > li{border-radius: 12px;border: solid 1px #E4E4E4;padding: 11px 17px 16px;margin-top: 14px;background-color: #ffffff;}
+.join .content ul.info > li.error{margin-bottom: 40px;border: solid 2px #F4997A;}
+.join .content ul.info > li label{color: #333333;font-size: 13px;}
+.join .content ul.info > li > span{color: #333333;font-size: 17px;display: block;padding-top: 25px;opacity: 0.5}
+.join .content ul.info > li > span.error{display: none;}
+.join .content ul.info > li.error > span.error{display: block;color: #F4997A;font-size: 14px;font-weight: 300;position: absolute;}
+.join .content ul.info > li > div > div{display: flex;padding-top: 21px;}
+.join .content ul.info > li > div > div span{color: #333333;font-size: 17px;flex: 1;}
+.join .content ul.info > li > div > div button{border: 1px solid #CDCDCD;border-radius: 6px;color: #333333;font-size: 12px;padding: 7px 16px;background-color: #ffffff;}
+.join .content ul.info > li > div > span{color: #333333;font-size: 17px;display: block;padding-top: 10px;}
+.join .content ul.info > li > div > input{border: none;color: #333333;font-size: 17px;margin-top: 14px;width: 100%;}
+.join .content ul.info > li > div > input:focus{outline: none;}
+.join .content ul.info > li > div > input::placeholder{font-weight: 300;opacity: 0.5;}
+.join .content ul.info > li > div > button{background-color: #FFFFFF;border: 1px solid #CDCDCD;color: #333333;font-size: 12px;padding: 7px 17px;border-radius: 6px;}
+.join .content ul.info > li > div > textarea{border: none;color: #333333;font-size: 17px;margin-top: 14px;width: 100%;}
+.join .content ul.info > li > div > textarea::placeholder{font-weight: 300;opacity: 0.5;}
+.join .content ul.info > li > div > span{color: #333333;font-size: 17px;font-weight: 300;text-align: right;}
+.join .content ul.info > li > div ul {padding: 10px 0;}
+.join .content ul.info > li > div ul li{padding: 5px 0;}
+.join .content ul.info > li > div.zip{display: flex;align-items: center;padding-top: 10px;}
+.join .content ul.info > li > div.zip p{flex: 1;padding-right: 10px;}
+.join .content ul.info > li > div.zip p span{color: #333333;opacity: 0.5;font-size: 17px;font-weight: 300;}
 .join .content .profile{text-align: center;}
 .join .content .profile img{width: 96px;height: 96px;border-radius: 100%;display: block;margin: 0 auto;margin: 32px auto 13px;object-fit: cover;}
 .join .content .profile input{display: none}

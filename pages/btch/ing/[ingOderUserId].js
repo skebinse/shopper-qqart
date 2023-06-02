@@ -291,6 +291,18 @@ export default function IngOderUserId() {
                                     <p>{btchInfo.ODER_RRV_ID}</p>
                                 </li>
                             }
+                            {!!btchInfo.ODER_DELY_ARTG &&
+                                <li>
+                                    <h5>배달 물품</h5>
+                                    <p>{btchInfo.ODER_DELY_ARTG}</p>
+                                </li>
+                            }
+                            {!!btchInfo.ODER_DELY_MENS &&
+                                <li>
+                                    <h5>배달 수단</h5>
+                                    <p>{btchInfo.ODER_DELY_MENS}</p>
+                                </li>
+                            }
                         </>
                     }
                     {btchInfo.ODER_PGRS_STAT === '05' &&
@@ -354,6 +366,18 @@ export default function IngOderUserId() {
                                 <li>
                                     <h5>주문시 요청 사항</h5>
                                     <p>{btchInfo.ODER_DELY_REQ_MATT}</p>
+                                </li>
+                            }
+                            {!!btchInfo.ODER_DELY_ARTG &&
+                                <li>
+                                    <h5>배달 물품</h5>
+                                    <p>{btchInfo.ODER_DELY_ARTG}</p>
+                                </li>
+                            }
+                            {!!btchInfo.ODER_DELY_MENS &&
+                                <li>
+                                    <h5>배달 수단</h5>
+                                    <p>{btchInfo.ODER_DELY_MENS}</p>
                                 </li>
                             }
                         </>

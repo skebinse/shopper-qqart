@@ -56,10 +56,14 @@ export default async function handler(req, res) {
                  , EE.ODER_KD
                  , EE.ODER_SHPR_TIP_AMT
                  , EE.ODER_DRC_LDTN_YN
-                 , CASE WHEN EE.ODER_MNGR_RGI_YN = 'Y'
-                     THEN DATE_FORMAT(EE.ODER_REQ_YMD, '%y년 %m월 %d일 %H:%i')
-                   ELSE DATE_FORMAT(DATE_ADD(EE.ODER_REQ_YMD, INTERVAL 9 HOUR), '%y년 %m월 %d일 %H:%i') END AS ODER_REQ_YMD
+                 , EE.ODER_URG_DELY_MI
+                 , EE.ODER_DELY_MENS
+                 , EE.ODER_DELY_ARTG
                  , FORMAT(fnGetDelyDtcAmt(EE.ODER_USER_ID, fnDecrypt(?, ?), EE.ODER_DELY_DTC) + EE.ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
+                 , DATE_FORMAT(fnGetOderReqYmd(EE.ODER_MNGR_RGI_YN, EE.ODER_REQ_YMD), '%y년 %m월 %d일 %H:%i') AS ODER_REQ_YMD
+                 , CASE WHEN EE.ODER_URG_DELY_MI != '' THEN 
+                    EE.ODER_URG_DELY_MI - TIMESTAMPDIFF(MINUTE, fnGetOderReqYmd(EE.ODER_MNGR_RGI_YN, EE.ODER_REQ_YMD), DATE_ADD(NOW(), INTERVAL 9 HOUR))
+                   ELSE '' END AS BTCH_RGI_PGRS_MI
             FROM T_ODER_USER_INFO EE
                  INNER JOIN T_SHOP_MAG BB
               ON BB.SHOP_ID = EE.SHOP_ID

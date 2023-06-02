@@ -221,6 +221,31 @@ export default function Info() {
                             <input id="ncnm" value={joinInfo.userNcnm} onChange={e => setJoinInfo(prevState => ({...prevState, userNcnm: e.target.value}))} type="text"  placeholder="닉네임을 입력해주세요" maxLength={8} />
                         </div>
                     </li>
+                    {/*<li>*/}
+                    {/*    <label>배달수단</label>*/}
+                    {/*    <div>*/}
+                    {/*        <ul>*/}
+                    {/*            <li>*/}
+                    {/*                <input id={'mensRdok01'} type={'radio'} name={'shprDelyMens'} value={'전체'} />*/}
+                    {/*                <label htmlFor={'mensRdok01'}>*/}
+                    {/*                    전체*/}
+                    {/*                </label>*/}
+                    {/*            </li>*/}
+                    {/*            <li>*/}
+                    {/*                <input id={'mensRdok02'} type={'radio'} name={'shprDelyMens'} value={'차량'} />*/}
+                    {/*                <label htmlFor={'mensRdok02'}>*/}
+                    {/*                    차량*/}
+                    {/*                </label>*/}
+                    {/*            </li>*/}
+                    {/*            <li>*/}
+                    {/*                <input id={'mensRdok03'} type={'radio'} name={'shprDelyMens'} value={'오토바이'} />*/}
+                    {/*                <label htmlFor={'mensRdok03'}>*/}
+                    {/*                    오토바이*/}
+                    {/*                </label>*/}
+                    {/*            </li>*/}
+                    {/*        </ul>*/}
+                    {/*    </div>*/}
+                    {/*</li>*/}
                     <li>
                         <label>자기소개</label>
                         <div>

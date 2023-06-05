@@ -9,7 +9,7 @@ export default function BottomMenu({idx}) {
                 <li className={idx === 0 ? 'on' : ''}>
                     <Link href={'/'}>
                         <Image alt={'홈 아이콘'} src={`/assets/images/btn/btnMenuBtch${idx === 0 ? 'On' : ''}.svg`} width={24} height={24} />
-                        <span>홈</span>
+                        <span>배치</span>
                     </Link>
                 </li>
                 <li className={idx === 1 ? 'on' : ''}>

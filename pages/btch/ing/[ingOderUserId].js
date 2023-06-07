@@ -132,7 +132,7 @@ export default function IngOderUserId() {
                 title = '배달 시작'
 
                 if(vchrImgList.length === 0) {
-                    cmm.alert('아직 사진을 등록하지 않았습니다.\n사진을 등록해주세요.', () => {
+                    cmm.alert('아직 영수증사진을 등록하지 않았습니다.\n영수증사진을 등록해주세요.', () => {
 
                         inpVchrFile.click();
                     });

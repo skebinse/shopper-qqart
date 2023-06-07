@@ -20,6 +20,8 @@ export default function IngOderUserId() {
     const [piupImgList, setPiupImgList] = useState([]);
     const [vchrImgList, setVchrImgList] = useState([]);
     const [vchrPrvImgList, setVchrPrvImgList] = useState([]);
+    const [cplImgList, setCplImgList] = useState([]);
+    const [cplPrvImgList, setCplPrvImgList] = useState([]);
     const {goPage} = useCommon();
     const shopS3Upload = useShopS3Upload();
     const {ingOderUserId} = router.query;
@@ -90,7 +92,7 @@ export default function IngOderUserId() {
         // 배달 완료
         if(btchInfo.ODER_PGRS_STAT === '05') {
 
-            if(vchrImgList.length === 0) {
+            if(cplImgList.length === 0) {
 
                 cmm.alert('아직 사진을 등록하지 않았습니다.\n사진을 등록해주세요.', () => {
 
@@ -100,7 +102,8 @@ export default function IngOderUserId() {
 
                 cmm.confirm('<span>벨누르기 완료</span>하셨나요?\n벨누르기 하지 않으면 배달 완료로\n 인정이 되지 않을 수 있으니 꼭 벨을 눌러주세요', () => {
 
-                    shopS3Upload(vchrImgList, res => {
+                    // 업로드
+                    shopS3Upload(cplImgList, res => {
 
                         cmm.ajax({
                             url: '/api/btch/ing/btchComp',
@@ -127,27 +130,87 @@ export default function IngOderUserId() {
             if(btchInfo.ODER_PGRS_STAT === '03' && btchInfo.ODER_KD === 'PIUP') {
                 msg = '스토어에 도착하셨나요?\n지금부터 배달을 시작하시겠습니까?';
                 title = '배달 시작'
+
+                if(vchrImgList.length === 0) {
+                    cmm.alert('아직 사진을 등록하지 않았습니다.\n사진을 등록해주세요.', () => {
+
+                        inpVchrFile.click();
+                    });
+
+                    return;
+                }
             }
 
+            // 업로드
             cmm.confirm(msg, () => {
 
-                cmm.ajax({
-                    url: '/api/btch/ing/btchStat',
-                    data: {
-                        oderUserId: ingOderUserId,
-                        oderPgrsStat: (btchInfo.ODER_PGRS_STAT === '03' && btchInfo.ODER_KD === 'DELY') ? '04' : '05',
-                    },
-                    success: res => router.reload()
-                });
+                // 배치 상태 변경
+                const callBtchStatChg = atchFileUuid => {
+
+                    cmm.ajax({
+                        url: '/api/btch/ing/btchStat',
+                        data: {
+                            oderUserId: ingOderUserId,
+                            oderPgrsStat: (btchInfo.ODER_PGRS_STAT === '03' && btchInfo.ODER_KD === 'DELY') ? '04' : '05',
+                            atchFileUuid
+                        },
+                        success: res => router.reload()
+                    });
+                };
+
+                // 픽업일 경우
+                if(btchInfo.ODER_PGRS_STAT === '03' && btchInfo.ODER_KD === 'PIUP') {
+
+                    // 업로드
+                    shopS3Upload(vchrImgList, res => {
+
+                        // 배치 상태 변경
+                        callBtchStatChg(res.atchFileUuid);
+                    });
+                } else {
+
+                    // 배치 상태 변경
+                    callBtchStatChg();
+                }
             }, null, title);
         }
     };
 
     /**
-     * 영수증 변경
+     * 완료 이미지 변경
      * @param e
      */
     const fileChage = e => {
+
+        if(e.target.files.length > 0) {
+
+            let fileIdx = 0, uploadFile;
+            cmm.loading(true);
+            for(let i = 0; i < e.target.files.length; i++) {
+
+                uploadFile = e.target.files[i];
+
+                // 썸네일
+                cmm.util.getThumbFile({file: uploadFile, maxSize: 1024, type: uploadFile.type}).then(imgData => {
+                    fileIdx++;
+                    setCplImgList(prevState => [...prevState, imgData.blob]);
+                    setCplPrvImgList(prevState => [...prevState, window.URL.createObjectURL(imgData.blob)]);
+
+                    if(fileIdx === e.target.files.length) {
+
+                        e.target.value = '';
+                        cmm.loading(false);
+                    }
+                });
+            }
+        }
+    };
+
+    /**
+     * 영수증 이미지 변경
+     * @param e
+     */
+    const fileVchrChage = e => {
 
         if(e.target.files.length > 0) {
 
@@ -174,11 +237,22 @@ export default function IngOderUserId() {
     };
 
     /**
-     * 이미지 삭제
+     * 완료 이미지 삭제
      *
      * @param idx
      */
     const imageDelHandler = imgIdx => {
+
+        setCplPrvImgList(prevState => prevState.filter((value, idx) => idx !== imgIdx));
+        setCplImgList(prevState => prevState.filter((value, idx) => idx !== imgIdx));
+    };
+
+    /**
+     * 영수증 이미지 삭제
+     *
+     * @param idx
+     */
+    const imageVchrDelHandler = imgIdx => {
 
         setVchrPrvImgList(prevState => prevState.filter((value, idx) => idx !== imgIdx));
         setVchrImgList(prevState => prevState.filter((value, idx) => idx !== imgIdx));
@@ -301,6 +375,26 @@ export default function IngOderUserId() {
                                 <li>
                                     <h5>배달 수단</h5>
                                     <p>{btchInfo.ODER_DELY_MENS}</p>
+                                </li>
+                            }
+                            {btchInfo.ODER_KD === 'PIUP' &&
+                                <li className={styles.uploadArea}>
+                                    <h5>사진 업로드</h5>
+                                    <input type={'file'} id={'inpVchrFile'} onChange={fileVchrChage} multiple={true} accept={'image/*'} />
+                                    <div>
+                                        {vchrPrvImgList.map((url, idx) => (
+                                            <div key={'img' + idx}>
+                                                <Image className={styles.vchrImg} src={url} alt={'영수증 사진'} width={96} height={72} />
+                                                <Image className={styles.del} src={'/assets/images/btn/btnDel.svg'} alt={'영수증 사진'} width={20} height={20} onClick={() => imageVchrDelHandler(idx)} />
+                                            </div>
+                                        ))}
+                                        <label htmlFor={'inpVchrFile'}>
+                                            <div className={styles.upload}>
+                                                <Image src={'/assets/images/btn/btnCamera.svg'} width={21.5} height={17} alt={'카메라'} />
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <p>영수증 사진을 업로드해주세요.</p>
                                 </li>
                             }
                         </>
@@ -436,7 +530,7 @@ export default function IngOderUserId() {
                             <h5>사진 업로드</h5>
                             <input type={'file'} id={'inpFile'} onChange={fileChage} multiple={true} accept={'image/*'} />
                             <div>
-                                {vchrPrvImgList.map((url, idx) => (
+                                {cplPrvImgList.map((url, idx) => (
                                     <div key={'img' + idx}>
                                         <Image className={styles.vchrImg} src={url} alt={'영수증 사진'} width={96} height={72} />
                                         <Image className={styles.del} src={'/assets/images/btn/btnDel.svg'} alt={'영수증 사진'} width={20} height={20} onClick={() => imageDelHandler(idx)} />

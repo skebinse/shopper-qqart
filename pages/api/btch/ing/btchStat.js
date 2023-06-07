@@ -22,12 +22,13 @@ export default async function handler(req, res) {
                     UPDATE T_ODER_USER_INFO
                        SET ODER_PGRS_STAT = ?
                          , ODER_DELY_STRT_DT = NOW()
+                         , ODER_PIUP_VCHR_ATCH_FILE_UUID = ?
                      WHERE ODER_USER_ID = ?
                        AND SHPR_ID = fnDecrypt(?, ?)
                     `;
             }
 
-            const [rows, fields] = await conn.query(query, [param.oderPgrsStat, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            const [rows, fields] = await conn.query(query, [param.oderPgrsStat, param.atchFileUuid, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
             if(param.oderPgrsStat === '05') {
 

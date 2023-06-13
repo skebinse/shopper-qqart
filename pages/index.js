@@ -93,7 +93,7 @@ export default function Index(props) {
 
     const appTest = () => {
 
-        if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
+        if(process.env.NEXT_PUBLIC_RUN_MODE === 'dev') {
 
             if(cmm.isApp()) {
 

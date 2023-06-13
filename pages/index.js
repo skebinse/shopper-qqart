@@ -93,10 +93,13 @@ export default function Index(props) {
 
     const appTest = () => {
 
-        // if(cmm.isApp()) {
-        //
-        //     webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "getlocation","callback": "window.getPosition"}));
-        // }
+        if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
+
+            if(cmm.isApp()) {
+
+                webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "getlocation","callback": "window.getPosition"}));
+            }
+        }
     };
 
     const appTest2 = () => {

@@ -66,7 +66,7 @@ export default function AnncDtpt() {
             document.querySelector('body').appendChild(cordovaJs);
         }
 
-    }, []);
+    }, [bbadId]);
 
     return (
         <div className={styles.anncDtpt}>

@@ -5,6 +5,7 @@ import Image from "next/image";
 import {Swiper, SwiperSlide} from "swiper/react";
 import 'swiper/css';
 import Head from "next/head";
+import Script from "next/script";
 
 export default function CompDtpt({id, onClose}) {
 
@@ -44,9 +45,7 @@ export default function CompDtpt({id, onClose}) {
 
     return (
         <div className={styles.compDtptDiv + ' ' + (id > -1 ? styles.active : '')}>
-            <Head>
-                <script src="/assets/js/blueimp-gallery.min.js" defer></script>
-            </Head>
+            <Script src="/assets/js/blueimp-gallery.min.js" defer></Script>
             <div className={styles.titleDiv}>
                 <h5>완료된 배치 상세내역</h5>
                 <Image alt={'닫기'} src={'/assets/images/icon/iconClose.svg'} width={22} height={22} onClick={onClose} />

@@ -8,12 +8,7 @@ export default function Index() {
     const [tabIdx, setTabIdx] = useState(0);
     const [anncList, setAnncList] = useState([]);
 
-    /**
-     * 게시판 리스트 조회
-     * @param bbadKd
-     */
-    const callAnncList = () => {
-
+    useEffect(() => {
         cmm.ajax({
             url: `/api/mag/anncs`,
             data: {
@@ -24,11 +19,6 @@ export default function Index() {
                 setAnncList(res);
             }
         });
-    };
-
-    useEffect(() => {
-        // 게시판 리스트 조회
-        callAnncList();
     }, [tabIdx]);
 
     return (
@@ -47,10 +37,6 @@ export default function Index() {
 }
 
 function List({list, noDataTxt}) {
-
-    useEffect(() => {
-        console.log(list)
-    }, []);
 
     return <ul>
         {list.length === 0 &&

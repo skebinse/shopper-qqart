@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import cmm from "../../js/common";
 import styles from "../../styles/mypage.module.css"
 import Image from "next/image";
@@ -85,7 +85,7 @@ export default function BtchAdj() {
      * 조회 일자 변경
      * @param kd
      */
-    const searchDateChange = kd => {
+    const searchDateChange = useCallback( kd => {
 
         // 오늘일자 보다 큰 경우 return
         if(kd === 'next' && searchDate.toDt >= cmm.date.getToday('-')) return;
@@ -101,7 +101,7 @@ export default function BtchAdj() {
         });
 
         setIsLastDate(toDt >= cmm.date.getToday('-'));
-    }
+    }, [searchDate]);
 
     /**
      * 상세 열기

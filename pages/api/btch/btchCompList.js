@@ -52,7 +52,7 @@ export default async function handler(req, res) {
              WHERE ((AA.PROD_CNT + AA.SPBK_CNT) > 0 OR AA.ODER_KD = 'PIUP')
           ORDER BY AA.ODER_DELY_CPL_DT DESC
                 `;
-            console.log(query)
+
             const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.formDt + ' 00:00:00', param.toDt + ' 23:59:59']);
 
             res.status(200).json(result(rows));

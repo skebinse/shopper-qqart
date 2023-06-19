@@ -67,14 +67,18 @@ export default function MyPage() {
                     <button type={'button'} className={'button short white'} >개인정보 수정</button>
                 </Link>
             </div>
-            {/*<ul className={'ulType01'}>*/}
-            {/*    <li>*/}
-            {/*        <Link href={'/btch/comp'}>*/}
-            {/*            <h5>완료된 배치</h5>*/}
-            {/*            <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />*/}
-            {/*        </Link>*/}
-            {/*    </li>*/}
-            {/*</ul>*/}
+            <ul className={'ulType01'}>
+                <li>
+                    <Link href={'/mag/annc'}>
+                        <h5>공지사항/이벤트</h5>
+                        <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
+                    </Link>
+                    {/*<Link href={'/btch/comp'}>*/}
+                    {/*    <h5>완료된 배치</h5>*/}
+                    {/*    <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />*/}
+                    {/*</Link>*/}
+                </li>
+            </ul>
             <hr />
             <div className={styles.logout}>
                 <button type={'button'} onClick={logoutClick}>로그아웃</button>

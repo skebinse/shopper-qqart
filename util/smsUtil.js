@@ -78,8 +78,10 @@ export async function adminSendNtfy(conn, options) {
 
         const [rows] = await conn.query(query, [options.oderUserId]);
 
-        notification.title = '배치 수락';
-        notification.body = `${rows[0].SHPR_NCNM}쇼퍼가 ${rows[0].SHOP_NM}${!!rows[0].ODER_RPRE_NO ? ' 접수번호 : ' + rows[0].ODER_RPRE_NO : ''} 수락하였습니다`;
+        if(!!rows[0]) {
+            notification.title = '배치 수락';
+            notification.body = `${rows[0].SHPR_NCNM}쇼퍼가 ${rows[0].SHOP_NM}${!!rows[0].ODER_RPRE_NO ? ' 접수번호 : ' + rows[0].ODER_RPRE_NO : ''} 수락하였습니다`;
+        }
     } else if(options.ntfyType === 'delyStrt') {
 
         const query =`
@@ -96,8 +98,10 @@ export async function adminSendNtfy(conn, options) {
 
         const [rows] = await conn.query(query, [options.oderUserId]);
 
-        notification.title = '배달 시작';
-        notification.body = `${rows[0].SHPR_NCNM}쇼퍼가 ${rows[0].SHOP_NM}${!!rows[0].ODER_RPRE_NO ? ' 접수번호 : ' + rows[0].ODER_RPRE_NO : ''} 배달을 시작하였습니다.`;
+        if(!!rows[0]) {
+            notification.title = '배달 시작';
+            notification.body = `${rows[0].SHPR_NCNM}쇼퍼가 ${rows[0].SHOP_NM}${!!rows[0].ODER_RPRE_NO ? ' 접수번호 : ' + rows[0].ODER_RPRE_NO : ''} 배달을 시작하였습니다.`;
+        }
     } else if(options.ntfyType === 'delyCpl') {
 
         const query =`
@@ -114,8 +118,10 @@ export async function adminSendNtfy(conn, options) {
 
         const [rows] = await conn.query(query, [options.oderUserId]);
 
-        notification.title = '배달 완료';
-        notification.body = `${rows[0].SHPR_NCNM}쇼퍼가 ${rows[0].SHOP_NM}${!!rows[0].ODER_RPRE_NO ? ' 접수번호 : ' + rows[0].ODER_RPRE_NO : ''} 배달을 완료하였습니다.`;
+        if(!!rows[0]) {
+            notification.title = '배달 완료';
+            notification.body = `${rows[0].SHPR_NCNM}쇼퍼가 ${rows[0].SHOP_NM}${!!rows[0].ODER_RPRE_NO ? ' 접수번호 : ' + rows[0].ODER_RPRE_NO : ''} 배달을 완료하였습니다.`;
+        }
     } else if(options.ntfyType === 'btchCan') {
 
         const query =`
@@ -132,23 +138,28 @@ export async function adminSendNtfy(conn, options) {
 
         const [rows] = await conn.query(query, [options.oderUserId]);
 
-        notification.title = '배달 완료';
-        notification.body = `${rows[0].SHPR_NCNM}쇼퍼가 ${rows[0].SHOP_NM}${!!rows[0].ODER_RPRE_NO ? ' 접수번호 : ' + rows[0].ODER_RPRE_NO : ''} 수락을 취소하였습니다.`;
+        if(!!rows[0]) {
+            notification.title = '배달 완료';
+            notification.body = `${rows[0].SHPR_NCNM}쇼퍼가 ${rows[0].SHOP_NM}${!!rows[0].ODER_RPRE_NO ? ' 접수번호 : ' + rows[0].ODER_RPRE_NO : ''} 수락을 취소하였습니다.`;
+        }
     }
 
-    fetch('https://fcm.googleapis.com/fcm/send', {
-        'method': 'POST',
-        'headers': {
-            'Authorization': 'key=' + process.env.NEXT_PUBLIC_FCM_KEY,
-            'Content-Type': 'application/json'
-        },
-        'body': JSON.stringify({
-            'notification': notification,
-            'to': `/topics/${process.env.NEXT_PUBLIC_RUN_MODE === 'prod' ? '' : process.env.NEXT_PUBLIC_RUN_MODE}admin`
-        })
-    }).then(function(response) {
-        console.log('seccess :' + response);
-    }).catch(function(error) {
-        console.error('error :' + error);
-    });
+    if(!!notification.body) {
+
+        fetch('https://fcm.googleapis.com/fcm/send', {
+            'method': 'POST',
+            'headers': {
+                'Authorization': 'key=' + process.env.NEXT_PUBLIC_FCM_KEY,
+                'Content-Type': 'application/json'
+            },
+            'body': JSON.stringify({
+                'notification': notification,
+                'to': `/topics/${process.env.NEXT_PUBLIC_RUN_MODE === 'prod' ? '' : process.env.NEXT_PUBLIC_RUN_MODE}admin`
+            })
+        }).then(function(response) {
+            console.log('seccess :' + response);
+        }).catch(function(error) {
+            console.error('error :' + error);
+        });
+    }
 }

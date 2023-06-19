@@ -81,7 +81,7 @@ export default async function handler(req, res) {
              AND AA.SHPR_ID = fnDecrypt(?, ?)
         ORDER BY CC.SPBK_HNDC_PROD_NM
         `;
-        console.log(query)
+
         const [rows] = await conn.query(query, [ingOderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
         res.status(200).json(result(rows));

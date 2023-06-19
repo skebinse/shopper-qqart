@@ -6,6 +6,7 @@ export default async function handler(req, res) {
     await getConnectPool(async conn => {
 
         const param = req.body;
+        let queryParam = [];
 
         try {
 
@@ -17,6 +18,8 @@ export default async function handler(req, res) {
                    AND SHPR_ID = fnDecrypt(?, ?)
                 `;
 
+            queryParam = [param.oderPgrsStat, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY];
+
             if(param.oderPgrsStat === '05') {
                 query =`
                     UPDATE T_ODER_USER_INFO
@@ -26,9 +29,11 @@ export default async function handler(req, res) {
                      WHERE ODER_USER_ID = ?
                        AND SHPR_ID = fnDecrypt(?, ?)
                     `;
+
+                queryParam = [param.oderPgrsStat, param.atchFileUuid, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY];
             }
 
-            const [rows, fields] = await conn.query(query, [param.oderPgrsStat, param.atchFileUuid, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            const [rows, fields] = await conn.query(query, queryParam);
 
             if(param.oderPgrsStat === '05') {
 

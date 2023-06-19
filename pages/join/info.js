@@ -268,7 +268,7 @@ export default function Info() {
                     <li>
                         <label>반경(Km)</label>
                         <div>
-                            <input id="shprDelyPosDtc" value={joinInfo.shprDelyPosDtc} onChange={e => setJoinInfo(prevState => ({...prevState, shprDelyPosDtc: e.target.value}))} type="text" />
+                            <input id="shprDelyPosDtc" value={joinInfo.shprDelyPosDtc} onChange={e => setJoinInfo(prevState => ({...prevState, shprDelyPosDtc: e.target.value}))} type="number" />
                         </div>
                     </li>
                 </ul>

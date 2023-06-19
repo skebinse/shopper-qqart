@@ -159,3 +159,8 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 .webPushDiv div div button:last-child{border-bottom-right-radius: 12px;background-color: #787878;color: #FFFFFF;}
 .webPushDiv div div button.d-none + button{border-bottom-left-radius: 12px;}
 .webPushDiv img{position: absolute;top: 5px;right: 5px;}
+
+/* Tab */
+.tabArea{display: flex;padding: 24px 17px 9px;}
+
+.ck.ck-editor__main>.ck-editor__editable{border: none;padding: 0;}

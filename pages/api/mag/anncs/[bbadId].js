@@ -7,20 +7,26 @@ export default async function handler(req, res) {
         const {bbadId} = req.query;
 
         try {
-            const query = `
-            SELECT BBAD_KD
-                 , BBAD_TRGT
-                 , BBAD_TITL
-                 , BBAD_TEXT
-                 , BBAD_BLLT_STRT_YMD
-                 , BBAD_BLLT_END_YMD
-                 , DATE_FORMAT(RGI_DT, '%Y-%m-%d') AS RGI_DT
-              FROM T_BBAD_MAG
-             WHERE BBAD_TRGT IN ('전체', '쇼퍼')
-               AND BBAD_ID = ?
+
+            let query = 'UPDATE T_BBAD_MAG SET BBAD_INQCN = BBAD_INQCN + 1 WHERE BBAD_ID = ?';
+
+            let [rows, fields] = await conn.query(query, [bbadId]);
+
+            query = `
+                SELECT BBAD_KD
+                     , BBAD_TRGT
+                     , BBAD_TITL
+                     , BBAD_TEXT
+                     , BBAD_BLLT_STRT_YMD
+                     , BBAD_BLLT_END_YMD
+                     , DATE_FORMAT(RGI_DT, '%Y-%m-%d') AS RGI_DT
+                  FROM T_BBAD_MAG
+                 WHERE BBAD_TRGT IN ('전체', '쇼퍼')
+                   AND BBAD_EXPO_YN = 'Y'
+                   AND BBAD_ID = ?
             `;
 
-            const [rows, fields] = await conn.query(query, [bbadId]);
+            [rows, fields] = await conn.query(query, [bbadId]);
 
             res.status(200).json(result(rows[0]));
         } catch (e) {

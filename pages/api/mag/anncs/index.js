@@ -17,8 +17,10 @@ export default async function handler(req, res) {
                      , DATE_FORMAT(RGI_DT, '%Y-%m-%d') AS RGI_DT
                   FROM T_BBAD_MAG
                  WHERE BBAD_TRGT IN ('전체', '쇼퍼')
+                   AND BBAD_EXPO_YN = 'Y'
                    AND BBAD_KD = ?
-              ORDER BY RGI_DT DESC
+              ORDER BY BBAD_SEQ
+                     , RGI_DT DESC
             `;
 
             const [rows, fields] = await conn.query(query, [param.bbadKd]);

@@ -95,13 +95,12 @@ export default function BtchAdj() {
 
         // 조회 일자 변경
         searchDateChange();
-
         document.body.classList.add(styles.bodyBg);
         return () => {
 
             document.body.classList.remove(styles.bodyBg);
         };
-    }, [searchDateChange]);
+    }, []);
 
     /**
      * 상세 열기

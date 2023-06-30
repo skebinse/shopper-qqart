@@ -18,7 +18,6 @@ export default function CphoneAhrz(props) {
 
     // init
     useEffect(() => {
-        console.log('init')
         setAuthNoHash(cmm.util.getLs(cmm.Cont.JOIN_INFO).authNoHash);
         setCphoneNo(cmm.util.getLs(cmm.Cont.JOIN_INFO).cphoneNo);
 

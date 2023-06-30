@@ -20,7 +20,6 @@ const messaging = firebase.messaging();
 
 const notiClick = e => {
 
-    console.log(e);
     e.notification.close();
     if(!!e.notification.data && !!e.notification.data.FCM_MSG && !!e.notification.data.FCM_MSG.data
         && !!e.notification.data.FCM_MSG.data['gcm.notification.data']) {
@@ -36,7 +35,7 @@ self.removeEventListener('notificationclick', notiClick);
 self.addEventListener('notificationclick', notiClick);
 
 messaging.onBackgroundMessage((payload) => {
-    console.log('[firebase-messaging-sw.js] Received background message ', payload);
+
     // Customize notification here
     const notificationOptions = {
         body: payload.notification.body,

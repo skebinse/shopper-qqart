@@ -48,5 +48,4 @@ export default async function Upload(req, res) {
             res.status(500).json(result('', '9999', '오류가 발생했습니다.'));
         }
     });
-    console.log(fileList)
 }

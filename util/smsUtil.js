@@ -158,7 +158,7 @@ export async function adminSendNtfy(conn, options) {
                 'to': `/topics/${process.env.NEXT_PUBLIC_RUN_MODE === 'prod' ? '' : process.env.NEXT_PUBLIC_RUN_MODE}admin`
             })
         }).then(function(response) {
-            console.log('seccess :' + response);
+
         }).catch(function(error) {
             console.error('error :' + error);
         });

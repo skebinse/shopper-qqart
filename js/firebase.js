@@ -66,7 +66,6 @@ export default function firebaseInit() {
                             if (response.status < 200 || response.status >= 400) {
                                 throw 'Error subscribing to topic: '+response.status + ' - ' + response.text();
                             }
-                            console.log(response)
                         }).catch(error => {
                             console.error(error);
                         });

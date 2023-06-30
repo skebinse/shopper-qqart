@@ -7,7 +7,6 @@ export default async function handler(req, res) {
 
   await getConnectPool(async conn => {
 
-      console.log(req.query);
       try {
           const [rows, fields] = await conn.query('select * from T_USER_INFO limit 10');
 

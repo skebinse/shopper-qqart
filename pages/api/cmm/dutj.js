@@ -5,7 +5,6 @@ export default async function handler(req, res) {
     await getConnectPool(async conn => {
 
         const param = req.body;
-        console.log(param)
         try {
 
             // 금일 업무시작 여부

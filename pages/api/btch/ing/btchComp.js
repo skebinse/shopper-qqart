@@ -25,7 +25,6 @@ export default async function handler(req, res) {
                 },
                 success: res => {
 
-                    console.log(res)
                 }
             });
 

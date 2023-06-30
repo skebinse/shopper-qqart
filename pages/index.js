@@ -28,27 +28,41 @@ export default function Index(props) {
         if(!isInit) {
 
             cmm.loading(true);
+            let isAjaxResult = false;
+            let isTimeResult = false;
+
+            cmm.ajax({
+                url: '/api/btch/btchList',
+                isLoaing: false,
+                success: res => {
+
+                    if(res.isDutjStrt) {
+
+                        setBtchInfo({btchList: res.btchList, btchAcpList: res.btchAcpList});
+                    } else {
+
+                        setLoginInfo(cmm.getLoginInfo());
+                    }
+
+                    setDnone('');
+                    setIsDutjStrt(res.isDutjStrt);
+
+                    isAjaxResult = true;
+                    if(isTimeResult) {
+
+                        cmm.loading(false);
+                    }
+                }
+            });
+
             setTimeout(() => {
 
-                cmm.ajax({
-                    url: '/api/btch/btchList',
-                    isLoaing: false,
-                    success: res => {
+                isTimeResult = true;
+                if(isAjaxResult) {
 
-                        if(res.isDutjStrt) {
+                    cmm.loading(false);
+                }
 
-                            setBtchInfo({btchList: res.btchList, btchAcpList: res.btchAcpList});
-                        } else {
-
-                            setLoginInfo(cmm.getLoginInfo());
-                        }
-
-                        setDnone('');
-                        setIsDutjStrt(res.isDutjStrt);
-                    }
-                });
-
-                cmm.loading(false);
             }, 950);
         } else {
 

@@ -11,7 +11,7 @@ export default function MyApp({ Component, pageProps }) {
     useEffect(() => {
 
         if(!!("Notification" in window)) {
-            firebaseInit();
+            // firebaseInit();
         }
 
         // 채널톡

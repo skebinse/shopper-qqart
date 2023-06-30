@@ -5,10 +5,12 @@ import styles from "../../styles/mypage.module.css"
 import BottomMenu from "../../components/bottomMenu";
 import Link from "next/link";
 import useCommon from "../../hooks/useCommon";
+import {useRouter} from "next/router";
 
 export default function MyPage() {
 
     const [myInfo, setMyInfo] = useState({});
+    const router = useRouter();
     const {goPage} = useCommon();
 
     useEffect(() => {
@@ -53,6 +55,26 @@ export default function MyPage() {
         });
     };
 
+    /**
+     * 업무 종료
+     */
+    const dutjEndHanler = () => {
+
+        cmm.confirm('업무를 종료하시겠습니까?', () => {
+
+            cmm.ajax({
+                url: '/api/cmm/dutj',
+                data: {
+                    type: 'end'
+                },
+                success: res => {
+
+                    router.push('/');
+                }
+            });
+        });
+    };
+
     return (
         <div className={styles.mypage}>
             <div className={styles.head}>
@@ -66,6 +88,9 @@ export default function MyPage() {
                 <Link href={'/join/info'}>
                     <button type={'button'} className={'button short white'} >개인정보 수정</button>
                 </Link>
+            </div>
+            <div className={styles.dutjEndDiv}>
+                <button type="button" className={'button'} onClick={dutjEndHanler}>업무 종료</button>
             </div>
             <ul className={'ulType01'}>
                 <li>

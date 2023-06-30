@@ -119,7 +119,7 @@ const cmm = {
      */
     checkLogin: () => {
 
-        const isLogin = !!cmm.util.getLs(cmm.Cont.LOGIN_INFO) && !!cmm.util.getLs(cmm.Cont.LOGIN_INFO).ENC_SHPR_ID;
+        const isLogin = !!window && !!cmm.util.getLs(cmm.Cont.LOGIN_INFO) && !!cmm.util.getLs(cmm.Cont.LOGIN_INFO).ENC_SHPR_ID;
 
         return isLogin;
     },

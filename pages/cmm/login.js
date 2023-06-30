@@ -5,10 +5,12 @@ import cmm from "../../js/common";
 import useCommon from "../../hooks/useCommon";
 import Link from "next/link";
 import Script from "next/script";
+import {useRouter} from "next/router";
 
 export default function Login(props) {
 
     const {goPage} = useCommon();
+    const router = useRouter();
     const [loginInfo, setLoginInfo] = useState({userId: '', userPw: ''});
     const [labelStyle, setLabelStyle] = useState(['', '']);
 
@@ -75,7 +77,7 @@ export default function Login(props) {
                 } else {
 
                     cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
-                    location.href = '/';
+                    router.push('/');
                 }
             }
         });

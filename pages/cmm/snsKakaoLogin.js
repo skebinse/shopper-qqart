@@ -1,10 +1,12 @@
 import React, {useEffect} from "react";
 import cmm from "../../js/common";
 import useCommon from "../../hooks/useCommon";
+import {useRouter} from "next/router";
 
 export default function Login(props) {
 
     const {goPage} = useCommon();
+    const router = useRouter();
 
     useEffect(() => {
 
@@ -46,7 +48,7 @@ export default function Login(props) {
                     } else {
 
                         cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
-                        location.href = '/';
+                        router.push('/');
                     }
                 }
             });

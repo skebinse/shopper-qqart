@@ -4,6 +4,7 @@
 .mypage .head img{border-radius: 100%;object-fit: cover;}
 .mypage .head p{color: #373454;font-size: 13px;padding-left: 16px;flex: 1;}
 .mypage .head p span{display: block;color: #02B763;font-size: 18px;font-weight: 500;}
+.mypage .dutjEndDiv{padding: 6px 16px 24px;background-color: #FFFFFF;}
 .mypage hr{background-color: #E4E4E4;height: 1px;width: 100%;margin: 0;border: none;}
 .mypage .logout{padding-top: 8px;}
 .mypage .logout button{color: #333333;font-size: 15px;background-color: #FFFFFF;border: none;padding: 20px 0;width: 100%;}

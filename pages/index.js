@@ -144,7 +144,7 @@ export default function Index(props) {
                 callBtchList();
             }
         });
-    }, []);
+    }, [callBtchList]);
 
     useEffect(() => {
 
@@ -175,7 +175,7 @@ export default function Index(props) {
                     console.error(err);
                 });
         };
-    }, []);
+    }, [callDutjStrt]);
 
     /**
      * 업무시작 클릭
@@ -227,7 +227,7 @@ export default function Index(props) {
                 <div className={styles.dutjStrtDiv}>
                     <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={80} height={17} />
                     <div>
-                        <img alt={'프로필사진'} src={loginInfo.SHPR_PRFL_FILE} />
+                        <Image alt={'프로필사진'} src={loginInfo.SHPR_PRFL_FILE} width={80} height={80} />
                         <p>
                             {loginInfo.SHPR_NCNM}님
                             <b>오늘 하루도 힘내세요!</b>

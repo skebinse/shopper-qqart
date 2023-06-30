@@ -69,18 +69,6 @@ export default function BtchAdj() {
         }
     }, [searchDate]);
 
-    useEffect(() => {
-
-        // 조회 일자 변경
-        searchDateChange();
-
-        document.body.classList.add(styles.bodyBg);
-        return () => {
-
-            document.body.classList.remove(styles.bodyBg);
-        };
-    }, []);
-
     /**
      * 조회 일자 변경
      * @param kd
@@ -102,6 +90,18 @@ export default function BtchAdj() {
 
         setIsLastDate(toDt >= cmm.date.getToday('-'));
     }, [searchDate]);
+
+    useEffect(() => {
+
+        // 조회 일자 변경
+        searchDateChange();
+
+        document.body.classList.add(styles.bodyBg);
+        return () => {
+
+            document.body.classList.remove(styles.bodyBg);
+        };
+    }, [searchDateChange]);
 
     /**
      * 상세 열기

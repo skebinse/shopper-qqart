@@ -23,7 +23,7 @@ export function smsSend(receiver, msg, callback) {
                 receiver,
                 user_id: 'justdoeng',
                 key: 'pe1a6ws0h5z4f2zqj3ewm4xt3whqnto3',
-                sender: '1855-0582',
+                sender: '1533-9171',
                 rdate: '',
                 rtime: '',
                 title: '[퀵퀵카트]',
@@ -39,6 +39,7 @@ export function smsSend(receiver, msg, callback) {
                 }
             },
             error: res => {
+                console.error('smsUtil', res);
                 !!callback && callback(false);
             },
         });

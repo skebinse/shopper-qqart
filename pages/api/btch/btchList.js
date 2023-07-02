@@ -45,22 +45,22 @@ export default async function handler(req, res) {
         let row;
 
         // 금일 업무시작 여부
-        // query = `
-        // SELECT COUNT(*) AS CNT
-        //   FROM T_SHPR_DUTJ_MAG
-        //  WHERE SHPR_ID = fnDecrypt(?, ?)
-        //    AND SHPR_DUTJ_YMD = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y-%m-%d')
-        //    AND SHPR_DUTJ_END_DT IS NULL
-        // `;
-        //
-        // [row] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
-        //
-        // if(row[0].CNT === 0) {
-        //
-        //     res.status(200).json(result({isDutjStrt: false}));
-        //
-        //     return;
-        // }
+        query = `
+        SELECT COUNT(*) AS CNT
+          FROM T_SHPR_DUTJ_MAG
+         WHERE SHPR_ID = fnDecrypt(?, ?)
+           AND SHPR_DUTJ_YMD = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y-%m-%d')
+           AND SHPR_DUTJ_END_DT IS NULL
+        `;
+
+        [row] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+
+        if(row[0].CNT === 0) {
+
+            res.status(200).json(result({isDutjStrt: false}));
+
+            return;
+        }
 
         // 배치 취소 패널티 확인
         query = `

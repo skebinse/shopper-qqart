@@ -55,7 +55,7 @@ export default async function handler(req, res) {
             await conn.commit();
 
             // admin 알림 발송
-            adminSendNtfy(conn, {ntfyType: 'btchCan', oderUserId: param.oderUserId});
+            adminSendNtfy(conn, {ntfyType: 'btchCan', oderUserId: param.oderUserId, encUserId: req.headers['x-enc-user-id'], encKey: process.env.ENC_KEY});
 
             res.status(200).json(result(rows));
         } catch (e) {

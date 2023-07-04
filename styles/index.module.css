@@ -28,3 +28,12 @@
 .index .dutjStrtDiv > div span img{width: 12px;height: 12px;padding-right: 4px;}
 .index .dutjStrtDiv > div span em{text-decoration: underline;padding-left: 3px;}
 
+.index .entApvDiv{width: 100%;height: calc(100% - 65px);position: fixed;top: 0;left: 0;background-color: #02B763;z-index: 100000000;}
+.index .entApvDiv > img{position: absolute;right: 24px;top: 24px;}
+.index .entApvDiv .textDiv{position: relative;top: 45%;transform: translateY(-50%);padding: 0 32px;}
+.index .entApvDiv .textDiv > h3{font-size: 24px;line-height: 32px;letter-spacing: -0.72px;color: #FFFFFF;padding-top: 32px;}
+.index .entApvDiv .textDiv > h3 em{font-weight: 700;}
+.index .entApvDiv .textDiv > p{font-size: 15px;line-height: 23px;color: #FFFFFF;padding-top: 12px;font-weight: 500;}
+.index .entApvDiv .kakaoDiv{display: inline-flex;padding: 16px 19px;align-items: center;border-radius: 12px;background: #00A95B;width: calc(100% - 96px);position: fixed;bottom: 113px;left: 32px;}
+.index .entApvDiv .kakaoDiv p{color: #FFF;font-size: 13px;font-weight: 500;line-height: 21px;padding-left: 12px;}
+.index .entApvDiv .kakaoDiv p a{color: #FFF;font-size: 13px;font-weight: 500;line-height: 21px;}

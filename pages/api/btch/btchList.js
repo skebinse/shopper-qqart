@@ -44,20 +44,37 @@ export default async function handler(req, res) {
 
         let row;
 
+        // 가입 승인 여부
+        query = `
+            SELECT COUNT(*) AS CNT
+              FROM T_SHPR_INFO
+             WHERE SHPR_ID = fnDecrypt(?, ?)
+               AND SHPR_ENT_APV_DT IS NULL
+        `;
+
+        [row] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+
+        if(row[0].CNT > 0) {
+
+            res.status(200).json(result({isEntApv: false}));
+
+            return;
+        }
+
         // 금일 업무시작 여부
         query = `
-        SELECT COUNT(*) AS CNT
-          FROM T_SHPR_DUTJ_MAG
-         WHERE SHPR_ID = fnDecrypt(?, ?)
-           AND SHPR_DUTJ_YMD = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y-%m-%d')
-           AND SHPR_DUTJ_END_DT IS NULL
+            SELECT COUNT(*) AS CNT
+              FROM T_SHPR_DUTJ_MAG
+             WHERE SHPR_ID = fnDecrypt(?, ?)
+               AND SHPR_DUTJ_YMD = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y-%m-%d')
+               AND SHPR_DUTJ_END_DT IS NULL
         `;
 
         [row] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
         if(row[0].CNT === 0) {
 
-            res.status(200).json(result({isDutjStrt: false}));
+            res.status(200).json(result({isDutjStrt: false, isEntApv: true}));
 
             return;
         }
@@ -241,6 +258,7 @@ export default async function handler(req, res) {
         const [rows2] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
         res.status(200).json(result({
+            isEntApv: true,
             isDutjStrt: true,
             btchList: rows,
             btchAcpList: rows2,

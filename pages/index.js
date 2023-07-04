@@ -16,6 +16,7 @@ export default function Index(props) {
     const [loginInfo, setLoginInfo] = useState(null);
     const [dnone, setDnone] = useState('d-none');
     const [isDutjStrt, setIsDutjStrt] = useState(false);
+    const [isEntApv, setIsEntApv] = useState(true);
     const [btchInfo, setBtchInfo] = useState({
         btchList: [],
         btchAcpList: [],
@@ -63,7 +64,7 @@ export default function Index(props) {
                     cmm.loading(false);
                 }
 
-            }, 950);
+            }, 500);
         } else {
 
             let dateInfo = cmm.util.getLs('dateInfo');
@@ -99,6 +100,7 @@ export default function Index(props) {
 
                     setDnone('');
                     setIsDutjStrt(res.isDutjStrt);
+                    setIsEntApv(res.isEntApv);
                 }
             });
         }
@@ -214,7 +216,7 @@ export default function Index(props) {
     return (
         // <div className={styles.index} style={{height: windowHeight}}>
         <div className={styles.index + ' ' + dnone}>
-            {isDutjStrt &&
+            {(isEntApv && isDutjStrt) &&
                 <>
                     <div className={styles.header}>
                         <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={113.6} height={24.5} onClick={appTest} />
@@ -237,7 +239,7 @@ export default function Index(props) {
                 </>
             }
             <BottomMenu idx={0} />
-            {(!!loginInfo && !isDutjStrt) &&
+            {(!!loginInfo && !isDutjStrt && isEntApv) &&
                 <div className={styles.dutjStrtDiv}>
                     <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={80} height={17} />
                     <div>
@@ -251,6 +253,29 @@ export default function Index(props) {
                             <Image alt={'경고'} src={'/assets/images/icon/iconWarningType02.svg'} width={12} height={12} />
                             업무 종료는 <em>마이페이지</em>에서 하실수 있습니다.
                         </span>
+                    </div>
+                </div>
+            }
+            {!isEntApv &&
+                <div className={styles.entApvDiv}>
+                    <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={80} height={17} />
+                    <div className={styles.textDiv}>
+                        <Image alt={'프로필사진'} src={'/assets/images/img/noEntApv.svg'} width={182} height={131} />
+                        <h3>
+                            신청하신 계정은<br/>
+                            <em>승인 대기 상태</em>입니다.
+                        </h3>
+                        <p>
+                            순차적으로 승인 진행중에 있으니<br/>
+                            조금만 더 기다려주시기 바랍니다.
+                        </p>
+                    </div>
+                    <div className={styles.kakaoDiv}>
+                        <Image alt={'카카오톡'} src={'/assets/images/icon/iconKakaotalkType01.svg'} width={32} height={45} />
+                        <p>
+                            카카오톡문의<br/>
+                            <a href={'http://pf.kakao.com/_haBuxj/chat'} className={'link'}>http://pf.kakao.com/_haBuxj/chat</a>
+                        </p>
                     </div>
                 </div>
             }

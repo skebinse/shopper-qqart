@@ -21,6 +21,16 @@ export default async function handler(req, res) {
             if(param.type === 'start') {
 
                 if(row[0].CNT === 0) {
+
+                    query = `
+                       UPDATE T_SHPR_INFO
+                          SET SHPR_MAX_DELY_NCN = 0
+                        WHERE SHPR_ID = fnDecrypt(?, ?)
+                          AND (SELECT COUNT(*) FROM T_SHPR_DUTJ_MAG WHERE SHPR_DUTJ_YMD = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y-%m-%d')) = 0
+                    `;
+
+                    await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+
                     query = `
                         INSERT INTO T_SHPR_DUTJ_MAG (
                             SHPR_ID,

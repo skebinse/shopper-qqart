@@ -25,6 +25,7 @@ export default async function handler(req, res) {
                     query = `
                        UPDATE T_SHPR_INFO
                           SET SHPR_MAX_DELY_NCN = 0
+                            , SHPR_PS_ODER_MXVA_YN = 'N'
                         WHERE SHPR_ID = fnDecrypt(?, ?)
                           AND (SELECT COUNT(*) FROM T_SHPR_DUTJ_MAG WHERE SHPR_DUTJ_YMD = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y-%m-%d')) = 0
                     `;

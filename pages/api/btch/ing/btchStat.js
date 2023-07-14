@@ -16,6 +16,7 @@ export default async function handler(req, res) {
                      , ODER_SHPP_STRT_DT = NOW()
                  WHERE ODER_USER_ID = ?
                    AND SHPR_ID = fnDecrypt(?, ?)
+                   AND ODER_PGRS_STAT != '06'
                 `;
 
             queryParam = [param.oderPgrsStat, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY];
@@ -28,6 +29,7 @@ export default async function handler(req, res) {
                          , ODER_PIUP_VCHR_ATCH_FILE_UUID = ?
                      WHERE ODER_USER_ID = ?
                        AND SHPR_ID = fnDecrypt(?, ?)
+                       AND ODER_PGRS_STAT != '06'
                     `;
 
                 queryParam = [param.oderPgrsStat, param.atchFileUuid, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY];

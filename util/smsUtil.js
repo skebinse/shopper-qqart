@@ -35,6 +35,7 @@ export function smsSend(receiver, msg, callback) {
                     !!callback && callback(true);
                 } else {
 
+                    console.log(res)
                     !!callback && callback(false);
                 }
             },

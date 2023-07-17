@@ -53,7 +53,7 @@ export default async function handler(req, res) {
           ORDER BY AA.ODER_DELY_CPL_DT DESC
                 `;
 
-            const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.formDt + ' 00:00:00', param.toDt + ' 23:59:59']);
+            const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.fromDt + ' 00:00:00', param.toDt + ' 23:59:59']);
 
             res.status(200).json(result(rows));
         } catch (e) {

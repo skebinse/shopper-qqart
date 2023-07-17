@@ -15,6 +15,22 @@ export default async function handler(req, res) {
                 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
             }
 
+            let query =`
+                SELECT ODER_PGRS_STAT
+                  FROM T_ODER_USER_INFO
+                 WHERE ODER_USER_ID = ?
+                   AND SHPR_ID = fnDecrypt(?, ?)
+                `;
+
+            let [rows] = await conn.query(query, [param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+
+            if(cmm.util.getNumber(rows[0].ODER_PGRS_STAT) >= 6) {
+
+                res.status(500).json(result('', '8000', '이미 배달이 완료된 건입니다.'));
+
+                return;
+            }
+
             cmm.ajax({
                 url: process.env.QQCART_URL + `/sendSmsNtfy.ax`,
                 isLoaing: false,
@@ -28,7 +44,7 @@ export default async function handler(req, res) {
                 }
             });
 
-            let query =`
+            query =`
                 UPDATE T_ODER_USER_INFO
                    SET ODER_PGRS_STAT = '06'
                      , ODER_DELY_CPL_ATCH_FILE_UUID = ?
@@ -37,7 +53,7 @@ export default async function handler(req, res) {
                    AND SHPR_ID = fnDecrypt(?, ?)
                 `;
 
-            let [rows, fields] = await conn.query(query, [param.atchFileUuid, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            [rows] = await conn.query(query, [param.atchFileUuid, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
             // 픽업 자동정산
             query = `CALL spInsPiupAtmtAdj(?, fnDecrypt(?, ?), 'N')`;

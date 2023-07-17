@@ -24,7 +24,7 @@ export default function BtchAdj() {
             cmm.ajax({
                 url: `/api/btch/btchCompList`,
                 data: {
-                    formDt: searchDate.formDt,
+                    fromDt: searchDate.fromDt,
                     toDt: searchDate.toDt,
                 },
                 success: res => {

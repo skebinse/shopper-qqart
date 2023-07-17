@@ -37,7 +37,10 @@ export default function IngOderUserId() {
 
                     if('03|04|05'.indexOf(item.ODER_PGRS_STAT) === -1) {
 
-                        cmm.alert('이미 완료된 건이거나 삭제된 건입니다.');
+                        cmm.alert('이미 완료된 건이거나 삭제된 건입니다.', () => {
+
+                            goPage('/');
+                        });
                         return;
                     }
 

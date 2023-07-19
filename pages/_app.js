@@ -83,7 +83,7 @@ export default function MyApp({ Component, pageProps }) {
                     "action": "getlocation",
                     "callback": "window.getPsPsit"
                 }));
-            }, (1000 * 60 * 5));
+            }, (1000 * 60 * 2));
         }
 
         if(process.env.NEXT_PUBLIC_RUN_MODE !== 'prod') {

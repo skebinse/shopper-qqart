@@ -17,8 +17,10 @@ export default function MyApp({ Component, pageProps }) {
         // 채널톡
         cmm.plugin.channelIO();
 
+        // PUSH
         window.onPushMessage = data => {
 
+            // 로그인 시
             if(cmm.checkLogin()) {
 
                 webPushTit.innerHTML = data.notification.title;
@@ -35,16 +37,56 @@ export default function MyApp({ Component, pageProps }) {
             }
         };
 
+        // PUSH 토큰 가져오기
         window.getPushToken = token => {
 
             cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
         }
 
+        // 앱이고 토큰 정보가 스토리지에 없는 경우
         if(cmm.isApp() && !cmm.util.getLs(cmm.Cont.APP_TOKEN)) {
 
             // PUSH Token
             cmm.app.getPushToken();
         }
+
+        // 현재 위치
+        window.getPsPsit = (lat, lon) => {
+
+            // 로그인 시
+            if(cmm.checkLogin()) {
+
+                cmm.ajax({
+                    url: '/api/cmm/insPsPsit',
+                    isLoaing: false,
+                    data: {
+                        lat,
+                        lon
+                    },
+                    success: res => {}
+                });
+            }
+        };
+
+        // 앱일 경우 현재 위치 저장
+        if(cmm.isApp()) {
+
+            webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({
+                "action": "getlocation",
+                "callback": "window.getPsPsit"
+            }));
+
+            // 5분마다 실행
+            setTimeout(() => {
+
+                webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({
+                    "action": "getlocation",
+                    "callback": "window.getPsPsit"
+                }));
+            }, (1000 * 60 * 5));
+        }
+
+
     }, []);
 
   return (

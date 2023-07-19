@@ -47,6 +47,12 @@ export default function Login(props) {
                         goPage('/join/clauAgr');
                     } else {
 
+                        // 현재 위치 저장
+                        webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({
+                            "action": "getlocation",
+                            "callback": "window.getPsPsit"
+                        }));
+
                         cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
                         goPage('/');
                     }

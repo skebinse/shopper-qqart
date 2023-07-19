@@ -76,6 +76,12 @@ export default function Login(props) {
                     cmm.alert('아이디 또는 비밀번호가 맞지 않습니다.');
                 } else {
 
+                    // 현재 위치 저장
+                    webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({
+                        "action": "getlocation",
+                        "callback": "window.getPsPsit"
+                    }));
+
                     cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
                     router.push('/');
                 }

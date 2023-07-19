@@ -63,7 +63,8 @@ export default function MyApp({ Component, pageProps }) {
                         lat,
                         lot
                     },
-                    success: res => {}
+                    success: res => {},
+                    error: res => {}
                 });
             }
         };

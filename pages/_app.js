@@ -51,7 +51,7 @@ export default function MyApp({ Component, pageProps }) {
         }
 
         // 현재 위치
-        window.getPsPsit = (lat, lon) => {
+        window.getPsPsit = (lat, lot) => {
 
             // 로그인 시
             if(cmm.checkLogin()) {
@@ -61,7 +61,7 @@ export default function MyApp({ Component, pageProps }) {
                     isLoaing: false,
                     data: {
                         lat,
-                        lon
+                        lot
                     },
                     success: res => {}
                 });

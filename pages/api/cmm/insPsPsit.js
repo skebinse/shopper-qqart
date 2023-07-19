@@ -21,7 +21,7 @@ export default async function handler(req, res) {
                 )
             `;
 
-            const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.lat, param.lot]);
+            const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.lot, param.lat]);
 
             res.status(200).json(result(rows));
         } catch (e) {

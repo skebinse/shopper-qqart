@@ -86,6 +86,15 @@ export default function MyApp({ Component, pageProps }) {
             }, (1000 * 60 * 5));
         }
 
+        if(process.env.NEXT_PUBLIC_RUN_MODE !== 'prod') {
+
+            window.onerror = function(msg,file,line) {
+
+                alert("오류메세지\t"+msg+"\n"+"파일위치\t"+file+"\n"+"라인번호\t"+line);
+
+                return true;  //true를 return하면 오류메세지를 발생시키지 않음
+            }
+        }
 
     }, []);
 

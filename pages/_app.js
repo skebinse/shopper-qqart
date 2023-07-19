@@ -77,7 +77,7 @@ export default function MyApp({ Component, pageProps }) {
             }));
 
             // 5분마다 실행
-            setTimeout(() => {
+            setInterval(() => {
 
                 webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({
                     "action": "getlocation",

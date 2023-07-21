@@ -69,11 +69,13 @@ export default function MyApp({ Component, pageProps }) {
             }
         };
 
-        console.log('cmm.isApp() : ', cmm.isApp(), !!cmm.util.getLs('deviceid'));
+        console.log('cmm.isApp() : ', !!cmm.util.getLs('deviceid'), window.webkit);
+
         setTimeout(() => {
 
-            console.log('set cmm.isApp() : ', cmm.isApp(), !!cmm.util.getLs('deviceid'));
+            console.log('set cmm.isApp() : ', !!cmm.util.getLs('deviceid'), window.webkit);
         }, 1000);
+
         // 앱일 경우 현재 위치 저장
         if (cmm.isApp()) {
 

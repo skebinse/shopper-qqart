@@ -68,7 +68,7 @@ export default function MyApp({ Component, pageProps }) {
                 });
             }
         };
-
+        console.log('cmm.isApp() : ', cmm.isApp());
         // 앱일 경우 현재 위치 저장
         if(cmm.isApp()) {
 
@@ -77,7 +77,7 @@ export default function MyApp({ Component, pageProps }) {
                 "callback": "window.getPsPsit"
             }));
 
-            // 5분마다 실행
+            // 2분마다 실행
             setInterval(() => {
 
                 webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({

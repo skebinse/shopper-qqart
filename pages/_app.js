@@ -69,27 +69,24 @@ export default function MyApp({ Component, pageProps }) {
             }
         };
 
-        setTimeout(() => {
+        console.log('cmm.isApp() : ', cmm.isApp());
+        // 앱일 경우 현재 위치 저장
+        if (cmm.isApp()) {
 
-            console.log('cmm.isApp() : ', cmm.isApp());
-            // 앱일 경우 현재 위치 저장
-            if (cmm.isApp()) {
+            webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({
+                "action": "getlocation",
+                "callback": "window.getPsPsit"
+            }));
+
+            // 2분마다 실행
+            setInterval(() => {
 
                 webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({
                     "action": "getlocation",
                     "callback": "window.getPsPsit"
                 }));
-
-                // 2분마다 실행
-                setInterval(() => {
-
-                    webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({
-                        "action": "getlocation",
-                        "callback": "window.getPsPsit"
-                    }));
-                }, (1000 * 60 * 2));
-            }
-        }, 1000);
+            }, (1000 * 60 * 2));
+        }
 
         if(process.env.NEXT_PUBLIC_RUN_MODE !== 'prod') {
 

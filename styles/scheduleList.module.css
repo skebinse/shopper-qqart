@@ -1,0 +1,123 @@
+.scheduleList ul {
+    padding-left: 17px;
+    padding-right: 17px;
+}
+
+.scheduleList ul li {
+    display: flex;
+    flex-direction: row;
+    position: sticky;
+    min-height: 64px;
+    margin-top: 12px;
+}
+
+.scheduleList ul li .dayContainer {
+    display: flex;
+    flex-direction: column;
+    width: 32px;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFFFF;
+}
+
+.scheduleList ul li .dayContainer .dateText {
+    font-family: 'Spoqa Han Sans Neo';
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #333333;
+}
+
+.scheduleList ul li .dayContainer .dateText.disabled {
+    color: #A0A0A0;
+}
+
+.scheduleList ul li .dayContainer .dateText.holiday {
+    color: #F4997A;
+}
+
+.scheduleList ul li .dayContainer .dayText {
+    font-family: 'Spoqa Han Sans Neo';
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #333333;
+}
+
+.scheduleList ul li .dayContainer .dayText.disabled {
+    color: #A0A0A0;
+}
+
+.scheduleList ul li .dayContainer .dayText.holiday {
+    color: #F4997A;
+}
+
+.scheduleList ul li .scheduleContainerTail {
+    position: absolute;
+    top: 32px;
+    left: 44px;
+    width: 17px;
+    height: 17px;
+    transform: rotate(45deg);
+    z-index: -1;
+    background-color: #FFFFFF;
+    box-shadow: 0px 4px 12px 0px #00000014;
+}
+
+.scheduleList ul li .scheduleContainerTail.disabled {
+    background-color: #F8F8F8;
+}
+
+.scheduleList ul li .scheduleContainer {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    height: 64px;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    box-shadow: 3px 4px 12px 0px #00000014;
+}
+
+.scheduleList ul li .scheduleContainer.disabled {
+    background-color: #F8F8F8;
+}
+
+.scheduleList ul li .scheduleContainer .scheduleText {
+    font-family: 'Spoqa Han Sans Neo';
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #333333
+}
+
+.scheduleList ul li .scheduleContainer .scheduleText.disabled {
+    color: #707070
+}
+
+.scheduleList ul li .scheduleContainer .scheduleText.unregistered {
+    font-weight: 700;
+    text-decoration: underline;
+    color: #02B763
+}
+
+.scheduleList ul li .scheduleContainer .registerText {
+    font-family: 'Spoqa Han Sans Neo';
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #02B763;
+    text-decoration: underline;
+}

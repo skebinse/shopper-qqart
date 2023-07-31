@@ -229,7 +229,7 @@ const cmm = {
      */
     isApp: () => {
 
-        return !!cmm.util.getLs('deviceid');
+        return !!window.webkit;
     },
 
     /**
@@ -515,8 +515,7 @@ const cmm = {
          */
         getLs : function(key) {
 
-            const data = window.localStorage.getItem(key);
-            return data.indexOf('{') === 0 ? JSON.parse(data) : data;
+            return JSON.parse(window.localStorage.getItem(key));
         },
 
         /**

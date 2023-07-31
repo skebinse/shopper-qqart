@@ -34,12 +34,18 @@ export default function ScheduleEditor(props) {
     useEffect(() => {
         // TODO: 서버에서 지역 목록 받아 오기
         setAreas(DUMMY_AREAS);
-    }, [])
+    }, []);
 
     useEffect(() => {
         setSelectedArea(schedule?.SHPR_SCHD_AREA ?? '');
         setSelectedTimeSlots(schedule?.SHPR_SCHD_HH.split(',') ?? [])
-    }, [schedule])
+    }, [schedule]);
+
+    const onClickSubmit = () => {
+        onSubmit(selectedArea, selectedTimeSlots);
+        setSelectedArea('');
+        setSelectedTimeSlots([]);
+    };
 
     const areaOptions = [DEFAULT_AREA].concat(areas).map(area => <option key={area.id} value={area.id} label={area.label} />);
     
@@ -56,7 +62,7 @@ export default function ScheduleEditor(props) {
             </select>
             <TimeSlotList slots={timeSlots} selectedSlots={selectedTimeSlots} onChangeSelection={setSelectedTimeSlots} />
             <div className={styles.okButtonContainer}>
-                <div className={styles.okButton} onClick={() => onSubmit(selectedArea, selectedTimeSlots)}>
+                <div className={styles.okButton} onClick={onClickSubmit}>
                     <label className={styles.okButtonLabelText}>확인</label>
                 </div>
             </div>

@@ -11,8 +11,8 @@ export default function ScheduleList(props) {
     today.setHours(0, 0, 0, 0);
 
     const items = range(7).map((offset) => {
-        const schedule = schedules[offset];
         const date = addDays(startDate, offset);
+        const schedule = schedules.find(savedSchedule => isSameDay(new Date(savedSchedule.SHPR_SCHD_YMD), date));
         const isHoliday = holidays.some(holiday => isSameDay(date, holiday)) || date.getDay() % 6 === 0;
         
         return {
@@ -21,7 +21,7 @@ export default function ScheduleList(props) {
             dayString: cmm.Cont.DAY_OF_WEEK[date.getDay()].charAt(0),
             disabled: isBefore(date, today),
             isHoliday,
-            onClickItem: () => onClickItem(schedule),
+            onClickItem: () => onClickItem(date, schedule),
         }
     });
 

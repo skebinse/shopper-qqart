@@ -37,8 +37,8 @@ export default function ClauAgr() {
      */
     const goPageClick =() => {
 
-        // goPage('/join/cphone');
-        goPage('/join/selfCfm');
+        goPage('/join/cphone');
+        // goPage('/join/selfCfm');
     };
 
     return (

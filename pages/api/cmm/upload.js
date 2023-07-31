@@ -3,13 +3,11 @@ import {uuid} from "next-s3-upload";
 
 export default async function Upload(req, res) {
 
-    const fileList = [];
-
     const atchFileUuid = uuid();
 
     await getConnectPool(async conn => {
 
-        const data = JSON.parse(req.body);
+        const data = req.body;
         try {
 
             for await (const item of data) {

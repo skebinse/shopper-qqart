@@ -44,8 +44,11 @@ export default function BtchList({list, href, classNm = '', noDataTxt = '현재 
                         <div className={'priceArea'}>
                             <p>
                                 {item.DELY_AMT}원
-                                {item.ODER_DRC_LDTN_YN === 'N' &&
+                                {item.ODER_DRC_LDTN_YN === 'N' && item.ODER_DRC_LDTN_AMT === 0 &&
                                     <span>카드 단말기 필요</span>
+                                }
+                                {item.ODER_DRC_LDTN_YN === 'N' && item.ODER_DRC_LDTN_AMT > 0 &&
+                                    <span style={{color: '#02B763'}}>직접 결제</span>
                                 }
                             </p>
                             <Image alt={'상점 이미지'} src={item.SHOP_RRSN_ATCH_FILE_LIST} width={40} height={40} />

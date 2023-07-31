@@ -14,6 +14,7 @@ em{font-style: normal;}
 .mr16{margin-right: 16px !important;}
 .colorGreen{color: #02B763 !important;}
 .bold{font-weight: 700 !important;}
+#ch-plugin.d-none{display: none !important;}
 
 
 /* headTitle */
@@ -130,6 +131,13 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 .prodUl > li span.prodNm{flex: 1;padding-right: 10px;}
 .prodUl > li span.prodCnt{font-size: 14px;}
 .prodUl > li span.prodAmt{font-size: 13px;width: 95px;text-align: right;}
+
+.inputUl > li{border-radius: 12px;border: solid 1px #E4E4E4;padding: 11px 17px 16px;margin-top: 14px;background-color: #ffffff;}
+.inputUl > li.error{margin-bottom: 40px;border: solid 2px #F4997A;}
+.inputUl > li > label{color: #333333;font-size: 13px;}
+.inputUl > li > div > input{border: none;color: #333333;font-size: 17px;margin-top: 14px;width: 100%;}
+.inputUl > li > div > input:focus{outline: none;}
+.inputUl > li > div > input::placeholder{font-weight: 300;opacity: 0.5;}
 
 .ulType01{padding-top: 8px;}
 .ulType01 > li{background-color: #FFFFFF;}

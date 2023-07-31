@@ -47,7 +47,7 @@ const cmm = {
         // JSON 타입일 경우
         if(_options.dataType === 'json') {
 
-            init.headers.contextType = 'application/json';
+            init.headers['Content-Type'] = 'application/json';
             init.body = JSON.stringify(_options.data);
         } else if(!!_options.formData) {
 
@@ -55,50 +55,59 @@ const cmm = {
             init.body = cmm.util.convertFormData(_options.formData);
         } else {
 
-            init.headers.contextType = _options.contextType;
+            init.headers['Content-Type'] = _options.contextType;
             init.body = !!_options.data ? new URLSearchParams(_options.data) : undefined;
         }
 
-        fetch(_options.url, init).then(res => res.json())
-            .then(res => {
+        fetch(_options.url, init).then(res => {
 
-                if(!!_options.isExtr) {
+            if(_options.responseType === 'arraybuffer') {
 
-                    _options.success(res);
+                return res.arrayBuffer();
+            } else {
+
+                return res.json();
+            }
+        })
+        .then(res => {
+
+            if(!!_options.isExtr) {
+
+                _options.success(res);
+            } else {
+
+                if(res.resultCode === '0000') {
+
+                    if(!!_options.success) {
+
+                        _options.success(res.data);
+                    }
+                } else if(res.resultCode === '8000') {
+
+                    cmm.alert(res.resultMsg, () => {
+
+                        location.href = '/';
+                    });
                 } else {
 
-                    if(res.resultCode === '0000') {
-
-                        if(!!_options.success) {
-
-                            _options.success(res.data);
-                        }
-                    } else if(res.resultCode === '8000') {
-
-                        cmm.alert(res.resultMsg, () => {
-
-                            location.href = '/';
-                        });
-                    } else {
-
-                        cmm.alert(res.resultMsg);
-                    }
+                    cmm.alert(res.resultMsg);
                 }
-            })
-            .catch(err => {
-                console.log(err)
-                if(!!_options.error) {
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            if(!!_options.error) {
 
-                    _options.error();
-                }
-            })
-            .finally(() => {
+                _options.error();
+            }
+        })
+        .finally(() => {
 
-                if(!_options.isExtr && !!_options.isLoaing) {
+            if(!_options.isExtr && !!_options.isLoaing) {
 
-                    cmm.loading(false);
-                }
-            });
+                cmm.loading(false);
+            }
+        });
     },
 
     /**
@@ -551,7 +560,6 @@ const cmm = {
 
                 cmm.alert('복사 되었습니다.');
             });
-
         },
 
         /**
@@ -639,6 +647,38 @@ const cmm = {
             });
 
             return formData;
+        },
+
+        /**
+         * GUID 생성
+         * @memberOf $comm.util
+         * @param value
+         */
+        guid: function() {
+            function _s4() {
+                return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+            }
+            return _s4() + _s4() + '-' + _s4() + '-' + _s4() + '-' + _s4() + '-' + _s4() + _s4() + _s4();
+        },
+
+        /**
+         * QueryString to Json
+         * @memberOf $comm.util
+         * @param value
+         */
+        queryStringToJSON: val => {
+            //파라메터별 분리
+            const pairs = val.split('&');
+
+            const result = {};//json 빈 객체
+
+            //각 파라메터별 key/val 처리
+            pairs.forEach(function(pair) {
+                pair = pair.split('=');//key=val 분리
+                result[pair[0]] = decodeURIComponent(pair[1] || '');
+            });
+
+            return JSON.parse(JSON.stringify(result));//json 객체를 문자열화해서 리턴
         }
     },
 

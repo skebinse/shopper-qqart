@@ -132,7 +132,12 @@ export default function OderUserId(props) {
                 {btchInfo.ODER_DRC_LDTN_YN === 'N' &&
                     <li>
                         <h5>결제</h5>
-                        <p style={{color: 'red'}}>카드 단말기 필요</p>
+                        {btchInfo.ODER_DRC_LDTN_AMT === 0 &&
+                            <p style={{color: '#F4997A'}}>카드 단말기 필요</p>
+                        }
+                        {btchInfo.ODER_DRC_LDTN_AMT > 0 &&
+                            <p style={{color: '#02B763'}}>직접 결제</p>
+                        }
                     </li>
                 }
                 <li>

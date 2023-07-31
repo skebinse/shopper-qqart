@@ -38,11 +38,12 @@ export default function ClauAgr() {
     const goPageClick =() => {
 
         goPage('/join/cphone');
+        // goPage('/join/selfCfm');
     };
 
     return (
         <div className={styles.join}>
-            <HeadTitle />
+            <HeadTitle callbackClose={() => goPage('/cmm/login')}/>
             <NaviStep step={1} />
             <div className={styles.content}>
                 <h3>약관 동의</h3>

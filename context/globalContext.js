@@ -21,7 +21,7 @@ export function GlobalProvider({children}) {
         callbackOk: null,
         callbackCancel: null,
     });
-    const notLoginList = ['/cmm/login', '/cmm/login2', '/cmm/snsKakaoLogin', '/join/clauAgr', '/join/cphone', '/join/cphoneAhrz', '/join/info', '/join/reg', '/join/clauSvcUtlz'];
+    const notLoginList = ['/cmm/login', '/cmm/login2', '/cmm/snsKakaoLogin', '/join/clauAgr', '/join/selfCfm', '/join/essInfoInpt', '/join/cphone', '/join/cphoneAhrz', '/join/info', '/join/reg', '/join/clauSvcUtlz'];
 
     /**
      * 로그인 정보 갱신

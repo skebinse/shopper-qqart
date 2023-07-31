@@ -11,7 +11,7 @@ import cmm from "../../js/common";
 import Script from "next/script";
 import Link from "next/link";
 
-export default function Info() {
+export default function Reg() {
 
     const router = useRouter();
     const shopS3Upload = useShopS3Upload();

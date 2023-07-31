@@ -60,11 +60,13 @@ export default async function handler(req, res) {
                  , AA.ODER_DRC_LDTN_YN
                  , AA.ODER_DELY_MENS
                  , AA.ODER_DELY_ARTG
+                 , IFNULL(AA.ODER_DRC_LDTN_AMT, 0) AS ODER_DRC_LDTN_AMT
                  , CASE WHEN AA.ODER_MNGR_RGI_YN = 'Y'
                      THEN DATE_FORMAT(AA.ODER_REQ_YMD, '%y년 %m월 %d일 %H:%i')
                    ELSE DATE_FORMAT(DATE_ADD(AA.ODER_REQ_YMD, INTERVAL 9 HOUR), '%y년 %m월 %d일 %H:%i') END AS ODER_REQ_YMD
                  , AA.ODER_PIUP_FRCS_MI
                  , TIMESTAMPDIFF(MINUTE, AA.ODER_REQ_APV_DT, NOW()) AS BTCH_ACP_PGRS_MI
+                 , AA.ODER_CARD_DRC_LDTN_CPL_YN
             FROM T_ODER_USER_INFO AA
                  INNER JOIN T_SHOP_MAG BB
               ON BB.SHOP_ID = AA.SHOP_ID

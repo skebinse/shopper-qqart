@@ -74,7 +74,7 @@ export async function getServerSideProps(context) {
     const data = {
         grant_type: 'authorization_code',
         client_id: 'dc6e9cd5281395107b6f48fbdf3b0ab1',
-        redirect_uri: process.env.LOCAL_URL + '/cmm/snsKakaoLogin',
+        redirect_uri: process.env.NEXT_PUBLIC_LOCAL_URL + '/cmm/snsKakaoLogin',
         code: context.query.code,
     };
 

@@ -59,7 +59,7 @@ export default function IngOderUserId() {
                     switch (item.ODER_PGRS_STAT) {
                         case '03': setBtnText(item.ODER_KD === 'DELY' ? '장보기 시작' : '배달 시작'); setTitle('스토어로 이동 중'); break;
                         case '04': setBtnText('배달 시작'); setTitle('장보는 중'); break;
-                        case '05': setBtnText('배달 완료'); setTitle('배달하는 중'); break;
+                        case '05': setBtnText((item.ODER_DRC_LDTN_YN === 'N' && item.ODER_DRC_LDTN_AMT > 0 && item.ODER_CARD_DRC_LDTN_CPL_YN !== 'Y') ? '결제 하기' : '배달 완료'); setTitle('배달하는 중'); break;
                     }
 
                     let oderDelySlctVal;
@@ -73,7 +73,7 @@ export default function IngOderUserId() {
                     }
 
                     item.oderDelySlctVal = oderDelySlctVal;
-
+                    console.log(item)
                     // 배치 정보
                     setBtchInfo(item);
                 } else {
@@ -95,6 +95,11 @@ export default function IngOderUserId() {
         // 배달 완료
         if(btchInfo.ODER_PGRS_STAT === '05') {
 
+            if(btnText === '결제 하기') {
+
+                goPage('/btch/ldtn/' + ingOderUserId);
+                return;
+            }
             if(cplImgList.length === 0) {
 
                 cmm.alert('아직 사진을 등록하지 않았습니다.\n사진을 등록해주세요.', () => {
@@ -311,7 +316,12 @@ export default function IngOderUserId() {
                             {btchInfo.ODER_DRC_LDTN_YN === 'N' &&
                                 <li>
                                     <h5>결제</h5>
-                                    <p style={{color: 'red'}}>카드 단말기 필요</p>
+                                    {btchInfo.ODER_DRC_LDTN_AMT === 0 &&
+                                        <p style={{color: '#F4997A'}}>카드 단말기 필요</p>
+                                    }
+                                    {btchInfo.ODER_DRC_LDTN_AMT > 0 &&
+                                        <p style={{color: '#02B763'}}>직접 결제</p>
+                                    }
                                 </li>
                             }
                             {!!btchInfo.ODER_PIUP_FRCS_MI &&
@@ -407,7 +417,14 @@ export default function IngOderUserId() {
                             {btchInfo.ODER_DRC_LDTN_YN === 'N' &&
                                 <li>
                                     <h5>결제</h5>
-                                    <p style={{color: 'red'}}>카드 단말기 필요</p>
+                                    {btchInfo.ODER_DRC_LDTN_AMT === 0 &&
+                                        <p style={{color: '#F4997A'}}>카드 단말기 필요</p>
+                                    }
+                                    {btchInfo.ODER_DRC_LDTN_AMT > 0 &&
+                                        <>
+                                            <span style={{color: '#02B763'}}>직접 결제 {btchInfo.ODER_CARD_DRC_LDTN_CPL_YN === 'Y' ? '완료' : ''}</span>
+                                        </>
+                                    }
                                 </li>
                             }
                             <li>

@@ -104,6 +104,7 @@ export default async function handler(req, res) {
                  , AA.ODER_KD
                  , AA.ODER_DRC_LDTN_YN
                  , AA.ODER_DELY_SLCT_VAL
+                 , AA.ODER_DRC_LDTN_AMT
                  , DATE_FORMAT(AA.ODER_DELY_YMD, '%m월 %d일') AS ODER_DELY_YMD
                  , AA.ODER_DELY_HH
                  , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
@@ -136,6 +137,7 @@ export default async function handler(req, res) {
                      , EE.SHPR_ID
                      , EE.SHPR_DELY_POS_DTC
                      , AA.ODER_DRC_LDTN_YN
+                     , IFNULL(AA.ODER_DRC_LDTN_AMT, 0) AS ODER_DRC_LDTN_AMT
                   FROM T_ODER_USER_INFO AA
                        INNER JOIN T_SHOP_MAG BB
                     ON BB.SHOP_ID = AA.SHOP_ID
@@ -184,6 +186,7 @@ export default async function handler(req, res) {
              , AA.ODER_KD
              , AA.ODER_DRC_LDTN_YN
              , AA.ODER_DELY_SLCT_VAL
+             , AA.ODER_DRC_LDTN_AMT
              , DATE_FORMAT(AA.ODER_DELY_YMD, '%m월 %d일') AS ODER_DELY_YMD
              , AA.ODER_DELY_HH
              , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
@@ -222,6 +225,7 @@ export default async function handler(req, res) {
                  , EE.SHPR_ID
                  , AA.ODER_DRC_LDTN_YN
                  , AA.ODER_PIUP_FRCS_MI
+                 , IFNULL(AA.ODER_DRC_LDTN_AMT, 0) AS ODER_DRC_LDTN_AMT
                  , TIMESTAMPDIFF(MINUTE, AA.ODER_REQ_APV_DT, NOW()) AS BTCH_ACP_PGRS_MI
               FROM T_ODER_USER_INFO AA
                    INNER JOIN T_SHOP_MAG BB

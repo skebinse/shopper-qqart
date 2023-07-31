@@ -11,6 +11,7 @@
   "dependencies": {
     "@next/font": "13.1.1",
     "aws-sdk": "^2.1327.0",
+    "bcrypt": "^5.1.0",
     "detect-browser": "^5.3.0",
     "eslint": "8.30.0",
     "eslint-config-next": "13.1.1",
@@ -19,8 +20,10 @@
     "mysql2": "^2.3.3",
     "next": "13.1.1",
     "next-s3-upload": "^0.2.9",
+    "popbill": "^1.59.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-select": "^5.7.4",
     "sharp": "^0.32.1",
     "swiper": "^8.4.5"
   }

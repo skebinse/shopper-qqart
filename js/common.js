@@ -515,6 +515,7 @@ const cmm = {
          */
         getLs : function(key) {
 
+            console.log(key, window.localStorage.getItem(key));
             return JSON.parse(window.localStorage.getItem(key));
         },
 

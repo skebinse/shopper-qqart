@@ -2,7 +2,7 @@ import { addDays, isBefore, isSameDay } from 'date-fns';
 import Image from 'next/image';
 import styles from "../../../styles/scheduleList.module.css"
 import cmm from '../../../js/common';
-import { range } from 'lodash';
+import { last, padStart, range } from 'lodash';
 
 export default function ScheduleList(props) {
     const { startDate, schedules, holidays, onClickItem } = props;
@@ -42,7 +42,7 @@ function renderList(items) {
             if (schedule === undefined) {
                 return disabled ? '등록 불가' : '등록하기'
             } else {
-                return schedule.SHPR_SCHD_HH;
+                return createScheduleLabel(schedule.SHPR_SCHD_HH);
             }
         })()
 
@@ -65,4 +65,26 @@ function renderList(items) {
             </li>
         )
     })
+}
+
+function createScheduleLabel(scheduleString) {
+    const startTimeList = scheduleString.split(',').map(Number).sort((a, b) => a - b);
+
+    const chunks = [];
+    let chunkStart = startTimeList[0];
+    for (let i = 0; i < startTimeList.length - 1; i++) {
+        const current = startTimeList[i];
+        const next = startTimeList[i + 1];
+        if (current < next - 1) {
+            chunks.push(`${chunkStart}시~${current + 1}시`);
+            chunkStart = next;
+        }
+    }
+    chunks.push(`${pad(chunkStart)}시~${pad(last(startTimeList) + 1)}시`);
+    
+    return chunks.join(', ');
+}
+
+function pad(num) {
+    return padStart(`${num}`, 2, '0');
 }

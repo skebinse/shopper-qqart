@@ -175,7 +175,7 @@ export default function LdtnOderUserId() {
                         카드번호
                     </label>
                     <div>
-                        <input type="text" value={ldtnInfo.cardNumberTxt} onChange={cardNumChange} placeholder="0000-0000-0000-0000" maxLength={19} />
+                        <input type="tel" value={ldtnInfo.cardNumberTxt} onChange={cardNumChange} placeholder="0000-0000-0000-0000" maxLength={19} />
                     </div>
                 </li>
                 <li>

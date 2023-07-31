@@ -1,0 +1,121 @@
+.scheduleEditor {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 100%;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
+    overflow: auto;
+    transition: all 0.3s ease-in;
+    background-color: #FFFFFF;
+}
+
+.scheduleEditor.active {
+    transition: top 0.3s ease-out;
+    top: 0;
+    opacity: 1;
+}
+
+.scheduleEditor .titleDiv {
+    display: flex;
+    padding: 22.5px 20px;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background-color: #FFFFFF;
+    z-index: 1;
+}
+
+.scheduleEditor .titleDiv h5 {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 19px;
+    color: #333333;
+}
+
+.scheduleEditor .okButtonContainer {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    padding-top: 16px;
+    padding-left: 17px;
+    padding-right: 17px;
+    padding-bottom: 25px;
+    background-color: #FFFFFF;
+    box-shadow: 0px -5px 8px 0px #0000000D;
+}
+
+.scheduleEditor .okButtonContainer .okButton {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    padding-top: 15px;
+    padding-bottom: 17px;
+    border-radius: 12px;
+    background-color: #02B763;
+}
+
+.scheduleEditor .okButtonContainer .okButton .okButtonLabelText {
+    font-family: 'Spoqa Han Sans Neo';
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 23px;
+    letter-spacing: -0.03em;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.scheduleEditor select { 
+    margin-bottom: 21px;
+    margin-left: 17px; 
+    margin-right: 17px;
+}
+
+.timeSlotList {
+    padding-top: 19px;
+    padding-left: 17px;
+    padding-right: 17px;
+    border-top: 1px solid #CCCCCC;
+}
+
+.timeSlotList .headerText {
+    font-family: 'Spoqa Han Sans Neo';
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 22px;
+    letter-spacing: -0.03em;
+    text-align: left;
+}
+
+.timeSlotList ul {
+    margin-top: 8px;
+}
+
+.timeSlotList ul li {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.timeSlotList ul li.footer {
+    height: 96px;
+}
+
+.timeSlotList ul li .checkbox {
+    margin-right: 12px;
+}
+
+.timeSlotList ul li .labelText {
+    font-family: 'Spoqa Han Sans Neo';
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: -0.03em;
+    text-align: left;
+}

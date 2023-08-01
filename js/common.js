@@ -1,3 +1,5 @@
+import {format} from "date-fns";
+
 const cmm = {
 
     /**
@@ -803,6 +805,28 @@ const cmm = {
                 webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "getpushid","callback": "window.getPushToken"}));
                 setTimeout(callback, 500);
             },1500);
+        }
+    },
+
+    biz: {
+
+        /**
+         * 공통 코드 리스트 조회
+         * @param options
+         * @param callback
+         */
+        commCdList: (options, callback) => {
+
+            if(typeof options === 'string') {
+
+                cmm.ajax({
+                    url: '/api/cmm/commCdList',
+                    data: {
+                        cdSppoId: options
+                    },
+                    success: callback,
+                });
+            }
         }
     }
 };

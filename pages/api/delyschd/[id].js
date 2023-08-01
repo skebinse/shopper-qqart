@@ -7,8 +7,9 @@ export default async function handler(req, res) {
                 return getSchedule(conn, req, res);
             case 'PATCH':
                 return setSchedule(conn, req, res);
-            case 'POST':
             case 'DELETE':
+                return deleteSchedule(conn, req, res);
+            case 'POST':
             default:
                 res.status(500).json(result('', '9999', 'Method not supported'));
         }
@@ -53,6 +54,23 @@ async function setSchedule(conn, req, res) {
         `;
 
         await conn.query(query, [area, schedule, id]);
+        res.status(200).json(result(id));
+    } catch (e) {
+        console.log(e);
+        res.status(500).json(result('', '9999', '오류가 발생했습니다.'));
+    }
+}
+
+async function deleteSchedule(conn, req, res) {
+    const { id } = req.query;
+
+    try {
+        const query =`
+            DELETE FROM T_SHPR_SCHD_MAG
+                WHERE SHPR_SCHD_ID = ?
+        `;
+
+        await conn.query(query, [id]);
         res.status(200).json(result(id));
     } catch (e) {
         console.log(e);

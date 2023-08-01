@@ -5,10 +5,15 @@ import cmm from '../../../js/common';
 import { last, padStart, range } from 'lodash';
 
 export default function ScheduleList(props) {
-    const { startDate, schedules, holidays, onClickItem } = props;
+    const { startDate, schedules, holidays, onClickItem, onClickDelete } = props;
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+
+    const _onClickDelete = (event, date, schedule) => {
+        event.stopPropagation();
+        onClickDelete(date, schedule);
+    }
 
     const items = range(7).map((offset) => {
         const date = addDays(startDate, offset);
@@ -22,6 +27,7 @@ export default function ScheduleList(props) {
             disabled: isBefore(date, today),
             isHoliday,
             onClickItem: () => onClickItem(date, schedule),
+            onClickDelete: (event) => _onClickDelete(event, date, schedule),
         }
     });
 
@@ -36,7 +42,7 @@ export default function ScheduleList(props) {
 
 function renderList(items) {
     return items.map(item => {
-        const { schedule, dateString, dayString, disabled, isHoliday, onClickItem } = item;
+        const { schedule, dateString, dayString, disabled, isHoliday, onClickItem, onClickDelete } = item;
 
         const scheduleString = (() => {
             if (schedule === undefined) {
@@ -44,10 +50,10 @@ function renderList(items) {
             } else {
                 return createScheduleLabel(schedule.SHPR_SCHD_HH);
             }
-        })()
+        })();
 
         const dateStyleKeySuffix = disabled ? 'disabled' : isHoliday ? 'holiday' : '';
-        const scheduleStyleKeySuffix = disabled ? 'disabled' : schedule === undefined ? 'unregistered' : ''
+        const scheduleStyleKeySuffix = disabled ? 'disabled' : schedule === undefined ? 'unregistered' : '';
 
         return (
             <li key={dateString} onClick={disabled ? undefined : onClickItem}>
@@ -62,6 +68,14 @@ function renderList(items) {
                     )}
                     <label className={`${styles.scheduleText} ${styles[scheduleStyleKeySuffix]}`}>{scheduleString}</label>
                 </div>
+                <Image
+                    className={styles.deleteButton} 
+                    src={'/assets/images/btn/btnDel.svg'} 
+                    alt={'삭제'} 
+                    width={20} 
+                    height={20} 
+                    onClick={onClickDelete}
+                />
             </li>
         )
     })

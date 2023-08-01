@@ -5,7 +5,9 @@ import HeadTitle from '../../../components/headTitle';
 import { createLocalDate } from '../../../util/dateUtil';
 import ScheduleList from './scheduleList';
 import ScheduleEditor from './scheduleEditor';
-import { requestGetSchedule, requestGetSchedules, requestCreateSchedule, requestUpdateSchedule } from './apis';
+import { requestGetSchedule, requestGetSchedules, requestCreateSchedule, requestUpdateSchedule, requestDeleteSchedule } from './apis';
+import cmm from '../../../js/common';
+import { remove } from 'lodash';
 
 export default function DelySchd() {
     
@@ -31,6 +33,20 @@ export default function DelySchd() {
         setEditingDate(date);
         setEditingSchedule(schedule);
         setEditorVisible(true);
+    }
+
+    const removeSchedule = (schedule) => {
+        requestDeleteSchedule(schedule.SHPR_SCHD_ID, () => {
+            setSchedules(prev => {
+                const newSchedules = [...prev];
+                remove(newSchedules, storedSchedule => storedSchedule.SHPR_SCHD_ID === schedule.SHPR_SCHD_ID);
+                return newSchedules;
+            });
+        })
+    }
+
+    const onClickDelete = (date, schedule) => {
+        cmm.confirm(`${date.getDate()}일 일정을 삭제하시겠습니까?`, () => removeSchedule(schedule));
     }
 
     const closeScheduleEditor = () => {
@@ -80,7 +96,7 @@ export default function DelySchd() {
 
     return (
         <div>
-            <HeadTitle />
+            <HeadTitle title='일정 관리'/>
             <WeekDate onSelectDate={date => setSearchDate(date)} />
             {startDate && (
                 <ScheduleList
@@ -88,9 +104,9 @@ export default function DelySchd() {
                     schedules={schedules}
                     holidays={holidays}
                     onClickItem={onClickSchedule}
+                    onClickDelete={onClickDelete}
                 />
             )}
-            <BottomMenu idx={1} />
             <ScheduleEditor
                 schedule={editingSchedule}
                 isVisible={isEditorVisible}

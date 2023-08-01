@@ -5,9 +5,8 @@ import { padStart, range } from "lodash";
 import TimeSlotList from "./timeSlotList";
 import cmm from "../../../../js/common";
 
-const DUMMY_AREAS = ['용산구', '중구', '종로구'];
-
 const DEFAULT_AREA = '지역 선택';
+const AREA_CD_CODE = '68';
 
 const START_TIME = 7;
 
@@ -19,8 +18,9 @@ export default function ScheduleEditor(props) {
     const [selectedTimeSlots, setSelectedTimeSlots] = useState([]);
 
     useEffect(() => {
-        // TODO: 서버에서 지역 목록 받아 오기
-        setAreas(DUMMY_AREAS);
+        cmm.biz.commCdList(AREA_CD_CODE, response => {
+            setAreas(response.map(cd => cd.CD_NM));
+        });
     }, []);
 
     useEffect(() => {

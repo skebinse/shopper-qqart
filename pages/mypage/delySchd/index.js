@@ -5,7 +5,7 @@ import HeadTitle from '../../../components/headTitle';
 import { createLocalDate } from '../../../util/dateUtil';
 import ScheduleList from './scheduleList';
 import ScheduleEditor from './scheduleEditor';
-import { requestGetSchedule, requestGetSchedules, requestCreateSchedule, requestUpdateSchedule, requestDeleteSchedule } from './apis';
+import { requestGetSchedule, requestGetSchedules, requestCreateSchedule, requestUpdateSchedule, requestDeleteSchedule } from './ajaxCall';
 import cmm from '../../../js/common';
 import { remove } from 'lodash';
 

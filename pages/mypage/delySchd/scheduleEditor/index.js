@@ -35,10 +35,10 @@ export default function ScheduleEditor(props) {
     }
 
     const onClickSubmit = () => {
-        if (selectedTimeSlots.length === 0) {
-            cmm.alert('시간을 선택해 주세요.');
-        } else if (selectedArea.length === 0 || selectedArea === DEFAULT_AREA) {
+        if (selectedArea.length === 0 || selectedArea === DEFAULT_AREA) {
             cmm.alert('지역을 선택해 주세요.');
+        } else if (selectedTimeSlots.length === 0) {
+            cmm.alert('시간을 선택해 주세요.');
         } else {
             cmm.confirm('저장하시겠습니까?', submit);
         }

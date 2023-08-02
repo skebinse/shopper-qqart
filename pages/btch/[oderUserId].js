@@ -217,7 +217,7 @@ export default function OderUserId(props) {
                             {piupImgList.map((url, idx) => (
                                 <SwiperSlide key={'prop' + idx}>
                                     <div className={'imgZoomArea'}>
-                                        <Image className={'img'} alt={'영수증 이미지'} src={url} width={278} height={278} />
+                                        <img className={'img'} alt={'영수증 이미지'} src={url} />
                                         <Image className={'zoom'} onClick={() => cmm.util.showImageZoom(piupImgList, idx)}
                                                alt={'확대 이미지'} src={'/assets/images/btn/btnZoom.svg'} width={24} height={24} />
                                     </div>

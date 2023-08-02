@@ -55,6 +55,8 @@ function renderList(items) {
         const dateStyleKeySuffix = disabled ? 'disabled' : isHoliday ? 'holiday' : '';
         const scheduleStyleKeySuffix = disabled ? 'disabled' : schedule === undefined ? 'unregistered' : '';
 
+        const isDeleteButtonVisible = !disabled && schedule !== undefined;
+
         return (
             <li key={dateString} onClick={disabled ? undefined : onClickItem}>
                 <div className={styles.dayContainer}>
@@ -68,14 +70,16 @@ function renderList(items) {
                     )}
                     <label className={`${styles.scheduleText} ${styles[scheduleStyleKeySuffix]}`}>{scheduleString}</label>
                 </div>
-                <Image
-                    className={styles.deleteButton} 
-                    src={'/assets/images/btn/btnDel.svg'} 
-                    alt={'삭제'} 
-                    width={20} 
-                    height={20} 
-                    onClick={onClickDelete}
-                />
+                {isDeleteButtonVisible && (
+                    <Image
+                        className={styles.deleteButton} 
+                        src={'/assets/images/btn/btnDel.svg'} 
+                        alt={'삭제'} 
+                        width={20} 
+                        height={20} 
+                        onClick={onClickDelete}
+                    />
+                )}
             </li>
         )
     })

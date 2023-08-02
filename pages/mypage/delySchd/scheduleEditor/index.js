@@ -3,24 +3,10 @@ import styles from "../../../../styles/scheduleEditor.module.css"
 import { useEffect, useState } from "react";
 import { padStart, range } from "lodash";
 import TimeSlotList from "./timeSlotList";
+import cmm from "../../../../js/common";
 
-const DUMMY_AREAS = [
-    {
-        id: '000',
-        label: '용산구',
-    }, {
-        id: '001',
-        label: '중구',
-    }, {
-        id: '002',
-        label: '종로구',
-    }
-]
-
-const DEFAULT_AREA = {
-    id: '-1',
-    label: '지역 선택'
-};
+const DEFAULT_AREA = '지역 선택';
+const AREA_CD_CODE = '68';
 
 const START_TIME = 7;
 
@@ -32,8 +18,9 @@ export default function ScheduleEditor(props) {
     const [selectedTimeSlots, setSelectedTimeSlots] = useState([]);
 
     useEffect(() => {
-        // TODO: 서버에서 지역 목록 받아 오기
-        setAreas(DUMMY_AREAS);
+        cmm.biz.commCdList(AREA_CD_CODE, response => {
+            setAreas(response.map(cd => cd.CD_NM));
+        });
     }, []);
 
     useEffect(() => {
@@ -41,13 +28,23 @@ export default function ScheduleEditor(props) {
         setSelectedTimeSlots(schedule?.SHPR_SCHD_HH.split(',') ?? [])
     }, [schedule]);
 
-    const onClickSubmit = () => {
+    const submit = () => {
         onSubmit(selectedArea, selectedTimeSlots);
         setSelectedArea('');
         setSelectedTimeSlots([]);
+    }
+
+    const onClickSubmit = () => {
+        if (selectedArea.length === 0 || selectedArea === DEFAULT_AREA) {
+            cmm.alert('지역을 선택해 주세요.');
+        } else if (selectedTimeSlots.length === 0) {
+            cmm.alert('시간을 선택해 주세요.');
+        } else {
+            cmm.confirm('저장하시겠습니까?', submit);
+        }
     };
 
-    const areaOptions = [DEFAULT_AREA].concat(areas).map(area => <option key={area.id} value={area.id} label={area.label} />);
+    const areaOptions = [DEFAULT_AREA].concat(areas).map(area => <option key={area} value={area} label={area} />);
     
     const timeSlots = range(14).map(offset => padStart(`${offset + START_TIME}`, 2, '0'));
 

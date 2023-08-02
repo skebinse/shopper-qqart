@@ -41,3 +41,11 @@ export function requestUpdateSchedule(scheduleId, areaId, timeSlots, onSuccess) 
         success: onSuccess,
     });
 }
+
+export function requestDeleteSchedule(scheduleId, onSuccess) {
+    cmm.ajax({
+        url: `/api/delyschd/${scheduleId}`,
+        method: 'DELETE',
+        success: onSuccess,
+    });
+}

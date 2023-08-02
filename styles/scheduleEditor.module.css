@@ -9,6 +9,7 @@
     opacity: 0;
     overflow: auto;
     transition: all 0.3s ease-in;
+    pointer-events: none;
     background-color: #FFFFFF;
 }
 
@@ -16,6 +17,7 @@
     transition: top 0.3s ease-out;
     top: 0;
     opacity: 1;
+    pointer-events: auto;
 }
 
 .scheduleEditor .titleDiv {

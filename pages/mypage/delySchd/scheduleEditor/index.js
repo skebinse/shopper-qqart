@@ -5,19 +5,32 @@ import { padStart, range } from "lodash";
 import TimeSlotList from "./timeSlotList";
 import cmm from "../../../../js/common";
 
+// 지역 선택 드랍다운 메뉴의 기본 표시 값
 const DEFAULT_AREA = '지역 선택';
+
+// 공통 코드 목록 요청 시 지역 카테고리 값
 const AREA_CD_CODE = '68';
 
+// 시간 선택 옵션의 가장 이른 시각
 const START_TIME = 7;
 
+// 시간 선택 옵션의 개수
+const TIME_SLOT_COUNT = 14;
+
+/**
+ * 일정 생성 및 수정 화면
+ */
 export default function ScheduleEditor(props) {
     const { schedule, isVisible, onSubmit, onClose } = props;
 
+    // Area: 지역 이름을 나타내는 문자열 (ex: '서초구 방배1동')
     const [areas, setAreas] = useState([]);
     const [selectedArea, setSelectedArea] = useState('');
+    // TimeSlot: 일정 선택 옵션의 시작 시각을 나타내는 두 자리의 문자열 (ex: '07')
     const [selectedTimeSlots, setSelectedTimeSlots] = useState([]);
 
     useEffect(() => {
+        // 지역 목록 요청
         cmm.biz.commCdList(AREA_CD_CODE, response => {
             setAreas(response.map(cd => cd.CD_NM));
         });
@@ -28,12 +41,18 @@ export default function ScheduleEditor(props) {
         setSelectedTimeSlots(schedule?.SHPR_SCHD_HH.split(',') ?? [])
     }, [schedule]);
 
+    /**
+     * 선택한 지역과 시간을 부모 페이지로 전달
+     */
     const submit = () => {
         onSubmit(selectedArea, selectedTimeSlots);
         setSelectedArea('');
         setSelectedTimeSlots([]);
     }
 
+    /**
+     * 확인 버튼 클릭 하면 입력 값 검증
+     */
     const onClickSubmit = () => {
         if (selectedArea.length === 0 || selectedArea === DEFAULT_AREA) {
             cmm.alert('지역을 선택해 주세요.');
@@ -44,9 +63,11 @@ export default function ScheduleEditor(props) {
         }
     };
  
+    // 지역 목록을 드랍다운 옵션으로 생성
     const areaOptions = [DEFAULT_AREA].concat(areas).map(area => <option key={area} value={area} label={area} />);
     
-    const timeSlots = range(14).map(offset => padStart(`${offset + START_TIME}`, 2, '0'));
+    // TIME_SLOT_COUNT 개수만큼의 시간 선택 옵션 생성
+    const timeSlots = range(TIME_SLOT_COUNT).map(offset => padStart(`${offset + START_TIME}`, 2, '0'));
 
     return (
         <div className={`${styles.scheduleEditor} ${isVisible ? styles.active : ''}`}>

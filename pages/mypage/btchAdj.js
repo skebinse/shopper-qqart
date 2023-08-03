@@ -42,19 +42,19 @@ export default function BtchAdj() {
                                 compList.push({
                                     date,
                                     cnt: 1,
-                                    amt: cmm.util.getNumber(item.DELY_AMT),
+                                    amt: cmm.util.getNumber(item.ODER_DELY_AMT),
                                     list: [item]
                                 });
                             } else {
 
                                 compList[compList.length - 1].cnt += 1;
-                                compList[compList.length - 1].amt += cmm.util.getNumber(item.DELY_AMT);
+                                compList[compList.length - 1].amt += cmm.util.getNumber(item.ODER_DELY_AMT);
                                 compList[compList.length - 1].list.push(item);
                             }
                             // 정산된 금액
-                            totalAdjAmt += (item.ODER_ADJ_YN === 'Y' ? cmm.util.getNumber(item.DELY_AMT) : 0);
+                            totalAdjAmt += (item.ODER_ADJ_YN === 'Y' ? cmm.util.getNumber(item.ODER_DELY_AMT) : 0);
                             // 정산예정 금액
-                            totalAmt += (item.ODER_ADJ_YN === 'N' ? cmm.util.getNumber(item.DELY_AMT) : 0);
+                            totalAmt += (item.ODER_ADJ_YN === 'N' ? cmm.util.getNumber(item.ODER_DELY_AMT) : 0);
                         });
                         setBtchList({
                             compList,
@@ -130,7 +130,7 @@ export default function BtchAdj() {
                                     <ul>
                                         {item.list.map((itemDtpt, idxDtpt) =>
                                             <li key={'compDtpt' + idxDtpt} onClick={() => setOderUserId(itemDtpt.ODER_USER_ID)}>
-                                                <span>{itemDtpt.DELY_AMT}원</span>
+                                                <span>{itemDtpt.ODER_DELY_AMT}원</span>
                                                 <span>{itemDtpt.SHOP_NM}</span>
                                             </li>
                                         )}

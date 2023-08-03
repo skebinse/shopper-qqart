@@ -53,7 +53,7 @@ export default function CompDtpt({id, onClose}) {
             <div className={styles.summDiv}>
                 <h5>정산금액</h5>
                 <p>
-                    {dtptInfo.DELY_AMT}원
+                    {cmm.util.comma(dtptInfo.ODER_DELY_AMT)}원
                     <span className={dtptInfo.ODER_ADJ_YN === 'Y' ? styles.adj : ''}>{dtptInfo.ODER_ADJ_YN === 'Y' ? '정산완료' : '정산예정'}</span>
                 </p>
                 <ul>

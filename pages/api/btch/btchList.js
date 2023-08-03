@@ -108,7 +108,7 @@ export default async function handler(req, res) {
                  , DATE_FORMAT(AA.ODER_DELY_YMD, '%m월 %d일') AS ODER_DELY_YMD
                  , AA.ODER_DELY_HH
                  , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
-                 , FORMAT(fnGetDelyDtcAmt(AA.ODER_USER_ID, AA.SHPR_ID, AA.ODER_DELY_DTC) + ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
+                 , FORMAT(fnGetShprDelyDtcAmt(AA.ODER_USER_ID, AA.SHPR_ID, AA.ODER_DELY_DTC) + ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
                  , fnGetAtchFileList(AA.SHOP_RRSN_ATCH_FILE_UUID) AS SHOP_RRSN_ATCH_FILE_LIST
                  , CASE WHEN AA.ODER_URG_DELY_MI != '' THEN 
                     AA.ODER_URG_DELY_MI - TIMESTAMPDIFF(MINUTE, AA.ODER_REQ_YMD, DATE_ADD(NOW(), INTERVAL 9 HOUR))
@@ -190,7 +190,7 @@ export default async function handler(req, res) {
              , DATE_FORMAT(AA.ODER_DELY_YMD, '%m월 %d일') AS ODER_DELY_YMD
              , AA.ODER_DELY_HH
              , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
-             , FORMAT(fnGetDelyDtcAmt(AA.ODER_USER_ID, AA.SHPR_ID, AA.ODER_DELY_DTC) + AA.ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
+             , FORMAT(fnGetShprDelyDtcAmt(AA.ODER_USER_ID, AA.SHPR_ID, AA.ODER_DELY_DTC) + ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
              , fnGetAtchFileList(AA.SHOP_RRSN_ATCH_FILE_UUID) AS SHOP_RRSN_ATCH_FILE_LIST
              , CASE 
                 WHEN AA.ODER_URG_DELY_MI != '' THEN ''

@@ -59,7 +59,7 @@ export default async function handler(req, res) {
                      THEN DATE_FORMAT(EE.ODER_REQ_YMD, '%y년 %m월 %d일 %H:%i')
                    ELSE DATE_FORMAT(DATE_ADD(EE.ODER_REQ_YMD, INTERVAL 9 HOUR), '%y년 %m월 %d일 %H:%i') END AS ODER_REQ_YMD
                  , DATE_FORMAT(DATE_ADD(EE.ODER_DELY_CPL_DT, INTERVAL 9 HOUR), '%y년 %m월 %d일 %H:%i') AS ODER_DELY_CPL_DT
-                 , FORMAT(fnGetDelyDtcAmt(EE.ODER_USER_ID, EE.SHPR_ID, EE.ODER_DELY_DTC) + EE.ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
+                 , FF.ODER_DELY_AMT
             FROM T_ODER_USER_INFO EE
                  INNER JOIN T_SHOP_MAG BB
               ON BB.SHOP_ID = EE.SHOP_ID

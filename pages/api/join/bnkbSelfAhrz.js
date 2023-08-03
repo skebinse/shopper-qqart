@@ -6,14 +6,14 @@ export default async function handler(req, res) {
 
     const param = req.body;
 
-    accountCheckService().checkDepositorInfo('6648802585', param.backCd, param.backNum, 'P', param.iden.substring(0, 6), 'VERYBUSYBEE', async resultRes => {
+    accountCheckService().checkDepositorInfo('6648802585', param.bankCd, param.bankNum, 'P', param.iden.substring(0, 6), 'VERYBUSYBEE', async resultRes => {
         console.log(resultRes)
 
         if(resultRes.result === 100) {
 
             if(await bcrypt.compare(resultRes.accountName, param.nameHash)) {
 
-                res.status(200).json(result(''));
+                res.status(200).json(result(true));
             } else {
 
                 res.status(200).json(result('', '9999', '예금주명이 상이합니다.'));

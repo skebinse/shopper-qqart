@@ -50,25 +50,19 @@ export default function EssInfoInpt(props) {
 
     useEffect(() => {
 
+        window.drvLicImg = null;
+
         if(!!document.querySelector('#ch-plugin')) {
             document.querySelector('#ch-plugin').classList.add('d-none');
         }
 
-        return () => {
-            if(!!document.querySelector('#ch-plugin')) {
-                document.querySelector('#ch-plugin').classList.remove('d-none');
-            }
-        };
-    }, []);
-
-    useEffect(() => {
-
-        console.log(!!router.query.name)
+        // 본인인증 실패
         if(!!router.query.error) {
 
             cmm.alert('본인인증에 실패하였습니다.\n다시 한번 진행해 주세요.', () => {
                 goPage('/join/selfCfm');
             });
+        // 본인인증 성공 및 새로고침
         } else if(!!router.query.name) {
 
             cmm.util.setLs('selfCfm', router.query);
@@ -78,8 +72,13 @@ export default function EssInfoInpt(props) {
 
             setUserInfo(!!cmm.util.getLs('selfCfm') ? cmm.util.getLs('selfCfm') : {});
         }
-        // https://localhost:3000/join/essInfoInpt?name=박장용&nameHash=$2b$10$FmebTEUUXulJC63UgYNpHuuWcC18MIVKu/xktT.WK7LS5A5bY5.wO&iden=8304081
+        // https://localhost:3000/join/essInfoInpt?name=박장용&nameHash=$2b$10$FmebTEUUXulJC63UgYNpHuuWcC18MIVKu/xktT.WK7LS5A5bY5.wO&iden=8304081&phone=01098767527
 
+        return () => {
+            if(!!document.querySelector('#ch-plugin')) {
+                document.querySelector('#ch-plugin').classList.remove('d-none');
+            }
+        };
     }, []);
 
     /**
@@ -87,11 +86,24 @@ export default function EssInfoInpt(props) {
      */
     const nextHandler = () => {
 
+        if(!userInfo.bankCd) {
+            cmm.alert('은행을 선택해 주세요.');
+            return;
+        } else if(!userInfo.bankNum) {
+            cmm.alert('통장번호를 입력해 주세요.');
+            return;
+        }
+
         cmm.ajax({
             url: '/api/join/bnkbSelfAhrz',
             data: userInfo,
             success: res => {
-                console.log(res);
+
+                if(res) {
+
+                    cmm.util.setLs(cmm.Cont.JOIN_INFO, {...cmm.util.getLs(cmm.Cont.JOIN_INFO), ...userInfo});
+                    goPage('./reg');
+                }
             }
         });
     }
@@ -110,6 +122,7 @@ export default function EssInfoInpt(props) {
             // 썸네일
             cmm.util.getThumbFile({file: uploadFile, maxSize: 1024, type: uploadFile.type}).then(imgData => {
                 setPrvImg(window.URL.createObjectURL(imgData.blob));
+                window.drvLicImg = imgData.blob;
 
                 cmm.loading(false);
             });
@@ -151,13 +164,13 @@ export default function EssInfoInpt(props) {
                         <label>은행</label>
                         <div className={styles.select2}>
                             <Select placeholder={'은행을 선택해주세요'}
-                                    onChange={e => setUserInfo(prevState => ({...prevState, backCd: e.value}))} options={options} />
+                                    onChange={e => setUserInfo(prevState => ({...prevState, bankCd: e.value, bankNm: e.label}))} options={options} />
                         </div>
                     </li>
                     <li>
                         <label>통장번호</label>
                         <div>
-                            <input onChange={e => setUserInfo(prevState => ({...prevState, backNum: e.target.value}))}
+                            <input onChange={e => setUserInfo(prevState => ({...prevState, bankNum: e.target.value}))}
                                    type="text" placeholder="통장번호를 입력해 주세요" />
                         </div>
                     </li>

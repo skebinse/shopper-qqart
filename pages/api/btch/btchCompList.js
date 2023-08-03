@@ -18,7 +18,7 @@ export default async function handler(req, res) {
                      , AA.ODER_ADJ_YN
                      , DATE_FORMAT(DATE_ADD(AA.ODER_DELY_CPL_DT, INTERVAL 9 HOUR), '%m월 %d일') AS ODER_DELY_CPL_DT
                      , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
-                     , FORMAT(fnGetDelyDtcAmt(AA.ODER_USER_ID, AA.SHPR_ID, AA.ODER_DELY_DTC) + AA.ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
+                     , ODER_DELY_AMT
                      , fnGetAtchFileList(AA.SHOP_RRSN_ATCH_FILE_UUID) AS SHOP_RRSN_ATCH_FILE_LIST
                   FROM (
                     SELECT AA.ODER_MNGR_RGI_YN
@@ -31,6 +31,7 @@ export default async function handler(req, res) {
                          , BB.SHOP_NM
                          , BB.SHOP_RRSN_ATCH_FILE_UUID
                          , CC.ODER_ADJ_YN
+                         , CC.ODER_DELY_AMT
                          , CONCAT(BB.SHOP_ADDR, ' ' , BB.SHOP_DTPT_ADDR) AS SHOP_FULL_ADDR
                          , ST_DISTANCE_SPHERE(POINT(BB.SHOP_ADDR_LAT, BB.SHOP_ADDR_LOT), POINT(EE.SHPR_ADDR_LAT, EE.SHPR_ADDR_LOT)) AS SLIN_DTC
                          , IFNULL((SELECT COUNT(*) FROM T_ODER_DTPT A1 WHERE A1.ODER_ID = AA.ODER_ID), 0) AS PROD_CNT

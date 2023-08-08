@@ -140,7 +140,8 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 .inputUl > li > div > input::placeholder{font-weight: 300;opacity: 0.5;}
 
 .ulType01{padding-top: 8px;}
-.ulType01 > li{background-color: #FFFFFF;}
+.ulType01 > li{background-color: #FFFFFF;border-bottom: 1px solid #E4E4E4;}
+.ulType01 > li:last-child{border-bottom: none;}
 .ulType01 > li a{display: flex;align-items: center;padding: 26px 17px 25px 33px;}
 .ulType01 > li a h5{color: #333333;font-size: 15px;flex: 1;}
 

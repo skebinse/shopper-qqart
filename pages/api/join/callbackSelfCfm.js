@@ -5,9 +5,6 @@ import bcrypt from 'bcrypt';
 
 export default async function handler(req, res) {
 
-    console.log(req.body)
-    console.log(req.body.ByBuffer)
-
     cmm.ajax({
         url: 'https://uas.teledit.com/uas/',
         isExtr: true,

@@ -37,6 +37,7 @@ async function getSchedule(conn, req, res) {
         const [rows] = await conn.query(query, [id]);
         res.status(200).json(result(rows[0]));
     } catch (e) {
+        console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
         console.log(e);
         res.status(500).json(result('', '9999', '오류가 발생했습니다.'));
     }
@@ -56,6 +57,7 @@ async function setSchedule(conn, req, res) {
         await conn.query(query, [area, schedule, id]);
         res.status(200).json(result(id));
     } catch (e) {
+        console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
         console.log(e);
         res.status(500).json(result('', '9999', '오류가 발생했습니다.'));
     }
@@ -73,6 +75,7 @@ async function deleteSchedule(conn, req, res) {
         await conn.query(query, [id]);
         res.status(200).json(result(id));
     } catch (e) {
+        console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
         console.log(e);
         res.status(500).json(result('', '9999', '오류가 발생했습니다.'));
     }

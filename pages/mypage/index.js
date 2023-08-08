@@ -99,12 +99,12 @@ export default function MyPage() {
                         <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
                     </Link>
                 </li>
-                <li>
-                    <Link href={'/mag/annc'}>
-                        <h5>공지사항/이벤트</h5>
-                        <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
-                    </Link>
-                </li>
+                {/*<li>*/}
+                {/*    <Link href={'/mag/annc'}>*/}
+                {/*        <h5>공지사항/이벤트</h5>*/}
+                {/*        <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />*/}
+                {/*    </Link>*/}
+                {/*</li>*/}
             </ul>
             <hr />
             <div className={styles.logout}>

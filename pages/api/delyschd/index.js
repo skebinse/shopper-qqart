@@ -44,6 +44,7 @@ async function setSchedule(conn, req, res) {
         const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, date, area, schedule]);
         res.status(200).json(result(rows.insertId));
     } catch (e) {
+        console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
         console.log(e);
         res.status(500).json(result('', '9999', '오류가 발생했습니다.'));
     }
@@ -72,6 +73,7 @@ async function getSchedules(conn, req, res) {
         const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, startdate, enddate]);
         res.status(200).json(result(rows));
     } catch (e) {
+        console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
         console.log(e);
         res.status(500).json(result('', '9999', '오류가 발생했습니다.'));
     }

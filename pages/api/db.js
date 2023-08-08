@@ -19,7 +19,15 @@ const pool = createPool({
 export async function getConnectPool(callback) {
     const conn = await pool.getConnection(async conn => conn);
 
-    await callback(conn);
+    try {
+
+        await callback(conn);
+    } catch (e) {
+
+        console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
+        console.log('db.js');
+        console.log(e);
+    }
 
     conn.release();
 }

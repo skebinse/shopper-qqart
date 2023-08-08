@@ -22,3 +22,4 @@ function getTimeZoneSuffix() {
     const minutes = padStart(`${offset % 60}`, 2, '0');
     return `${sign}${hours}:${minutes}`;
 }
+  

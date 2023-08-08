@@ -93,18 +93,18 @@ export default function MyPage() {
                 <button type="button" className={'button'} onClick={dutjEndHanler}>업무 종료</button>
             </div>
             <ul className={'ulType01'}>
-                <li>
-                    <Link href={'/mypage/delySchd'}>
-                        <h5>일정관리</h5>
-                        <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
-                    </Link>
-                </li>
                 {/*<li>*/}
-                {/*    <Link href={'/mag/annc'}>*/}
-                {/*        <h5>공지사항/이벤트</h5>*/}
+                {/*    <Link href={'/mypage/delySchd'}>*/}
+                {/*        <h5>일정관리</h5>*/}
                 {/*        <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />*/}
                 {/*    </Link>*/}
                 {/*</li>*/}
+                <li>
+                    <Link href={'/mag/annc'}>
+                        <h5>공지사항/이벤트</h5>
+                        <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
+                    </Link>
+                </li>
             </ul>
             <hr />
             <div className={styles.logout}>

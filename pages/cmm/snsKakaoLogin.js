@@ -10,6 +10,7 @@ export default function Login(props) {
 
     useEffect(() => {
 
+        console.log('props.profile', props.profile);
         if(!!props.profile) {
 
             const param = {
@@ -85,13 +86,13 @@ export async function getServerSideProps(context) {
         },
         method: 'POST',
     }).then(res => res.json()).then(res => res.access_token);
-
+    console.log('accessToken', accessToken);
     const profile = await fetch('https://kapi.kakao.com/v2/user/me', {
         headers: {
             Authorization: 'Bearer ' + accessToken
         },
     }).then(res => res.json());
-
+    console.log('profile', profile);
     return {
         props: {
             profile

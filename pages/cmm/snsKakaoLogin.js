@@ -10,7 +10,6 @@ export default function Login(props) {
 
     useEffect(() => {
 
-        console.log('props.profile', props.profile);
         if(!!props.profile) {
 
             const param = {
@@ -78,29 +77,25 @@ export async function getServerSideProps(context) {
         redirect_uri: process.env.NEXT_PUBLIC_LOCAL_URL + '/cmm/snsKakaoLogin',
         code: context.query.code,
     };
-
+    console.log(data.redirect_uri);
     const accessToken = await fetch('https://kauth.kakao.com/oauth/token', {
         body: new URLSearchParams(data),
         headers: {
             contentType: 'application/x-www-form-urlencoded;charset=utf-8'
         },
         method: 'POST',
-    }).then(res => {
-        console.log('res', res);
-        return res.json();
-    }).then(res => {
-        console.log('res2', res);
+    }).then(res => res.json()).then(res => {
+
+        console.log(res);
         return res.access_token;
-    }).catch(err => {
-        console.log('err', err);
     });
-    console.log('accessToken', accessToken);
+
     const profile = await fetch('https://kapi.kakao.com/v2/user/me', {
         headers: {
             Authorization: 'Bearer ' + accessToken
         },
     }).then(res => res.json());
-    console.log('profile', profile);
+
     return {
         props: {
             profile

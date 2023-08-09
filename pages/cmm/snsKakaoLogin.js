@@ -85,7 +85,15 @@ export async function getServerSideProps(context) {
             contentType: 'application/x-www-form-urlencoded;charset=utf-8'
         },
         method: 'POST',
-    }).then(res => res.json()).then(res => res.access_token);
+    }).then(res => {
+        console.log('res', res);
+        return res.json();
+    }).then(res => {
+        console.log('res2', res);
+        return res.access_token;
+    }).catch(err => {
+        console.log('err', err);
+    });
     console.log('accessToken', accessToken);
     const profile = await fetch('https://kapi.kakao.com/v2/user/me', {
         headers: {

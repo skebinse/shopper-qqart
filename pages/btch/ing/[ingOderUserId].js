@@ -468,7 +468,11 @@ export default function IngOderUserId() {
                             </li>
                             <li>
                                 <h5>연락처</h5>
-                                <p className={'colorGreen bold'}>{cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}</p>
+                                <p>
+                                    <a className={'colorGreen bold'} href={'tel:' + btchInfo.ODER_ACPP_CPHONE_NO}>
+                                        {cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}
+                                    </a>
+                                </p>
                             </li>
                             {!!btchInfo.ODER_JOIN_ENTH_PW &&
                                 <li>
@@ -504,7 +508,9 @@ export default function IngOderUserId() {
                             </li>
                             <li>
                                 <h5>연락처</h5>
-                                <p className={'colorGreen bold'}>{cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}</p>
+                                <a className={'colorGreen bold'} href={'tel:' + btchInfo.ODER_ACPP_CPHONE_NO}>
+                                    {cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}
+                                </a>
                             </li>
                             <li>
                                 <h5>스토어 적립</h5>

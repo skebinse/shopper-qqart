@@ -101,7 +101,11 @@ export default function BtchComp() {
                     </li>
                     <li>
                         <h5>연락처</h5>
-                        <p className={'colorGreen bold'}>{cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}</p>
+                        <p>
+                            <a className={'colorGreen bold'} href={'tel:' + btchInfo.ODER_ACPP_CPHONE_NO}>
+                                {cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}
+                            </a>
+                        </p>
                     </li>
                     {!!btchInfo.ODER_DELY_REQ_MATT &&
                         <li>

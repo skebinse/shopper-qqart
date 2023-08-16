@@ -13,6 +13,7 @@
 .btchAdjDiv .headTitle{padding: 20px 35px;background-color: #FFFFFF;position: sticky;top:0;z-index: 1;}
 .btchAdjDiv .headTitle h3{text-align: center;}
 .btchAdjDiv .btchArea{}
+.btchAdjDiv .btchArea :global .weekDateDiv{top: 63px;}
 .btchAdjDiv .btchArea .searchDiv{display: flex;align-items: center;padding: 12px 20px;border-bottom: 1px solid #CCCCCC;position: sticky;top: 67px;background: #fff;z-index: 1;}
 .btchAdjDiv .btchArea .searchDiv span{flex: 1;font-weight: 500;font-size: 14px;line-height: 17px;color: #333333;display: inline-block;text-align: center;}
 .btchAdjDiv .btchArea .searchDiv img:last-child{transform: rotate(180deg)}
@@ -34,7 +35,7 @@
 .btchAdjDiv .btchArea .compListDiv > ul > li div.smryDiv img{transform: rotate(270deg)}
 .btchAdjDiv .btchArea .compListDiv > ul > li.active div.smryDiv img{transform: rotate(0)}
 .btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv{overflow: hidden;transition: max-height 0.2s ease-out;max-height: 0;}
-.btchAdjDiv .btchArea .compListDiv > ul > li.active div.dtptDiv{max-height: 1000px;transition: max-height 0.3s ease-in;}
+.btchAdjDiv .btchArea .compListDiv > ul > li.active div.dtptDiv{max-height: 3000px;transition: max-height 0.3s ease-in;}
 .btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv ul{border-top: 1px solid #E6E6E6;margin-top: 20px;}
 .btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv li{padding-top: 32px;display: flex;}
 .btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv li:first-child{padding-top: 20px;}

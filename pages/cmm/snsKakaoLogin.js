@@ -10,7 +10,13 @@ export default function Login(props) {
 
     useEffect(() => {
 
-        if(!!props.profile) {
+        if(!!props.error) {
+
+            cmm.alert(`카카오로그인에 실패하였습니다.
+                            다시 로그인해 주세요.(${props.error})`);
+
+            goPage('/cmm/login');
+        } else if(!!props.profile) {
 
             const param = {
                 userCrctno: props.profile.id,
@@ -77,7 +83,7 @@ export async function getServerSideProps(context) {
         redirect_uri: process.env.NEXT_PUBLIC_LOCAL_URL + '/cmm/snsKakaoLogin',
         code: context.query.code,
     };
-    console.log(data.redirect_uri);
+
     const accessToken = await fetch('https://kauth.kakao.com/oauth/token', {
         body: new URLSearchParams(data),
         headers: {
@@ -86,19 +92,31 @@ export async function getServerSideProps(context) {
         method: 'POST',
     }).then(res => res.json()).then(res => {
 
-        console.log(res);
+        if(!!res.error) {
+
+            console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
+            console.log(res);
+        }
         return res.access_token;
     });
 
-    const profile = await fetch('https://kapi.kakao.com/v2/user/me', {
-        headers: {
-            Authorization: 'Bearer ' + accessToken
-        },
-    }).then(res => res.json());
+    let error = null, profile = null;
+    if(!accessToken) {
+
+        error = 'accessToken';
+    } else {
+
+        profile = await fetch('https://kapi.kakao.com/v2/user/me', {
+            headers: {
+                Authorization: 'Bearer ' + accessToken
+            },
+        }).then(res => res.json());
+    }
 
     return {
         props: {
-            profile
+            profile,
+            error,
         },
     }
 }

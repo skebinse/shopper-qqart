@@ -4,9 +4,7 @@ import { useEffect, useState } from "react";
 import { padStart, range } from "lodash";
 import TimeSlotList from "./timeSlotList";
 import cmm from "../../../../js/common";
-
-// 지역 선택 드랍다운 메뉴의 기본 표시 값
-const DEFAULT_AREA = '지역 선택';
+import Select from 'react-select'
 
 // 공통 코드 목록 요청 시 지역 카테고리 값
 const AREA_CD_CODE = '68';
@@ -54,7 +52,7 @@ export default function ScheduleEditor(props) {
      * 확인 버튼 클릭 하면 입력 값 검증
      */
     const onClickSubmit = () => {
-        if (selectedArea.length === 0 || selectedArea === DEFAULT_AREA) {
+        if (selectedArea.length === 0) {
             cmm.alert('지역을 선택해 주세요.');
         } else if (selectedTimeSlots.length === 0) {
             cmm.alert('시간을 선택해 주세요.');
@@ -64,7 +62,7 @@ export default function ScheduleEditor(props) {
     };
  
     // 지역 목록을 드랍다운 옵션으로 생성
-    const areaOptions = [DEFAULT_AREA].concat(areas).map(area => <option key={area} value={area} label={area} />);
+    const areaOptions = areas.map(area => ({ value: area, label: area }));
     
     // TIME_SLOT_COUNT 개수만큼의 시간 선택 옵션 생성
     const timeSlots = range(TIME_SLOT_COUNT).map(offset => padStart(`${offset + START_TIME}`, 2, '0'));
@@ -75,9 +73,7 @@ export default function ScheduleEditor(props) {
                 <h5>지역 및 시간 선택</h5>
                 <Image alt={'닫기'} src={'/assets/images/icon/iconClose.svg'} width={22} height={22} onClick={onClose} />
             </div>
-            <select value={selectedArea} onChange={event => setSelectedArea(event.target.value)}>
-                {areaOptions}
-            </select>
+            <Select options={areaOptions} placeholder='지역 선택' onChange={event => setSelectedArea(event.value)} />
             <TimeSlotList slots={timeSlots} selectedSlots={selectedTimeSlots} onChangeSelection={setSelectedTimeSlots} />
             <div className={styles.okButtonContainer}>
                 <div className={styles.okButton} onClick={onClickSubmit}>

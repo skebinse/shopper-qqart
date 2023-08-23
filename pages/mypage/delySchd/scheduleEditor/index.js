@@ -36,8 +36,21 @@ export default function ScheduleEditor(props) {
 
     useEffect(() => {
         setSelectedArea(schedule?.SHPR_SCHD_AREA ?? '');
-        setSelectedTimeSlots(schedule?.SHPR_SCHD_HH.split(',') ?? [])
+        setSelectedTimeSlots(schedule?.SHPR_SCHD_HH.split(',') ?? []);
+
     }, [schedule]);
+
+
+    /**
+     * 팝업 닫을 때 데이터 초기화
+     */
+    useEffect(() => {
+
+        if(!isVisible) {
+            setSelectedArea('');
+            setSelectedTimeSlots([]);
+        }
+    }, [isVisible]);
 
     /**
      * 선택한 지역과 시간을 부모 페이지로 전달
@@ -60,7 +73,7 @@ export default function ScheduleEditor(props) {
             cmm.confirm('저장하시겠습니까?', submit);
         }
     };
- 
+
     // 지역 목록을 드랍다운 옵션으로 생성
     const areaOptions = areas.map(area => ({ value: area, label: area }));
     
@@ -73,7 +86,7 @@ export default function ScheduleEditor(props) {
                 <h5>지역 및 시간 선택</h5>
                 <Image alt={'닫기'} src={'/assets/images/icon/iconClose.svg'} width={22} height={22} onClick={onClose} />
             </div>
-            <Select options={areaOptions} placeholder='지역 선택' onChange={event => setSelectedArea(event.value)} />
+            <Select className={styles.select} value={areaOptions.filter(item => item.value === selectedArea)} options={areaOptions} placeholder='지역 선택' onChange={event => setSelectedArea(event.value)} />
             <TimeSlotList slots={timeSlots} selectedSlots={selectedTimeSlots} onChangeSelection={setSelectedTimeSlots} />
             <div className={styles.okButtonContainer}>
                 <div className={styles.okButton} onClick={onClickSubmit}>

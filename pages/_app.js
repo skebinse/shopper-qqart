@@ -61,7 +61,8 @@ export default function MyApp({ Component, pageProps }) {
                     isLoaing: false,
                     data: {
                         lat,
-                        lot
+                        lot,
+                        shprAppYn: 'Y',
                     },
                     success: res => {},
                     error: res => {}
@@ -87,6 +88,45 @@ export default function MyApp({ Component, pageProps }) {
                         "callback": "window.getPsPsit"
                     }));
                 }, (1000 * 60 * 2));
+            } else {
+
+                // // 위치 정보
+                // if(!!navigator.geolocation && !!navigator.geolocation.getCurrentPosition) {
+                //
+                //     // 현재 위치 저장
+                //     const callCurrentPosition = () => {
+                //
+                //         // 로그인 시
+                //         if(cmm.checkLogin()) {
+                //             navigator.geolocation.getCurrentPosition(res => {
+                //
+                //                 cmm.ajax({
+                //                     url: '/api/cmm/insPsPsit',
+                //                     isLoaing: false,
+                //                     data: {
+                //                         lat: res.coords.latitude,
+                //                         lot: res.coords.longitude,
+                //                         shprAppYn: 'N',
+                //                     },
+                //                     success: res => {
+                //                     },
+                //                     error: res => {
+                //                     }
+                //                 });
+                //             }, res => console.error(res))
+                //         }
+                //     };
+                //
+                //     // 현재 위치 저장
+                //     callCurrentPosition();
+                //
+                //     // 2분마다 실행
+                //     setInterval(() => {
+                //
+                //         // 현재 위치 저장
+                //         callCurrentPosition();
+                //     }, (1000 * 60 * 2));
+                // }
             }
         }, 1000);
 

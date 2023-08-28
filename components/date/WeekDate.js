@@ -2,10 +2,10 @@ import React, {useCallback, useEffect, useState} from 'react';
 import Image from "next/image";
 import cmm from "../../js/common";
 
-export default function WeekDate({onSelectDate}) {
+export default function WeekDate({onSelectDate, isNextWeek = false}) {
 
     const [searchDate, setSearchDate] = useState({toDt: '', fromDt: ''});
-    const [isLastDate, setIsLastDate] = useState(true);
+    const [isLastDate, setIsLastDate] = useState(false);
 
     /**
      * 조회 일자 변경
@@ -14,7 +14,7 @@ export default function WeekDate({onSelectDate}) {
     const searchDateChange = kd => {
 
         // 오늘일자 보다 큰 경우 return
-        if(kd === 'next' && searchDate.toDt >= cmm.date.getToday('-')) return;
+        if(kd === 'next' && !isNextWeek && searchDate.toDt >= cmm.date.getToday('-')) return;
 
         const stdDate = !!kd ? cmm.date.calDateReturnDt(searchDate.fromDt, 'D', (kd === 'prev' ? -7 : 7)) : new Date();
         const weekIdx = stdDate.getDay();
@@ -26,10 +26,14 @@ export default function WeekDate({onSelectDate}) {
             toDt,
             text: `${fromDt.substring(5).replace('-', '월')}일 ~ ${toDt.substring(5).replace('-', '월')}일`
         };
+
         setSearchDate(selectDate);
 
-        // 오늘보다 큰 날일 경우
-        setIsLastDate(toDt >= cmm.date.getToday('-'));
+        if(!isNextWeek) {
+
+            // 오늘보다 큰 날일 경우
+            setIsLastDate(toDt >= cmm.date.getToday('-'));
+        }
 
         // calblack
         !!onSelectDate && onSelectDate(selectDate);

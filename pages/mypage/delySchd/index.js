@@ -145,7 +145,7 @@ export default function DelySchd() {
     return (
         <div>
             <HeadTitle title='일정 관리'/>
-            <WeekDate onSelectDate={date => setSearchDate(date)} />
+            <WeekDate onSelectDate={date => setSearchDate(date)} isNextWeek={true} />
             {startDate && (
                 <ScheduleList
                     startDate={startDate}

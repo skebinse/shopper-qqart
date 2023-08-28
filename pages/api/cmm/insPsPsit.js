@@ -12,10 +12,12 @@ export default async function handler(req, res) {
                      SHPR_ID
                    , SHPR_PSIT_LAT
                    , SHPR_PSIT_LOT
+                   , SHPR_APP_YN
                    , SHPR_PSIT_RGI_YMD
                    , RGI_DT
                 ) VALUES (
                      fnDecrypt(?, ?)
+                   , ?
                    , ?
                    , ?
                    , DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y-%m-%d')
@@ -23,7 +25,7 @@ export default async function handler(req, res) {
                 )
             `;
 
-            const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.lot, param.lat]);
+            const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.lot, param.lat, param.shprAppYn]);
 
             res.status(200).json(result(rows));
         } catch (e) {

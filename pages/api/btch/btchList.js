@@ -12,7 +12,7 @@ export default async function handler(req, res) {
         try {
 
             // cmm.ajax({
-            //     url: 'https://devroad.qqcart.shop/api/v1/eta/route',
+            //     url: 'http://road.qqcart.shop:3000/api/v1/eta/route',
             //     isExtr: true,
             //     dataType: 'json',
             //     headers: {

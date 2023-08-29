@@ -12,7 +12,7 @@ export default async function handler(req, res) {
         try {
 
             // cmm.ajax({
-            //     url: 'http://road.qqcart.shop:3000/api/v1/eta/route',
+            //     url: 'http://road.qqcart.shop/api/v1/eta/route',
             //     isExtr: true,
             //     dataType: 'json',
             //     headers: {
@@ -156,6 +156,7 @@ export default async function handler(req, res) {
                      , AA.ODER_DRC_LDTN_YN
                      , AA.ODER_DELY_SLCT_VAL
                      , AA.ODER_DRC_LDTN_AMT
+                     , AA.ODER_DELY_DTC
                      , DATE_FORMAT(AA.ODER_DELY_YMD, '%m월 %d일') AS ODER_DELY_YMD
                      , AA.ODER_DELY_HH
                      , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
@@ -238,6 +239,7 @@ export default async function handler(req, res) {
                  , AA.ODER_DRC_LDTN_YN
                  , AA.ODER_DELY_SLCT_VAL
                  , AA.ODER_DRC_LDTN_AMT
+                 , AA.ODER_DELY_DTC
                  , DATE_FORMAT(AA.ODER_DELY_YMD, '%m월 %d일') AS ODER_DELY_YMD
                  , AA.ODER_DELY_HH
                  , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC

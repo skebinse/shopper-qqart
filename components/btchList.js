@@ -56,7 +56,7 @@ export default function BtchList({list, href, classNm = '', noDataTxt = '현재 
                         <div className={'delyArea'}>
                             <div>
                                 <Image alt={'배달거리 이미지'} src={'/assets/images/icon/iconDistance.svg'} width={24} height={14.8} />
-                                <span>{item.SLIN_DTC}Km</span>
+                                <span>{item.ODER_DELY_DTC}Km</span>
                             </div>
                             <div>
                                 <Image alt={'상품 이미지'} src={'/assets/images/icon/iconProduct.svg'} width={17} height={18.4} />

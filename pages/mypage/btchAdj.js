@@ -131,7 +131,7 @@ export default function BtchAdj() {
                                         {item.list.map((itemDtpt, idxDtpt) =>
                                             <li key={'compDtpt' + idxDtpt} onClick={() => setOderUserId(itemDtpt.ODER_USER_ID)}>
                                                 <span>{cmm.util.comma(itemDtpt.ODER_DELY_AMT)}원</span>
-                                                <span>{itemDtpt.SHOP_NM}</span>
+                                                <span>{itemDtpt.SHOP_NM}({itemDtpt.ODER_RPRE_NO})</span>
                                             </li>
                                         )}
                                     </ul>

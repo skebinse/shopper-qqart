@@ -73,7 +73,8 @@ export default function Index(props) {
             cmm.ajax({
                 url: '/api/btch/btchList',
                 data:{
-                    isLog: dateInfo.log !== cmm.date.getToday('')
+                    isLog: dateInfo.log !== cmm.date.getToday(''),
+                    appYn: cmm.isApp() ? 'Y' : 'N'
                 },
                 success: res => {
 

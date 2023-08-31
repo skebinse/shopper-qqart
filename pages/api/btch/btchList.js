@@ -70,11 +70,11 @@ export default async function handler(req, res) {
                     : window.location.host
 
                 query = `
-                    INSERT INTO T_ACES_LOG(ACES_LOG_BROW, ACES_LOG_SCRN_URL, ACES_LOG_IP, SHPR_ID)
-                    VALUES (?, ?, ?, fnDecrypt(?, ?))
+                    INSERT INTO T_ACES_LOG(ACES_LOG_BROW, ACES_LOG_SCRN_URL, ACES_LOG_IP, SHPR_ID, APP_YN)
+                    VALUES (?, ?, ?, fnDecrypt(?, ?), ?)
                 `;
 
-                await conn.query(query, [userAgent, protocol + '//' + host, ip, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+                await conn.query(query, [userAgent, protocol + '//' + host, ip, req.headers['x-enc-user-id'], process.env.ENC_KEY, param.appYn]);
             }
 
             // 정지 계정 확인
@@ -157,6 +157,7 @@ export default async function handler(req, res) {
                      , AA.ODER_DELY_SLCT_VAL
                      , AA.ODER_DRC_LDTN_AMT
                      , AA.ODER_DELY_DTC
+                     , fnGetPromPoin(AA.SHOP_ID) AS SHPR_ADJ_POIN
                      , DATE_FORMAT(AA.ODER_DELY_YMD, '%m월 %d일') AS ODER_DELY_YMD
                      , AA.ODER_DELY_HH
                      , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
@@ -177,6 +178,7 @@ export default async function handler(req, res) {
                          , AA.ODER_DELY_SLCT_VAL
                          , AA.ODER_DELY_YMD
                          , AA.ODER_DELY_HH
+                         , AA.SHOP_ID
                          , BB.SHOP_NM
                          , BB.SHOP_RRSN_ATCH_FILE_UUID
                          , CONCAT(BB.SHOP_ADDR, ' ' , BB.SHOP_DTPT_ADDR) AS SHOP_FULL_ADDR
@@ -240,6 +242,7 @@ export default async function handler(req, res) {
                  , AA.ODER_DELY_SLCT_VAL
                  , AA.ODER_DRC_LDTN_AMT
                  , AA.ODER_DELY_DTC
+                 , AA.SHPR_ADJ_POIN
                  , DATE_FORMAT(AA.ODER_DELY_YMD, '%m월 %d일') AS ODER_DELY_YMD
                  , AA.ODER_DELY_HH
                  , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
@@ -265,6 +268,7 @@ export default async function handler(req, res) {
                      , AA.ODER_DELY_YMD
                      , AA.ODER_DELY_HH
                      , AA.ODER_URG_DELY_MI
+                     , AA.SHPR_ADJ_POIN
                      , BB.SHOP_NM
                      , BB.SHOP_RRSN_ATCH_FILE_UUID
                      , AA.ODER_DELY_ADDR

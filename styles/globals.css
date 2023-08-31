@@ -73,6 +73,7 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 .btch li.warning .priceArea p{background: url('/assets/images/icon/iconQuickType02.svg') no-repeat left center;padding-left: 28px;}
 .btch li .priceArea p span{color:#F4997A;font-size: 14px;padding-left: 5px}
 .btch li .priceArea img{border-radius: 100%;object-fit: cover;}
+.btch li .point{font-size: 14px;font-weight: 700;}
 .btch li .delyArea{padding-top: 12px;display: flex;align-items: center;}
 .btch li .delyArea div{flex: 1;display: flex;align-items: center;justify-content: center;}
 .btch li .delyArea div:first-child{justify-content: flex-start;}

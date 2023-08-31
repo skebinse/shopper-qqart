@@ -60,6 +60,7 @@ export default async function handler(req, res) {
                      , EE.ODER_URG_DELY_MI
                      , EE.ODER_DELY_MENS
                      , EE.ODER_DELY_ARTG
+                     , fnGetPromPoin(EE.SHOP_ID) AS SHPR_ADJ_POIN
                      , IFNULL(EE.ODER_DRC_LDTN_AMT, 0) AS ODER_DRC_LDTN_AMT
                      , FORMAT(fnGetShprDelyDtcAmt(EE.ODER_USER_ID, fnDecrypt(?, ?), EE.ODER_DELY_DTC) + EE.ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
                      , DATE_FORMAT(fnGetOderReqYmd(EE.ODER_MNGR_RGI_YN, EE.ODER_REQ_YMD), '%y년 %m월 %d일 %H:%i') AS ODER_REQ_YMD

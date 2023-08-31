@@ -2,8 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/index.module.css";
 import React, {useEffect} from "react";
+import cmm from "../js/common";
 
-export default function BtchList({list, href, classNm = '', noDataTxt = '현재 접수된 배치가 없습니다.',
+export default function  BtchList({list, href, classNm = '', noDataTxt = '현재 접수된 배치가 없습니다.',
                                      isDtptBtn = false, isIngBtch = false, isInit}) {
 
     /**
@@ -53,6 +54,9 @@ export default function BtchList({list, href, classNm = '', noDataTxt = '현재 
                             </p>
                             <Image alt={'상점 이미지'} src={item.SHOP_RRSN_ATCH_FILE_LIST} width={40} height={40} />
                         </div>
+                        {item.SHPR_ADJ_POIN > 0 &&
+                            <span className={'point'}>+{cmm.util.comma(item.SHPR_ADJ_POIN)}P</span>
+                        }
                         <div className={'delyArea'}>
                             <div>
                                 <Image alt={'배달거리 이미지'} src={'/assets/images/icon/iconDistance.svg'} width={24} height={14.8} />

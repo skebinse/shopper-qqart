@@ -9,14 +9,28 @@ import {useRouter} from "next/router";
 
 export default function MyPage() {
 
-    const [myInfo, setMyInfo] = useState({});
+    const [myInfo, setMyInfo] = useState({
+        SHPR_PRFL_FILE: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNs/Q8AAg8Bhso7688AAAAASUVORK5CYII='
+    });
     const router = useRouter();
     const {goPage} = useCommon();
 
     useEffect(() => {
 
         document.body.classList.add(styles.body);
-        setMyInfo(cmm.getLoginInfo());
+
+        cmm.ajax({
+            url: `/api/cmm/myInfo`,
+            success: res => {
+                if(!!res) {
+
+                    setMyInfo(res);
+                } else {
+                    cmm.alert('없는 계정입니다.');
+                }
+            }
+        });
+
         return () => {
 
             document.body.classList.remove(styles.body);
@@ -84,6 +98,10 @@ export default function MyPage() {
                 <p>
                     반갑습니다. 쇼퍼님!
                     <span>{myInfo.SHPR_NCNM}</span>
+                    <span className={styles.point}>
+                        <Image src={'/assets/images/icon/iconPoint.svg'} alt={'포인트 아이콘'} width={16} height={16} />
+                        {cmm.util.comma(myInfo?.SHPR_POIN)}P
+                    </span>
                 </p>
                 <Link href={'/join/info'}>
                     <button type={'button'} className={'button short white'} >개인정보 수정</button>
@@ -111,7 +129,7 @@ export default function MyPage() {
                 <button type={'button'} onClick={logoutClick}>로그아웃</button>
             </div>
             <p onClick={mbScssClick}>회원 탈퇴</p>
-           <BottomMenu idx={2} />
-       </div>
+            <BottomMenu idx={2} />
+        </div>
     );
 }

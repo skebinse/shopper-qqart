@@ -12,6 +12,7 @@ export default function MyPage() {
     const [myInfo, setMyInfo] = useState({
         SHPR_PRFL_FILE: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNs/Q8AAg8Bhso7688AAAAASUVORK5CYII='
     });
+    const [ntfy, setNtfy] = useState(false);
     const router = useRouter();
     const {goPage} = useCommon();
 
@@ -21,10 +22,12 @@ export default function MyPage() {
 
         cmm.ajax({
             url: `/api/cmm/myInfo`,
+            method: 'GET',
             success: res => {
                 if(!!res) {
 
                     setMyInfo(res);
+                    setNtfy(res.SHPR_NTFY_YN === 'Y');
                 } else {
                     cmm.alert('없는 계정입니다.');
                 }
@@ -89,6 +92,24 @@ export default function MyPage() {
         });
     };
 
+    /**
+     * 알림 변경
+     * @param e
+     */
+    const ntfyChangeHandler = e => {
+
+        setNtfy(e.target.checked);
+        cmm.ajax({
+            url: `/api/cmm/myInfo`,
+            method: 'PUT',
+            data: {
+                shprNtfyYn: e.target.checked ? 'Y' : 'N'
+            },
+            success: res => {
+            }
+        });
+    };
+
     return (
         <div className={styles.mypage}>
             <div className={styles.head}>
@@ -123,6 +144,17 @@ export default function MyPage() {
                         <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
                     </Link>
                 </li>
+                {/*<li>*/}
+                {/*    <div>*/}
+                {/*        <h5>알림</h5>*/}
+                {/*        <span className={'toggleArea'}>*/}
+                {/*            <input type="checkbox" id="toggleNtfy" hidden onChange={ntfyChangeHandler} checked={ntfy} />*/}
+                {/*            <label htmlFor="toggleNtfy" className={'toggleSwitch'}>*/}
+                {/*                <span className={'toggleButton'}></span>*/}
+                {/*            </label>*/}
+                {/*        </span>*/}
+                {/*    </div>*/}
+                {/*</li>*/}
             </ul>
             <hr />
             <div className={styles.logout}>

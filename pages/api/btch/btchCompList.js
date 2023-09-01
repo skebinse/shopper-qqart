@@ -17,6 +17,7 @@ export default async function handler(req, res) {
                      , AA.ODER_KD
                      , AA.ODER_ADJ_YN
                      , AA.ODER_RPRE_NO
+                     , AA.SHPR_ADJ_POIN
                      , DATE_FORMAT(DATE_ADD(AA.ODER_DELY_CPL_DT, INTERVAL 9 HOUR), '%m월 %d일') AS ODER_DELY_CPL_DT
                      , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
                      , ODER_DELY_AMT
@@ -30,6 +31,7 @@ export default async function handler(req, res) {
                          , AA.ODER_KD
                          , AA.SHPR_ID
                          , AA.ODER_RPRE_NO
+                         , AA.SHPR_ADJ_POIN
                          , BB.SHOP_NM
                          , BB.SHOP_RRSN_ATCH_FILE_UUID
                          , CC.ODER_ADJ_YN

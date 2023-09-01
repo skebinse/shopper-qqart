@@ -48,6 +48,13 @@ input[type=radio]+label {padding-left: 34px;background-image: url('/assets/image
 input[type=radio]:checked+label {background-image: url('/assets/images/icon/iconRadioOn.svg');}
 input[type=radio]:disabled+label{opacity: 0.5;}
 
+/* 토글 버튼 */
+.toggleArea .toggleSwitch {width: 40px;height: 24px;display: block;position: relative;border-radius: 100px;background-color: #DFE4F1;cursor: pointer;transition: all 0.2s ease-in;padding-left: 0;background-image: none;}
+.toggleArea .toggleSwitch .toggleButton {border-radius: 100px;width: 18px;height: 18px;position: absolute;top: 50%;left: 4px;transform: translateY(-50%);border-radius: 50%;background: #ffffff;transition: all 0.2s ease-in;}
+.toggleArea input:checked ~ .toggleSwitch {background: #02B763;}
+.toggleArea input:checked ~ .toggleSwitch .toggleButton {left: calc(100% - 22px);background: #fff;}
+
+
 /* alert confirm */
 .alertArea,.confirmArea{position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0, 0, 0, 0.8);padding: 0 17px;display: flex;flex-direction: column;z-index: 100000000;}
 .alertArea > div,.confirmArea > div{background-color: #FFFFFF;border-radius: 12px;width: calc(100% - 68px);margin: auto 0;padding: 24px 17px;animation-name: alertAni;animation-duration: 0.2s;}

@@ -33,7 +33,7 @@ export default function BtchAdj() {
 
                         let date = '';
                         const compList = [];
-                        let totalAdjAmt = 0, totalAmt = 0;
+                        let totalAdjAmt = 0, totalAmt = 0, totalPoint = 0;
                         res.forEach(item => {
 
                             if(date !== item.ODER_DELY_CPL_DT) {
@@ -43,24 +43,29 @@ export default function BtchAdj() {
                                     date,
                                     cnt: 1,
                                     amt: cmm.util.getNumber(item.ODER_DELY_AMT),
+                                    point: cmm.util.getNumber(item.SHPR_ADJ_POIN),
                                     list: [item]
                                 });
                             } else {
 
                                 compList[compList.length - 1].cnt += 1;
                                 compList[compList.length - 1].amt += cmm.util.getNumber(item.ODER_DELY_AMT);
+                                compList[compList.length - 1].point += cmm.util.getNumber(item.SHPR_ADJ_POIN);
                                 compList[compList.length - 1].list.push(item);
                             }
                             // 정산된 금액
                             totalAdjAmt += (item.ODER_ADJ_YN === 'Y' ? cmm.util.getNumber(item.ODER_DELY_AMT) : 0);
                             // 정산예정 금액
                             totalAmt += (item.ODER_ADJ_YN === 'N' ? cmm.util.getNumber(item.ODER_DELY_AMT) : 0);
+                            // 포인트
+                            totalPoint += cmm.util.getNumber(item.SHPR_ADJ_POIN);
                         });
                         setBtchList({
                             compList,
                             summ: {
                                 adjAmt: totalAdjAmt,
                                 amt: totalAmt,
+                                point: totalPoint,
                                 cnt: res.length,
                             }
                         });
@@ -114,6 +119,12 @@ export default function BtchAdj() {
                             <label>정산예정</label>
                             <p>{cmm.util.comma(btchList?.summ?.amt)}원</p>
                         </li>
+                        {!!btchList?.summ?.point &&
+                            <li>
+                                <label>포인트</label>
+                                <p>{cmm.util.comma(btchList?.summ?.point)}원</p>
+                            </li>
+                        }
                     </ul>
                 </div>
                 <div className={styles.compListDiv}>
@@ -122,7 +133,12 @@ export default function BtchAdj() {
                             <li key={'comp' + idx} className={!!item.active ? styles.active : ''}>
                                 <h5>{item.date}</h5>
                                 <div className={styles.smryDiv} onClick={() => liClickHandler(idx)}>
-                                    <p>{cmm.util.comma(item.amt)}원</p>
+                                    <p>
+                                        {cmm.util.comma(item.amt)}원
+                                        {!!item.point &&
+                                            <em> +{cmm.util.comma(item.point)}P</em>
+                                        }
+                                    </p>
                                     <span>{item.cnt}건</span>
                                     <Image alt={'상세'} src={!!item.active ? '/assets/images/icon/iconArrowUColor.svg' : '/assets/images/icon/iconArrowL.svg'} width={24} height={24}/>
                                 </div>
@@ -130,7 +146,12 @@ export default function BtchAdj() {
                                     <ul>
                                         {item.list.map((itemDtpt, idxDtpt) =>
                                             <li key={'compDtpt' + idxDtpt} onClick={() => setOderUserId(itemDtpt.ODER_USER_ID)}>
-                                                <span>{cmm.util.comma(itemDtpt.ODER_DELY_AMT)}원</span>
+                                                <span>
+                                                    {cmm.util.comma(itemDtpt.ODER_DELY_AMT)}원
+                                                    {!!itemDtpt.SHPR_ADJ_POIN &&
+                                                        <em> +{cmm.util.comma(itemDtpt.SHPR_ADJ_POIN)}P</em>
+                                                    }
+                                                </span>
                                                 <span>{itemDtpt.SHOP_NM}({itemDtpt.ODER_RPRE_NO})</span>
                                             </li>
                                         )}

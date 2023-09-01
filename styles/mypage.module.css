@@ -9,6 +9,8 @@
 .mypage hr{background-color: #E4E4E4;height: 1px;width: 100%;margin: 0;border: none;}
 .mypage .logout{padding-top: 8px;}
 .mypage .logout button{color: #333333;font-size: 15px;background-color: #FFFFFF;border: none;padding: 20px 0;width: 100%;}
+.mypage :global .ulType01 li > div{display: flex;align-items: center;padding: 26px 17px 25px 33px;}
+.mypage :global .ulType01 li > div h5{color: #333333;font-size: 15px;flex: 1 1;}
 
 
 .btchAdjDiv .headTitle{padding: 20px 35px;background-color: #FFFFFF;position: sticky;top:0;z-index: 1;}
@@ -30,6 +32,7 @@
 .btchAdjDiv .btchArea .compListDiv > ul > li h5{font-size: 12px;line-height: 14px;color: #333333;}
 .btchAdjDiv .btchArea .compListDiv > ul > li div.smryDiv{display: flex;align-items: center;padding-top: 12px;}
 .btchAdjDiv .btchArea .compListDiv > ul > li div.smryDiv p{font-weight: 700;font-size: 16px;line-height: 19px;color: #333333;flex: 1;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.smryDiv p em{font-size: 14px;}
 .btchAdjDiv .btchArea .compListDiv > ul > li.active div.smryDiv p{color: #02B763;}
 .btchAdjDiv .btchArea .compListDiv > ul > li div.smryDiv span{font-weight: 500;font-size: 14px;line-height: 17px;color: #333333;padding-right: 20px;}
 .btchAdjDiv .btchArea .compListDiv > ul > li.active div.smryDiv span{color: #02B763;}
@@ -42,3 +45,4 @@
 .btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv li:first-child{padding-top: 20px;}
 .btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv li span{font-size: 14px;line-height: 17px;color: #333333;}
 .btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv li span:first-child{flex: 1;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv li span em{font-size: 12px;}

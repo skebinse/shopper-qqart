@@ -54,6 +54,9 @@ export default function CompDtpt({id, onClose}) {
                 <h5>정산금액</h5>
                 <p>
                     {cmm.util.comma(dtptInfo.ODER_DELY_AMT)}원
+                    {!!dtptInfo.SHPR_ADJ_POIN &&
+                        <em> +{cmm.util.comma(dtptInfo.SHPR_ADJ_POIN)}P</em>
+                    }
                     <span className={dtptInfo.ODER_ADJ_YN === 'Y' ? styles.adj : ''}>{dtptInfo.ODER_ADJ_YN === 'Y' ? '정산완료' : '정산예정'}</span>
                 </p>
                 <ul>

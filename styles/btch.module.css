@@ -32,6 +32,7 @@
 .compDtptDiv .summDiv{padding: 16px 20px;border-bottom: solid 8px #F2F2F2;}
 .compDtptDiv h5{font-weight: 700;font-size: 14px;line-height: 17px;color: #333333;padding-bottom: 8px;}
 .compDtptDiv .summDiv p{position: relative;font-weight: 700;font-size: 24px;line-height: 29px;color: #333333;}
+.compDtptDiv .summDiv p em{font-size: 20px;}
 .compDtptDiv .summDiv p span{border: 2px solid #FF7676;border-radius: 8px;padding: 3px 4px;font-weight: 700;font-size: 12px;line-height: 15px;color: #FF7676;position: absolute;right: 0;}
 .compDtptDiv .summDiv p span.adj{color: #02B763;border: 2px solid #02B763;}
 .compDtptDiv .divArea{padding: 0 20px;border-bottom: solid 8px #F2F2F2;}

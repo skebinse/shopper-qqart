@@ -147,17 +147,17 @@ export default function MyPage() {
                         <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
                     </Link>
                 </li>
-                <li>
-                    <div>
-                        <h5>알림</h5>
-                        <span className={'toggleArea'}>
-                            <input type="checkbox" id="toggleNtfy" hidden onChange={ntfyChangeHandler} checked={ntfy} />
-                            <label htmlFor="toggleNtfy" className={'toggleSwitch'}>
-                                <span className={'toggleButton'}></span>
-                            </label>
-                        </span>
-                    </div>
-                </li>
+                {/*<li>*/}
+                {/*    <div>*/}
+                {/*        <h5>알림</h5>*/}
+                {/*        <span className={'toggleArea'}>*/}
+                {/*            <input type="checkbox" id="toggleNtfy" hidden onChange={ntfyChangeHandler} checked={ntfy} />*/}
+                {/*            <label htmlFor="toggleNtfy" className={'toggleSwitch'}>*/}
+                {/*                <span className={'toggleButton'}></span>*/}
+                {/*            </label>*/}
+                {/*        </span>*/}
+                {/*    </div>*/}
+                {/*</li>*/}
             </ul>
             <hr />
             <div className={styles.logout}>

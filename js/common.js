@@ -191,6 +191,8 @@ const cmm = {
 
             elet.addEventListener('click', e => {
 
+                document.querySelector('#alertArea').innerHTML = '';
+
                 // 확인
                 if(e.target.classList.length === 1) {
 
@@ -199,8 +201,6 @@ const cmm = {
 
                     !!cancelCallback && cancelCallback();
                 }
-
-                document.querySelector('#alertArea').innerHTML = '';
             });
         });
     },
@@ -805,7 +805,40 @@ const cmm = {
                 webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "getpushid","callback": "window.getPushToken"}));
                 setTimeout(callback, 500);
             },1500);
-        }
+        },
+
+
+        /**
+         * 안드로이드 여부
+         * @returns {boolean}
+         */
+        isAndroid: () => {
+            const agent = navigator.userAgent.toLowerCase();
+
+            if( agent.indexOf('android') > -1 ) {
+
+                return true;
+            }else{
+                // 기타
+                return false;
+            }
+        },
+
+        /**
+         * IOS 여부
+         * @returns {boolean}
+         */
+        isIOS: () => {
+            const agent = navigator.userAgent.toLowerCase();
+
+            if( agent.indexOf("iphone") > -1 || agent.indexOf("ipad") > -1 || agent.indexOf("ipod") > -1 ) {
+                // IOS인 경우
+                return true;
+            }else{
+                // 기타
+                return false;
+            }
+        },
     },
 
     biz: {

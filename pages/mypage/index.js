@@ -57,17 +57,20 @@ export default function MyPage() {
      */
     const mbScssClick = () => {
 
-        cmm.confirm('탈퇴 하시겠습니까?', () => {
+        cmm.confirm('<b style="color: red;font-weight: 700">탈퇴</b> 하시겠습니까?', () => {
 
-            cmm.ajax({
-                url: '/api/cmm/mbScss',
-                success: res => {
+            cmm.confirm('정말로 <b style="color: red;font-weight: 700">탈퇴</b> 하시겠습니까?', () => {
 
-                    cmm.alert('탈퇴 되었습니다.', () => {
+                cmm.ajax({
+                    url: '/api/cmm/mbScss',
+                    success: res => {
 
-                        goPage('/cmm/login');
-                    });
-                }
+                        cmm.alert('탈퇴 되었습니다.', () => {
+
+                            goPage('/cmm/login');
+                        });
+                    }
+                });
             });
         });
     };
@@ -144,17 +147,17 @@ export default function MyPage() {
                         <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
                     </Link>
                 </li>
-                {/*<li>*/}
-                {/*    <div>*/}
-                {/*        <h5>알림</h5>*/}
-                {/*        <span className={'toggleArea'}>*/}
-                {/*            <input type="checkbox" id="toggleNtfy" hidden onChange={ntfyChangeHandler} checked={ntfy} />*/}
-                {/*            <label htmlFor="toggleNtfy" className={'toggleSwitch'}>*/}
-                {/*                <span className={'toggleButton'}></span>*/}
-                {/*            </label>*/}
-                {/*        </span>*/}
-                {/*    </div>*/}
-                {/*</li>*/}
+                <li>
+                    <div>
+                        <h5>알림</h5>
+                        <span className={'toggleArea'}>
+                            <input type="checkbox" id="toggleNtfy" hidden onChange={ntfyChangeHandler} checked={ntfy} />
+                            <label htmlFor="toggleNtfy" className={'toggleSwitch'}>
+                                <span className={'toggleButton'}></span>
+                            </label>
+                        </span>
+                    </div>
+                </li>
             </ul>
             <hr />
             <div className={styles.logout}>

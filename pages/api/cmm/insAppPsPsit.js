@@ -12,12 +12,14 @@ export default async function handler(req, res) {
                      SHPR_ID
                    , SHPR_PSIT_LAT
                    , SHPR_PSIT_LOT
+                   , SHPR_APP_YN
                    , SHPR_PSIT_RGI_YMD
                    , RGI_DT
                 ) VALUES (
-                     shprId
+                     ?
                    , ?
                    , ?
+                   , 'Y'
                    , DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y-%m-%d')
                    , NOW()
                 )

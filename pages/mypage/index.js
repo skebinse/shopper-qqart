@@ -59,19 +59,22 @@ export default function MyPage() {
 
         cmm.confirm('<b style="color: red;font-weight: 700">탈퇴</b> 하시겠습니까?', () => {
 
-            cmm.confirm('정말로 <b style="color: red;font-weight: 700">탈퇴</b> 하시겠습니까?', () => {
+            setTimeout(() => {
 
-                cmm.ajax({
-                    url: '/api/cmm/mbScss',
-                    success: res => {
+                cmm.confirm('정말로 <b style="color: red;font-weight: 700">탈퇴</b> 하시겠습니까?', () => {
 
-                        cmm.alert('탈퇴 되었습니다.', () => {
+                    cmm.ajax({
+                        url: '/api/cmm/mbScss',
+                        success: res => {
 
-                            goPage('/cmm/login');
-                        });
-                    }
+                            cmm.alert('탈퇴 되었습니다.', () => {
+
+                                goPage('/cmm/login');
+                            });
+                        }
+                    });
                 });
-            });
+            }, 100);
         });
     };
 

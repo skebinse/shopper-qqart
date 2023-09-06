@@ -10,31 +10,18 @@ export default async function handler(req, res) {
             // 금일 업무시작 여부
             let query = `
                 SELECT COUNT(*) AS CNT 
+                     , fnDecrypt(?, ?) AS SHPR_ID
                   FROM T_SHPR_DUTJ_MAG
                  WHERE SHPR_ID = fnDecrypt(?, ?)
                    AND SHPR_DUTJ_YMD = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y-%m-%d')
                    AND SHPR_DUTJ_END_DT IS NULL
                 `;
 
-            let [row] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            let [row] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
             if(param.type === 'start') {
 
                 if(row[0].CNT === 0) {
-
-                    // 배치 최대 건수 초기화
-                    // query = `
-                    //    UPDATE T_SHPR_INFO
-                    //       SET SHPR_MAX_DELY_NCN = 0
-                    //         , SHPR_PS_ODER_MXVA_YN = 'N'
-                    //     WHERE SHPR_ID = fnDecrypt(?, ?)
-                    //       AND (SELECT COUNT(*)
-                    //              FROM T_SHPR_DUTJ_MAG
-                    //             WHERE SHPR_ID = fnDecrypt(?, ?)
-                    //               AND SHPR_DUTJ_YMD = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y-%m-%d')) = 0
-                    // `;
-                    //
-                    // await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
                     query = `
                         INSERT INTO T_SHPR_DUTJ_MAG (
@@ -71,7 +58,7 @@ export default async function handler(req, res) {
                 }
             }
 
-            res.status(200).json(result(''));
+            res.status(200).json(result(row[0]));
         } catch (e) {
             console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
             console.log(e)

@@ -11,6 +11,10 @@ const cmm = {
         WEB_TOKEN: 'webToken',
         APP_TOKEN: 'appToken',
         DAY_OF_WEEK: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+        APP_MESSAGE_TYPE: {
+            NOTIFICATION: 'NOTIFICATION',
+            ONE_SIGNAL_PLAYER_ID: 'ONE_SIGNAL_PLAYER_ID',
+        }
     },
 
     /**
@@ -232,6 +236,14 @@ const cmm = {
     isApp: () => {
 
         return !!window.webkit;
+    },
+
+    /**
+     * 리액트 앱여부
+     */
+    isReactApp: () => {
+
+        return !!window.ReactNativeWebView;
     },
 
     /**

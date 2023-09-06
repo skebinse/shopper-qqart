@@ -14,6 +14,56 @@ export default function MyApp({ Component, pageProps }) {
             // firebaseInit();
         }
 
+        // 리액트 네이티브일 경우
+        if(cmm.isReactApp()) {
+
+            // 앱 콜백
+            const appCallback = e => {
+
+                const result = JSON.parse(e.data);
+
+                // PUSH Key
+                if(result.type === cmm.Cont.APP_MESSAGE_TYPE.ONE_SIGNAL_PLAYER_ID) {
+
+                    const token = result.data.replace(/\"/g, '');
+
+                    // 토큰 정보가 다를 경우
+                    if(cmm.util.getLs(cmm.Cont.APP_TOKEN) !== token) {
+
+                        cmm.ajax({
+                            url: '/api/cmm/modAppPushTkn',
+                            isLoaing: false,
+                            data: {
+                                token
+                            },
+                            success: res => {},
+                            error: res => {}
+                        });
+                    }
+
+                    cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
+                }
+            };
+
+            // 앱 안드로이드일 경우
+            if(cmm.app.isAndroid()) {
+
+                document.addEventListener("message", e => {
+
+                    console.log(e);
+                    // 앱 콜백
+                    appCallback(e);
+                });
+            } else {
+
+                window.addEventListener("message", e => {
+
+                    // 앱 콜백
+                    appCallback(e);
+                });
+            }
+        }
+
         // 채널톡
         cmm.plugin.channelIO();
 
@@ -40,11 +90,28 @@ export default function MyApp({ Component, pageProps }) {
         // PUSH 토큰 가져오기
         window.getPushToken = token => {
 
+            if(cmm.checkLogin()) {
+
+                // 토큰 정보가 다를 경우
+                if(cmm.util.getLs(cmm.Cont.APP_TOKEN) !== token) {
+
+                    cmm.ajax({
+                        url: '/api/cmm/modAppPushTkn',
+                        isLoaing: false,
+                        data: {
+                            token
+                        },
+                        success: res => {},
+                        error: res => {}
+                    });
+                }
+            }
+
             cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
         }
 
         // 앱이고 토큰 정보가 스토리지에 없는 경우
-        if(cmm.isApp() && !cmm.util.getLs(cmm.Cont.APP_TOKEN)) {
+        if(cmm.isApp()) {
 
             // PUSH Token
             cmm.app.getPushToken();

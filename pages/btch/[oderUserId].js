@@ -69,9 +69,7 @@ export default function OderUserId(props) {
     const btchAcpClick = () => {
 
         let options = `<option value="15">15분</option>
-                        <option value="30" selected >30분</option>
-                        <option value="45">45분</option>
-                        <option value="60">60분</option>`;
+                        <option value="30" selected >30분</option>`;
 
         // 급한 배달건일 경우
         if(!!btchInfo.BTCH_RGI_PGRS_MI) {

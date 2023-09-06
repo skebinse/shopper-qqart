@@ -158,6 +158,23 @@ export default function Index(props) {
             data: param,
             success: res => {
 
+                const loginInfo = cmm.util.getLs(cmm.Cont.LOGIN_INFO);
+
+                loginInfo.SHPR_ID = res.SHPR_ID;
+                cmm.util.setLs(cmm.Cont.LOGIN_INFO, loginInfo);
+
+                // 리액트 앱일 경우
+                if(cmm.isReactApp()) {
+
+                    window.postMessage(JSON.stringify({
+                        type: 'LOCATION_INFO_CONSENT',
+                        data: {
+                            psitTnsmYn: true,
+                            psitTnsmYmd: cmm.date.getToday('-'),
+                            shprId: res.SHPR_ID
+                        }
+                    }))
+                }
                 callBtchList();
             }
         });

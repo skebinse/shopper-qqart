@@ -92,6 +92,16 @@ export default function MyPage() {
                 },
                 success: res => {
 
+                    // 리액트 앱일 경우
+                    if(cmm.isReactApp()) {
+
+                        window.postMessage(JSON.stringify({
+                            type: 'LOCATION_INFO_CONSENT',
+                            data: {
+                                psitTnsmYn: false,
+                            }
+                        }))
+                    }
                     router.push('/');
                 }
             });

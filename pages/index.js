@@ -17,6 +17,7 @@ export default function Index(props) {
     const [dnone, setDnone] = useState('d-none');
     const [isDutjStrt, setIsDutjStrt] = useState(false);
     const [isEntApv, setIsEntApv] = useState(true);
+    const [entRefuRsn, setEntRefuRsn] = useState('');
     const [btchInfo, setBtchInfo] = useState({
         btchList: [],
         btchAcpList: [],
@@ -102,6 +103,7 @@ export default function Index(props) {
                     setDnone('');
                     setIsDutjStrt(res.isDutjStrt);
                     setIsEntApv(res.isEntApv);
+                    setEntRefuRsn(res.shprEntRefuRsn);
                 }
             });
         }
@@ -281,12 +283,29 @@ export default function Index(props) {
                         <Image alt={'프로필사진'} src={'/assets/images/img/noEntApv.svg'} width={182} height={131} />
                         <h3>
                             신청하신 계정은<br/>
-                            <em>승인 대기 상태</em>입니다.
+                            {!entRefuRsn &&
+                                <>
+                                    <em>승인 대기 상태</em>입니다.
+                                </>
+                            }
+                            {!!entRefuRsn &&
+                                <>
+                                    <em>승인 거절 상태</em>입니다.
+                                </>
+                            }
                         </h3>
-                        <p>
+                        {!entRefuRsn &&
+                            <p>
                             순차적으로 승인 진행중에 있으니<br/>
                             조금만 더 기다려주시기 바랍니다.
-                        </p>
+                            </p>
+                        }
+                        {!!entRefuRsn &&
+                            <p>
+                            아래 거절사유입니다.<br/>
+                            “{entRefuRsn}”
+                            </p>
+                        }
                     </div>
                     <div className={styles.kakaoDiv}>
                         <Image alt={'카카오톡'} src={'/assets/images/icon/iconKakaotalkType01.svg'} width={32} height={45} />

@@ -98,6 +98,7 @@ export default async function handler(req, res) {
             // 가입 승인 여부
             query = `
                 SELECT COUNT(*) AS CNT
+                     , SHPR_ENT_REFU_RSN
                   FROM T_SHPR_INFO
                  WHERE SHPR_ID = fnDecrypt(?, ?)
                    AND SHPR_ENT_APV_DT IS NULL
@@ -107,7 +108,7 @@ export default async function handler(req, res) {
 
             if (row[0].CNT > 0) {
 
-                res.status(200).json(result({isEntApv: false}));
+                res.status(200).json(result({isEntApv: false, shprEntRefuRsn: row[0].SHPR_ENT_REFU_RSN}));
 
                 return;
             }

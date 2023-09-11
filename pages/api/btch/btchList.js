@@ -158,7 +158,7 @@ export default async function handler(req, res) {
                      , AA.ODER_DELY_SLCT_VAL
                      , AA.ODER_DRC_LDTN_AMT
                      , AA.ODER_DELY_DTC
-                     , fnGetPromPoin(AA.SHOP_ID) AS SHPR_ADJ_POIN
+                     , fnGetPromPoin(AA.SHOP_ID, AA.SHPR_ID) AS SHPR_ADJ_POIN
                      , DATE_FORMAT(AA.ODER_DELY_YMD, '%m월 %d일') AS ODER_DELY_YMD
                      , AA.ODER_DELY_HH
                      , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC

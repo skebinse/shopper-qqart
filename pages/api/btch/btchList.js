@@ -222,7 +222,7 @@ export default async function handler(req, res) {
                    ) AA
              WHERE (AA.PROD_CNT > 0 OR AA.ODER_KD = 'PIUP')
                AND AA.SLIN_DTC < AA.SHPR_DELY_POS_DTC * 1000
-               AND AA.ODER_REQ_YMD BETWEEN CONCAT(DATE_FORMAT(NOW(), '%Y-%m-%d'), ' 00:00:00') AND CONCAT(DATE_FORMAT(NOW(), '%Y-%m-%d'), ' 23:59:59')
+               AND AA.ODER_REQ_YMD BETWEEN CONCAT(DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y-%m-%d'), ' 00:00:00') AND CONCAT(DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y-%m-%d'), ' 23:59:59')
           ORDER BY AA.ODER_REQ_YMD
             `;
 

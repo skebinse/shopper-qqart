@@ -11,8 +11,8 @@ export default function ScheduleList(props) {
     const { startDate, schedules, holidays, onClickItem, onClickDelete } = props;
 
     // 오늘 날짜의 0시 0분 0초를 나타내는 Date 객체
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const tomorrow = addDays(new Date(), 1);
+    tomorrow.setHours(0, 0, 0, 0);
 
     /**
      * 삭제 버튼을 누를 때에 z-index 상 아래에 있는 일정 항목으로는 클릭 이벤트를 전파하지 않고 부모 화면에 삭제하려는 일정의 Date와 Schedule 객체 전달
@@ -35,7 +35,7 @@ export default function ScheduleList(props) {
             schedule: schedule,  
             dateString: date.getDate().toString(),
             dayString: cmm.Cont.DAY_OF_WEEK[date.getDay()]?.charAt(0),
-            disabled: isBefore(date, today),
+            disabled: isBefore(date, tomorrow),
             isHoliday,
             onClickItem: () => onClickItem(date, schedule),
             onClickDelete: (event) => _onClickDelete(event, date, schedule),

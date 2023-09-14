@@ -410,6 +410,22 @@ const cmm = {
                 return cmm.date.parseDate(strDate).getDay();
             }
         },
+
+        /**
+         * 분을 시간-분으로 반환
+         * @param mi
+         * @returns {*|string}
+         */
+        getMmToHhMm : function(mi) {
+
+            if(mi >= 60) {
+
+                return Math.floor(mi / 60) + '시간' + ' ' + (mi % 60) + '분';
+            } else {
+
+                return mi + '분';
+            }
+        },
     },
 
     /**

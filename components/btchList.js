@@ -36,75 +36,89 @@ export default function  BtchList({list, href, classNm = '', noDataTxt = '현재
             }
             {list.map((item, idx) => (
                 <li key={'btch' + idx} className={[
-                    (!!item.BTCH_RGI_PGRS_MI && item.BTCH_RGI_PGRS_MI >= 0) ? 'ing' :
-                        (((!!item.BTCH_RGI_PGRS_MI && item.BTCH_RGI_PGRS_MI < 0)) ? 'warning' : ''),
+                    item.BTCH_ODER_PGRS_MI >= 120 ? 'hhWr hhExcs' :
+                        (((item.BTCH_ODER_PGRS_MI >= 90)) ? 'hhWr' : ''),
                     isIngBtch ? 'btchIng' : 'btchWait'
                 ].join(' ')
                 }>
                     <Link href={href + '/' + item.ODER_USER_ID}>
                         <div className={'priceArea'}>
-                            <p>
-                                {item.DELY_AMT}원
-                                {item.ODER_DRC_LDTN_YN === 'N' && item.ODER_DRC_LDTN_AMT === 0 &&
-                                    <span>카드 단말기 필요</span>
-                                }
-                                {item.ODER_DRC_LDTN_YN === 'N' && item.ODER_DRC_LDTN_AMT > 0 &&
-                                    <span style={{color: '#02B763'}}>직접 결제</span>
-                                }
-                            </p>
-                            <Image alt={'상점 이미지'} src={item.SHOP_RRSN_ATCH_FILE_LIST} width={40} height={40} />
+                            <div>
+                                <p>
+                                    {item.DELY_AMT}원
+                                    {(!isIngBtch && item.SHPR_ADJ_POIN) > 0 &&
+                                        <span className={'point'}>+{cmm.util.comma(item.SHPR_ADJ_POIN)}P</span>
+                                    }
+                                    {item.ODER_DRC_LDTN_YN === 'N' && item.ODER_DRC_LDTN_AMT === 0 &&
+                                        <span>카드 단말기</span>
+                                    }
+                                    {item.ODER_DRC_LDTN_YN === 'N' && item.ODER_DRC_LDTN_AMT > 0 &&
+                                        <span className={'drcLdtn'}>직접 결제</span>
+                                    }
+                                </p>
+                                <Image alt={'상점 이미지'} src={item.SHOP_RRSN_ATCH_FILE_LIST} width={40} height={40} />
+                            </div>
+                            {(isIngBtch && item.SHPR_ADJ_POIN) > 0 &&
+                                <span className={'point'}>+{cmm.util.comma(item.SHPR_ADJ_POIN)}P</span>
+                            }
                         </div>
-                        {item.SHPR_ADJ_POIN > 0 &&
-                            <span className={'point'}>+{cmm.util.comma(item.SHPR_ADJ_POIN)}P</span>
+                        {!!item.ODER_RPRE_NO &&
+                            <p>
+                                주문번호: <em>{item.ODER_RPRE_NO.length === 11 ? cmm.util.getNumber(item.ODER_RPRE_NO.substring(6)) : item.ODER_RPRE_NO}</em>
+                            </p>
                         }
                         <div className={'delyArea'}>
                             <div>
-                                <Image alt={'배달거리 이미지'} src={'/assets/images/icon/iconDistance.svg'} width={24} height={14.8} />
+                                <Image alt={'배달거리 이미지'} src={`/assets/images/icon/iconDistance${item.BTCH_ODER_PGRS_MI >= 90 ? 'W' : ''}.svg`} width={24} height={14.8} />
                                 <span>{item.ODER_DELY_DTC}Km</span>
                             </div>
                             <div>
-                                <Image alt={'상품 이미지'} src={'/assets/images/icon/iconProduct.svg'} width={17} height={18.4} />
+                                <Image alt={'상품 이미지'} src={`/assets/images/icon/iconProduct${item.BTCH_ODER_PGRS_MI >= 90 ? 'W' : ''}.svg`} width={17} height={18.4} />
                                 <span>{item.ODER_KD === 'PIUP' ? '픽업' : item.PROD_CNT + '개 상품'}</span>
                             </div>
-                            {!!item.ODER_RPRE_NO &&
-                                <div className={'orderNo'}>
-                                    <Image alt={'주문 정보'} src={'/assets/images/icon/iconInfo.svg'} width={17} height={18.4} />
-                                    <span>{item.ODER_RPRE_NO}</span>
-                                </div>
-                            }
                         </div>
-                        <p>{item.ODER_DELY_FULL_ADDR}</p>
                         {item.ODER_DELY_SLCT_VAL !== 'imm' &&
                             <p>{createTagResv(item)}</p>
                         }
-                        <div className={'storeArea'}>
-                                <h5>
-                                    {item.SHOP_NM}
-                                </h5>
+                        {!isIngBtch &&
+                            <>
+                                <p>{item.SHOP_NM}</p>
                                 <p>{item.SHOP_FULL_ADDR}</p>
-                        </div>
-                        {!!item.BTCH_RGI_PGRS_MI && item.BTCH_RGI_PGRS_MI >= 0 &&
-                            <div className={'piupRemMi'}>
-                                <Image alt={'주문 정보'} src={'/assets/images/icon/iconWarningType01.svg'} width={17} height={17} />
-                                {Math.abs(item.BTCH_RGI_PGRS_MI)}분 남음
-                            </div>
+                            </>
                         }
-                        {!!item.BTCH_RGI_PGRS_MI && item.BTCH_RGI_PGRS_MI < 0 &&
-                            <div className={'piupRemMi'}>
-                                <Image alt={'주문 정보'} src={'/assets/images/icon/iconWarning.svg'} width={17} height={17} />
-                                {Math.abs(item.BTCH_RGI_PGRS_MI)}분 지남
-                            </div>
-                        }
-                        {!!item.ODER_PIUP_FRCS_MI && item.ODER_PIUP_FRCS_MI - item.BTCH_ACP_PGRS_MI >= 0 &&
-                            <div className={'piupRemMi ing'}>
-                                <Image alt={'주문 정보'} src={'/assets/images/icon/iconWarningType01.svg'} width={17} height={17} />
-                                {Math.abs(item.ODER_PIUP_FRCS_MI - item.BTCH_ACP_PGRS_MI)}분 남음
-                            </div>
-                        }
-                        {!!item.ODER_PIUP_FRCS_MI && item.ODER_PIUP_FRCS_MI - item.BTCH_ACP_PGRS_MI < 0 &&
-                            <div className={'piupRemMi'}>
-                                <Image alt={'주문 정보'} src={'/assets/images/icon/iconWarning.svg'} width={17} height={17} />
-                                {Math.abs(item.ODER_PIUP_FRCS_MI - item.BTCH_ACP_PGRS_MI)}분 지남
+                        {!!isIngBtch &&
+                            <div className={'storeArea'}>
+                                {item.ODER_PGRS_STAT !== '05' &&
+                                    <>
+                                        <h5>
+                                            {item.SHOP_NM}
+                                        </h5>
+                                        <p>{item.SHOP_FULL_ADDR}</p>
+                                    </>
+                                }
+                                {item.ODER_PGRS_STAT === '05' &&
+                                    <>
+                                        <h5>
+                                            고객 주소
+                                        </h5>
+                                        <p>{item.ODER_DELY_FULL_ADDR}</p>
+                                    </>
+                                }
+                                {item.BTCH_ODER_PGRS_MI >= 90 &&
+                                    <div className={'piupRemMi'}>
+                                        <Image alt={'주문 정보'} src={'/assets/images/icon/iconWarningW.svg'} width={17} height={17} />
+                                        {item.BTCH_ODER_PGRS_MI >= 120 &&
+                                            <>
+                                                {cmm.date.getMmToHhMm(item.BTCH_ODER_PGRS_MI - 120)} 지남
+                                            </>
+                                        }
+                                        {item.BTCH_ODER_PGRS_MI < 120 &&
+                                            <>
+                                                {cmm.date.getMmToHhMm(120 - item.BTCH_ODER_PGRS_MI)} 남음
+                                            </>
+                                        }
+                                    </div>
+                                }
                             </div>
                         }
                         {isDtptBtn &&

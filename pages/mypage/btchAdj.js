@@ -9,10 +9,8 @@ import WeekDate from "../../components/date/WeekDate";
 export default function BtchAdj() {
 
     const [btchList, setBtchList] = useState({summ: {amt: 0, adjAmt: 0}});
-    const [selIdx, setSelIdx] = useState(-1);
     const [oderUserId, setOderUserId] = useState(-1);
     const [searchDate, setSearchDate] = useState(null);
-    const [isLastDate, setIsLastDate] = useState(true);
 
     /**
      * 배치 완료 리스트 조회

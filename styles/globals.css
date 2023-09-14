@@ -69,31 +69,46 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 
 /* 배치 리스트 */
 .btch{padding: 0 17px;}
-.btch li{background-color: #FFFFFF;border-radius: 12px;box-shadow: #00000033 0px 0px 16px;margin-bottom: 24px;padding: 18px 15px 25px 19px;}
+.btch li{background-color: #FFFFFF;border-radius: 12px;box-shadow: #00000033 0px 0px 16px;margin-bottom: 24px;padding: 12px 15px 15px 19px;}
+.btch li.btchIng.hhWr{background: #FF7B52;}
+.btch li.btchIng.hhWr.hhExcs{background: #F65B5B;}
+.btch li.btchIng.hhWr p{color: #FFFFFF;}
+.btch li.btchIng.hhWr span{color: #FFFFFF;}
 .btch li.ing{border: 1px solid #02B763;box-shadow: 0px 6px 24px rgba(2, 183, 99, 0.15);}
 .btch li.warning{border: 1px solid #F4997A;box-shadow: 0px 6px 24px rgba(244, 153, 122, 0.15);}
 .btch li.noData{box-shadow: none;background: none;text-align: center;padding-top: 40px;}
 .btch li.noData p {padding-top: 45px;color: #333333;font-size: 20px;}
-.btch li .priceArea{display: flex;align-items: center;}
-.btch li .priceArea p{color: #333333;font-size: 24px;font-weight: 700;flex: 1;}
+.btch li .priceArea{border-bottom: 1px solid #EBEBEB;padding-bottom: 16px;margin-bottom: 11px;}
+.btch li.hhWr .priceArea{border-bottom: 1px solid rgba(255, 255, 255, 0.1);}
+.btch li.btchWait .priceArea{padding-bottom: 0;margin-bottom: 0;border: none;}
+.btch li .priceArea div{display: flex;align-items: center;}
+.btch li .priceArea p{color: #333333;font-size: 24px;font-weight: 700;flex: 1;display: flex;align-items: center;}
+.btch li .priceArea p span{border-radius: 100px;background: #333;padding: 2px 8px;color: #FFF;font-size: 11px;font-weight: 500;line-height: 16px;display: inline-block;margin-left: 4px;}
+.btch li .priceArea p span.drcLdtn{background: #E4E4E4;color: #535867;}
+.btch li .priceArea p span.point{background: none;color: #000000;font-size: 14px;font-weight: 700;margin-left: 0;}
+.btch li .priceArea p span.point + span{margin-left: 0;}
 .btch li.ing .priceArea p{background: url('/assets/images/icon/iconQuickType01.svg') no-repeat left center;padding-left: 28px;}
 .btch li.warning .priceArea p{background: url('/assets/images/icon/iconQuickType02.svg') no-repeat left center;padding-left: 28px;}
-.btch li .priceArea p span{color:#F4997A;font-size: 14px;padding-left: 5px}
 .btch li .priceArea img{border-radius: 100%;object-fit: cover;}
 .btch li .point{font-size: 14px;font-weight: 700;}
-.btch li .delyArea{padding-top: 12px;display: flex;align-items: center;}
+.btch li .delyArea{padding-top: 7px;display: flex;align-items: center;}
 .btch li .delyArea div{flex: 1;display: flex;align-items: center;justify-content: center;}
 .btch li .delyArea div:first-child{justify-content: flex-start;}
-.btch li .delyArea div span{color: #333333;font-size: 16px;padding-left: 10px;}
+.btch li .delyArea div span{color: #333333;font-size: 14px;padding-left: 10px;}
 .btch li .delyArea div.orderNo span{padding-left: 5px;}
 .btch li .storeArea{background: #F8F8F8;border-radius: 8px;padding: 16px;margin-top: 16px;}
+.btch li.btchIng.hhWr .storeArea{background: #FF6841;}
+.btch li.btchIng.hhWr.hhExcs .storeArea{background: #F44444;}
 .btch li .storeArea h5{padding: 0;}
-.btch li .piupRemMi{background: #FEF5F2;border-radius: 8px;padding: 16px;margin-top: 8px;font-weight: 700;font-size: 14px;line-height: 22px;color: #F4997A;display: flex;align-items: center;justify-content: center;}
+.btch li.btchIng.hhWr .storeArea h5{color: #FFFFFF;}
+.btch li.btchIng.hhWr .storeArea p{color: #FEE9E9;}
+.btch li .piupRemMi{background: rgba(255, 255, 255, 0.20);border-radius: 8px;padding: 9px;margin-top: 8px;font-weight: 700;font-size: 14px;line-height: 22px;color: #FFFFFF;display: flex;align-items: center;justify-content: center;}
 .btch li.ing .piupRemMi,.btch li .piupRemMi.ing{background: #E6F8EF;color: #4ECD92;}
 .btch li .piupRemMi img{padding-right: 8px;}
 .btch li h5{color: #333333;font-size: 16px;font-weight: 700;padding-top: 12px;display: flex;align-items: center;}
 .btch li h5 img{padding-right: 12px;}
 .btch li p{color: #333333;font-size: 16px;padding-top: 5px;}
+.btch li p em{font-weight: 500;}
 .btch li button{background-color: #E4E4E4;color: rgba(51, 51, 51, 0.6);margin-top: 24px;}
 
 

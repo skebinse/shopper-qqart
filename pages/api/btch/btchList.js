@@ -233,6 +233,7 @@ export default async function handler(req, res) {
             query = `
             SELECT AA.ODER_MNGR_RGI_YN
                  , AA.ODER_RPRE_NO
+                 , AA.ODER_PGRS_STAT
                  , AA.SHOP_NM
                  , AA.PROD_CNT
                  , AA.SHOP_FULL_ADDR
@@ -252,7 +253,7 @@ export default async function handler(req, res) {
                  , CASE 
                     WHEN AA.ODER_URG_DELY_MI != '' THEN ''
                    ELSE ODER_PIUP_FRCS_MI END AS ODER_PIUP_FRCS_MI
-                 , AA.BTCH_ACP_PGRS_MI
+                 , AA.BTCH_ODER_PGRS_MI
                  , CASE 
                     WHEN AA.ODER_URG_DELY_MI != '' THEN AA.ODER_URG_DELY_MI - TIMESTAMPDIFF(MINUTE, AA.ODER_REQ_YMD, DATE_ADD(NOW(), INTERVAL 9 HOUR))
                    ELSE '' END AS BTCH_RGI_PGRS_MI
@@ -260,6 +261,7 @@ export default async function handler(req, res) {
                 SELECT AA.ODER_MNGR_RGI_YN
                      , fnGetOderReqYmd(AA.ODER_MNGR_RGI_YN, AA.ODER_REQ_YMD) AS ODER_REQ_YMD
                      , AA.ODER_RPRE_NO
+                     , AA.ODER_PGRS_STAT
                      , AA.ODER_USER_ID
                      , AA.ODER_DELY_DTC
                      , AA.ODER_REQ_APV_DT
@@ -284,7 +286,9 @@ export default async function handler(req, res) {
                      , AA.ODER_DRC_LDTN_YN
                      , AA.ODER_PIUP_FRCS_MI
                      , IFNULL(AA.ODER_DRC_LDTN_AMT, 0) AS ODER_DRC_LDTN_AMT
-                     , TIMESTAMPDIFF(MINUTE, AA.ODER_REQ_APV_DT, NOW()) AS BTCH_ACP_PGRS_MI
+                     , CASE 
+                        WHEN AA.ODER_DELY_SLCT_VAL = 'resv' THEN TIMESTAMPDIFF(MINUTE, STR_TO_DATE(CONCAT(AA.ODER_DELY_YMD, ' ', SUBSTRING(AA.ODER_DELY_HH, 1, 5)), '%Y-%m-%d %H:%i'), DATE_ADD(NOW(), INTERVAL 9 HOUR))
+                       ELSE TIMESTAMPDIFF(MINUTE, AA.ODER_REQ_YMD, NOW()) END AS BTCH_ODER_PGRS_MI
                   FROM T_ODER_USER_INFO AA
                        INNER JOIN T_SHOP_MAG BB
                     ON BB.SHOP_ID = AA.SHOP_ID

@@ -19,8 +19,14 @@ export default function BottomMenu({idx}) {
                     </Link>
                 </li>
                 <li className={idx === 2 ? 'on' : ''}>
+                    <Link href={'/mag/annc'}>
+                        <Image alt={'공지 아이콘'} src={`/assets/images/btn/btnMenuAnnc${idx === 2 ? 'On' : ''}.svg`} width={24} height={24} />
+                        <span>공지</span>
+                    </Link>
+                </li>
+                <li className={idx === 3 ? 'on' : ''}>
                     <Link href={'/mypage'}>
-                        <Image alt={'마이페이지 아이콘'} src={`/assets/images/btn/btnMenuMypage${idx === 2 ? 'On' : ''}.svg`} width={24} height={24} />
+                        <Image alt={'마이페이지 아이콘'} src={`/assets/images/btn/btnMenuMypage${idx === 3 ? 'On' : ''}.svg`} width={24} height={24} />
                         <span>마이페이지</span>
                     </Link>
                 </li>

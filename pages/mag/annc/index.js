@@ -3,6 +3,7 @@ import HeadTitle from "../../../components/headTitle";
 import styles from "../../../styles/mag.module.css";
 import cmm from "../../../js/common";
 import Link from "next/link";
+import BottomMenu from "../../../components/bottomMenu";
 
 export default function Index() {
     const [tabIdx, setTabIdx] = useState(0);
@@ -23,7 +24,9 @@ export default function Index() {
 
     return (
         <div className={styles.anncList}>
-            <HeadTitle title={'공지사항/이벤트'} />
+            <div className={styles.headTitle}>
+                <h3>공지/이벤트</h3>
+            </div>
             <div className={'tabArea'}>
                 <button className={'button mr10 ' + (tabIdx === 0 ? '' : 'white')} onClick={() => setTabIdx(0)}>공지사항</button>
                 <button className={'button ' + (tabIdx === 0 ? 'white' : '')} onClick={() => setTabIdx(1)}>이벤트</button>
@@ -32,6 +35,7 @@ export default function Index() {
                 <List list={tabIdx === 0 ? anncList : []} noDataTxt={'등록된 공지사항이 없습니다.'}/>
                 <List list={tabIdx === 1 ? anncList : []} noDataTxt={'등록된 이벤트가 없습니다.'} />
             </div>
+            <BottomMenu idx={2} />
         </div>
     );
 }

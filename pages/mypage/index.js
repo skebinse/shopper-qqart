@@ -155,29 +155,23 @@ export default function MyPage() {
                     </Link>
                 </li>
                 <li>
-                    <Link href={'/mag/annc'}>
-                        <h5>공지사항/이벤트</h5>
-                        <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
-                    </Link>
+                    <div>
+                        <h5>알림</h5>
+                        <span className={'toggleArea'}>
+                            <input type="checkbox" id="toggleNtfy" hidden onChange={ntfyChangeHandler} checked={ntfy} />
+                            <label htmlFor="toggleNtfy" className={'toggleSwitch'}>
+                                <span className={'toggleButton'}></span>
+                            </label>
+                        </span>
+                    </div>
                 </li>
-                {/*<li>*/}
-                {/*    <div>*/}
-                {/*        <h5>알림</h5>*/}
-                {/*        <span className={'toggleArea'}>*/}
-                {/*            <input type="checkbox" id="toggleNtfy" hidden onChange={ntfyChangeHandler} checked={ntfy} />*/}
-                {/*            <label htmlFor="toggleNtfy" className={'toggleSwitch'}>*/}
-                {/*                <span className={'toggleButton'}></span>*/}
-                {/*            </label>*/}
-                {/*        </span>*/}
-                {/*    </div>*/}
-                {/*</li>*/}
             </ul>
             <hr />
             <div className={styles.logout}>
                 <button type={'button'} onClick={logoutClick}>로그아웃</button>
             </div>
             <p onClick={mbScssClick}>회원 탈퇴</p>
-            <BottomMenu idx={2} />
+            <BottomMenu idx={3} />
         </div>
     );
 }

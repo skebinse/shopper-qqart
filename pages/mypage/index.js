@@ -95,7 +95,7 @@ export default function MyPage() {
                     // 리액트 앱일 경우
                     if(cmm.isReactApp()) {
 
-                        window.postMessage(JSON.stringify({
+                        window.ReactNativeWebView.postMessage(JSON.stringify({
                             type: 'LOCATION_INFO_CONSENT',
                             data: {
                                 psitTnsmYn: false,

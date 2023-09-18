@@ -168,9 +168,10 @@ export default function Index(props) {
                 // 리액트 앱일 경우
                 if(cmm.isReactApp()) {
 
-                    window.postMessage(JSON.stringify({
+                    window.ReactNativeWebView.postMessage(JSON.stringify({
                         type: 'LOCATION_INFO_CONSENT',
                         data: {
+                            psitTnsmTimer: (120 * 1000),
                             psitTnsmYn: true,
                             psitTnsmYmd: cmm.date.getToday('-'),
                             shprId: res.SHPR_ID

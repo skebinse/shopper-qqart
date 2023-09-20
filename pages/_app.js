@@ -25,23 +25,27 @@ export default function MyApp({ Component, pageProps }) {
                 // PUSH Key
                 if(result.type === cmm.Cont.APP_MESSAGE_TYPE.ONE_SIGNAL_PLAYER_ID) {
 
-                    const token = result.data.replace(/\"/g, '');
+                    cmm.alert(result.data)
+                    if(!!result.data) {
 
-                    // 토큰 정보가 다를 경우
-                    if(cmm.util.getLs(cmm.Cont.APP_TOKEN) !== token) {
+                        const token = result.data.replace(/\"/g, '');
 
-                        cmm.ajax({
-                            url: '/api/cmm/modAppPushTkn',
-                            isLoaing: false,
-                            data: {
-                                token
-                            },
-                            success: res => {},
-                            error: res => {}
-                        });
+                        // 토큰 정보가 다를 경우
+                        if(cmm.util.getLs(cmm.Cont.APP_TOKEN) !== token) {
+
+                            cmm.ajax({
+                                url: '/api/cmm/modAppPushTkn',
+                                isLoaing: false,
+                                data: {
+                                    token
+                                },
+                                success: res => {},
+                                error: res => {}
+                            });
+                        }
+
+                        cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
                     }
-
-                    cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
                 // PUSH
                 } else if(result.type === cmm.Cont.APP_MESSAGE_TYPE.NOTIFICATION) {
 

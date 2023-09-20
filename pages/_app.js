@@ -42,10 +42,26 @@ export default function MyApp({ Component, pageProps }) {
                     }
 
                     cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
+                // PUSH
+                } else if(result.type === cmm.Cont.APP_MESSAGE_TYPE.NOTIFICATION) {
+
+                    cmm.alert(result.data.replace(/\"/g, ''));
+                    // webPushTit.innerHTML = data.notification.title;
+                    // webPushTxt.innerHTML = data.notification.body;
+                    // if(!!data.notification.additionalData && !!data.notification.additionalData.custom_url) {
+                    //
+                    //     btnWebPushUrl.classList = '';
+                    //     btnWebPushUrl.setAttribute('data-url', data.notification.additionalData.custom_url);
+                    // } else {
+                    //
+                    //     btnWebPushUrl.classList = 'd-none';
+                    // }
+                    // document.querySelector('.webPushDiv').classList = 'webPushDiv active';
                 // 앱버전
                 } else if(result.type === cmm.Cont.APP_MESSAGE_TYPE.CURRENT_APP_VERSION) {
 
-                    cmm.alert(result.data.replace(/\"/g, ''));
+                    const json = JSON.parse(result.data.replace(/\"/g, ''));
+                    cmm.alert(json.os + ' ' + json.version);
                 }
             };
 

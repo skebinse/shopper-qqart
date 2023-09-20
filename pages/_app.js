@@ -49,9 +49,10 @@ export default function MyApp({ Component, pageProps }) {
                 } else if(result.type === cmm.Cont.APP_MESSAGE_TYPE.NOTIFICATION) {
 
                     const json = JSON.parse(result.data);
-
+alert(json);
                     webPushTit.innerHTML = json.title;
                     webPushTxt.innerHTML = json.body;
+                    alert(1);
                     if(!!json.additionalData && !!json.additionalData.custom_url) {
 
                         btnWebPushUrl.classList = '';
@@ -60,6 +61,7 @@ export default function MyApp({ Component, pageProps }) {
 
                         btnWebPushUrl.classList = 'd-none';
                     }
+                    alert(2);
                     document.querySelector('.webPushDiv').classList = 'webPushDiv active';
                 // 앱버전
                 } else if(result.type === cmm.Cont.APP_MESSAGE_TYPE.CURRENT_APP_VERSION) {

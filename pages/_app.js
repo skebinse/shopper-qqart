@@ -48,21 +48,25 @@ export default function MyApp({ Component, pageProps }) {
                 // PUSH
                 } else if(result.type === cmm.Cont.APP_MESSAGE_TYPE.NOTIFICATION) {
 
-                    const json = JSON.parse(result.data);
-alert(json);
-                    webPushTit.innerHTML = json.title;
-                    webPushTxt.innerHTML = json.body;
-                    alert(1);
-                    if(!!json.additionalData && !!json.additionalData.custom_url) {
+                    // 로그인 시
+                    if(cmm.checkLogin()) {
 
-                        btnWebPushUrl.classList = '';
-                        btnWebPushUrl.setAttribute('data-url', data.additionalData.custom_url);
-                    } else {
+                        const json = JSON.parse(result.data);
 
-                        btnWebPushUrl.classList = 'd-none';
+                        webPushTit.innerHTML = json.title;
+                        webPushTxt.innerHTML = json.body;
+
+                        if (!!json.additionalData && !!json.additionalData.custom_url) {
+
+                            btnWebPushUrl.classList = '';
+                            btnWebPushUrl.setAttribute('data-url', json.additionalData.custom_url);
+                        } else {
+
+                            btnWebPushUrl.classList = 'd-none';
+                        }
+
+                        document.querySelector('.webPushDiv').classList = 'webPushDiv active';
                     }
-                    alert(2);
-                    document.querySelector('.webPushDiv').classList = 'webPushDiv active';
                 // 앱버전
                 } else if(result.type === cmm.Cont.APP_MESSAGE_TYPE.CURRENT_APP_VERSION) {
 
@@ -76,7 +80,6 @@ alert(json);
 
                 document.addEventListener("message", e => {
 
-                    console.log(e);
                     // 앱 콜백
                     appCallback(e);
                 });

@@ -22,10 +22,10 @@ export default function MyApp({ Component, pageProps }) {
 
                 const result = JSON.parse(e.data);
 
+                cmm.alert(e.data)
                 // PUSH Key
                 if(result.type === cmm.Cont.APP_MESSAGE_TYPE.ONE_SIGNAL_PLAYER_ID) {
 
-                    cmm.alert(result.data)
                     if(!!result.data) {
 
                         const token = result.data.replace(/\"/g, '');
@@ -51,9 +51,9 @@ export default function MyApp({ Component, pageProps }) {
 
                     const json = JSON.parse(result.data);
 
-                    cmm.alert(JSON.stringify(json));
-                    cmm.alert(JSON.stringify(json.notification));
-                    cmm.alert(JSON.stringify(json.additionalData));
+                    // cmm.alert(JSON.stringify(json));
+                    // cmm.alert(JSON.stringify(json.notification));
+                    // cmm.alert(JSON.stringify(json.additionalData));
 
                     webPushTit.innerHTML = json.title;
                     webPushTxt.innerHTML = json.body;
@@ -70,7 +70,7 @@ export default function MyApp({ Component, pageProps }) {
                 } else if(result.type === cmm.Cont.APP_MESSAGE_TYPE.CURRENT_APP_VERSION) {
 
                     const json = JSON.parse(result.data);
-                    cmm.alert(json.os + ' ' + json.version);
+                    // cmm.alert(json.os + ' ' + json.version);
                 }
             };
 

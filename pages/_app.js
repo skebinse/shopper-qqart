@@ -48,6 +48,8 @@ export default function MyApp({ Component, pageProps }) {
                     const json = JSON.parse(result.data);
 
                     cmm.alert(JSON.stringify(json));
+                    cmm.alert(JSON.stringify(json.notification));
+                    cmm.alert(JSON.stringify(json.additionalData));
 
                     webPushTit.innerHTML = json.title;
                     webPushTxt.innerHTML = json.body;

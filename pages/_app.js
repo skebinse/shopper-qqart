@@ -22,7 +22,6 @@ export default function MyApp({ Component, pageProps }) {
 
                 const result = JSON.parse(e.data);
 
-                cmm.alert(e.data)
                 // PUSH Key
                 if(result.type === cmm.Cont.APP_MESSAGE_TYPE.ONE_SIGNAL_PLAYER_ID) {
 
@@ -51,16 +50,12 @@ export default function MyApp({ Component, pageProps }) {
 
                     const json = JSON.parse(result.data);
 
-                    // cmm.alert(JSON.stringify(json));
-                    // cmm.alert(JSON.stringify(json.notification));
-                    // cmm.alert(JSON.stringify(json.additionalData));
-
                     webPushTit.innerHTML = json.title;
                     webPushTxt.innerHTML = json.body;
-                    if(!!json.notification && !!json.notification.additionalData && !!json.notification.additionalData.custom_url) {
+                    if(!!json.additionalData && !!json.additionalData.custom_url) {
 
                         btnWebPushUrl.classList = '';
-                        btnWebPushUrl.setAttribute('data-url', data.notification.additionalData.custom_url);
+                        btnWebPushUrl.setAttribute('data-url', data.additionalData.custom_url);
                     } else {
 
                         btnWebPushUrl.classList = 'd-none';

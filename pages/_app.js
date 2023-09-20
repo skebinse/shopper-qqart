@@ -60,8 +60,9 @@ export default function MyApp({ Component, pageProps }) {
                 // 앱버전
                 } else if(result.type === cmm.Cont.APP_MESSAGE_TYPE.CURRENT_APP_VERSION) {
 
-                    const json = JSON.parse(result.data.replace(/\"/g, ''));
-                    cmm.alert(json.os + ' ' + json.version);
+                    cmm.alert(result.data)
+                    // const json = JSON.parse(result.data.replace(/\"/g, ''));
+                    // cmm.alert(json.os + ' ' + json.version);
                 }
             };
 

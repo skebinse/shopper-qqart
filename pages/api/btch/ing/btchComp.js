@@ -7,6 +7,7 @@ export default async function handler(req, res) {
     await getConnectPool(async conn => {
 
         const param = req.body;
+        let isError = false;
 
         try {
 
@@ -31,19 +32,6 @@ export default async function handler(req, res) {
                 return;
             }
 
-            cmm.ajax({
-                url: process.env.QQCART_URL + `/sendSmsNtfy.ax`,
-                isLoaing: false,
-                isExtr: true,
-                data: {
-                    pgrsStat: 'comp',
-                    oderUserId: param.oderUserId,
-                },
-                success: res => {
-
-                }
-            });
-
             query =`
                 UPDATE T_ODER_USER_INFO
                    SET ODER_PGRS_STAT = '06'
@@ -65,18 +53,35 @@ export default async function handler(req, res) {
 
             await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
 
-            // admin 알림 발송
-            adminSendNtfy(conn, {ntfyType: 'delyCpl', oderUserId: param.oderUserId});
-
             await conn.commit();
             res.status(200).json(result(rows));
         } catch (e) {
             if(conn) {
                 await conn.rollback();
             }
+            isError = true;
             console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
             console.log(e);
             res.status(500).json(result('', '9999', '오류가 발생했습니다.'));
+        }
+
+        if(!isError) {
+
+            cmm.ajax({
+                url: process.env.QQCART_URL + `/sendSmsNtfy.ax`,
+                isLoaing: false,
+                isExtr: true,
+                data: {
+                    pgrsStat: 'comp',
+                    oderUserId: param.oderUserId,
+                },
+                success: res => {
+
+                }
+            });
+
+            // admin 알림 발송
+            adminSendNtfy(conn, {ntfyType: 'delyCpl', oderUserId: param.oderUserId});
         }
     });
 }

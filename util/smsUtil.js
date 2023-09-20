@@ -55,7 +55,7 @@ export function smsSend(receiver, msg, callback) {
  */
 export async function adminSendNtfy(conn, options) {
 
-    if(process.env.NEXT_PUBLIC_RUN_MODE === 'local1') {
+    if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
         return;
     }
 

@@ -42,6 +42,10 @@ export default function MyApp({ Component, pageProps }) {
                     }
 
                     cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
+                // 앱버전
+                } else if(result.type === cmm.Cont.APP_MESSAGE_TYPE.CURRENT_APP_VERSION) {
+
+                    cmm.alert(result.data.replace(/\"/g, ''));
                 }
             };
 
@@ -62,6 +66,16 @@ export default function MyApp({ Component, pageProps }) {
                     appCallback(e);
                 });
             }
+
+            // 앱버전 호출
+            window.ReactNativeWebView.postMessage(JSON.stringify({
+                type: cmm.Cont.APP_MESSAGE_TYPE.CURRENT_APP_VERSION
+            }));
+
+            // PUSH key 호출
+            window.ReactNativeWebView.postMessage(JSON.stringify({
+                type: cmm.Cont.APP_MESSAGE_TYPE.ONE_SIGNAL_PLAYER_ID
+            }));
         }
 
         // 채널톡

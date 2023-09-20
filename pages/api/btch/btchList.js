@@ -147,6 +147,7 @@ export default async function handler(req, res) {
                 // 미배치 리스트
                 query = `
                 SELECT AA.ODER_MNGR_RGI_YN
+                     , AA.ODER_PGRS_STAT
                      , AA.ODER_RPRE_NO
                      , AA.SHOP_NM
                      , AA.PROD_CNT
@@ -169,6 +170,7 @@ export default async function handler(req, res) {
                        ELSE '' END AS BTCH_RGI_PGRS_MI
                   FROM (
                     SELECT AA.ODER_MNGR_RGI_YN
+                         , AA.ODER_PGRS_STAT
                          , fnGetOderReqYmd(AA.ODER_MNGR_RGI_YN, AA.ODER_REQ_YMD) AS ODER_REQ_YMD
                          , AA.ODER_URG_DELY_MI
                          , AA.ODER_RPRE_NO

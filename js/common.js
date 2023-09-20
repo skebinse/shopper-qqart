@@ -14,6 +14,7 @@ const cmm = {
         APP_MESSAGE_TYPE: {
             NOTIFICATION: 'NOTIFICATION',
             ONE_SIGNAL_PLAYER_ID: 'ONE_SIGNAL_PLAYER_ID',
+            CURRENT_APP_VERSION: 'CURRENT_APP_VERSION',
         }
     },
 

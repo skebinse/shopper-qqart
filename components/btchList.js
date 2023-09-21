@@ -77,50 +77,31 @@ export default function  BtchList({list, href, classNm = '', noDataTxt = '현재
                                 <span>{item.ODER_KD === 'PIUP' ? '픽업' : item.PROD_CNT + '개 상품'}</span>
                             </div>
                         </div>
+                        <p>{item.ODER_DELY_FULL_ADDR}</p>
                         {item.ODER_DELY_SLCT_VAL !== 'imm' &&
                             <p>{createTagResv(item)}</p>
                         }
-                        {!isIngBtch &&
-                            <>
-                                <p>{item.SHOP_NM}</p>
-                                <p>{item.SHOP_FULL_ADDR}</p>
-                            </>
-                        }
-                        {!!isIngBtch &&
-                            <div className={'storeArea'}>
-                                {item.ODER_PGRS_STAT !== '05' &&
-                                    <>
-                                        <h5>
-                                            {item.SHOP_NM}
-                                        </h5>
-                                        <p>{item.SHOP_FULL_ADDR}</p>
-                                    </>
-                                }
-                                {item.ODER_PGRS_STAT === '05' &&
-                                    <>
-                                        <h5>
-                                            고객 주소
-                                        </h5>
-                                        <p>{item.ODER_DELY_FULL_ADDR}</p>
-                                    </>
-                                }
-                                {item.BTCH_ODER_PGRS_MI >= 90 &&
-                                    <div className={'piupRemMi'}>
-                                        <Image alt={'주문 정보'} src={'/assets/images/icon/iconWarningW.svg'} width={17} height={17} />
-                                        {item.BTCH_ODER_PGRS_MI >= 120 &&
-                                            <>
-                                                {cmm.date.getMmToHhMm(item.BTCH_ODER_PGRS_MI - 120)} 지남
-                                            </>
-                                        }
-                                        {item.BTCH_ODER_PGRS_MI < 120 &&
-                                            <>
-                                                {cmm.date.getMmToHhMm(120 - item.BTCH_ODER_PGRS_MI)} 남음
-                                            </>
-                                        }
-                                    </div>
-                                }
-                            </div>
-                        }
+                        <div className={'storeArea'}>
+                            <h5>
+                                {item.SHOP_NM}
+                            </h5>
+                            <p>{item.SHOP_FULL_ADDR}</p>
+                            {(!!isIngBtch && item.BTCH_ODER_PGRS_MI >= 90) &&
+                                <div className={'piupRemMi'}>
+                                    <Image alt={'주문 정보'} src={'/assets/images/icon/iconWarningW.svg'} width={17} height={17} />
+                                    {item.BTCH_ODER_PGRS_MI >= 120 &&
+                                        <>
+                                            {cmm.date.getMmToHhMm(item.BTCH_ODER_PGRS_MI - 120)} 지남
+                                        </>
+                                    }
+                                    {item.BTCH_ODER_PGRS_MI < 120 &&
+                                        <>
+                                            {cmm.date.getMmToHhMm(120 - item.BTCH_ODER_PGRS_MI)} 남음
+                                        </>
+                                    }
+                                </div>
+                            }
+                        </div>
                         {isDtptBtn &&
                             <button type={'button'} className={'button'}>상세보기</button>
                         }

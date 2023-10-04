@@ -94,7 +94,7 @@ export default function CompDtpt({id, onClose}) {
                     </li>
                     <li>
                         <label>주소</label>
-                        <span>{dtptInfo.USER_FULL_ADDR}</span>
+                        <span>{dtptInfo.ODER_DELY_ADDR} {dtptInfo.ODER_DELY_DTPT_ADDR}</span>
                     </li>
                     <li>
                         <label>요청사항</label>

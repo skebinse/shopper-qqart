@@ -168,6 +168,9 @@ export default async function handler(req, res) {
                      , CASE WHEN AA.ODER_URG_DELY_MI != '' THEN 
                         AA.ODER_URG_DELY_MI - TIMESTAMPDIFF(MINUTE, AA.ODER_REQ_YMD, DATE_ADD(NOW(), INTERVAL 9 HOUR))
                        ELSE '' END AS BTCH_RGI_PGRS_MI
+                     , AA.ODER_DELY_ADDR_LAT
+                     , AA.ODER_DELY_ADDR_LOT
+                     , AA.SHOP_ID
                   FROM (
                     SELECT AA.ODER_MNGR_RGI_YN
                          , AA.ODER_PGRS_STAT
@@ -195,6 +198,8 @@ export default async function handler(req, res) {
                          , EE.SHPR_DELY_POS_DTC
                          , AA.ODER_DRC_LDTN_YN
                          , IFNULL(AA.ODER_DRC_LDTN_AMT, 0) AS ODER_DRC_LDTN_AMT
+                         , BB.SHOP_ADDR_LAT AS ODER_DELY_ADDR_LAT
+                         , BB.SHOP_ADDR_LOT AS ODER_DELY_ADDR_LOT
                       FROM T_ODER_USER_INFO AA
                            INNER JOIN T_SHOP_MAG BB
                         ON BB.SHOP_ID = AA.SHOP_ID
@@ -247,6 +252,7 @@ export default async function handler(req, res) {
                  , AA.ODER_DRC_LDTN_AMT
                  , AA.ODER_DELY_DTC
                  , AA.SHPR_ADJ_POIN
+                 , AA.ODER_OPTM_DTC_SEQ
                  , DATE_FORMAT(AA.ODER_DELY_YMD, '%m월 %d일') AS ODER_DELY_YMD
                  , AA.ODER_DELY_HH
                  , CEIL(TRUNCATE(AA.SLIN_DTC, 0) / 100) / 10 AS SLIN_DTC
@@ -259,6 +265,9 @@ export default async function handler(req, res) {
                  , CASE 
                     WHEN AA.ODER_URG_DELY_MI != '' THEN AA.ODER_URG_DELY_MI - TIMESTAMPDIFF(MINUTE, AA.ODER_REQ_YMD, DATE_ADD(NOW(), INTERVAL 9 HOUR))
                    ELSE '' END AS BTCH_RGI_PGRS_MI
+                 , AA.ODER_DELY_ADDR_LAT
+                 , AA.ODER_DELY_ADDR_LOT
+                 , AA.SHOP_ID
               FROM (
                 SELECT AA.ODER_MNGR_RGI_YN
                      , fnGetOderReqYmd(AA.ODER_MNGR_RGI_YN, AA.ODER_REQ_YMD) AS ODER_REQ_YMD
@@ -274,6 +283,7 @@ export default async function handler(req, res) {
                      , AA.ODER_DELY_HH
                      , AA.ODER_URG_DELY_MI
                      , AA.SHPR_ADJ_POIN
+                     , AA.ODER_OPTM_DTC_SEQ
                      , BB.SHOP_NM
                      , BB.SHOP_RRSN_ATCH_FILE_UUID
                      , AA.ODER_DELY_ADDR
@@ -281,6 +291,7 @@ export default async function handler(req, res) {
                      , CONCAT(AA.ODER_DELY_ADDR, ' ' , AA.ODER_DELY_DTPT_ADDR) AS ODER_DELY_FULL_ADDR
                      , IFNULL(DD.PROD_CNT, 0) AS PROD_CNT
                      , IFNULL(DD.SPBK_DELY_DTC, 0) AS SPBK_DELY_DTC
+                     , BB.SHOP_ID
                      , BB.SHOP_ADDR_LAT
                      , BB.SHOP_ADDR_LOT
                      , ST_DISTANCE_SPHERE(POINT(BB.SHOP_ADDR_LAT, BB.SHOP_ADDR_LOT), POINT(EE.SHPR_ADDR_LAT, EE.SHPR_ADDR_LOT)) AS SLIN_DTC
@@ -291,6 +302,8 @@ export default async function handler(req, res) {
                      , CASE 
                         WHEN AA.ODER_DELY_SLCT_VAL = 'resv' THEN TIMESTAMPDIFF(MINUTE, STR_TO_DATE(CONCAT(AA.ODER_DELY_YMD, ' ', SUBSTRING(AA.ODER_DELY_HH, 1, 5)), '%Y-%m-%d %H:%i'), DATE_ADD(NOW(), INTERVAL 9 HOUR))
                        ELSE TIMESTAMPDIFF(MINUTE, AA.ODER_REQ_YMD, NOW()) END AS BTCH_ODER_PGRS_MI
+                     , CASE WHEN AA.ODER_PGRS_STAT = '03' THEN BB.SHOP_ADDR_LAT ELSE AA.ODER_DELY_ADDR_LAT END AS ODER_DELY_ADDR_LAT
+                     , CASE WHEN AA.ODER_PGRS_STAT = '03' THEN BB.SHOP_ADDR_LOT ELSE AA.ODER_DELY_ADDR_LOT END AS ODER_DELY_ADDR_LOT
                   FROM T_ODER_USER_INFO AA
                        INNER JOIN T_SHOP_MAG BB
                     ON BB.SHOP_ID = AA.SHOP_ID
@@ -319,8 +332,9 @@ export default async function handler(req, res) {
                    AND AA.ODER_REQ_YMD IS NOT NULL
                    AND AA.ODER_PGRS_STAT IN ('03', '04', '05')
                ) AA
-      ORDER BY AA.ODER_REQ_APV_DT
+      ORDER BY AA.ODER_OPTM_DTC_SEQ
              , AA.ODER_REQ_YMD
+             , AA.ODER_REQ_APV_DT
         `;
 
             const [rows2] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);

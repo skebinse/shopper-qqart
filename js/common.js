@@ -710,7 +710,56 @@ const cmm = {
             });
 
             return JSON.parse(JSON.stringify(result));//json 객체를 문자열화해서 리턴
-        }
+        },
+
+        /**
+         * 현재 위치(좌표)
+         * @param data
+         */
+        getCurrentPosition: callback => {
+
+            if(cmm.isApp()) {
+
+                window.getCurrntPsPsit = (lat, lot) => {
+
+                    cmm.ajax({
+                        url: '/api/cmm/insPsPsit',
+                        isLoaing: false,
+                        data: {
+                            lat,
+                            lot,
+                            shprAppYn: 'Y',
+                        },
+                        success: res => {},
+                        error: res => {}
+                    });
+
+                    callback({lat, lot});
+                };
+
+                webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({
+                    "action": "getlocation",
+                    "callback": "window.getCurrntPsPsit"
+                }));
+            } else if(cmm.isReactApp()) {
+
+                cmm.ajax({
+                    url: '/api/cmm/GETPsPsit',
+                    isLoaing: false,
+                    success: res => {
+
+                        callback({lat: res.SHPR_PSIT_LAT, lot: res.SHPR_PSIT_LAT});
+                    },
+                    error: res => {}
+                });
+            } else {
+
+                navigator.geolocation.getCurrentPosition(res => {
+
+                    callback({lat: res.coords.latitude, lot: res.coords.longitude});
+                }, res => cmm.alert('위치 권한이 없습니다.'))
+            }
+        },
     },
 
     /**

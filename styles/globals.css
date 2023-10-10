@@ -120,7 +120,7 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 
 
 /* bottomMenu */
-.bottonMenu{position: fixed;bottom: 0;width: 100%;background-color: #FFFFFF;box-shadow: #0000000D 0px -5px 16px;}
+.bottonMenu{position: fixed;bottom: 0;width: 100%;background-color: #FFFFFF;box-shadow: #0000000D 0px -5px 16px;z-index: 99999999;}
 .bottonMenu ul{display: flex;}
 .bottonMenu ul li{width: 100%;text-align: center;padding: 13px 0 10px;}
 .bottonMenu ul li span{color: #333333;font-size: 10px;display: block;}
@@ -211,3 +211,17 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 .weekDateDiv span{flex: 1;font-weight: 500;font-size: 14px;line-height: 17px;color: #333333;display: inline-block;text-align: center;}
 .weekDateDiv img:last-child{transform: rotate(180deg)}
 .weekDateDiv img.noVtlz{opacity: 0.3;}
+
+/* sheet modal */
+.react-modal-sheet-container .tabArea{padding: 0 17px 24px;}
+.react-modal-sheet-container .tabArea > div{background-color: #F8F8F8;width:100%;display: flex;margin: 0 23px;border-radius: 100px;}
+.react-modal-sheet-container .tabArea button{height: 40px;padding: 0;background-color: #F8F8F8;color: #707070;font-size: 14px;font-style: normal;font-weight: 500;line-height: 22px;letter-spacing: -0.7px;border-radius: 100px;}
+.react-modal-sheet-container .tabArea button.on{border: 1px solid #02B763;background: #FFF;box-shadow: 0px 4px 4px 0px rgba(2, 183, 99, 0.10);}
+.react-modal-sheet-container .btchArea{position: relative;transition: 0.3s all;height: 100%;}
+.react-modal-sheet-container .btchArea.ing{transform: translateX(-100%)}
+.react-modal-sheet-container .btchArea :global .btch{height: calc(100% - 230px);overflow-y: auto;padding-top: 15px;}
+.react-modal-sheet-container .btchArea ul{position: absolute;top: 0;width: calc(100% - 34px);padding-bottom: 60px}
+.react-modal-sheet-container .btchArea ul:last-child{left: 100%;}
+
+/* kakaomap */
+#kakaoMap > div > div > div > div > img{border-radius: 100px;}

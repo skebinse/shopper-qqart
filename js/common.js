@@ -118,6 +118,70 @@ const cmm = {
     },
 
     /**
+     * ajax Server 통신
+     * @param options
+     */
+    ajaxServer: async (options) => {
+
+        if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
+            process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+        }
+
+        const _options = {
+            method: 'POST',
+            contextType: 'application/x-www-form-urlencoded',
+            dataType: '',
+            headers: {},
+            body: undefined,
+        };
+
+        Object.entries(options).forEach(item => _options[item[0]] = item[1]);
+
+        const init = {
+            method: _options.method,
+            headers: _options.headers,
+            body: _options.body,
+            rejectUnauthorized: false,
+        };
+
+        // JSON 타입일 경우
+        if(_options.dataType === 'json') {
+
+            init.headers['Content-Type'] = 'application/json';
+            init.body = JSON.stringify(_options.data);
+        } else if(!!_options.formData) {
+
+            // FormData로 변경
+            init.body = cmm.util.convertFormData(_options.formData);
+        } else {
+
+            init.headers['Content-Type'] = _options.contextType;
+            init.body = !!_options.data ? new URLSearchParams(_options.data) : undefined;
+        }
+
+        return fetch(_options.url, init).then(res => {
+
+            if(_options.responseType === 'arraybuffer') {
+
+                return res.arrayBuffer();
+            } else {
+
+                return res.json();
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            if(!!_options.error) {
+
+                _options.error();
+            }
+        })
+        .finally(() => {
+
+        });
+    },
+
+    /**
      * 로그인 정보
      * @param key
      * @returns {any}
@@ -744,7 +808,7 @@ const cmm = {
             } else if(cmm.isReactApp()) {
 
                 cmm.ajax({
-                    url: '/api/cmm/GETPsPsit',
+                    url: '/api/shpr/getPsPsit',
                     isLoaing: false,
                     success: res => {
 

@@ -12,6 +12,7 @@
     "@next/font": "13.1.1",
     "aws-sdk": "^2.1327.0",
     "bcrypt": "^5.1.0",
+    "cookies-next": "^4.0.0",
     "date-fns": "^2.30.0",
     "detect-browser": "^5.3.0",
     "eslint": "8.30.0",

@@ -49,7 +49,8 @@ export default function Info() {
             if(!!cmm.checkLogin()) {
 
                 cmm.ajax({
-                    url: '/api/cmm/user',
+                    url: '/api/shpr/myInfo',
+                    method: 'GET',
                     success: res => {
 
                         setJoinInfo({
@@ -69,7 +70,7 @@ export default function Info() {
                             atchFileUuid: res.SHPR_PRFL_ATCH_FILE_UUID,
                             shprDelyPosDtc: res.SHPR_DELY_POS_DTC,
                         });
-                        setPrflPrvImg(cmm.getLoginInfo('SHPR_PRFL_FILE'));
+                        setPrflPrvImg(res.SHPR_PRFL_FILE);
                     }
                 });
             }
@@ -155,7 +156,7 @@ export default function Info() {
                 const call = param => {
 
                     cmm.ajax({
-                        url: '/api/cmm/join',
+                        url: '/api/join',
                         data: {
                             ...param,
                             appToken: (!!cmm.util.getLs(cmm.Cont.APP_TOKEN) ? cmm.util.getLs(cmm.Cont.APP_TOKEN) : ''),

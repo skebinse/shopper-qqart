@@ -21,7 +21,7 @@ export default function MyPage() {
         document.body.classList.add(styles.body);
 
         cmm.ajax({
-            url: `/api/cmm/myInfo`,
+            url: `/api/shpr/myInfo`,
             method: 'GET',
             success: res => {
                 if(!!res) {
@@ -29,7 +29,10 @@ export default function MyPage() {
                     setMyInfo(res);
                     setNtfy(res.SHPR_NTFY_YN === 'Y');
                 } else {
-                    cmm.alert('없는 계정입니다.');
+                    cmm.alert('로그인 후 이용가능합니다.<br/>로그인 화면으로 이동합니다.', () => {
+
+                        goPage('/cmm/login');
+                    });
                 }
             }
         });
@@ -64,7 +67,7 @@ export default function MyPage() {
                 cmm.confirm('정말로 <b style="color: red;font-weight: 700">탈퇴</b> 하시겠습니까?', () => {
 
                     cmm.ajax({
-                        url: '/api/cmm/mbScss',
+                        url: '/api/shpr/mbScss',
                         success: res => {
 
                             cmm.alert('탈퇴 되었습니다.', () => {
@@ -86,7 +89,7 @@ export default function MyPage() {
         cmm.confirm('업무를 종료하시겠습니까?', () => {
 
             cmm.ajax({
-                url: '/api/cmm/dutj',
+                url: '/api/shpr/dutj',
                 data: {
                     type: 'end'
                 },
@@ -116,7 +119,7 @@ export default function MyPage() {
 
         setNtfy(e.target.checked);
         cmm.ajax({
-            url: `/api/cmm/myInfo`,
+            url: `/api/shpr/myInfo`,
             method: 'PUT',
             data: {
                 shprNtfyYn: e.target.checked ? 'Y' : 'N'
@@ -170,7 +173,9 @@ export default function MyPage() {
             <div className={styles.logout}>
                 <button type={'button'} onClick={logoutClick}>로그아웃</button>
             </div>
-            <p onClick={mbScssClick}>회원 탈퇴</p>
+            <div className={styles.mbScss}>
+                <p onClick={mbScssClick}>회원 탈퇴</p>
+            </div>
             <BottomMenu idx={3} />
         </div>
     );

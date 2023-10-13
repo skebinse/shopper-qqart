@@ -11,54 +11,6 @@ export default async function handler(req, res) {
 
         try {
 
-            // cmm.ajax({
-            //     url: 'http://road.qqcart.shop/api/v1/eta/route',
-            //     isExtr: true,
-            //     dataType: 'json',
-            //     headers: {
-            //         'x-api-key': 'r7!JbD*Qi4'
-            //     },
-            //     data: {
-            //         "shopper": {
-            //             "name": "쇼퍼1",
-            //             "latitude": 37.5261592,
-            //             "longitude": 127.0276199
-            //         },
-            //         "deliveries": [
-            //             {
-            //                 "shop": {
-            //                     "name": "초록마을 압구정점",
-            //                     "latitude": 37.53179991223511,
-            //                     "longitude": 127.02704971673802
-            //                 },
-            //                 "destinations": [
-            //                     {
-            //                         "name": "압구정 현대아파트 4차",
-            //                         "latitude": 37.5322059,
-            //                         "longitude": 127.0312148
-            //                     },
-            //                     {
-            //                         "name": "압구정 한양1차 아파트",
-            //                         "latitude": 37.5301281,
-            //                         "longitude": 127.0385485
-            //                     },
-            //                     {
-            //                         "name": "압구정 현대아파트 5차",
-            //                         "latitude": 37.5317938,
-            //                         "longitude": 127.0285396
-            //                     },
-            //                     {
-            //                         "name": "연세리버 테라스아파트",
-            //                         "latitude": 37.5287073,
-            //                         "longitude": 127.0474361
-            //                     }
-            //                 ]
-            //             }
-            //         ]
-            //     },
-            //     success: res => console.log(res)
-            // });
-
             // 접속 로그
             if (param.isLog === 'true') {
 

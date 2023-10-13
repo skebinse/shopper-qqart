@@ -35,7 +35,7 @@ export default function CphoneAhrz() {
     const cetinoClick = () => {
 
         cmm.ajax({
-            url: '/api/cmm/smsCetinoSend',
+            url: '/api/join/smsCetinoSend',
             data: {
                 cphoneNo
             },

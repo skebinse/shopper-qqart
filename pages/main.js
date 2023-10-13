@@ -263,7 +263,7 @@ export default function Index(props) {
         param.type = 'start';
 
         cmm.ajax({
-            url: '/api/cmm/dutj',
+            url: '/api/shpr/dutj',
             isLoaing: false,
             data: param,
             success: res => {

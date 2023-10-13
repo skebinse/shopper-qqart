@@ -58,7 +58,7 @@ export default function CphoneAhrz(props) {
     const cetinoRtrnClick = () => {
 
         cmm.ajax({
-            url: '/api/cmm/smsCetinoSend',
+            url: '/api/join/smsCetinoSend',
             data: {
                 cphoneNo: cmm.util.getLs(cmm.Cont.JOIN_INFO).cphoneNo
             },
@@ -74,7 +74,7 @@ export default function CphoneAhrz(props) {
     const cetionCheckClick = () => {
 
         cmm.ajax({
-            url: '/api/cmm/authNo',
+            url: '/api/join/authNo',
             data: {
                 cetino,
                 authNoHash,

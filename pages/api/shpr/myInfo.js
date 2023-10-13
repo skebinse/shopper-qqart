@@ -9,9 +9,6 @@ export default async function handler(req, res) {
                 return getMyInfo(conn, req, res);
             case 'PUT':
                 return setMyInfo(conn, req, res);
-            case 'DELETE':
-                return deleteSchedule(conn, req, res);
-            case 'POST':
             default:
                 res.status(500).json(result('', '9999', 'Method not supported'));
         }
@@ -29,12 +26,30 @@ async function getMyInfo(conn, req, res) {
 
     try {
         const query = `
-                SELECT SHPR_NCNM
+                SELECT SHPR_CRCTNO
+                     , SHPR_LOGIN_ID
+                     , SHPR_SNS_TYPE
+                     , SHPR_NCNM
+                     , SHPR_PRFL_ATCH_FILE_UUID
+                     , SHPR_STDO_CD
+                     , SHPR_ZIPC
+                     , SHPR_ADDR
+                     , SHPR_DTPT_ADDR
+                     , SHPR_ADDR_LAT
+                     , SHPR_ADDR_LOT
+                     , SHPR_TNAL_PRFL
+                     , SHPR_SNS_TYPE
+                     , SHPR_SFITD_TEXT
+                     , SHPR_SCSS_YN
+                     , SHPR_SCSS_YMD
+                     , SHPR_DELY_POS_DTC
+                     , SHPR_NCNM
                      , SHPR_NTFY_YN
                      , fnGetAtchFileList(SHPR_PRFL_ATCH_FILE_UUID) AS SHPR_PRFL_FILE
                      , fnGetShprPoint(SHPR_ID) AS SHPR_POIN
                   FROM T_SHPR_INFO
                  WHERE SHPR_ID = fnDecrypt(?, ?)
+                   AND SHPR_SCSS_YN = 'N'
             `;
 
         const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
@@ -64,6 +79,7 @@ async function setMyInfo(conn, req, res) {
                    SET SHPR_NTFY_YN = ?
                      , SHPR_NTFY_AGR_YMD = NOW()
                  WHERE SHPR_ID = fnDecrypt(?, ?)
+                   AND SHPR_SCSS_YN = 'N'
             `;
 
         const [rows] = await conn.query(query, [param.shprNtfyYn, req.headers['x-enc-user-id'], process.env.ENC_KEY]);

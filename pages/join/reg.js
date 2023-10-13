@@ -44,7 +44,8 @@ export default function Reg() {
             if(!!cmm.checkLogin()) {
 
                 cmm.ajax({
-                    url: '/api/cmm/user',
+                    url: '/api/shpr/myInfo',
+                    method: 'GET',
                     success: res => {
 
                         setJoinInfo({
@@ -157,7 +158,7 @@ export default function Reg() {
 
                 const call = param => {
                     cmm.ajax({
-                        url: '/api/cmm/join',
+                        url: '/api/join',
                         data: param,
                         success: res => {
 

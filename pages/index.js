@@ -6,6 +6,9 @@ import cmm from "../js/common";
 import BtchList from "../components/btchList";
 import BottomMenu from "../components/bottomMenu";
 import Link from "next/link";
+import {cookies} from "next/headers";
+import {getCookieParser} from "next/dist/server/api-utils";
+import {getCookie} from "cookies-next";
 
 export default function Index(props) {
 
@@ -155,7 +158,7 @@ export default function Index(props) {
         param.type = 'start';
 
         cmm.ajax({
-            url: '/api/cmm/dutj',
+            url: '/api/shpr/dutj',
             isLoaing: false,
             data: param,
             success: res => {
@@ -321,9 +324,36 @@ export default function Index(props) {
     )
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps({req, res}) {
 
-    return {
-        props: {},
+    const resData = await cmm.ajaxServer({
+        url: process.env.NEXT_PUBLIC_LOCAL_URL + '/api/cmm/getSystCrll',
+        isExtr: true,
+        data: {
+            systCrllSc: '메인화면',
+            enc_sh: getCookie('enc_sh', {req, res}),
+        },
+        success: res => {
+            console.log(2)
+            if(res.data === 1) {
+                res.redirect = '/main';
+            }
+        }
+    });
+
+    if(resData.data === 1) {
+
+        return {
+            redirect: {
+                permanent: false,
+                destination: "/main",
+            },
+            props: {},
+        }
+    } else {
+
+        return {
+            props: {},
+        }
     }
 }

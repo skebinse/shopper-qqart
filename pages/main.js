@@ -7,6 +7,8 @@ import BtchList from "../components/btchListMain";
 import BottomMenu from "../components/bottomMenu";
 import Link from "next/link";
 import Sheet from 'react-modal-sheet';
+import Head from "next/head";
+import Script from "next/script";
 
 export default function Index(props) {
 
@@ -227,18 +229,28 @@ export default function Index(props) {
 
     useEffect(() => {
 
-        if(cmm.checkLogin()) {
+        const script = document.createElement("script");
+        script.src =
+            "https://dapi.kakao.com/v2/maps/sdk.js?appkey=dc6e9cd5281395107b6f48fbdf3b0ab1&autoload=false";
+        document.head.appendChild(script);
 
-            let shprAddr = cmm.getLoginInfo('SHPR_ADDR');
-            shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
-            shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
+        script.onload = () => {
+            kakao.maps.load(() => {
 
-            setAddr(shprAddr);
+                if(cmm.checkLogin()) {
 
-            // 배치 리스트 조회
-            callBtchList(true);
-            setIsInit(false);
-        }
+                    let shprAddr = cmm.getLoginInfo('SHPR_ADDR');
+                    shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
+                    shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
+
+                    setAddr(shprAddr);
+
+                    // 배치 리스트 조회
+                    callBtchList(true);
+                    setIsInit(false);
+                }
+            });
+        };
     }, []);
 
     const appTest = () => {

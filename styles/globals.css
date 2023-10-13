@@ -219,6 +219,7 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 .react-modal-sheet-container .tabArea button.on{border: 1px solid #02B763;background: #FFF;box-shadow: 0px 4px 4px 0px rgba(2, 183, 99, 0.10);}
 .react-modal-sheet-container .btchArea{position: relative;transition: 0.3s all;height: 100%;}
 .react-modal-sheet-container .btchArea.ing{transform: translateX(-100%)}
+.react-modal-sheet-container .noScroll{overflow: hidden !important}
 .react-modal-sheet-container .btchArea :global .btch{height: calc(100% - 230px);overflow-y: auto;padding-top: 15px;}
 .react-modal-sheet-container .btchArea ul{position: absolute;top: 0;width: calc(100% - 34px);padding-bottom: 60px}
 .react-modal-sheet-container .btchArea ul:last-child{left: 100%;}

@@ -23,6 +23,7 @@ export default function Index(props) {
     const [entRefuRsn, setEntRefuRsn] = useState('');
     const [isSheetOpen, setSheetOpen] = useState(false);
     const [isDtcOptmBtn, setIsDtcOptmBtn] = useState(false);
+    const [snapIdx, setSnapIdx] = useState(1);
     const sheetRef = useRef();
     const sheetScrollRef = useRef();
     const [mapShopId, setMapShopId] = useState(null);
@@ -373,6 +374,8 @@ export default function Index(props) {
      */
     const sheetSnapHandler = snapIdx => {
 
+        setSnapIdx(snapIdx);
+
         if(snapIdx === 1) {
             setMapShopId(null);
             setMapOderUserId(null);
@@ -437,7 +440,7 @@ export default function Index(props) {
                         <Sheet.Container>
                             <Sheet.Header></Sheet.Header>
                             <Sheet.Content>
-                                <Sheet.Scroller ref={sheetScrollRef}>
+                                <Sheet.Scroller ref={sheetScrollRef} className={snapIdx === 1 ? 'noScroll' : ''}>
                                     {!mapShopId && !mapOderUserId &&
                                         <div className={'tabArea'}>
                                             <div>
@@ -446,7 +449,7 @@ export default function Index(props) {
                                             </div>
                                         </div>
                                     }
-                                    <div className={'btchArea' + ' ' +  (tabIdx === 0 ? '' : 'ing')}>
+                                    <div className={'btchArea' + ' ' +  (tabIdx === 0 ? '' : 'ing') + ' '}>
                                         <BtchList list={btchInfo.btchList} href={'/btch'} filter={tabIdx === 0 ? {mapShopId, mapOderUserId} : null} isInit={isInit} reflashHandler={() => callBtchList()} />
                                         <BtchList list={btchInfo.btchAcpList} href={'/btch/ing'} filter={tabIdx === 1 ? {mapShopId, mapOderUserId} : null} isInit={isInit} noDataTxt={'현재 수락한 배치가 없습니다.'} isIngBtch={true} reflashHandler={() => callBtchList()} />
                                     </div>

@@ -431,7 +431,7 @@ export default function Index(props) {
                         {/*    <span>{addr}<Image alt={'열기'} src={'/assets/images/icon/iconAllowDown.svg'} width={10.4} height={6} /></span>*/}
                         {/*</Link>*/}
                     </div>
-                    <div id="kakaoMap" style={{height: '100%'}}></div>
+                    <div id="kakaoMap" style={{height: 'calc(100% - 210px)'}}></div>
                     <Sheet ref={sheetRef} isOpen={isSheetOpen} onClose={() => setSheetOpen(false)} snapPoints={[window.innerHeight - 40, 155]} initialSnap={1}
                            onSnap={sheetSnapHandler}>
                         <Sheet.Container>

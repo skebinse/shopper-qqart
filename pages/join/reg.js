@@ -156,41 +156,55 @@ export default function Reg() {
 
             cmm.confirm(joinInfo.isLogin ? '개인정보를 수정하시겠습니까?' : '가입 진행하겠습니까?', () => {
 
-                const call = param => {
-                    cmm.ajax({
-                        url: '/api/join',
-                        data: param,
-                        success: res => {
+                cmm.ajax({
+                    url: '/api/join/ncnmDplc',
+                    data: {
+                        userNcnm: joinInfo.userNcnm
+                    },
+                    success: res => {
 
-                            cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
-                            if(!!res && !joinInfo.isLogin) {
+                        if(res.CNT === 1) {
 
-                                goPage('./comp');
-                            } else {
-
-                                cmm.alert(`${joinInfo.isLogin ? '수정' : '가입'} 되었습니다.`, () => {
-
-                                    router.reload();
-                                });
-                            }
+                            cmm.alert('동일한 별명이 있습니다.');
+                            return;
                         }
-                    });
-                };
+                        const call = param => {
+                            cmm.ajax({
+                                url: '/api/join',
+                                data: param,
+                                success: res => {
 
-                if(!!joinInfo.atchFileUuid) {
+                                    cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
+                                    if(!!res && !joinInfo.isLogin) {
 
-                    call({...joinInfo, ...joinInfoLS});
-                } else {
+                                        goPage('./comp');
+                                    } else {
 
-                    shopS3Upload(joinInfo.profile, res => {
+                                        cmm.alert(`${joinInfo.isLogin ? '수정' : '가입'} 되었습니다.`, () => {
 
-                        const param = {...joinInfo, ...joinInfoLS};
-                        param.atchFileUuid = res.atchFileUuid;
-                        setJoinInfo(prevState => ({...prevState, atchFileUuid: res.atchFileUuid}));
+                                            router.reload();
+                                        });
+                                    }
+                                }
+                            });
+                        };
 
-                        call(param);
-                    });
-                }
+                        if(!!joinInfo.atchFileUuid) {
+
+                            call({...joinInfo, ...joinInfoLS});
+                        } else {
+
+                            shopS3Upload(joinInfo.profile, res => {
+
+                                const param = {...joinInfo, ...joinInfoLS};
+                                param.atchFileUuid = res.atchFileUuid;
+                                setJoinInfo(prevState => ({...prevState, atchFileUuid: res.atchFileUuid}));
+
+                                call(param);
+                            });
+                        }
+                    }
+                });
             });
         }
     };

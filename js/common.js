@@ -69,7 +69,7 @@ const cmm = {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({url: _options.url})
+            body: JSON.stringify({url: _options.url, isExtr: _options.isExtr})
         }).then(res => res.json()).then(res => {
 
             if(res.data.CNT === 0) {

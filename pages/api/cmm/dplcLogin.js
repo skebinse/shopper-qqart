@@ -8,9 +8,11 @@ export default async function handler(req, res) {
         const param = req.body;
         const encShprId = getCookie('enc_sh', {req, res});
         const tknSh = getCookie('tkn_sh', {req, res});
-        const excpUrlList = ['/api/cmm', '/api/join'];
+        const excpUrlPathList = ['/api/cmm', '/api/join'];
+        const excpUrlList = ['/api/join'];
 
-        if(excpUrlList.indexOf(param.url.substring(0, param.url.lastIndexOf('/'))) > -1) {
+        if(!!param.isExtr || excpUrlPathList.indexOf(param.url.substring(0, param.url.lastIndexOf('/'))) > -1 ||
+            excpUrlList.indexOf(param.url) > -1) {
 
             res.status(200).json(result({CNT: 1}));
         } else {

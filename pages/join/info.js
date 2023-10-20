@@ -151,51 +151,80 @@ export default function Info() {
             cmm.alert('반경(Km)을 입력해 주세요.');
         } else {
 
-            cmm.confirm(joinInfo.isLogin ? '개인정보를 수정하시겠습니까?' : '가입 진행하겠습니까?', () => {
+            if(!joinInfo.isLogin) {
 
-                const call = param => {
+                cmm.ajax({
+                    url: '/api/join/ncnmDplc',
+                    data: {
+                        userNcnm: joinInfo.userNcnm
+                    },
+                    success: res => {
 
-                    cmm.ajax({
-                        url: '/api/join',
-                        data: {
-                            ...param,
-                            appToken: (!!cmm.util.getLs(cmm.Cont.APP_TOKEN) ? cmm.util.getLs(cmm.Cont.APP_TOKEN) : ''),
-                        },
-                        success: res => {
+                        if (res.CNT === 1) {
 
-                            cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
-                            cmm.util.rmLs(cmm.Cont.JOIN_INFO);
-                            if(!!res && !joinInfo.isLogin) {
-
-                                goPage('./comp');
-                            } else {
-
-                                cmm.alert('수정 되었습니다.', () => {
-
-                                    router.reload();
-                                });
-                            }
+                            cmm.alert('동일한 별명이 있습니다.');
+                            return;
                         }
-                    });
-                };
 
-                if(!!joinInfo.atchFileUuid) {
+                        cmm.confirm('가입 진행하겠습니까?', () => {
 
-                    call({...joinInfo, ...joinInfoLS});
-                } else {
+                            callJoin();
+                        });
+                    }
+                });
+            } else {
 
-                    shopS3Upload(joinInfo.profile, res => {
+                cmm.confirm('개인정보를 수정하시겠습니까?', () => {
 
-                        const param = {...joinInfo, ...joinInfoLS};
-                        param.atchFileUuid = res.atchFileUuid;
-                        setJoinInfo(prevState => ({...prevState, atchFileUuid: res.atchFileUuid}));
-
-                        call(param);
-                    });
-                }
-            });
+                    callJoin();
+                });
+            }
         }
     };
+
+    const callJoin = () => {
+
+        const call = param => {
+
+            cmm.ajax({
+                url: '/api/join',
+                data: {
+                    ...param,
+                    appToken: (!!cmm.util.getLs(cmm.Cont.APP_TOKEN) ? cmm.util.getLs(cmm.Cont.APP_TOKEN) : ''),
+                },
+                success: res => {
+
+                    cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
+                    cmm.util.rmLs(cmm.Cont.JOIN_INFO);
+                    if(!!res && !joinInfo.isLogin) {
+
+                        goPage('./comp');
+                    } else {
+
+                        cmm.alert('수정 되었습니다.', () => {
+
+                            router.reload();
+                        });
+                    }
+                }
+            });
+        };
+
+        if(!!joinInfo.atchFileUuid) {
+
+            call({...joinInfo, ...joinInfoLS});
+        } else {
+
+            shopS3Upload(joinInfo.profile, res => {
+
+                const param = {...joinInfo, ...joinInfoLS};
+                param.atchFileUuid = res.atchFileUuid;
+                setJoinInfo(prevState => ({...prevState, atchFileUuid: res.atchFileUuid}));
+
+                call(param);
+            });
+        }
+    }
 
     return (
         <div className={styles.join}>

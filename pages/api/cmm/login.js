@@ -11,7 +11,7 @@ export default async function handler(req, res) {
         try {
             const [rows] = await conn.query(`call spShprLogin(?, ?, ?, ?, ?, ?, ?)`, [encShprId, param.userCrctno, param.userSnsType, process.env.ENC_KEY, param.userId, param.userPw, (param.appToken === 'null' ? '' : param.appToken)]);
             const item = rows[0][0];
-            console.log(item)
+
             // 쿠키 등록
             if(item.IS_LOGIN === 1) {
                 setCookie('enc_sh', item.ENC_SHPR_ID, {
@@ -28,7 +28,7 @@ export default async function handler(req, res) {
                 LOING_DT: item.LOING_DT,
                 SHPR_NCNM: item.SHPR_NCNM,
                 SHPR_PRFL_FILE: item.SHPR_PRFL_FILE,
-                LOGIN_VER: 'v1.0',
+                LOGIN_VER: item.LOGIN_VER,
             }));
         } catch (e) {
             console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium' } ).format(new Date()));

@@ -25,9 +25,19 @@ export default async function handler(req, res) {
 
                     req, res, maxAge: 2592000, sameSite: 'strict', httpOnly: true,  secure: true
                 });
+                setCookie('tkn_sh', item.SHPR_DPLC_LOGIN_TKN, {
+                    req, res, maxAge: 2592000, sameSite: 'strict', httpOnly: true,  secure: true
+                });
             }
 
-            res.status(200).json(result(item));
+            res.status(200).json(result({
+                IS_LOGIN: item.IS_LOGIN,
+                SHPR_ADDR: item.SHPR_ADDR,
+                LOING_DT: item.LOING_DT,
+                SHPR_NCNM: item.SHPR_NCNM,
+                SHPR_PRFL_FILE: item.SHPR_PRFL_FILE,
+                LOGIN_VER: item.LOGIN_VER,
+            }));
         } catch (e) {
 
             console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));

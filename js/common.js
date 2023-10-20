@@ -1,5 +1,3 @@
-import {format} from "date-fns";
-
 const cmm = {
 
     /**
@@ -22,7 +20,7 @@ const cmm = {
      * ajax 통신
      * @param options
      */
-    ajax: (options) => {
+    ajax: async (options) => {
 
         const _options = {
             method: 'POST',
@@ -47,9 +45,9 @@ const cmm = {
             body: _options.body,
         };
 
-        if(!_options.isExtr && cmm.checkLogin()) {
-            init.headers['X-ENC-USER-ID'] = cmm.getLoginInfo('ENC_SHPR_ID');
-        }
+        // if(!_options.isExtr && cmm.checkLogin()) {
+        //     init.headers['X-ENC-USER-ID'] = cmm.getLoginInfo('ENC_SHPR_ID');
+        // }
 
         // JSON 타입일 경우
         if(_options.dataType === 'json') {
@@ -66,55 +64,71 @@ const cmm = {
             init.body = !!_options.data ? new URLSearchParams(_options.data) : undefined;
         }
 
-        fetch(_options.url, init).then(res => {
+        fetch('/api/cmm/dplcLogin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({url: _options.url})
+        }).then(res => res.json()).then(res => {
 
-            if(_options.responseType === 'arraybuffer') {
+            if(res.data.CNT === 0) {
 
-                return res.arrayBuffer();
+                location.href = '/cmm/login?p=dplcLogin';
             } else {
 
-                return res.json();
-            }
-        })
-        .then(res => {
+                fetch(_options.url, init).then(res => {
 
-            if(!!_options.isExtr) {
+                    if(_options.responseType === 'arraybuffer') {
 
-                _options.success(res);
-            } else {
+                        return res.arrayBuffer();
+                    } else {
 
-                if(res.resultCode === '0000') {
-
-                    if(!!_options.success) {
-
-                        _options.success(res.data);
+                        return res.json();
                     }
-                } else if(res.resultCode === '8000') {
+                })
+                .then(res => {
 
-                    cmm.alert(res.resultMsg, () => {
+                    if(!!_options.isExtr) {
 
-                        location.href = '/';
-                    });
-                } else {
+                        _options.success(res);
+                    } else {
 
-                    cmm.alert(res.resultMsg);
-                }
-            }
-        })
-        .catch(err => {
-            console.log(err)
-            if(!!_options.error) {
+                        if(res.resultCode === '0000') {
 
-                _options.error();
-            }
-        })
-        .finally(() => {
+                            if(!!_options.success) {
 
-            if(!_options.isExtr && !!_options.isLoaing) {
+                                _options.success(res.data);
+                            }
+                        } else if(res.resultCode === '8000') {
 
-                cmm.loading(false);
+                            cmm.alert(res.resultMsg, () => {
+
+                                location.href = '/';
+                            });
+                        } else {
+
+                            cmm.alert(res.resultMsg);
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                    if(!!_options.error) {
+
+                        _options.error();
+                    }
+                })
+                .finally(() => {
+
+                    if(!_options.isExtr && !!_options.isLoaing) {
+
+                        cmm.loading(false);
+                    }
+                });
             }
         });
+
     },
 
     /**
@@ -205,7 +219,7 @@ const cmm = {
      */
     checkLogin: () => {
 
-        const isLogin = !!window && !!cmm.util.getLs(cmm.Cont.LOGIN_INFO) && !!cmm.util.getLs(cmm.Cont.LOGIN_INFO).ENC_SHPR_ID;
+        const isLogin = !!window && !!cmm.util.getLs(cmm.Cont.LOGIN_INFO) && cmm.util.getLs(cmm.Cont.LOGIN_INFO).LOGIN_VER === 'v1.0';
 
         return isLogin;
     },

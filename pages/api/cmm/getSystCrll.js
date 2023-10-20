@@ -8,15 +8,22 @@ export default async function handler(req, res) {
         const param = req.body;
 
         try {
-            const query = `
-                   SELECT COUNT(1) AS CNT
-                     FROM T_SYST_CRLL_MAG
-                    WHERE SYST_CRLL_SC = ?
-                      AND SHPR_ID = fnDecrypt(?, ?)`;
+            console.log(param.enc_sh)
+            if(!!param.enc_sh) {
 
-            const [rows] = await conn.query(query, [param.systCrllSc, param.enc_sh, process.env.ENC_KEY]);
+                const query = `
+                       SELECT COUNT(1) AS CNT
+                         FROM T_SYST_CRLL_MAG
+                        WHERE SYST_CRLL_SC = ?
+                          AND SHPR_ID = fnDecrypt(?, ?)`;
 
-            res.status(200).json(result(rows[0].CNT));
+                const [rows] = await conn.query(query, [param.systCrllSc, param.enc_sh, process.env.ENC_KEY]);
+
+                res.status(200).json(result(rows[0].CNT));
+            } else {
+
+                res.status(200).json(result(0));
+            }
         } catch (e) {
 
             console.log(e);

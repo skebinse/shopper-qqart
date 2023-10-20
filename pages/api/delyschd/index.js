@@ -1,4 +1,5 @@
 import { getConnectPool, result } from "../db";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
     await getConnectPool(async conn => {
@@ -17,6 +18,7 @@ export default async function handler(req, res) {
 
 async function setSchedule(conn, req, res) {
     const { date, area, schedule } = req.body;
+    const encShprId = getCookie('enc_sh', {req, res});
 
     try {
         const query =`
@@ -41,7 +43,7 @@ async function setSchedule(conn, req, res) {
             )
         `;
 
-        const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, date, area, schedule]);
+        const [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY, date, area, schedule]);
         res.status(200).json(result(rows.insertId));
     } catch (e) {
         console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
@@ -52,6 +54,7 @@ async function setSchedule(conn, req, res) {
 
 async function getSchedules(conn, req, res) {
     const { startdate, enddate } = req.query;
+    const encShprId = getCookie('enc_sh', {req, res});
 
     try {
         const query = `
@@ -70,7 +73,7 @@ async function getSchedules(conn, req, res) {
                 AND SHPR_SCHD_YMD BETWEEN CONCAT(DATE_FORMAT(?, '%Y-%m-%d'), ' 00:00:00') AND CONCAT(DATE_FORMAT(?, '%Y-%m-%d'), ' 23:59:59')
         `;
 
-        const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, startdate, enddate]);
+        const [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY, startdate, enddate]);
         res.status(200).json(result(rows));
     } catch (e) {
         console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));

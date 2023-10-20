@@ -1,4 +1,5 @@
 import {getConnectPool, result} from "../db";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
@@ -25,6 +26,8 @@ export default async function handler(req, res) {
 async function getMyInfo(conn, req, res) {
 
     try {
+        const encShprId = getCookie('enc_sh', {req, res});
+        
         const query = `
                 SELECT SHPR_CRCTNO
                      , SHPR_LOGIN_ID
@@ -52,7 +55,7 @@ async function getMyInfo(conn, req, res) {
                    AND SHPR_SCSS_YN = 'N'
             `;
 
-        const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+        const [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
 
         res.status(200).json(result(rows[0]));
     } catch (e) {
@@ -82,7 +85,7 @@ async function setMyInfo(conn, req, res) {
                    AND SHPR_SCSS_YN = 'N'
             `;
 
-        const [rows] = await conn.query(query, [param.shprNtfyYn, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+        const [rows] = await conn.query(query, [param.shprNtfyYn, encShprId, process.env.ENC_KEY]);
 
         res.status(200).json(result(rows[0]));
     } catch (e) {

@@ -1,15 +1,17 @@
 import {getConnectPool, result} from "../db";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         const param = req.body;
+        const encShprId = getCookie('enc_sh', {req, res});
 
         try {
 
             const [rows] = await conn.query('call spGetShprCompList(fnDecrypt(?, ?), ?, ?)',
-                [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.fromDt + ' 00:00:00', param.toDt + ' 23:59:59']);
+                [encShprId, process.env.ENC_KEY, param.fromDt + ' 00:00:00', param.toDt + ' 23:59:59']);
 
             res.status(200).json(result(rows[0]));
         } catch (e) {

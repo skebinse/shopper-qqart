@@ -29,7 +29,7 @@ export function GlobalProvider({children}) {
     const loginInfoRnw = () => {
 
         cmm.ajax({
-            url: '/api/login',
+            url: '/api/cmm/login',
             data: {
                 encShprId: cmm.getLoginInfo('ENC_SHPR_ID'),
                 appToken: cmm.util.getLs(cmm.Cont.APP_TOKEN),

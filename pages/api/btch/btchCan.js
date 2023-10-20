@@ -1,12 +1,14 @@
 import {getConnectPool, result} from "../db";
 import Login from "../../cmm/login";
 import {adminSendNtfy} from "../../../util/smsUtil";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         const param = req.body;
+        const encShprId = getCookie('enc_sh', {req, res});
 
         await conn.beginTransaction();
 
@@ -19,7 +21,7 @@ export default async function handler(req, res) {
                    AND SHPR_ID = fnDecrypt(?, ?)
             `;
 
-            const [oderRows] = await conn.query(query, [param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            const [oderRows] = await conn.query(query, [param.oderUserId, encShprId, process.env.ENC_KEY]);
 
             query =`
                 INSERT INTO T_BTCH_CAN_HITY (
@@ -39,7 +41,7 @@ export default async function handler(req, res) {
                 )
             `;
 
-            const [rows] = await conn.query(query, [oderRows[0].SHOP_ID, oderRows[0].USER_ID, req.headers['x-enc-user-id'], process.env.ENC_KEY, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            const [rows] = await conn.query(query, [oderRows[0].SHOP_ID, oderRows[0].USER_ID, encShprId, process.env.ENC_KEY, param.oderUserId, encShprId, process.env.ENC_KEY]);
 
             query =`
                 UPDATE T_ODER_USER_INFO
@@ -51,11 +53,11 @@ export default async function handler(req, res) {
                    AND SHPR_ID = fnDecrypt(?, ?)
             `;
 
-            await conn.query(query, [param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            await conn.query(query, [param.oderUserId, encShprId, process.env.ENC_KEY]);
             await conn.commit();
 
             // admin 알림 발송
-            adminSendNtfy(conn, {ntfyType: 'btchCan', oderUserId: param.oderUserId, encUserId: req.headers['x-enc-user-id'], encKey: process.env.ENC_KEY});
+            adminSendNtfy(conn, {ntfyType: 'btchCan', oderUserId: param.oderUserId, encUserId: encShprId, encKey: process.env.ENC_KEY});
 
             res.status(200).json(result(rows));
         } catch (e) {

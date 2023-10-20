@@ -1,10 +1,12 @@
 import {getConnectPool, result} from "../db";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         const param = req.body;
+        const encShprId = getCookie('enc_sh', {req, res});
 
         try {
             const query = `
@@ -13,7 +15,7 @@ export default async function handler(req, res) {
                  WHERE SHPR_ID = fnDecrypt(?, ?)
             `;
 
-            const [rows, fields] = await conn.query(query, [param.token, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            const [rows, fields] = await conn.query(query, [param.token, encShprId, process.env.ENC_KEY]);
 
             res.status(200).json(result(rows));
         } catch (e) {

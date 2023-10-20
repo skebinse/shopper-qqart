@@ -1,12 +1,13 @@
 import {getConnectPool, result} from "../db";
 import cmm from "../../../js/common";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         const param = req.body;
-
+        const encShprId = getCookie('enc_sh', {req, res});
         let query = '';
 
         try {
@@ -26,7 +27,7 @@ export default async function handler(req, res) {
                     VALUES (?, ?, ?, fnDecrypt(?, ?), ?)
                 `;
 
-                await conn.query(query, [userAgent, protocol + '//' + host, ip, req.headers['x-enc-user-id'], process.env.ENC_KEY, param.appYn]);
+                await conn.query(query, [userAgent, protocol + '//' + host, ip, encShprId, process.env.ENC_KEY, param.appYn]);
             }
 
             // 정지 계정 확인
@@ -36,7 +37,7 @@ export default async function handler(req, res) {
                  WHERE SHPR_ID = fnDecrypt(?, ?)
             `;
 
-            const [actSpnsRow] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            const [actSpnsRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
 
             if (!!actSpnsRow[0] && !!actSpnsRow[0].SHPR_ACT_SPNS_DT) {
 
@@ -56,7 +57,7 @@ export default async function handler(req, res) {
                    AND SHPR_ENT_APV_DT IS NULL
             `;
 
-            [row] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            [row] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
 
             if (row[0].CNT > 0) {
 
@@ -74,7 +75,7 @@ export default async function handler(req, res) {
                    AND SHPR_DUTJ_END_DT IS NULL
             `;
 
-            [row] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            [row] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
 
             if (row[0].CNT === 0) {
 
@@ -91,7 +92,7 @@ export default async function handler(req, res) {
                AND BTCH_CAN_SANCT_YN = 'Y'
             `;
 
-            [row] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            [row] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
             let rows = [];
 
             if (row[0].MIN >= 60) {
@@ -185,7 +186,7 @@ export default async function handler(req, res) {
           ORDER BY AA.ODER_REQ_YMD
             `;
 
-                [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+                [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
             }
 
             // 배치 리스트
@@ -289,7 +290,7 @@ export default async function handler(req, res) {
              , AA.ODER_REQ_APV_DT
         `;
 
-            const [rows2] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            const [rows2] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
 
             res.status(200).json(result({
                 isEntApv: true,

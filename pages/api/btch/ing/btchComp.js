@@ -1,12 +1,14 @@
 import {getConnectPool, result} from "../../db";
 import cmm from "../../../../js/common";
 import {adminSendNtfy} from "../../../../util/smsUtil";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         const param = req.body;
+        const encShprId = getCookie('enc_sh', {req, res});
         let isError = false;
 
         try {
@@ -23,7 +25,7 @@ export default async function handler(req, res) {
                    AND SHPR_ID = fnDecrypt(?, ?)
                 `;
 
-            let [rows] = await conn.query(query, [param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            let [rows] = await conn.query(query, [param.oderUserId, encShprId, process.env.ENC_KEY]);
 
             if(cmm.util.getNumber(rows[0].ODER_PGRS_STAT) >= 6) {
 
@@ -41,17 +43,17 @@ export default async function handler(req, res) {
                    AND SHPR_ID = fnDecrypt(?, ?)
                 `;
 
-            [rows] = await conn.query(query, [param.atchFileUuid, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            [rows] = await conn.query(query, [param.atchFileUuid, param.oderUserId, encShprId, process.env.ENC_KEY]);
 
             // 픽업 자동정산
             query = `CALL spInsPiupAtmtAdj(?, fnDecrypt(?, ?), 'N')`;
 
-            await conn.query(query, [param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            await conn.query(query, [param.oderUserId, encShprId, process.env.ENC_KEY]);
 
             // 쇼퍼 현재 주문 최대치 수정
             query = 'CALL spModShprPsOderMxva(fnDecrypt(?, ?))';
 
-            await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            await conn.query(query, [encShprId, process.env.ENC_KEY]);
 
             await conn.commit();
             res.status(200).json(result(rows));

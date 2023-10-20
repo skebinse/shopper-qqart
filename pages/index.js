@@ -326,29 +326,34 @@ export default function Index(props) {
 
 export async function getServerSideProps({req, res}) {
 
-    const resData = await cmm.ajaxServer({
-        url: process.env.NEXT_PUBLIC_LOCAL_URL + '/api/cmm/getSystCrll',
-        isExtr: true,
-        data: {
-            systCrllSc: '메인화면',
-            enc_sh: getCookie('enc_sh', {req, res}),
-        },
-        success: res => {
-            console.log(2)
-            if(res.data === 1) {
-                res.redirect = '/main';
-            }
-        }
-    });
+    const cookieEncSh = getCookie('enc_sh', {req, res});
 
-    if(resData.data === 1) {
+    // 쿠키에 값이 있을 경우
+    if(!!cookieEncSh) {
 
-        return {
-            redirect: {
-                permanent: false,
-                destination: "/main",
+        const resData = await cmm.ajaxServer({
+            url: process.env.NEXT_PUBLIC_LOCAL_URL + '/api/cmm/getSystCrll',
+            isExtr: true,
+            data: {
+                systCrllSc: '메인화면',
+                enc_sh: cookieEncSh,
             },
-            props: {},
+        });
+
+        if(resData.data === 1) {
+
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: "/main",
+                },
+                props: {},
+            }
+        } else {
+
+            return {
+                props: {},
+            }
         }
     } else {
 

@@ -1,10 +1,13 @@
 import {getConnectPool, result} from "../db";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         try {
+            const encShprId = getCookie('enc_sh', {req, res});
+            
             const query =`
                 UPDATE T_SHPR_INFO
                    SET SHPR_SCSS_YN = 'Y'
@@ -14,7 +17,7 @@ export default async function handler(req, res) {
                  WHERE SHPR_ID = fnDecrypt(?, ?)
                    AND SHPR_SCSS_YN = 'N'
             `;
-            const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            const [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY, encShprId, process.env.ENC_KEY]);
 
             res.status(200).json(result(rows[0]));
         } catch (e) {

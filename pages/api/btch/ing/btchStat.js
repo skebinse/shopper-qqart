@@ -1,5 +1,6 @@
 import {getConnectPool, result} from "../../db";
 import {adminSendNtfy} from "../../../../util/smsUtil";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
@@ -7,6 +8,7 @@ export default async function handler(req, res) {
 
         const param = req.body;
         let queryParam = [];
+        const encShprId = getCookie('enc_sh', {req, res});
 
         try {
 
@@ -19,7 +21,7 @@ export default async function handler(req, res) {
                    AND ODER_PGRS_STAT != '06'
                 `;
 
-            queryParam = [param.oderPgrsStat, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY];
+            queryParam = [param.oderPgrsStat, param.oderUserId, encShprId, process.env.ENC_KEY];
 
             if(param.oderPgrsStat === '05') {
                 query =`
@@ -32,7 +34,7 @@ export default async function handler(req, res) {
                        AND ODER_PGRS_STAT != '06'
                     `;
 
-                queryParam = [param.oderPgrsStat, param.atchFileUuid, param.oderUserId, req.headers['x-enc-user-id'], process.env.ENC_KEY];
+                queryParam = [param.oderPgrsStat, param.atchFileUuid, param.oderUserId, encShprId, process.env.ENC_KEY];
             }
 
             const [rows, fields] = await conn.query(query, queryParam);

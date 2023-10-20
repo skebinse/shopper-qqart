@@ -1,12 +1,14 @@
 import {getConnectPool, result, resultOne} from "../db";
 import cmm from "../../../js/common";
 import {adminSendNtfy} from "../../../util/smsUtil";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         const param = req.body;
+        const encShprId = getCookie('enc_sh', {req, res});
 
         try {
             if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
@@ -15,7 +17,7 @@ export default async function handler(req, res) {
 
             const query = 'CALL spInsShprBtchAcp(fnDecrypt(?, ?), ?, ?)';
 
-            const [rows, fields] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.oderUserId, param.oderPiupFrcsMi]);
+            const [rows, fields] = await conn.query(query, [encShprId, process.env.ENC_KEY, param.oderUserId, param.oderPiupFrcsMi]);
 
             if(!rows[0]) {
 

@@ -1,10 +1,12 @@
 import {getConnectPool, result} from "../db";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         const param = req.body;
+        const encShprId = getCookie('enc_sh', {req, res});
 
         try {
             const query = `
@@ -25,7 +27,7 @@ export default async function handler(req, res) {
                 )
             `;
 
-            const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.lot, param.lat, param.shprAppYn]);
+            const [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY, param.lot, param.lat, param.shprAppYn]);
 
             res.status(200).json(result(rows));
         } catch (e) {

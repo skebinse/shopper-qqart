@@ -28,6 +28,12 @@ export default function MyPage() {
 
                     setMyInfo(res);
                     setNtfy(res.SHPR_NTFY_YN === 'Y');
+
+                    cmm.util.setLs(cmm.Cont.LOGIN_INFO, {...cmm.getLoginInfo(), ...{
+                        SHPR_PRFL_FILE: res.SHPR_PRFL_FILE,
+                        SHPR_NCNM: res.SHPR_NCNM,
+                        SHPR_ADDR: res.SHPR_ADDR,
+                    }});
                 } else {
                     cmm.alert('로그인 후 이용가능합니다.<br/>로그인 화면으로 이동합니다.', () => {
 
@@ -50,8 +56,15 @@ export default function MyPage() {
 
         cmm.confirm('로그아웃 하시겠습니까?', () => {
 
-            cmm.util.rmLs(cmm.Cont.LOGIN_INFO);
-            goPage('/cmm/login');
+            cmm.ajax({
+                url: `/api/cmm/logout`,
+                success: res => {
+
+                    cmm.util.rmLs(cmm.Cont.LOGIN_INFO);
+                    goPage('/cmm/login');
+                }
+            });
+
         });
     };
 

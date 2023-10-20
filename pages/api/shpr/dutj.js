@@ -1,10 +1,13 @@
 import {getConnectPool, result} from "../db";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         const param = req.body;
+        const encShprId = getCookie('enc_sh', {req, res});
+        
         try {
 
             // 금일 업무시작 여부
@@ -17,7 +20,7 @@ export default async function handler(req, res) {
                    AND SHPR_DUTJ_END_DT IS NULL
                 `;
 
-            let [row] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            let [row] = await conn.query(query, [encShprId, process.env.ENC_KEY, encShprId, process.env.ENC_KEY]);
 
             if(param.type === 'start') {
 
@@ -41,7 +44,7 @@ export default async function handler(req, res) {
                         )
                     `;
 
-                    await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY, param.lat, param.lon, param.shprDutjStrtPsit]);
+                    await conn.query(query, [encShprId, process.env.ENC_KEY, param.lat, param.lon, param.shprDutjStrtPsit]);
                 }
             } else if(param.type === 'end') {
 
@@ -54,7 +57,7 @@ export default async function handler(req, res) {
                            AND SHPR_DUTJ_END_DT IS NULL
                     `;
 
-                    await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+                    await conn.query(query, [encShprId, process.env.ENC_KEY]);
                 }
             }
 

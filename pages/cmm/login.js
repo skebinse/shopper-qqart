@@ -3,9 +3,9 @@ import Image from "next/image";
 import React, {useEffect, useState} from "react";
 import cmm from "../../js/common";
 import useCommon from "../../hooks/useCommon";
-import Link from "next/link";
 import Script from "next/script";
 import {useRouter} from "next/router";
+import {deleteCookie} from "cookies-next";
 
 export default function Login(props) {
 
@@ -45,6 +45,10 @@ export default function Login(props) {
                 setLabelStyle(prevState => prevState.map((style, idx) => idx === 1 ? '' : style));
             }
         });
+
+        if(!!props && props.p === 'dplcLogin') {
+            cmm.alert('중복로그인 되었습니다.<br/>다시 로그인해주세요.');
+        }
     }, []);
 
     /**
@@ -62,7 +66,7 @@ export default function Login(props) {
     const loginClick = () => {
 
         cmm.ajax({
-            url: '/api/login',
+            url: '/api/cmm/login',
             data: {
                 userId: loginInfo.userId,
                 userPw: loginInfo.userPw,
@@ -158,4 +162,15 @@ export default function Login(props) {
             </div>
         </>
     );
+}
+export async function getServerSideProps({req, res, query }) {
+
+    deleteCookie('enc_sh', {req, res});
+    deleteCookie('tkn_sh', {req, res});
+
+    return {
+        props: {
+            p: !!query.p ? query.p : ''
+        },
+    }
 }

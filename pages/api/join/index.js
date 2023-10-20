@@ -1,4 +1,5 @@
 import {getConnectPool, result} from "../db";
+import {setCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
@@ -16,8 +17,17 @@ export default async function handler(req, res) {
                 param.userAddrLot, '', '', param.atchFileUuid, param.shprSfitdText, process.env.ENC_KEY,
                 param.userId, param.userPw, (param.appToken === 'null' ? '' : param.appToken), param.shprDelyPosDtc
             ]);
+            const item = rows[0][0];
 
-            res.status(200).json(result(rows[0][0]));
+            // 쿠키 등록
+            if(item.IS_LOGIN === 1) {
+                setCookie('enc_sh', item.ENC_SHPR_ID, {
+
+                    req, res, maxAge: 2592000, sameSite: 'strict', httpOnly: true,  secure: true
+                });
+            }
+
+            res.status(200).json(result(item));
         } catch (e) {
 
             console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));

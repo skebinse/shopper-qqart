@@ -1,10 +1,12 @@
 import {getConnectPool, result} from "../../db";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         const param = req.body;
+        const encShprId = getCookie('enc_sh', {req, res});
 
         try {
             const query = `
@@ -33,7 +35,7 @@ export default async function handler(req, res) {
                 )
             `;
 
-            const [rows, fields] = await conn.query(query, [param.oderUserId, param.orderId, param.failCd, param.failCd, param.failText, param.amt, param.paymentKey, param.ldtnInfo, req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            const [rows, fields] = await conn.query(query, [param.oderUserId, param.orderId, param.failCd, param.failCd, param.failText, param.amt, param.paymentKey, param.ldtnInfo, encShprId, process.env.ENC_KEY]);
 
             res.status(200).json(result(rows));
         } catch (e) {

@@ -1,12 +1,14 @@
 import {getConnectPool, result} from "../../db";
 import {adminSendNtfy} from "../../../../util/smsUtil";
 import cmm from "../../../../js/common";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         const param = req.body;
+        const encShprId = getCookie('enc_sh', {req, res});
         let queryParam = [];
 
         try {
@@ -20,7 +22,7 @@ export default async function handler(req, res) {
                    AND ODER_USER_ID IN (${param.oderUserIds})
             `;
 
-            const [rows] = await conn.query(query, [req.headers['x-enc-user-id'], process.env.ENC_KEY]);
+            const [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
             const data = {
                 shopper: {
                     name: '쇼퍼',
@@ -48,8 +50,7 @@ export default async function handler(req, res) {
                     });
                 });
             }
-            console.log(data)
-            console.log(data.deliveries[0])
+
             cmm.ajax({
                 url: 'http://road.qqcart.shop/api/v1/eta/route',
                 isExtr: true,
@@ -70,7 +71,7 @@ export default async function handler(req, res) {
                                        AND ODER_USER_ID = ?
                                 `;
 
-                            conn.query(query, [idx, req.headers['x-enc-user-id'], process.env.ENC_KEY, item.name]);
+                            conn.query(query, [idx, encShprId, process.env.ENC_KEY, item.name]);
                         });
                     }
                     res.status(200).json(result(apiRes));

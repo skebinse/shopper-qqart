@@ -55,7 +55,7 @@ export default function Login(props) {
                         }
 
                         cmm.ajax({
-                            url: '/api/login',
+                            url: '/api/cmm/login',
                             data: param,
                             success: res => {
 

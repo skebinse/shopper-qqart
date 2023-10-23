@@ -45,10 +45,6 @@ const cmm = {
             body: _options.body,
         };
 
-        // if(!_options.isExtr && cmm.checkLogin()) {
-        //     init.headers['X-ENC-USER-ID'] = cmm.getLoginInfo('ENC_SHPR_ID');
-        // }
-
         // JSON 타입일 경우
         if(_options.dataType === 'json') {
 
@@ -64,29 +60,19 @@ const cmm = {
             init.body = !!_options.data ? new URLSearchParams(_options.data) : undefined;
         }
 
-        fetch('/api/cmm/dplcLogin', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({url: _options.url, isExtr: _options.isExtr})
-        }).then(res => res.json()).then(res => {
+        // ajax call
+        const callAjax = () => {
 
-            if(res.data.CNT === 0) {
+            fetch(_options.url, init).then(res => {
 
-                location.href = '/cmm/login?p=dplcLogin';
-            } else {
+                if(_options.responseType === 'arraybuffer') {
 
-                fetch(_options.url, init).then(res => {
+                    return res.arrayBuffer();
+                } else {
 
-                    if(_options.responseType === 'arraybuffer') {
-
-                        return res.arrayBuffer();
-                    } else {
-
-                        return res.json();
-                    }
-                })
+                    return res.json();
+                }
+            })
                 .then(res => {
 
                     if(!!_options.isExtr) {
@@ -126,8 +112,31 @@ const cmm = {
                         cmm.loading(false);
                     }
                 });
-            }
-        });
+        };
+
+        if(!!_options.isExtr) {
+
+            callAjax();
+        } else {
+
+            // 중복 로그인 체크
+            fetch('/api/cmm/dplcLogin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({url: _options.url, isExtr: _options.isExtr})
+            }).then(res => res.json()).then(res => {
+
+                if(res.data.CNT === 0) {
+
+                    location.href = '/cmm/login?p=dplcLogin';
+                } else {
+
+                    callAjax();
+                }
+            });
+        }
 
     },
 

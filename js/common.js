@@ -133,20 +133,14 @@ const cmm = {
                     callAjax();
                 } else if(res.data.result === -1) {
 
-                    if(!_options.isExtr && !!_options.isLoaing) {
-
-                        cmm.loading(false);
-                    }
+                    cmm.loading(false);
                     cmm.alert('로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.', () => {
 
                         location.href = '/cmm/login';
                     });
                 } else if(res.data.result === 0) {
 
-                    if(!_options.isExtr && !!_options.isLoaing) {
-
-                        cmm.loading(false);
-                    }
+                    cmm.loading(false);
                     location.href = '/cmm/login?p=dplcLogin';
                 }
             });

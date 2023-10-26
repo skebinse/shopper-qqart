@@ -2,7 +2,6 @@ import HeadTitle from "../../components/headTitle";
 import NaviStep from "../../components/naviStep";
 import styles from "../../styles/join.module.css";
 import {useEffect, useRef, useState} from "react";
-import {useRouter} from "next/router";
 import cmm from "../../js/common";
 import useCommon from "../../hooks/useCommon";
 
@@ -25,10 +24,10 @@ export default function CphoneAhrz(props) {
 
             setVldtSs(prevState => {
 
-                if(prevState <= 0) {
+                if(prevState <= 1) {
 
                     clearInterval(timer);
-                    cmm.alert('인증번호 유효기간이 지났습니다. 재전송을 클릭하시기 바랍니다.');
+                    cmm.alert('인증번호 유효기간이 지났습니다.<br/>재전송을 클릭하시기 바랍니다.');
                 }
 
                 return prevState - 1;

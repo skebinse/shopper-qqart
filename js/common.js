@@ -128,12 +128,26 @@ const cmm = {
                 body: JSON.stringify({url: _options.url, isExtr: _options.isExtr})
             }).then(res => res.json()).then(res => {
 
-                if(res.data.CNT === 0) {
-
-                    location.href = '/cmm/login?p=dplcLogin';
-                } else {
+                if(res.data.result === 1) {
 
                     callAjax();
+                } else if(res.data.result === -1) {
+
+                    if(!_options.isExtr && !!_options.isLoaing) {
+
+                        cmm.loading(false);
+                    }
+                    cmm.alert('로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.', () => {
+
+                        location.href = '/cmm/login';
+                    });
+                } else if(res.data.result === 0) {
+
+                    if(!_options.isExtr && !!_options.isLoaing) {
+
+                        cmm.loading(false);
+                    }
+                    location.href = '/cmm/login?p=dplcLogin';
                 }
             });
         }

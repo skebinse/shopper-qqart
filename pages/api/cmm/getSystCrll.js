@@ -8,7 +8,7 @@ export default async function handler(req, res) {
         const param = req.body;
 
         try {
-            console.log(param.enc_sh)
+
             if(!!param.enc_sh) {
 
                 const query = `

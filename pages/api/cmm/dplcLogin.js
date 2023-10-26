@@ -24,9 +24,11 @@ export default async function handler(req, res) {
                       FROM T_SHPR_INFO
                      WHERE SHPR_ID = fnDecrypt(?, ?)
                 `, [encShprId, process.env.ENC_KEY, tknSh]);
-                console.log(rows[0])
 
-                if(!!rows[0].SHPR_DPLC_LOGIN_TKN) {
+                if(!encShprId ||!rows[0].SHPR_DPLC_LOGIN_TKN) {
+
+                    res.status(200).json(result({result: -1}));
+                } else {
 
                     if(rows[0].SHPR_DPLC_LOGIN_TKN === tknSh) {
 
@@ -35,9 +37,6 @@ export default async function handler(req, res) {
 
                         res.status(200).json(result({result: 0}));
                     }
-                } else {
-
-                    res.status(200).json(result({result: -1}));
                 }
             } catch (e) {
                 console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium' } ).format(new Date()));

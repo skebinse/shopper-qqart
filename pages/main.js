@@ -435,7 +435,7 @@ export default function Index(props) {
                         {/*</Link>*/}
                     </div>
                     <div id="kakaoMap" style={{height: 'calc(100% - 210px)'}}></div>
-                    <Sheet ref={sheetRef} isOpen={isSheetOpen} onClose={() => setSheetOpen(false)} snapPoints={[window.innerHeight - 40, 155]} initialSnap={1}
+                    <Sheet ref={sheetRef} isOpen={isSheetOpen} className={'mainSheet'} onClose={() => setSheetOpen(false)} snapPoints={[window.innerHeight - 40, 155]} initialSnap={1}
                            onSnap={sheetSnapHandler}>
                         <Sheet.Container>
                             <Sheet.Header></Sheet.Header>

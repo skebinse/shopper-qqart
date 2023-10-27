@@ -1,5 +1,5 @@
 import {getConnectPool, result} from "../db";
-import {setCookie} from "cookies-next";
+import {getCookie, setCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
@@ -22,13 +22,16 @@ export default async function handler(req, res) {
 
             // 쿠키 등록
             if(item.IS_LOGIN === 1) {
-                setCookie('enc_sh', item.ENC_SHPR_ID, {
 
-                    req, res, maxAge: 2592000, sameSite: 'strict', httpOnly: true,  secure: true
-                });
-                setCookie('tkn_sh', item.SHPR_DPLC_LOGIN_TKN, {
-                    req, res, maxAge: 2592000, sameSite: 'strict', httpOnly: true,  secure: true
-                });
+                if(param.isLogin === 'N') {
+
+                    setCookie('enc_sh', item.ENC_SHPR_ID, {
+                        req, res, maxAge: 2592000, sameSite: 'strict', httpOnly: true,  secure: true
+                    });
+                    setCookie('tkn_sh', item.SHPR_DPLC_LOGIN_TKN, {
+                        req, res, maxAge: 2592000, sameSite: 'strict', httpOnly: true,  secure: true
+                    });
+                }
 
                 res.status(200).json(result({
                     IS_LOGIN: item.IS_LOGIN,

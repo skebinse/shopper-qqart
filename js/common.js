@@ -939,6 +939,11 @@ const cmm = {
                     s.charset = 'UTF-8';
                     let x = document.getElementsByTagName('script')[0];
                     x.parentNode.insertBefore(s, x);
+                    s.addEventListener('load', () => {
+                        console.log(document.querySelector('#ch-plugin').style.zIndex)
+                        document.querySelector('#ch-plugin').attr = '100';
+                        console.log(document.querySelector('#ch-plugin').style.zIndex)
+                    });
                 }
                 if (document.readyState === 'complete') {
                     l();

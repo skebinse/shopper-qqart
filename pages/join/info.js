@@ -40,7 +40,7 @@ export default function Info() {
             setJoinInfoLS(cmm.util.getLs(cmm.Cont.JOIN_INFO));
         }
 
-        if(!cmm.checkLogin() && !cmm.util.getLs(cmm.Cont.JOIN_INFO).userCrctno) {
+        if(!cmm.checkLogin() && !cmm.util.getLs(cmm.Cont.JOIN_INFO) && !cmm.util.getLs(cmm.Cont.JOIN_INFO)?.userCrctno) {
             cmm.alert('로그인정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {
                 goPage('/cmm/login');
             });
@@ -191,6 +191,7 @@ export default function Info() {
                 data: {
                     ...param,
                     appToken: (!!cmm.util.getLs(cmm.Cont.APP_TOKEN) ? cmm.util.getLs(cmm.Cont.APP_TOKEN) : ''),
+                    isLogin: cmm.checkLogin() ? 'Y' : 'N',
                 },
                 success: res => {
 

@@ -120,7 +120,7 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 
 
 /* bottomMenu */
-.bottonMenu{position: fixed;bottom: 0;width: 100%;background-color: #FFFFFF;box-shadow: #0000000D 0px -5px 16px;z-index: 99999999;}
+.bottonMenu{position: fixed;bottom: 0;width: 100%;background-color: #FFFFFF;box-shadow: #0000000D 0px -5px 16px;z-index: 11;}
 .bottonMenu ul{display: flex;}
 .bottonMenu ul li{width: 100%;text-align: center;padding: 13px 0 10px;}
 .bottonMenu ul li span{color: #333333;font-size: 10px;display: block;}
@@ -226,3 +226,5 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 
 /* kakaomap */
 #kakaoMap > div > div > div > div > img{border-radius: 100px;}
+
+.mainSheet{z-index: 10 !important;}

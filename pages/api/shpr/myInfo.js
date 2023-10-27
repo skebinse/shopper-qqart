@@ -75,6 +75,7 @@ async function getMyInfo(conn, req, res) {
 async function setMyInfo(conn, req, res) {
 
     const param = req.body;
+    const encShprId = getCookie('enc_sh', {req, res});
 
     try {
         const query = `

@@ -95,6 +95,7 @@ export async function getServerSideProps(context) {
         if(!!res.error) {
 
             console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
+            console.log(context.query)
             console.log(res);
         }
         return res.access_token;

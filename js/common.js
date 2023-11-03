@@ -843,7 +843,11 @@ const cmm = {
                     isLoaing: false,
                     success: res => {
 
-                        callback({lat: res.SHPR_PSIT_LAT, lot: res.SHPR_PSIT_LAT});
+                        if(res.length > 0) {
+                            callback({lat: res[0].SHPR_PSIT_LOT, lot: res[0].SHPR_PSIT_LAT});
+                        } else {
+                            callback({error: '위치 정보가 없습니다.'});
+                        }
                     },
                     error: res => {}
                 });

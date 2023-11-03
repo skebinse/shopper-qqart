@@ -5,10 +5,7 @@ import {useRouter} from "next/router";
 import cmm from "../js/common";
 import BtchList from "../components/btchListMain";
 import BottomMenu from "../components/bottomMenu";
-import Link from "next/link";
 import Sheet from 'react-modal-sheet';
-import Head from "next/head";
-import Script from "next/script";
 
 export default function Index(props) {
 
@@ -46,7 +43,7 @@ export default function Index(props) {
 
         // 현재위치 마커 주소입니다
         const imageSrc = '/assets/images/icon/map/iconMapShopper.png';
-        const imageSize = new kakao.maps.Size(40, 40);
+        const imageSize = new kakao.maps.Size(32, 32);
 
         // 현재 위치 마커를 생성합니다
         const marker = new kakao.maps.Marker({
@@ -64,7 +61,7 @@ export default function Index(props) {
             data.list.forEach(item => {
 
                 // 마커 주소입니다 ODER_OPTM_DTC_SEQ
-                let imageSrc = (item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03') ? item.SHOP_RRSN_ATCH_FILE_LIST : '/assets/images/icon/map/iconMapUser.png';
+                let imageSrc = (item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03') ? '/assets/images/icon/map/iconMapStore.png' : '/assets/images/icon/map/iconMapUser.png';
 
                 if(!!item.ODER_OPTM_DTC_SEQ) {
                     imageSrc = `/assets/images/icon/map/icoMapPersonalNum_${item.ODER_OPTM_DTC_SEQ}.png`
@@ -112,7 +109,6 @@ export default function Index(props) {
 
         // 현재 위치 가져오기
         cmm.util.getCurrentPosition(res => {
-
             createMap({
                 shprPsitLat: res.lot,
                 shprPsitLot: res.lat,
@@ -205,14 +201,14 @@ export default function Index(props) {
 
                             setTabIdx(Number(router.query.tabIdx));
                             currentList = Number(router.query.tabIdx) === 0 ? res.btchList : res.btchAcpList;
+
+                            // 쇼퍼 위치 확인 후 지도 생성
+                            shopperPosition(currentList);
                         } else if(res.btchAcpList.length > 0) {
 
                             setTabIdx(1);
                             currentList = res.btchAcpList;
                         }
-
-                        // 쇼퍼 위치 확인 후 지도 생성
-                        shopperPosition(currentList);
 
                     } else {
 

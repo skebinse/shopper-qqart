@@ -331,7 +331,7 @@ const cmm = {
      */
     isApp: () => {
 
-        return !!window.webkit && !!window.webkit.messageHandlers;
+        return !!window.webkit && !!window.webkit.messageHandlers && !!window.webkit.messageHandlers.cordova_iab;
     },
 
     /**

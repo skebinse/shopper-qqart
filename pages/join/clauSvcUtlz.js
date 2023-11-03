@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
-import styles from "../../styles/join.module.css"
-import HeadTitle from "../../components/headTitle";
+import styles from '../../styles/join.module.css';
+import HeadTitle from '../../components/headTitle';
 
 export default function ClauSvcUtlz() {
 
@@ -23,7 +23,7 @@ export default function ClauSvcUtlz() {
                 <h1><strong>퀵퀵카트 쇼퍼(Shopper) 이용약관</strong></h1>
 
                 <p><strong>제1조 (목적)</strong></p>
-                퀵퀵카트 쇼퍼 이용약관(이하 “본 약관”)은 (주)베리비지비(이하 “회사”)가 장보기쇼퍼(shopper)(이하 “쇼퍼”)에게 회사가 지정하는 물품(이하 “물품”)의 장보기 및 배달업무(이하 “업무”)를 위탁함에 있어 필요한 권리·의무를 정함에 그 목적이 있습니다.
+                퀵퀵카트 쇼퍼 이용약관(이하 &quot;본 약관&quot;)은 (주)베리비지비(이하 &quot;회사&quot;)가 장보기쇼퍼(shopper)(이하 &quot;쇼퍼&quot;)에게 회사가 지정하는 물품(이하 &quot;물품&quot;)의 장보기 및 배달업무(이하 &quot;업무&quot;)를 위탁함에 있어 필요한 권리·의무를 정함에 그 목적이 있습니다.
 
                 <p><strong>제2조 (본 약관의 효력 및 변경)</strong></p>
                 ① 본 약관은 쇼퍼가 본 약관에 동의하고 회사가 정한 절차에 따라 등록함으로써 효력이 발생합니다.<br/>
@@ -120,7 +120,7 @@ export default function ClauSvcUtlz() {
                 ① 쇼퍼는 업무를 수행할 때 개인정보 보호법 등 관련 법령을 위반하여서는 안 됩니다.<br/>
                 ② 쇼퍼는 업무 수행 중 알게 된 회사의 고객의 개인정보를 업무 수행 이외의 목적으로 사용할 수 없습니다.<br/>
                 ③ 쇼퍼의 귀책사유로 회사의 고객의 개인정보 등이 분실, 도난, 유출, 위·변조되는 등의 사고가 발생하고 그로 인하여 개인정보 주체를 비롯한 제3자와 회사 사이에 민·형사 또는 행정상 분쟁이 발생한 경우, 쇼퍼는 이를 자신의 책임과 비용으로 해결하고, 회사를 면책시켜야 합니다. 다만 관련 법률에 따라 회사가 책임을 부담하여야 하는 경우 또는 회사의 고의∙과실이 입증된 경우에는 회사가 책임을 분담합니다.<br/>
-                ④ 개인정보의 보호와 관련하여 상세한 내용은 “개인정보 수집 이용 동의”에 의합니다.
+                ④ 개인정보의 보호와 관련하여 상세한 내용은 &quot;개인정보 수집 이용 동의&quot;에 의합니다.
 
                 <p><strong>제12조 (양도 등의 제한)</strong></p>
                 쇼퍼는 본 약관에 따른 지위, 권리 및 의무의 전부 또는 일부를 회사의 사전 동의 없이 제3자에게 양도, 재위탁하거나 담보의 목적물로 제공할 수 없습니다.

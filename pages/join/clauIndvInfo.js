@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
-import styles from "../../styles/join.module.css"
-import HeadTitle from "../../components/headTitle";
+import styles from '../../styles/join.module.css';
+import HeadTitle from '../../components/headTitle';
 
 export default function ClauIndvInfo() {
 

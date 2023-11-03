@@ -331,7 +331,7 @@ const cmm = {
      */
     isApp: () => {
 
-        return !!window.webkit;
+        return !!window.webkit && !!window.webkit.messageHandlers;
     },
 
     /**

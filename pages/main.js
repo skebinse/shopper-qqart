@@ -134,6 +134,7 @@ export default function Index(props) {
      * 배치 리스트 조회
      */
     const callBtchList = isInit => {
+
         if(!isInit) {
 
             cmm.loading(true);

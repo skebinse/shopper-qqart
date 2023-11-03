@@ -2,7 +2,7 @@ import styles from "../../styles/join.module.css"
 import HeadTitle from "../../components/headTitle";
 import NaviStep from "../../components/naviStep";
 import Link from "next/link";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import useCommon from "../../hooks/useCommon";
 
@@ -12,15 +12,28 @@ export default function ClauAgr() {
     const router = useRouter();
     const {goPage} = useCommon();
 
+    useEffect(() => {
+
+        if(!!document.querySelector('#ch-plugin')) {
+            document.querySelector('#ch-plugin').classList.add('d-none');
+        }
+
+        return () => {
+            if(!!document.querySelector('#ch-plugin')) {
+                document.querySelector('#ch-plugin').classList.remove('d-none');
+            }
+        };
+    }, []);
+
     /**
      * 전체 약관 동의
      */
     const allChkChange = e => {
         clauAgrChk02.checked = e.target.checked;
-        // clauAgrChk03.checked = e.target.checked;
-        // clauAgrChk04.checked = e.target.checked;
+        clauAgrChk03.checked = e.target.checked;
+        clauAgrChk04.checked = e.target.checked;
 
-        setBtnDisabled(!e.target.checked);
+        setBtnDisabled(!(clauAgrChk02.checked && clauAgrChk03.checked && clauAgrChk04.checked ));
     };
 
     /**
@@ -29,7 +42,7 @@ export default function ClauAgr() {
     const chkChagne = () => {
 
         // setBtnDisabled(!(clauAgrChk02.checked && clauAgrChk03.checked));
-        setBtnDisabled(!(clauAgrChk02.checked));
+        setBtnDisabled(!(clauAgrChk02.checked && clauAgrChk03.checked && clauAgrChk04.checked ));
     };
 
     /**
@@ -62,6 +75,24 @@ export default function ClauAgr() {
                             <p>서비스 이용약관 동의 <em>(필수)</em></p>
                         </label>
                         <Link href={'/join/clauSvcUtlz'}>
+                            보기
+                        </Link>
+                    </li>
+                    <li>
+                        <input type={'checkbox'} id={'clauAgrChk03'} value={'03'} onChange={chkChagne} />
+                        <label htmlFor={'clauAgrChk03'}>
+                            <p>위치기반 서비스 이용 약관 <em>(필수)</em></p>
+                        </label>
+                        <Link href={'/join/clauPsitUtlz'}>
+                            보기
+                        </Link>
+                    </li>
+                    <li>
+                        <input type={'checkbox'} id={'clauAgrChk04'} value={'04'} onChange={chkChagne} />
+                        <label htmlFor={'clauAgrChk04'}>
+                            <p>개인정보 수집 이용 동의 <em>(필수)</em></p>
+                        </label>
+                        <Link href={'/join/clauIndvInfo'}>
                             보기
                         </Link>
                     </li>

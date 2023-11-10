@@ -88,7 +88,7 @@ export default function Login(props) {
                             "callback": "window.getPsPsit"
                         }));
                     }
-                    console.log(res)
+
                     cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
                     router.push('/');
                 }

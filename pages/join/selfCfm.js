@@ -42,7 +42,7 @@ export default function SelfCfm() {
     };
 
     useEffect(() => {
-        console.log(danalTid);
+
         if(!!danalTid) {
             frmSelfCfm.submit();
         }

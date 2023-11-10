@@ -73,7 +73,7 @@ export default function IngOderUserId() {
                     }
 
                     item.oderDelySlctVal = oderDelySlctVal;
-                    console.log(item)
+
                     // 배치 정보
                     setBtchInfo(item);
                 } else {

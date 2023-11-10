@@ -79,7 +79,6 @@ export default function LdtnOderUserId() {
                 isExtr: true,
                 data: ldtnInfo,
                 success: res => {
-                    console.log(res);
 
                     // 결제 내역 등록
                     callInsLdtnHity(res);

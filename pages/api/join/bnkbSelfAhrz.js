@@ -7,7 +7,6 @@ export default async function handler(req, res) {
     const param = req.body;
 
     accountCheckService().checkDepositorInfo('6648802585', param.bankCd, param.bankNum, 'P', param.iden.substring(0, 6), 'VERYBUSYBEE', async resultRes => {
-        console.log(resultRes)
 
         if(resultRes.result === 100) {
 

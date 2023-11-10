@@ -34,7 +34,7 @@ export default async function handler(req, res) {
 
                     res.status(200).json(result({result: -1}));
                 } else {
-                    console.log(rows[0].SHPR_DPLC_LOGIN_TKN, tknSh)
+
                     if(rows[0].SHPR_DPLC_LOGIN_TKN === tknSh) {
 
                         res.status(200).json(result({result: 1}));

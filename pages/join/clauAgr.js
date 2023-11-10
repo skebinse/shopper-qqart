@@ -5,6 +5,7 @@ import Link from "next/link";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import useCommon from "../../hooks/useCommon";
+import cmm from "../../js/common";
 
 export default function ClauAgr() {
 
@@ -32,6 +33,7 @@ export default function ClauAgr() {
         clauAgrChk02.checked = e.target.checked;
         clauAgrChk03.checked = e.target.checked;
         clauAgrChk04.checked = e.target.checked;
+        clauAgrChk05.checked = e.target.checked;
 
         setBtnDisabled(!(clauAgrChk02.checked && clauAgrChk03.checked && clauAgrChk04.checked ));
     };
@@ -49,6 +51,10 @@ export default function ClauAgr() {
      * 화면 이동
      */
     const goPageClick =() => {
+
+        const joinInfoLS = cmm.util.getLs(cmm.Cont.JOIN_INFO);
+        joinInfoLS.mktnAgrYn = !!document.querySelector('#clauAgrChk05').checked ? 'Y' : 'N'
+        cmm.util.setLs(cmm.Cont.JOIN_INFO, joinInfoLS);
 
         goPage('/join/cphone');
         // goPage('/join/selfCfm');
@@ -95,6 +101,13 @@ export default function ClauAgr() {
                         <Link href={'/join/clauIndvInfo'}>
                             보기
                         </Link>
+                    </li>
+                    <li>
+                        <input type={'checkbox'} id={'clauAgrChk05'} value={'05'} />
+                        <label htmlFor={'clauAgrChk05'}>
+                            마케팅 정보 앱 푸시 알림 수신 동의 (선택)
+                            <span>이벤트 및 혜택 정보를 받아보실 수 있어요.</span>
+                        </label>
                     </li>
                 </ul>
                 <div className={styles.btnArea}>

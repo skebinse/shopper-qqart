@@ -97,6 +97,7 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 .btch li .delyArea div:first-child{justify-content: flex-start;}
 .btch li .delyArea div span{color: #333333;font-size: 14px;padding-left: 10px;}
 .btch li .delyArea div.orderNo span{padding-left: 5px;}
+.btch li .delyArea div span.type01{color: #02B763;font-weight: 700;}
 .btch li .storeArea{background: #F8F8F8;border-radius: 8px;padding: 16px;margin-top: 16px;}
 .btch li.btchIng.hhWr .storeArea{background: #FF6841;}
 .btch li.btchIng.hhWr.hhExcs .storeArea{background: #F44444;}

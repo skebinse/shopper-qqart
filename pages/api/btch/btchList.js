@@ -129,6 +129,7 @@ export default async function handler(req, res) {
                      , AA.ODER_DELY_ADDR_LAT
                      , AA.ODER_DELY_ADDR_LOT
                      , AA.SHOP_ID
+                     , AA.ODER_DELY_ARTG
                   FROM (
                     SELECT AA.ODER_MNGR_RGI_YN
                          , AA.ODER_PGRS_STAT
@@ -142,6 +143,7 @@ export default async function handler(req, res) {
                          , AA.ODER_DELY_SLCT_VAL
                          , AA.ODER_DELY_YMD
                          , AA.ODER_DELY_HH
+                         , AA.ODER_DELY_ARTG
                          , AA.SHOP_ID
                          , BB.SHOP_NM
                          , BB.SHOP_RRSN_ATCH_FILE_UUID

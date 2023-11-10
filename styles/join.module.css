@@ -101,4 +101,5 @@
 .join .drvLicDiv.prevImgShow > img{width: 100%;height: 100%;object-fit: cover;border-radius: 12px;}
 
 .join .callInfo{padding-top: 30px;font-weight: 500;}
-.join .callInfo em{display: block;padding-bottom: 10px;font-weight: 700;}
+.join .callInfo em{display: block;padding-bottom: 10px;font-weight: 700;font-size: 22px;
+}

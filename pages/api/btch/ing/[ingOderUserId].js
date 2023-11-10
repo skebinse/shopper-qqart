@@ -9,7 +9,13 @@ export default async function handler(req, res) {
         const encShprId = getCookie('enc_sh', {req, res});
 
         try {
-            let query = `
+
+            let query = `SELECT fnDecrypt(?, ?) AS SHPR_ID`;
+
+            const [shprIdRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+            const shprId = shprIdRow[0].SHPR_ID;
+
+            query = `
                SELECT AA.SHOP_ID
                      , BB.SHOP_NM
                      , CC.PROD_ID
@@ -83,11 +89,11 @@ export default async function handler(req, res) {
                      LEFT OUTER JOIN T_USER_INFO EE
                   ON EE.USER_ID = AA.USER_ID
                WHERE AA.ODER_USER_ID = ?
-                 AND AA.SHPR_ID = fnDecrypt(?, ?)
+                 AND AA.SHPR_ID = ?
             ORDER BY CC.SPBK_HNDC_PROD_NM
             `;
 
-            const [rows] = await conn.query(query, [ingOderUserId, encShprId, process.env.ENC_KEY]);
+            const [rows] = await conn.query(query, [ingOderUserId, shprId]);
 
             res.status(200).json(result(rows));
         } catch (e) {

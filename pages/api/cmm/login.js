@@ -9,29 +9,53 @@ export default async function handler(req, res) {
         const encShprId = getCookie('enc_sh', {req, res});
 
         try {
-            const [rows] = await conn.query(`call spShprLogin(?, ?, ?, ?, ?, ?, ?)`, [encShprId, param.userCrctno, param.userSnsType, process.env.ENC_KEY, param.userId, param.userPw, (param.appToken === 'null' ? '' : param.appToken)]);
-            const item = rows[0][0];
 
-            // 쿠키 등록
-            if(item.IS_LOGIN === 1) {
+            if(process.env.NEXT_PUBLIC_RUN_MODE === 'local' && process.env.DB_PROD_YN === 'Y') {
+
+                const [rows] = await conn.query(`
+                    SELECT 1 AS IS_LOGIN
+                         , A.SHPR_NCNM
+                         , A.SHPR_ADDR
+                         , TO_BASE64(AES_ENCRYPT(A.SHPR_ID, ?)) AS ENC_SHPR_ID
+                         , fnGetAtchFileList(A.SHPR_PRFL_ATCH_FILE_UUID) AS SHPR_PRFL_FILE
+                         , DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y%m%d') AS LOING_DT
+                         , 'v1.0' AS LOGIN_VER
+                      FROM T_SHPR_INFO A
+                     WHERE A.SHPR_ID = ?`,
+                    [process.env.ENC_KEY, param.userId]);
+                const item = rows[0];
+
                 setCookie('enc_sh', item.ENC_SHPR_ID, {
                     req, res, maxAge: 2592000, sameSite: 'strict', httpOnly: true,  secure: true
                 });
-                setCookie('tkn_sh', item.SHPR_DPLC_LOGIN_TKN, {
-                    req, res, maxAge: 2592000, sameSite: 'strict', httpOnly: true,  secure: true
-                });
-
-                res.status(200).json(result({
-                    IS_LOGIN: item.IS_LOGIN,
-                    SHPR_ADDR: item.SHPR_ADDR,
-                    LOING_DT: item.LOING_DT,
-                    SHPR_NCNM: item.SHPR_NCNM,
-                    SHPR_PRFL_FILE: item.SHPR_PRFL_FILE,
-                    LOGIN_VER: item.LOGIN_VER,
-                }));
-            } else {
 
                 res.status(200).json(result(item));
+            } else {
+
+                const [rows] = await conn.query(`call spShprLogin(?, ?, ?, ?, ?, ?, ?)`, [encShprId, param.userCrctno, param.userSnsType, process.env.ENC_KEY, param.userId, param.userPw, (param.appToken === 'null' ? '' : param.appToken)]);
+                const item = rows[0][0];
+
+                // 쿠키 등록
+                if(item.IS_LOGIN === 1) {
+                    setCookie('enc_sh', item.ENC_SHPR_ID, {
+                        req, res, maxAge: 2592000, sameSite: 'strict', httpOnly: true,  secure: true
+                    });
+                    setCookie('tkn_sh', item.SHPR_DPLC_LOGIN_TKN, {
+                        req, res, maxAge: 2592000, sameSite: 'strict', httpOnly: true,  secure: true
+                    });
+
+                    res.status(200).json(result({
+                        IS_LOGIN: item.IS_LOGIN,
+                        SHPR_ADDR: item.SHPR_ADDR,
+                        LOING_DT: item.LOING_DT,
+                        SHPR_NCNM: item.SHPR_NCNM,
+                        SHPR_PRFL_FILE: item.SHPR_PRFL_FILE,
+                        LOGIN_VER: item.LOGIN_VER,
+                    }));
+                } else {
+
+                    res.status(200).json(result(item));
+                }
             }
         } catch (e) {
             console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium' } ).format(new Date()));

@@ -11,6 +11,12 @@ export default async function handler(req, res) {
         const excpUrlPathList = ['/api/cmm', '/api/join'];
         const excpUrlList = ['/api/join'];
 
+        if(process.env.NEXT_PUBLIC_RUN_MODE === 'local' && process.env.DB_PROD_YN === 'Y') {
+
+            res.status(200).json(result({result: 1}));
+            return;
+        }
+
         if(!!param.isExtr || excpUrlPathList.indexOf(param.url.substring(0, param.url.lastIndexOf('/'))) > -1 ||
             excpUrlList.indexOf(param.url) > -1) {
 

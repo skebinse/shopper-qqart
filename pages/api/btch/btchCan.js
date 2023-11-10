@@ -13,15 +13,21 @@ export default async function handler(req, res) {
         await conn.beginTransaction();
 
         try {
-            let query =`
+
+            let query = `SELECT fnDecrypt(?, ?) AS SHPR_ID`;
+
+            const [shprIdRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+            const shprId = shprIdRow[0].SHPR_ID;
+
+            query =`
                 SELECT SHOP_ID
                      , USER_ID
                   FROM T_ODER_USER_INFO
                  WHERE ODER_USER_ID = ?
-                   AND SHPR_ID = fnDecrypt(?, ?)
+                   AND SHPR_ID = ?
             `;
 
-            const [oderRows] = await conn.query(query, [param.oderUserId, encShprId, process.env.ENC_KEY]);
+            const [oderRows] = await conn.query(query, [param.oderUserId, shprId]);
 
             query =`
                 INSERT INTO T_BTCH_CAN_HITY (
@@ -34,14 +40,14 @@ export default async function handler(req, res) {
                 ) VALUES (
                         ?,
                         ?,
-                        fnDecrypt(?, ?),
+                        ?,
                         ?,
                         NOW(),
-                        fnDecrypt(?, ?)
+                        ?
                 )
             `;
 
-            const [rows] = await conn.query(query, [oderRows[0].SHOP_ID, oderRows[0].USER_ID, encShprId, process.env.ENC_KEY, param.oderUserId, encShprId, process.env.ENC_KEY]);
+            const [rows] = await conn.query(query, [oderRows[0].SHOP_ID, oderRows[0].USER_ID, shprId, param.oderUserId, shprId]);
 
             query =`
                 UPDATE T_ODER_USER_INFO
@@ -50,10 +56,10 @@ export default async function handler(req, res) {
                      , ODER_PGRS_STAT = '02'
                      , ODER_REQ_APV_DT = NULL
                  WHERE ODER_USER_ID = ?
-                   AND SHPR_ID = fnDecrypt(?, ?)
+                   AND SHPR_ID = ?
             `;
 
-            await conn.query(query, [param.oderUserId, encShprId, process.env.ENC_KEY]);
+            await conn.query(query, [param.oderUserId, shprId]);
             await conn.commit();
 
             // admin 알림 발송

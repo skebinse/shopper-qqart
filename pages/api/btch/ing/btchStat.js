@@ -12,16 +12,21 @@ export default async function handler(req, res) {
 
         try {
 
-            let query =`
+            let query = `SELECT fnDecrypt(?, ?) AS SHPR_ID`;
+
+            const [shprIdRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+            const shprId = shprIdRow[0].SHPR_ID;
+
+            query =`
                 UPDATE T_ODER_USER_INFO
                    SET ODER_PGRS_STAT = ?
                      , ODER_SHPP_STRT_DT = NOW()
                  WHERE ODER_USER_ID = ?
-                   AND SHPR_ID = fnDecrypt(?, ?)
+                   AND SHPR_ID = ?
                    AND ODER_PGRS_STAT != '06'
                 `;
 
-            queryParam = [param.oderPgrsStat, param.oderUserId, encShprId, process.env.ENC_KEY];
+            queryParam = [param.oderPgrsStat, param.oderUserId, shprId];
 
             if(param.oderPgrsStat === '05') {
                 query =`
@@ -30,11 +35,11 @@ export default async function handler(req, res) {
                          , ODER_DELY_STRT_DT = NOW()
                          , ODER_PIUP_VCHR_ATCH_FILE_UUID = ?
                      WHERE ODER_USER_ID = ?
-                       AND SHPR_ID = fnDecrypt(?, ?)
+                       AND SHPR_ID = ?
                        AND ODER_PGRS_STAT != '06'
                     `;
 
-                queryParam = [param.oderPgrsStat, param.atchFileUuid, param.oderUserId, encShprId, process.env.ENC_KEY];
+                queryParam = [param.oderPgrsStat, param.atchFileUuid, param.oderUserId, shprId];
             }
 
             const [rows, fields] = await conn.query(query, queryParam);

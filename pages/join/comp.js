@@ -25,6 +25,11 @@ export default function Comp() {
             <Link href={'/'}>
                 메인으로
             </Link>
+            <p className={styles.callInfo}>
+                <em>1533-9171</em>
+                위 번호로 전화를 드리면<br/>
+                꼭 받아주세요.
+            </p>
         </div>
     );
 }

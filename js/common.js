@@ -279,7 +279,9 @@ const cmm = {
             <div class='confirmArea'>
                 <div>
                     <h3>${!!title ? title : '알림'}</h3>
-                    <p>${txt.replace(/\n/g, '<br/>')}</p>
+                    <p>
+                        ${txt.replace(/\n/g, '<br/>')}                        
+                    </p>
                     <div>
                         <button class='button white mr16' type="button">취소</button>
                         <button class='button' type="button">확인</button>
@@ -294,6 +296,14 @@ const cmm = {
                 // 확인
                 if(e.target.classList.length === 1) {
 
+                    if(!!document.querySelector('#confirmChk')) {
+
+                        if(!document.querySelector('#confirmChk').checked) {
+
+                            document.querySelector('#confirmVali').style.display = 'block';
+                            return;
+                        }
+                    }
                     !!callback && callback();
                 } else {
 

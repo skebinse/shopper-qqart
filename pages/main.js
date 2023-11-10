@@ -420,13 +420,48 @@ export default function Index(props) {
             }
         }
     };
+
+    /**
+     * 업무 종료
+     */
+    const dutjEndHanler = () => {
+
+        cmm.confirm('업무를 종료하시겠습니까?', () => {
+
+            cmm.ajax({
+                url: '/api/shpr/dutj',
+                data: {
+                    type: 'end'
+                },
+                success: res => {
+
+                    // 리액트 앱일 경우
+                    if(cmm.isReactApp()) {
+
+                        window.ReactNativeWebView.postMessage(JSON.stringify({
+                            type: 'LOCATION_INFO_CONSENT',
+                            data: {
+                                psitTnsmYn: false,
+                            }
+                        }))
+                    }
+
+                    // 배치 리스트 조회
+                    callBtchList();
+                }
+            });
+        });
+    };
     return (
         // <div className={styles.index} style={{height: windowHeight}}>
         <div className={styles.index + ' ' + dnone}>
             {(isEntApv && isDutjStrt) &&
                 <>
                     <div className={styles.header}>
-                        <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={113.6} height={24.5} onClick={appTest} />
+                        <div>
+                            <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={113.6} height={24.5} onClick={appTest} />
+                        </div>
+                        <button type={'button'} onClick={dutjEndHanler}>업무 종료</button>
                         {/*<Link href={'/join/info'}>*/}
                         {/*    <span>{addr}<Image alt={'열기'} src={'/assets/images/icon/iconAllowDown.svg'} width={10.4} height={6} /></span>*/}
                         {/*</Link>*/}
@@ -503,10 +538,17 @@ export default function Index(props) {
                             }
                         </h3>
                         {!entRefuRsn &&
-                            <p>
-                            순차적으로 승인 진행중에 있으니<br/>
-                            조금만 더 기다려주시기 바랍니다.
-                            </p>
+                            <>
+                                <p>
+                                순차적으로 승인 진행중에 있으니<br/>
+                                조금만 더 기다려주시기 바랍니다.
+                                </p>
+                                <p>
+                                <em>1533-9171</em>
+                                위 번호로 전화를 드리면<br/>
+                                꼭 받아주세요.
+                                </p>
+                            </>
                         }
                         {!!entRefuRsn &&
                             <p>

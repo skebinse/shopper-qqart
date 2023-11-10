@@ -181,7 +181,7 @@ export default function MyApp({ Component, pageProps }) {
             // 앱일 경우 현재 위치 저장
             if (cmm.isApp()) {
 
-                webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({
+                window.webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({
                     "action": "getlocation",
                     "callback": "window.getPsPsit"
                 }));
@@ -189,14 +189,14 @@ export default function MyApp({ Component, pageProps }) {
                 // 2분마다 실행
                 setInterval(() => {
 
-                    webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({
+                    window.webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({
                         "action": "getlocation",
                         "callback": "window.getPsPsit"
                     }));
                 }, (1000 * 60 * 2));
             } else {
 
-                // // 위치 정보
+                // 위치 정보
                 // if(!!navigator.geolocation && !!navigator.geolocation.getCurrentPosition) {
                 //
                 //     // 현재 위치 저장

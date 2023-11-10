@@ -171,7 +171,18 @@ export default function  BtchList({list, href, classNm = '', noDataTxt = '현재
                     // 픽업일 경우
                     if (item.ODER_PGRS_STAT === '03' && item.ODER_KD === 'PIUP') {
                         msg = '스토어에 도착하셨나요?\n지금부터 배달을 시작하시겠습니까?';
-                        title = '배달 시작'
+                        title = '배달 시작';
+
+                        const check1 = item.ODER_DELY_ARTG.indexOf('계란') > -1;
+                        const check2 = item.ODER_DELY_ARTG.indexOf('파손주의') > -1;
+                        if(check1 || check2) {
+
+                            msg += '\n\n';
+                            msg += '<span style="color: red">' + (check1 ? '계란\n' : '') + '</span>';
+                            msg += '파.손.주.의 물품이 있습니다!!!\n\n배달 전 파손여부를 확인 후\n주의해서 배달해주시기 바랍니다.\n\n' ;
+                            msg += '<input type="checkbox" id="confirmChk" /><label for="confirmChk">네, 주의해서 배달하겠습니다.</label>' ;
+                            msg += '<span id="confirmVali">체크 후 진행 가능합니다.</span>' ;
+                        }
                     }
 
                     // 업로드

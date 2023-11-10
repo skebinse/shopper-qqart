@@ -12,6 +12,11 @@ export default async function handler(req, res) {
 
         try {
 
+            query = `SELECT fnDecrypt(?, ?) AS SHPR_ID`;
+
+            const [shprIdRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+            const shprId = shprIdRow[0].SHPR_ID;
+
             // 접속 로그
             if (param.isLog === 'true') {
 
@@ -24,20 +29,20 @@ export default async function handler(req, res) {
 
                 query = `
                     INSERT INTO T_ACES_LOG(ACES_LOG_BROW, ACES_LOG_SCRN_URL, ACES_LOG_IP, SHPR_ID, APP_YN)
-                    VALUES (?, ?, ?, fnDecrypt(?, ?), ?)
+                    VALUES (?, ?, ?, ?, ?)
                 `;
 
-                await conn.query(query, [userAgent, protocol + '//' + host, ip, encShprId, process.env.ENC_KEY, param.appYn]);
+                await conn.query(query, [userAgent, protocol + '//' + host, ip, shprId, param.appYn]);
             }
 
             // 정지 계정 확인
             query = `
                 SELECT SHPR_ACT_SPNS_DT
                   FROM T_SHPR_INFO
-                 WHERE SHPR_ID = fnDecrypt(?, ?)
+                 WHERE SHPR_ID = ?
             `;
 
-            const [actSpnsRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+            const [actSpnsRow] = await conn.query(query, [shprId]);
 
             if (!!actSpnsRow[0] && !!actSpnsRow[0].SHPR_ACT_SPNS_DT) {
 
@@ -53,11 +58,11 @@ export default async function handler(req, res) {
                 SELECT COUNT(*) AS CNT
                      , SHPR_ENT_REFU_RSN
                   FROM T_SHPR_INFO
-                 WHERE SHPR_ID = fnDecrypt(?, ?)
+                 WHERE SHPR_ID = ?
                    AND SHPR_ENT_APV_DT IS NULL
             `;
 
-            [row] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+            [row] = await conn.query(query, [shprId]);
 
             if (row[0].CNT > 0) {
 
@@ -70,12 +75,12 @@ export default async function handler(req, res) {
             query = `
                 SELECT COUNT(*) AS CNT
                   FROM T_SHPR_DUTJ_MAG
-                 WHERE SHPR_ID = fnDecrypt(?, ?)
+                 WHERE SHPR_ID = ?
                    AND SHPR_DUTJ_YMD = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y-%m-%d')
                    AND SHPR_DUTJ_END_DT IS NULL
             `;
 
-            [row] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+            [row] = await conn.query(query, [shprId]);
 
             if (row[0].CNT === 0) {
 
@@ -88,11 +93,11 @@ export default async function handler(req, res) {
             query = `
             SELECT IFNULL(TIMESTAMPDIFF(MINUTE, MAX(RGI_DT), NOW()), 60) AS MIN 
               FROM T_BTCH_CAN_HITY
-             WHERE SHPR_ID = fnDecrypt(?, ?)
+             WHERE SHPR_ID = ?
                AND BTCH_CAN_SANCT_YN = 'Y'
             `;
 
-            [row] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+            [row] = await conn.query(query, [shprId]);
             let rows = [];
 
             if (row[0].MIN >= 60) {
@@ -175,7 +180,7 @@ export default async function handler(req, res) {
                             ) DD
                         ON AA.ODER_USER_ID = DD.ODER_USER_ID
                            INNER JOIN T_SHPR_INFO EE
-                        ON EE.SHPR_ID = fnDecrypt(?, ?)
+                        ON EE.SHPR_ID = ?
                      WHERE AA.ODER_ID IS NULL
                        AND AA.ODER_REQ_YMD IS NOT NULL
                        AND AA.ODER_REQ_APV_DT IS NULL
@@ -186,7 +191,7 @@ export default async function handler(req, res) {
           ORDER BY AA.ODER_REQ_YMD
             `;
 
-                [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+                [rows] = await conn.query(query, [shprId]);
             }
 
             // 배치 리스트
@@ -221,6 +226,7 @@ export default async function handler(req, res) {
                  , AA.ODER_DELY_ADDR_LAT
                  , AA.ODER_DELY_ADDR_LOT
                  , AA.SHOP_ID
+                 , AA.ODER_DELY_ARTG
               FROM (
                 SELECT AA.ODER_MNGR_RGI_YN
                      , fnGetOderReqYmd(AA.ODER_MNGR_RGI_YN, AA.ODER_REQ_YMD) AS ODER_REQ_YMD
@@ -237,6 +243,7 @@ export default async function handler(req, res) {
                      , AA.ODER_URG_DELY_MI
                      , AA.SHPR_ADJ_POIN
                      , AA.ODER_OPTM_DTC_SEQ
+                     , AA.ODER_DELY_ARTG
                      , BB.SHOP_NM
                      , BB.SHOP_RRSN_ATCH_FILE_UUID
                      , AA.ODER_DELY_ADDR
@@ -279,7 +286,7 @@ export default async function handler(req, res) {
                         ) DD
                     ON AA.ODER_USER_ID = DD.ODER_USER_ID
                        INNER JOIN T_SHPR_INFO EE
-                    ON EE.SHPR_ID = fnDecrypt(?, ?)
+                    ON EE.SHPR_ID = ?
                    AND AA.SHPR_ID = EE.SHPR_ID
                  WHERE AA.ODER_ID IS NULL
                    AND AA.ODER_REQ_YMD IS NOT NULL
@@ -290,7 +297,7 @@ export default async function handler(req, res) {
              , AA.ODER_REQ_APV_DT
         `;
 
-            const [rows2] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+            const [rows2] = await conn.query(query, [shprId]);
 
             res.status(200).json(result({
                 isEntApv: true,

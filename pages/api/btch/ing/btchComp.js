@@ -14,18 +14,24 @@ export default async function handler(req, res) {
         try {
 
             await conn.beginTransaction();
+
+            let query = `SELECT fnDecrypt(?, ?) AS SHPR_ID`;
+
+            const [shprIdRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+            const shprId = shprIdRow[0].SHPR_ID;
+
             if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
                 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
             }
 
-            let query =`
+            query =`
                 SELECT ODER_PGRS_STAT
                   FROM T_ODER_USER_INFO
                  WHERE ODER_USER_ID = ?
-                   AND SHPR_ID = fnDecrypt(?, ?)
+                   AND SHPR_ID = ?
                 `;
 
-            let [rows] = await conn.query(query, [param.oderUserId, encShprId, process.env.ENC_KEY]);
+            let [rows] = await conn.query(query, [param.oderUserId, shprId]);
 
             if(cmm.util.getNumber(rows[0].ODER_PGRS_STAT) >= 6) {
 
@@ -40,10 +46,10 @@ export default async function handler(req, res) {
                      , ODER_DELY_CPL_ATCH_FILE_UUID = ?
                      , ODER_DELY_CPL_DT = NOW()
                  WHERE ODER_USER_ID = ?
-                   AND SHPR_ID = fnDecrypt(?, ?)
+                   AND SHPR_ID = ?
                 `;
 
-            [rows] = await conn.query(query, [param.atchFileUuid, param.oderUserId, encShprId, process.env.ENC_KEY]);
+            [rows] = await conn.query(query, [param.atchFileUuid, param.oderUserId, shprId]);
 
             // 픽업 자동정산
             query = `CALL spInsPiupAtmtAdj(?, fnDecrypt(?, ?), 'N')`;

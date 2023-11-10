@@ -26,7 +26,7 @@ export default function Reg() {
         addrTxt: '<span>주소를 입력해주세요.</span>',
         shprSfitdText: '',
         profile: '',
-        isLogin: false,
+        isLogin: 'N',
     });
     const {goPage} = useCommon();
 
@@ -49,7 +49,7 @@ export default function Reg() {
                     success: res => {
 
                         setJoinInfo({
-                            isLogin: cmm.checkLogin(),
+                            isLogin: 'Y',
                             userCrctno: res.SHPR_CRCTNO,
                             userId: res.SHPR_LOGIN_ID,
                             userNcnm: res.SHPR_NCNM,
@@ -154,20 +154,16 @@ export default function Reg() {
             cmm.alert('지역을 선택해 주세요.');
         } else {
 
-            cmm.confirm(joinInfo.isLogin ? '개인정보를 수정하시겠습니까?' : '가입 진행하겠습니까?', () => {
+            cmm.confirm('가입 진행하겠습니까?', () => {
 
                 cmm.ajax({
-                    url: '/api/join/ncnmDplc',
+                    url: '/api/join/ncnmNIdDplc',
                     data: {
-                        userNcnm: joinInfo.userNcnm
+                        userNcnm: joinInfo.userNcnm,
+                        userId: joinInfo.userId,
                     },
                     success: res => {
 
-                        if(res.CNT === 1) {
-
-                            cmm.alert('동일한 별명이 있습니다.');
-                            return;
-                        }
                         const call = param => {
                             cmm.ajax({
                                 url: '/api/join',
@@ -175,16 +171,7 @@ export default function Reg() {
                                 success: res => {
 
                                     cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
-                                    if(!!res && !joinInfo.isLogin) {
-
-                                        goPage('./comp');
-                                    } else {
-
-                                        cmm.alert(`${joinInfo.isLogin ? '수정' : '가입'} 되었습니다.`, () => {
-
-                                            router.reload();
-                                        });
-                                    }
+                                    goPage('./comp');
                                 }
                             });
                         };
@@ -211,14 +198,9 @@ export default function Reg() {
 
     return (
         <div className={styles.join}>
-            <HeadTitle title={joinInfo.isLogin ? '개인정보수정' : ''} />
-            {!joinInfo.isLogin &&
-                <NaviStep step={3} />
-            }
-            <div className={styles.content} style={joinInfo.isLogin ? {paddingTop: '0px'} : {}}>
-                {!joinInfo.isLogin &&
-                    <h3>기본 정보 설정</h3>
-                }
+            <HeadTitle title={''} />
+            <NaviStep step={3} />
+            <div className={styles.content} style={joinInfo.isLogin === 'N' ? {paddingTop: '0px'} : {}}>
                 <div className={styles.profile}>
                     <Image src={!!prflPrvImg ? prflPrvImg : "/assets/images/img/noProfile.svg"} alt={'프로필 사진'} width={96} height={96} />
                     <input id={'inpFile'} type={"file"} accept={'image/*'} onChange={fileChage} />
@@ -251,31 +233,6 @@ export default function Reg() {
                             <input id="ncnm" value={joinInfo.userNcnm} onChange={e => setJoinInfo(prevState => ({...prevState, userNcnm: e.target.value}))} type="text"  placeholder="닉네임을 입력해주세요" />
                         </div>
                     </li>
-                    {/*<li>*/}
-                    {/*    <label>배달수단</label>*/}
-                    {/*    <div>*/}
-                    {/*        <ul>*/}
-                    {/*            <li>*/}
-                    {/*                <input id={'mensRdok01'} type={'radio'} name={'shprDelyMens'} value={'전체'} />*/}
-                    {/*                <label htmlFor={'mensRdok01'}>*/}
-                    {/*                    전체*/}
-                    {/*                </label>*/}
-                    {/*            </li>*/}
-                    {/*            <li>*/}
-                    {/*                <input id={'mensRdok02'} type={'radio'} name={'shprDelyMens'} value={'차량'} />*/}
-                    {/*                <label htmlFor={'mensRdok02'}>*/}
-                    {/*                    차량*/}
-                    {/*                </label>*/}
-                    {/*            </li>*/}
-                    {/*            <li>*/}
-                    {/*                <input id={'mensRdok03'} type={'radio'} name={'shprDelyMens'} value={'오토바이'} />*/}
-                    {/*                <label htmlFor={'mensRdok03'}>*/}
-                    {/*                    오토바이*/}
-                    {/*                </label>*/}
-                    {/*            </li>*/}
-                    {/*        </ul>*/}
-                    {/*    </div>*/}
-                    {/*</li>*/}
                     <li>
                         <label>자기소개</label>
                         <div>
@@ -298,7 +255,7 @@ export default function Reg() {
                 </ul>
                 <p className={styles.infoTxt}>* 설정한 지역을 중심으로 배치를 확인하실 수 있습니다.</p>
                 <div className={styles.btnArea}>
-                    <button type={"button"} onClick={joinCompClick}>설정완료</button>
+                    <button type={"button"} onClick={joinCompClick}>가입하기</button>
                 </div>
             </div>
             <div className={styles.popup + ' ' + popupClass}>

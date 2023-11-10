@@ -28,13 +28,13 @@ export default async function handler(req, res) {
                     SELECT SHPR_DPLC_LOGIN_TKN
                       FROM T_SHPR_INFO
                      WHERE SHPR_ID = fnDecrypt(?, ?)
-                `, [encShprId, process.env.ENC_KEY, tknSh]);
+                `, [encShprId, process.env.ENC_KEY]);
 
                 if(!encShprId ||!rows[0].SHPR_DPLC_LOGIN_TKN) {
 
                     res.status(200).json(result({result: -1}));
                 } else {
-
+                    console.log(rows[0].SHPR_DPLC_LOGIN_TKN, tknSh)
                     if(rows[0].SHPR_DPLC_LOGIN_TKN === tknSh) {
 
                         res.status(200).json(result({result: 1}));

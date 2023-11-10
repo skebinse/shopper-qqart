@@ -30,10 +30,6 @@ export default function Info() {
     const {goPage} = useCommon();
 
     useEffect(() => {
-        console.log(joinInfo)
-    }, [joinInfo]);
-
-    useEffect(() => {
 
         if(!!cmm.util.getLs(cmm.Cont.JOIN_INFO)) {
 
@@ -252,31 +248,6 @@ export default function Info() {
                             <input id="ncnm" value={joinInfo.userNcnm} onChange={e => setJoinInfo(prevState => ({...prevState, userNcnm: e.target.value}))} type="text"  placeholder="닉네임을 입력해주세요" maxLength={8} />
                         </div>
                     </li>
-                    {/*<li>*/}
-                    {/*    <label>배달수단</label>*/}
-                    {/*    <div>*/}
-                    {/*        <ul>*/}
-                    {/*            <li>*/}
-                    {/*                <input id={'mensRdok01'} type={'radio'} name={'shprDelyMens'} value={'전체'} />*/}
-                    {/*                <label htmlFor={'mensRdok01'}>*/}
-                    {/*                    전체*/}
-                    {/*                </label>*/}
-                    {/*            </li>*/}
-                    {/*            <li>*/}
-                    {/*                <input id={'mensRdok02'} type={'radio'} name={'shprDelyMens'} value={'차량'} />*/}
-                    {/*                <label htmlFor={'mensRdok02'}>*/}
-                    {/*                    차량*/}
-                    {/*                </label>*/}
-                    {/*            </li>*/}
-                    {/*            <li>*/}
-                    {/*                <input id={'mensRdok03'} type={'radio'} name={'shprDelyMens'} value={'오토바이'} />*/}
-                    {/*                <label htmlFor={'mensRdok03'}>*/}
-                    {/*                    오토바이*/}
-                    {/*                </label>*/}
-                    {/*            </li>*/}
-                    {/*        </ul>*/}
-                    {/*    </div>*/}
-                    {/*</li>*/}
                     <li>
                         <label>자기소개</label>
                         <div>
@@ -305,7 +276,7 @@ export default function Info() {
                 </ul>
                 <p className={styles.infoTxt}>* 설정한 지역을 중심으로 배치를 확인하실 수 있습니다.</p>
                 <div className={styles.btnArea}>
-                    <button type={"button"} onClick={joinCompClick}>설정완료</button>
+                    <button type={"button"} onClick={joinCompClick}>{joinInfo.isLogin ? '설정완료' : '가입하기'}</button>
                 </div>
             </div>
             <div className={styles.popup + ' ' + popupClass}>

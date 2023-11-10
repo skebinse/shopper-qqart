@@ -84,6 +84,9 @@
 .clauSvcUtlz p strong{font-weight: bold;padding: 10px 0;display: block;}
 .clauSvcUtlz ol{padding-left: 20px;}
 .clauSvcUtlz ol li{list-style-type: decimal}
+.clauSvcUtlz ul{padding: 20px 0px 20px 40px;}
+.clauSvcUtlz ul li{list-style-type: disc;padding-bottom: 10px;}
+.clauSvcUtlz ul li li{list-style-type: disclosure-closed;}
 
 /** 면허증 및 통장 정보 */
 .join .select2 > div > div{width: 100%;border: none;}

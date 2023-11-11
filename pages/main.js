@@ -246,6 +246,12 @@ export default function Index(props) {
                     // 배치 리스트 조회
                     callBtchList(true);
                     setIsInit(false);
+                } else {
+
+                    cmm.alert('로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.', () => {
+
+                        location.href = '/cmm/login';
+                    });
                 }
             });
         };

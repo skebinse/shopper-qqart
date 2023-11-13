@@ -18,7 +18,7 @@ export default async function handler(req, res) {
             const shprId = shprIdRow[0].SHPR_ID;
 
             // 접속 로그
-            if (param.isLog === 'true') {
+            if (param.isLog === 'true' && process.env.DB_PROD_YN !== 'Y') {
 
                 const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
                 const ip = req.headers["x-real-ip"] || req.connection.remoteAddress;

@@ -165,8 +165,8 @@ export default function Login(props) {
 }
 export async function getServerSideProps({req, res, query }) {
 
-    // deleteCookie('enc_sh', {req, res});
-    // deleteCookie('tkn_sh', {req, res});
+    deleteCookie('enc_sh', {req, res});
+    deleteCookie('tkn_sh', {req, res});
 
     return {
         props: {

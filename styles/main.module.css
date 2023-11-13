@@ -33,7 +33,7 @@
 .index .entApvDiv .textDiv > h3{font-size: 24px;line-height: 32px;letter-spacing: -0.72px;color: #FFFFFF;padding-top: 32px;}
 .index .entApvDiv .textDiv > h3 em{font-weight: 700;}
 .index .entApvDiv .textDiv > p{font-size: 15px;line-height: 23px;color: #FFFFFF;padding-top: 12px;font-weight: 500;}
-.index .entApvDiv .textDiv > p em{display: block;font-weight: 700;}
+.index .entApvDiv .textDiv > p em{display: block;font-weight: 700;font-size: 20px;padding: 5px 0;}
 .index .entApvDiv .kakaoDiv{display: inline-flex;padding: 16px 19px;align-items: center;border-radius: 12px;background: #00A95B;width: calc(100% - 96px);position: fixed;bottom: 113px;left: 32px;}
 .index .entApvDiv .kakaoDiv p{color: #FFF;font-size: 13px;font-weight: 500;line-height: 21px;padding-left: 12px;}
 .index .entApvDiv .kakaoDiv p a{color: #FFF;font-size: 13px;font-weight: 500;line-height: 21px;}

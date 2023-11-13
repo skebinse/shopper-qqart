@@ -9,7 +9,6 @@ export default async function handler(req, res) {
 
         const param = req.body;
         const encShprId = getCookie('enc_sh', {req, res});
-        let queryParam = [];
 
         try {
 
@@ -28,6 +27,7 @@ export default async function handler(req, res) {
             `;
 
             const [rows] = await conn.query(query, [shprId]);
+
             const data = {
                 shopper: {
                     name: '쇼퍼',
@@ -47,7 +47,6 @@ export default async function handler(req, res) {
             if(rows.length > 0) {
 
                 rows.forEach(item => {
-
                     data.deliveries[0].destinations.push({
                         name: String(item.ODER_USER_ID),
                         latitude: Number(item.ODER_DELY_ADDR_LOT),
@@ -69,14 +68,15 @@ export default async function handler(req, res) {
                     if(!!apiRes.steps && apiRes.steps.length > 0) {
 
                         apiRes.steps.forEach((item, idx) => {
+
                             const query = `
                                     UPDATE T_ODER_USER_INFO
                                        SET ODER_OPTM_DTC_SEQ = ?
-                                     WHERE SHPR_ID = fnDecrypt(?, ?)
+                                     WHERE SHPR_ID = ?
                                        AND ODER_USER_ID = ?
                                 `;
 
-                            conn.query(query, [idx, encShprId, process.env.ENC_KEY, item.name]);
+                            conn.query(query, [idx, shprId, item.name]);
                         });
                     }
                     res.status(200).json(result(apiRes));

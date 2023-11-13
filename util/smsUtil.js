@@ -132,13 +132,15 @@ export async function adminSendNtfy(conn, options) {
                      , ODER_RPRE_NO
                   FROM T_ODER_USER_INFO AA
                        INNER JOIN T_SHPR_INFO BB 
-                    ON BB.SHPR_ID = fnDecrypt(?, ?)
+                    ON BB.SHPR_ID = ?
                        INNER JOIN T_SHOP_MAG CC 
                     ON CC.SHOP_ID = AA.SHOP_ID
                  WHERE AA.ODER_USER_ID = ?
                 `;
 
-        const [rows] = await conn.query(query, [options.encUserId, options.encKey, options.oderUserId]);
+        const [rows] = await conn.query(query, [options.shprId, options.oderUserId]);
+
+        console.log(rows)
         if(!!rows[0]) {
             notification.title = '배치 취소';
             notification.body = `${rows[0].SHPR_NCNM}쇼퍼가 ${rows[0].SHOP_NM}${!!rows[0].ODER_RPRE_NO ? ' 접수번호 : ' + rows[0].ODER_RPRE_NO : ''} 수락을 취소하였습니다.`;

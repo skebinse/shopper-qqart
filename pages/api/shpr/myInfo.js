@@ -27,8 +27,13 @@ async function getMyInfo(conn, req, res) {
 
     try {
         const encShprId = getCookie('enc_sh', {req, res});
+
+        let query = `SELECT fnDecrypt(?, ?) AS SHPR_ID`;
+
+        const [shprIdRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+        const shprId = shprIdRow[0].SHPR_ID;
         
-        const query = `
+        query = `
                 SELECT SHPR_CRCTNO
                      , SHPR_LOGIN_ID
                      , SHPR_SNS_TYPE
@@ -51,11 +56,11 @@ async function getMyInfo(conn, req, res) {
                      , fnGetAtchFileList(SHPR_PRFL_ATCH_FILE_UUID) AS SHPR_PRFL_FILE
                      , fnGetShprPoint(SHPR_ID) AS SHPR_POIN
                   FROM T_SHPR_INFO
-                 WHERE SHPR_ID = fnDecrypt(?, ?)
+                 WHERE SHPR_ID = ?
                    AND SHPR_SCSS_YN = 'N'
             `;
 
-        const [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+        const [rows] = await conn.query(query, [shprId]);
 
         res.status(200).json(result(rows[0]));
     } catch (e) {
@@ -78,15 +83,21 @@ async function setMyInfo(conn, req, res) {
     const encShprId = getCookie('enc_sh', {req, res});
 
     try {
-        const query = `
+
+        let query = `SELECT fnDecrypt(?, ?) AS SHPR_ID`;
+
+        const [shprIdRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+        const shprId = shprIdRow[0].SHPR_ID;
+
+        query = `
                 UPDATE T_SHPR_INFO
                    SET SHPR_NTFY_YN = ?
                      , SHPR_NTFY_AGR_YMD = NOW()
-                 WHERE SHPR_ID = fnDecrypt(?, ?)
+                 WHERE SHPR_ID = ?
                    AND SHPR_SCSS_YN = 'N'
             `;
 
-        const [rows] = await conn.query(query, [param.shprNtfyYn, encShprId, process.env.ENC_KEY]);
+        const [rows] = await conn.query(query, [param.shprNtfyYn, shprId]);
 
         res.status(200).json(result(rows[0]));
     } catch (e) {

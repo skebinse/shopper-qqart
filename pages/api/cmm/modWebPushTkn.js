@@ -9,12 +9,18 @@ export default async function handler(req, res) {
         const encShprId = getCookie('enc_sh', {req, res});
 
         try {
-            const query =`
+
+            let query = `SELECT fnDecrypt(?, ?) AS SHPR_ID`;
+
+            const [shprIdRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+            const shprId = shprIdRow[0].SHPR_ID;
+
+            query =`
                 UPDATE T_SHPR_INFO
                    SET SHPR_WEB_PUSH_TKN = ?
-                 WHERE SHPR_ID = fnDecrypt(?, ?)
+                 WHERE SHPR_ID = ?
             `;
-            const [rows] = await conn.query(query, [param.webPushTkn, encShprId, process.env.ENC_KEY]);
+            const [rows] = await conn.query(query, [param.webPushTkn, shprId]);
 
             res.status(200).json(result(rows[0]));
         } catch (e) {

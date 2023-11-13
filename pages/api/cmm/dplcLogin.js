@@ -24,11 +24,17 @@ export default async function handler(req, res) {
         } else {
 
             try {
+
+                let query = `SELECT fnDecrypt(?, ?) AS SHPR_ID`;
+
+                const [shprIdRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+                const shprId = shprIdRow[0].SHPR_ID;
+
                 const [rows] = await conn.query(`
                     SELECT SHPR_DPLC_LOGIN_TKN
                       FROM T_SHPR_INFO
-                     WHERE SHPR_ID = fnDecrypt(?, ?)
-                `, [encShprId, process.env.ENC_KEY]);
+                     WHERE SHPR_ID = ?
+                `, [shprId]);
 
                 if(!encShprId ||!rows[0].SHPR_DPLC_LOGIN_TKN) {
 

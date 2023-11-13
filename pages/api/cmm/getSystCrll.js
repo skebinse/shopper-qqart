@@ -11,13 +11,18 @@ export default async function handler(req, res) {
 
             if(!!param.enc_sh) {
 
-                const query = `
+                let query = `SELECT fnDecrypt(?, ?) AS SHPR_ID`;
+
+                const [shprIdRow] = await conn.query(query, [param.enc_sh, process.env.ENC_KEY]);
+                const shprId = shprIdRow[0].SHPR_ID;
+
+                query = `
                        SELECT COUNT(1) AS CNT
                          FROM T_SYST_CRLL_MAG
                         WHERE SYST_CRLL_SC = ?
-                          AND SHPR_ID = fnDecrypt(?, ?)`;
+                          AND SHPR_ID = ?`;
 
-                const [rows] = await conn.query(query, [param.systCrllSc, param.enc_sh, process.env.ENC_KEY]);
+                const [rows] = await conn.query(query, [param.systCrllSc, shprId]);
 
                 res.status(200).json(result(rows[0].CNT));
             } else {

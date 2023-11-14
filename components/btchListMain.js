@@ -31,13 +31,18 @@ export default function  BtchList({list, href, classNm = '', noDataTxt = '현재
         }
     }, [list]);
 
+    /**
+     * 배치 리스트 필터
+     */
     useEffect(() => {
 
         if(!!filter && (!!filter.mapShopId || !!filter.mapOderUserId)) {
 
+            // 상점일 경우
             if(!!filter.mapShopId) {
 
                 setBtchList(list.filter(item => item.SHOP_ID === filter.mapShopId));
+            // 단일 배치일 경우
             } else if(!!filter.mapOderUserId) {
 
                 setBtchList(list.filter(item => item.ODER_USER_ID === filter.mapOderUserId));
@@ -151,7 +156,7 @@ export default function  BtchList({list, href, classNm = '', noDataTxt = '현재
 
                         cmm.alert('배치 수락이 완료되었습니다.', () => {
 
-                            reflashHandler && reflashHandler();
+                            reflashHandler && reflashHandler('배치수락');
                         });
                     }
                 });
@@ -202,7 +207,7 @@ export default function  BtchList({list, href, classNm = '', noDataTxt = '현재
                                     atchFileUuid
                                 },
                                 success: res => {
-                                    reflashHandler && reflashHandler();
+                                    reflashHandler && reflashHandler('배달시작');
 
                                     imageAtchDelHandler(idx, 'all');
                                 }
@@ -240,7 +245,7 @@ export default function  BtchList({list, href, classNm = '', noDataTxt = '현재
                                 success: res => {
 
                                     cmm.alert('배달을 완료하였습니다.\n수고하셨습니다.', () => {
-                                        reflashHandler && reflashHandler();
+                                        reflashHandler && reflashHandler('배달완료');
 
                                         imageAtchDelHandler(idx, 'all');
                                     });

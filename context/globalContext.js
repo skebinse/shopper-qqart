@@ -8,6 +8,7 @@ export function GlobalProvider({children}) {
 
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const [pushCnt, setPushCnt] = useState(0);
     const [sAlert, setSAlert] = useState({
         show: false,
         title: '알림',
@@ -90,17 +91,29 @@ export function GlobalProvider({children}) {
         }
     }, []);
 
+    /**
+     * push 알림 확인 클릭
+     */
+    const pushAlertClickHandler = e => {
+
+        if(location.href.indexOf('/main') > -1) {
+
+            setPushCnt(prevState => prevState + 1);
+        } else {
+
+            router.push(e.target.getAttribute('data-url'));
+        }
+        document.querySelector('.webPushDiv').classList = 'webPushDiv';
+    };
+
     return (
-        <GlobalContext.Provider value={{sAlert, setSAlert, sConfirm, setSConfirm, isLoading, setIsLoading}}>
+        <GlobalContext.Provider value={{sAlert, setSAlert, sConfirm, setSConfirm, isLoading, setIsLoading, pushCnt}}>
             <div className={'webPushDiv'}>
                 <div>
                     <h5 id={'webPushTit'} data-id={1}></h5>
                     <p id={'webPushTxt'}></p>
                     <div>
-                        <button id={'btnWebPushUrl'} onClick={e => {
-                            router.push(e.target.getAttribute('data-url'));
-                            document.querySelector('.webPushDiv').classList = 'webPushDiv';
-                        }}>이동하기</button>
+                        <button id={'btnWebPushUrl'} onClick={pushAlertClickHandler}>이동하기</button>
                         <button onClick={() => document.querySelector('.webPushDiv').classList = 'webPushDiv'}>닫기</button>
                     </div>
                 </div>

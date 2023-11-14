@@ -244,7 +244,7 @@ export default async function handler(req, res) {
                      , AA.ODER_DELY_HH
                      , AA.ODER_URG_DELY_MI
                      , AA.SHPR_ADJ_POIN
-                     , AA.ODER_OPTM_DTC_SEQ
+                     , IFNULL(AA.ODER_OPTM_DTC_SEQ, 99) AS ODER_OPTM_DTC_SEQ
                      , AA.ODER_DELY_ARTG
                      , BB.SHOP_NM
                      , BB.SHOP_RRSN_ATCH_FILE_UUID

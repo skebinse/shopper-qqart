@@ -77,7 +77,10 @@ const cmm = {
 
                     if(!!_options.isExtr) {
 
-                        _options.success(res);
+                        if(!!_options.success) {
+
+                            _options.success(res);
+                        }
                     } else {
 
                         if(res.resultCode === '0000') {
@@ -955,6 +958,10 @@ const cmm = {
                     x.parentNode.insertBefore(s, x);
                     s.addEventListener('load', () => {
                         document.querySelector('#ch-plugin').attr = '100';
+
+                        if(location.href.indexOf('/main') > -1) {
+                            document.querySelector('#ch-plugin').classList.add('d-none');
+                        }
                     });
                 }
                 if (document.readyState === 'complete') {

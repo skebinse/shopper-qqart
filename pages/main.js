@@ -6,6 +6,7 @@ import cmm from "../js/common";
 import BtchList from "../components/btchListMain";
 import BottomMenu from "../components/bottomMenu";
 import Sheet from 'react-modal-sheet';
+import {useGlobal} from "../context/globalContext";
 
 export default function Index(props) {
 
@@ -25,11 +26,16 @@ export default function Index(props) {
     const sheetScrollRef = useRef();
     const [mapShopId, setMapShopId] = useState(null);
     const [mapOderUserId, setMapOderUserId] = useState(null);
+    const {pushCnt} = useGlobal();
     const [btchInfo, setBtchInfo] = useState({
         btchList: [],
         btchAcpList: [],
     });
 
+    /**
+     * 메인 지도 생성
+     * @param data
+     */
     const createMap = data => {
 
         const container = document.getElementById('kakaoMap'); //지도를 담을 영역의 DOM 레퍼런스
@@ -63,7 +69,7 @@ export default function Index(props) {
                 // 마커 주소입니다 ODER_OPTM_DTC_SEQ
                 let imageSrc = (item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03') ? '/assets/images/icon/map/iconMapStore.png' : '/assets/images/icon/map/iconMapUser.png';
 
-                if(!!item.ODER_OPTM_DTC_SEQ) {
+                if(!!item.ODER_OPTM_DTC_SEQ && item.ODER_OPTM_DTC_SEQ < 99) {
                     imageSrc = `/assets/images/icon/map/icoMapPersonalNum_${item.ODER_OPTM_DTC_SEQ}.png`
                 }
                 const imageSize = new kakao.maps.Size(32, 32);
@@ -79,20 +85,7 @@ export default function Index(props) {
 
                 // 마커에 클릭이벤트를 등록합니다
                 kakao.maps.event.addListener(marker, 'click', function() {
-                    // 마커 위에 인포윈도우를 표시합니다
-
-                    // 배치 수락
-                    if(item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03') {
-
-                        setMapShopId(item.SHOP_ID);
-                        setMapOderUserId(null);
-                    } else {
-
-                        setMapShopId(null);
-                        setMapOderUserId(item.ODER_USER_ID);
-                    }
-
-                    sheetRef.current.snapTo(0);
+                    mapMarkerClickHandler(item);
                 });
 
                 marker.setMap(map);
@@ -101,6 +94,26 @@ export default function Index(props) {
             map.setBounds(bounds);
         }
     };
+
+    /**
+     * 마커 클릭 이벤트
+     * @param item
+     */
+    const mapMarkerClickHandler = item => {
+
+        // 배치 수락
+        if(item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03') {
+
+            setMapShopId(item.SHOP_ID);
+            setMapOderUserId(null);
+        } else {
+
+            setMapShopId(null);
+            setMapOderUserId(item.ODER_USER_ID);
+        }
+
+        sheetRef.current.snapTo(0);
+    }
 
     /**
      * 쇼퍼 위치 확인 후 지도 생성
@@ -133,7 +146,7 @@ export default function Index(props) {
     /**
      * 배치 리스트 조회
      */
-    const callBtchList = isInit => {
+    const callBtchList = (isInit, pgrsRslt) => {
 
         if(!isInit) {
 
@@ -163,6 +176,12 @@ export default function Index(props) {
                     if(isTimeResult) {
 
                         cmm.loading(false);
+                    }
+
+                    if(!!pgrsRslt) {
+
+                        setMapShopId(null);
+                        setMapOderUserId(null);
                     }
                 }
             });
@@ -458,6 +477,43 @@ export default function Index(props) {
             });
         });
     };
+
+    /**
+     * 탭 클릭 시
+     * @param _tabIdx
+     */
+    const tabClickHandler = _tabIdx => {
+
+        if(_tabIdx === tabIdx) {
+
+            if(snapIdx !== 0) {
+
+                sheetRef.current.snapTo(0);
+            }
+        } else {
+
+            setTabIdx(_tabIdx);
+        }
+    };
+
+    /**
+     * PUSH 알림
+     */
+    useEffect(() => {
+
+        if(pushCnt > 0) {
+
+            if(snapIdx !== 0) {
+
+                sheetRef.current.snapTo(0);
+            }
+            setTabIdx(0);
+
+            // 배치 리스트 조회
+            callBtchList();
+        }
+    }, [pushCnt]);
+
     return (
         // <div className={styles.index} style={{height: windowHeight}}>
         <div className={styles.index + ' ' + dnone}>
@@ -473,7 +529,7 @@ export default function Index(props) {
                         {/*</Link>*/}
                     </div>
                     <div id="kakaoMap" style={{height: 'calc(100% - 210px)'}}></div>
-                    <Sheet ref={sheetRef} isOpen={isSheetOpen} className={'mainSheet'} onClose={() => setSheetOpen(false)} snapPoints={[window.innerHeight - 40, 155]} initialSnap={1}
+                    <Sheet ref={sheetRef} isOpen={isSheetOpen} className={'mainSheet'} onClose={() => setSheetOpen(false)} snapPoints={[window.innerHeight - 40, 155]} initialSnap={!!router.query.hasOwnProperty('tabIdx') ? 0 : 1}
                            onSnap={sheetSnapHandler}>
                         <Sheet.Container>
                             <Sheet.Header></Sheet.Header>
@@ -482,14 +538,14 @@ export default function Index(props) {
                                     {!mapShopId && !mapOderUserId &&
                                         <div className={'tabArea'}>
                                             <div>
-                                                <button className={'button ' + (tabIdx === 0 ? 'on' : '')} onClick={() => setTabIdx(0)}>모든 배치 {btchInfo.btchList.length}</button>
-                                                <button className={'button ' + (tabIdx === 0 ? '' : 'on')} onClick={() => setTabIdx(1)}>진행중 배치 {btchInfo.btchAcpList.length}</button>
+                                                <button className={'button ' + (tabIdx === 0 ? 'on' : '')} onClick={() => tabClickHandler(0)}>모든 배치 {btchInfo.btchList.length}</button>
+                                                <button className={'button ' + (tabIdx === 0 ? '' : 'on')} onClick={() => tabClickHandler(1)}>진행중 배치 {btchInfo.btchAcpList.length}</button>
                                             </div>
                                         </div>
                                     }
                                     <div className={'btchArea' + ' ' +  (tabIdx === 0 ? '' : 'ing') + ' '}>
-                                        <BtchList list={btchInfo.btchList} href={'/btch'} filter={tabIdx === 0 ? {mapShopId, mapOderUserId} : null} isInit={isInit} reflashHandler={() => callBtchList()} />
-                                        <BtchList list={btchInfo.btchAcpList} href={'/btch/ing'} filter={tabIdx === 1 ? {mapShopId, mapOderUserId} : null} isInit={isInit} noDataTxt={'현재 수락한 배치가 없습니다.'} isIngBtch={true} reflashHandler={() => callBtchList()} />
+                                        <BtchList list={btchInfo.btchList} href={'/btch'} filter={tabIdx === 0 ? {mapShopId, mapOderUserId} : null} isInit={isInit} reflashHandler={pgrsRslt => callBtchList(false, pgrsRslt)} />
+                                        <BtchList list={btchInfo.btchAcpList} href={'/btch/ing'} filter={tabIdx === 1 ? {mapShopId, mapOderUserId} : null} isInit={isInit} noDataTxt={'현재 수락한 배치가 없습니다.'} isIngBtch={true} reflashHandler={pgrsRslt => callBtchList(false, pgrsRslt)} />
                                     </div>
                                 </Sheet.Scroller>
                             </Sheet.Content>

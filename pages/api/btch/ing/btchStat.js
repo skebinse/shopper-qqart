@@ -1,6 +1,7 @@
 import {getConnectPool, result} from "../../db";
 import {adminSendNtfy} from "../../../../util/smsUtil";
 import {getCookie} from "cookies-next";
+import cmm from "../../../../js/common";
 
 export default async function handler(req, res) {
 
@@ -28,6 +29,7 @@ export default async function handler(req, res) {
 
             queryParam = [param.oderPgrsStat, param.oderUserId, shprId];
 
+            // 배달중에서 배달 완료 시
             if(param.oderPgrsStat === '05') {
                 query =`
                     UPDATE T_ODER_USER_INFO
@@ -44,8 +46,19 @@ export default async function handler(req, res) {
 
             const [rows, fields] = await conn.query(query, queryParam);
 
+            // 배달중에서 배달 완료 시
             if(param.oderPgrsStat === '05') {
 
+                // 고객에게 알림 전송(기존 배치 수락시 발송을 배달 시작 시로 변경)
+                cmm.ajax({
+                    url: process.env.QQCART_URL + `/sendSmsNtfy.ax`,
+                    isLoaing: false,
+                    isExtr: true,
+                    data: {
+                        pgrsStat: 'btch',
+                        oderUserId: param.oderUserId,
+                    },
+                });
                 // admin 알림 발송
                 adminSendNtfy(conn, {ntfyType: 'delyStrt', oderUserId: param.oderUserId});
             }

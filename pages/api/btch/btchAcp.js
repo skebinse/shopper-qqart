@@ -1,5 +1,4 @@
 import {getConnectPool, result, resultOne} from "../db";
-import cmm from "../../../js/common";
 import {adminSendNtfy} from "../../../util/smsUtil";
 import {getCookie} from "cookies-next";
 
@@ -21,17 +20,18 @@ export default async function handler(req, res) {
 
             if(!rows[0]) {
 
-                cmm.ajax({
-                    url: process.env.QQCART_URL + `/sendSmsNtfy.ax`,
-                    isLoaing: false,
-                    isExtr: true,
-                    data: {
-                        pgrsStat: 'btch',
-                        oderUserId: param.oderUserId,
-                    },
-                    success: res => {
-                    }
-                });
+                // 고객에게 알림 전송
+                // cmm.ajax({
+                //     url: process.env.QQCART_URL + `/sendSmsNtfy.ax`,
+                //     isLoaing: false,
+                //     isExtr: true,
+                //     data: {
+                //         pgrsStat: 'btch',
+                //         oderUserId: param.oderUserId,
+                //     },
+                //     success: res => {
+                //     }
+                // });
 
                 // admin 알림 발송
                 adminSendNtfy(conn, {ntfyType: 'btchAcp', oderUserId: param.oderUserId});

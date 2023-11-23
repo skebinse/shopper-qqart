@@ -18,6 +18,7 @@
 .btchIng > ul .uploadArea > div > div{position: relative;}
 .btchIng > ul .uploadArea > div > div .vchrImg{border-radius: 12px;object-fit: cover;width: 100%;}
 .btchIng > ul .uploadArea > div > div .del{position: absolute;top: 0;right: 0;}
+.btchIng .oderNo{font-size: 14px;font-weight: 700;}
 
 .btchArea{padding-top: 24px;}
 

@@ -69,6 +69,7 @@ export default async function handler(req, res) {
                      , AA.ODER_DRC_LDTN_YN
                      , AA.ODER_DELY_MENS
                      , AA.ODER_DELY_ARTG
+                     , AA.ODER_RPRE_NO
                      , IFNULL(AA.ODER_DRC_LDTN_AMT, 0) AS ODER_DRC_LDTN_AMT
                      , CASE WHEN AA.ODER_MNGR_RGI_YN = 'Y'
                          THEN DATE_FORMAT(AA.ODER_REQ_YMD, '%y년 %m월 %d일 %H:%i')

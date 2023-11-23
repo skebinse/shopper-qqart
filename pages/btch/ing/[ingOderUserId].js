@@ -348,7 +348,7 @@ export default function IngOderUserId() {
                                 </li>
                             }
                             <li>
-                                <h5>스토어</h5>
+                                <h5>스토어 <em className={styles.oderNo}>(주문번호: {btchInfo.ODER_RPRE_NO.length === 11 ? cmm.util.getNumber(btchInfo.ODER_RPRE_NO.substring(6)) : btchInfo.ODER_RPRE_NO})</em></h5>
                                 <p>{btchInfo.SHOP_NM}</p>
                             </li>
                             <li>
@@ -441,6 +441,10 @@ export default function IngOderUserId() {
                                     }
                                 </li>
                             }
+                            <li>
+                                <h5>스토어 <em className={styles.oderNo}>(주문번호: {btchInfo.ODER_RPRE_NO.length === 11 ? cmm.util.getNumber(btchInfo.ODER_RPRE_NO.substring(6)) : btchInfo.ODER_RPRE_NO})</em></h5>
+                                <p>{btchInfo.SHOP_NM}</p>
+                            </li>
                             <li>
                                 <h5>배달 시간</h5>
                                 <p>{btchInfo.oderDelySlctVal}</p>

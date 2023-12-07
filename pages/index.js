@@ -1,14 +1,12 @@
-import React, {useCallback, useEffect, useState} from "react";
-import styles from "/styles/index.module.css"
+import React, {useCallback, useEffect, useRef, useState} from "react";
+import styles from "/styles/main.module.css"
 import Image from "next/image";
 import {useRouter} from "next/router";
 import cmm from "../js/common";
-import BtchList from "../components/btchList";
+import BtchList from "../components/btchListMain";
 import BottomMenu from "../components/bottomMenu";
-import Link from "next/link";
-import {cookies} from "next/headers";
-import {getCookieParser} from "next/dist/server/api-utils";
-import {getCookie} from "cookies-next";
+import Sheet from 'react-modal-sheet';
+import {useGlobal} from "../context/globalContext";
 
 export default function Index(props) {
 
@@ -21,15 +19,178 @@ export default function Index(props) {
     const [isDutjStrt, setIsDutjStrt] = useState(false);
     const [isEntApv, setIsEntApv] = useState(true);
     const [entRefuRsn, setEntRefuRsn] = useState('');
+    const [isSheetOpen, setSheetOpen] = useState(false);
+    const [isDtcOptmBtn, setIsDtcOptmBtn] = useState(false);
+    const [snapIdx, setSnapIdx] = useState(1);
+    const [mapShopId, setMapShopId] = useState(null);
+    const [mapPsitInfo, setMapPsitInfo] = useState(null);
+    const {pushCnt} = useGlobal();
     const [btchInfo, setBtchInfo] = useState({
         btchList: [],
         btchAcpList: [],
     });
+    const sheetRef = useRef();
+    const sheetScrollRef = useRef();
+    const ulBtchAll = useRef();
+    const ulBtchIng = useRef();
+
+    /**
+     * 메인 지도 생성
+     * @param data
+     */
+    const createMap = data => {
+
+        const container = document.getElementById('kakaoMap'); //지도를 담을 영역의 DOM 레퍼런스
+        const shprLatLng = new kakao.maps.LatLng(data.shprPsitLot, data.shprPsitLat);
+        const options = { //지도를 생성할 때 필요한 기본 옵션
+            center: shprLatLng, //지도의 중심좌표.
+            level: 5 //지도의 레벨(확대, 축소 정도)
+        };
+
+        const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+
+        kakao.maps.event.addListener(map, 'center_changed', function() {
+
+            document.querySelectorAll('.markerInfo').forEach(elet => {
+
+                elet.parentElement.style.transform = 'translateY(-42px)';
+            });
+        });
+
+        // 현재위치 마커 주소입니다
+        const imageSrc = '/assets/images/icon/map/iconMapShopper.png';
+        const imageSize = new kakao.maps.Size(32, 32);
+
+        // 현재 위치 마커를 생성합니다
+        const marker = new kakao.maps.Marker({
+            position: shprLatLng,
+            image: new kakao.maps.MarkerImage(imageSrc, imageSize),
+        });
+
+        marker.setMap(map);
+
+        const bounds = new kakao.maps.LatLngBounds();
+        bounds.extend(shprLatLng);
+
+        // 마커 표시
+        if(!!data.list && data.list.length > 0) {
+
+            // 마커 툴팁 표시
+            const tooltipInfo = {};
+            data.list.forEach(item => {
+
+                const key = item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT;
+                if(!tooltipInfo[key]) {
+
+                    tooltipInfo[key] = [];
+                }
+
+                tooltipInfo[key].push(item.ODER_RPRE_NO.length === 11 ? cmm.util.getNumber(item.ODER_RPRE_NO.substring(6)) : item.ODER_RPRE_NO);
+            });
+
+            data.list.forEach(item => {
+
+                // 마커 주소입니다 ODER_OPTM_DTC_SEQ
+                let imageSrc = (item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03') ? '/assets/images/icon/map/iconMapStore.png' : '/assets/images/icon/map/iconMapUser.png';
+                let tooltipTxt = '';
+                let classNm = 'store';
+
+                if(!!(item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03')) {
+
+                    tooltipTxt = tooltipInfo[item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT].length + '건';
+                } else {
+
+                    classNm = 'customer';
+                    tooltipTxt = '주문번호 ' + tooltipInfo[item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT].join(',');
+                }
+
+                if(!!item.ODER_OPTM_DTC_SEQ && item.ODER_OPTM_DTC_SEQ < 99) {
+                    imageSrc = `/assets/images/icon/map/icoMapPersonalNum_${item.ODER_OPTM_DTC_SEQ}.png`
+                }
+
+                const imageSize = new kakao.maps.Size(32, 32);
+                const markerPosition = new kakao.maps.LatLng(item.ODER_DELY_ADDR_LOT, item.ODER_DELY_ADDR_LAT);
+                bounds.extend(markerPosition);
+
+                // 현재 위치 마커를 생성합니다
+                const marker = new kakao.maps.Marker({
+                    position: markerPosition,
+                    image: new kakao.maps.MarkerImage(imageSrc, imageSize),
+                    clickable: true
+                });
+
+                // 마커에 클릭이벤트를 등록합니다
+                kakao.maps.event.addListener(marker, 'click', function() {
+                    mapMarkerClickHandler(item);
+                });
+
+                const tooltip = new kakao.maps.CustomOverlay({
+                    position : markerPosition,
+                    content : `<div class="markerInfo ${classNm}">${tooltipTxt}</div>`,
+                    map: map,
+                    removable: true,
+                });
+
+                marker.setMap(map);
+            });
+
+            map.setBounds(bounds);
+        }
+    };
+
+    /**
+     * 마커 클릭 이벤트
+     * @param item
+     */
+    const mapMarkerClickHandler = item => {
+
+        // 배치 수락
+        if(item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03') {
+
+            setMapShopId(item.SHOP_ID);
+            setMapPsitInfo(null);
+        } else {
+
+            setMapShopId(null);
+            setMapPsitInfo(item.ODER_DELY_ADDR_LAT + ',' + item.ODER_DELY_ADDR_LOT);
+        }
+
+        sheetRef.current.snapTo(0);
+    }
+
+    /**
+     * 쇼퍼 위치 확인 후 지도 생성
+     */
+    const shopperPosition = list => {
+
+        // 현재 위치 가져오기
+        cmm.util.getCurrentPosition(res => {
+            createMap({
+                shprPsitLat: res.lot,
+                shprPsitLot: res.lat,
+                list,
+            });
+        });
+    };
+
+    useEffect(() => {
+
+        if(!!document.querySelector('#ch-plugin')) {
+            document.querySelector('#ch-plugin').classList.add('d-none');
+        }
+
+        return () => {
+            if(!!document.querySelector('#ch-plugin')) {
+                document.querySelector('#ch-plugin').classList.remove('d-none');
+            }
+        };
+    }, []);
 
     /**
      * 배치 리스트 조회
      */
-    const callBtchList = useCallback(isInit => {
+    const callBtchList = (isInit, pgrsRslt) => {
+
         if(!isInit) {
 
             cmm.loading(true);
@@ -43,6 +204,8 @@ export default function Index(props) {
 
                     if(res.isDutjStrt) {
 
+                        // 쇼퍼 위치 확인 후 지도 생성
+                        shopperPosition(tabIdx === 0 ? res.btchList : res.btchAcpList);
                         setBtchInfo({btchList: res.btchList, btchAcpList: res.btchAcpList});
                     } else {
 
@@ -56,6 +219,12 @@ export default function Index(props) {
                     if(isTimeResult) {
 
                         cmm.loading(false);
+                    }
+
+                    if(!!pgrsRslt) {
+
+                        setMapShopId(null);
+                        setMapPsitInfo(null);
                     }
                 }
             });
@@ -89,13 +258,19 @@ export default function Index(props) {
 
                         setBtchInfo({btchList: res.btchList, btchAcpList: res.btchAcpList});
 
+                        let currentList = res.btchList;
                         // 진행중인 배치가 있을 경우
                         if(!!router.query.hasOwnProperty('tabIdx')) {
 
                             setTabIdx(Number(router.query.tabIdx));
+                            currentList = Number(router.query.tabIdx) === 0 ? res.btchList : res.btchAcpList;
+
+                            // 쇼퍼 위치 확인 후 지도 생성
+                            shopperPosition(currentList);
                         } else if(res.btchAcpList.length > 0) {
 
                             setTabIdx(1);
+                            currentList = res.btchAcpList;
                         }
 
                     } else {
@@ -110,29 +285,39 @@ export default function Index(props) {
                 }
             });
         }
-    }, [router.query]);
+    };
 
     useEffect(() => {
 
-        if(cmm.checkLogin()) {
+        const script = document.createElement("script");
+        script.src =
+            "https://dapi.kakao.com/v2/maps/sdk.js?appkey=dc6e9cd5281395107b6f48fbdf3b0ab1&autoload=false";
+        document.head.appendChild(script);
 
-            let shprAddr = cmm.getLoginInfo('SHPR_ADDR');
-            shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
-            shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
+        script.onload = () => {
+            kakao.maps.load(() => {
 
-            setAddr(shprAddr);
+                if(cmm.checkLogin()) {
 
-            // 배치 리스트 조회
-            callBtchList(true);
-            setIsInit(false);
-        } else {
+                    let shprAddr = cmm.getLoginInfo('SHPR_ADDR');
+                    shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
+                    shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
 
-            cmm.alert('로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.', () => {
+                    setAddr(shprAddr);
 
-                location.href = '/cmm/login';
+                    // 배치 리스트 조회
+                    callBtchList(true);
+                    setIsInit(false);
+                } else {
+
+                    cmm.alert('로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.', () => {
+
+                        location.href = '/cmm/login';
+                    });
+                }
             });
-        }
-    }, [callBtchList]);
+        };
+    }, []);
 
     const appTest = () => {
 
@@ -143,14 +328,6 @@ export default function Index(props) {
                 webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "getlocation","callback": "window.getPosition"}));
             }
         }
-    };
-
-    const appTest2 = () => {
-
-        // if(cmm.isApp()) {
-        //
-        //     webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "qrcamera","callback": "window.getQrCode"}));
-        // }
     };
 
     /**
@@ -230,41 +407,203 @@ export default function Index(props) {
 
         // 업무시작 호출
         callDutjStrt();
-        // cmm.loading(true);
-        // if(cmm.isApp()) {
-        //     webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({
-        //         "action": "getlocation",
-        //         "callback": "window.getPosition"
-        //     }));
-        // } else {
-        //
-        //     // 업무시작 호출
-        //     callDutjStrt();
-        // }
     };
 
+    /**
+     * sheet open/close
+     */
+    useEffect(() => {
+
+        if(!isSheetOpen) {
+            setSheetOpen(true);
+        }
+    }, [isSheetOpen]);
+
+    /**
+     * 모든배치/진행중 배치 탭 변경
+     */
+    useEffect(() => {
+
+        if(btchInfo.btchList.length > 0 || btchInfo.btchAcpList.length > 0) {
+
+            // 쇼퍼 위치 확인 후 지도 생성
+            shopperPosition(tabIdx === 0 ? btchInfo.btchList : btchInfo.btchAcpList);
+        }
+
+        setIsDtcOptmBtn(tabIdx === 1);
+    }, [tabIdx]);
+
+    /**
+     * sheet 위치 변경
+     * @param snapIdx
+     */
+    const sheetSnapHandler = snapIdx => {
+
+        setSnapIdx(snapIdx);
+
+        if(snapIdx === 1) {
+            setMapShopId(null);
+            setMapPsitInfo(null);
+            sheetScrollRef.current.scrollTop = 0;
+        } else {
+
+            ulBtchAll.current.scrollTop = 0;
+            ulBtchIng.current.scrollTop = 0;
+        }
+    }
+
+    /**
+     * 동선 최적화 버튼
+     */
+    const dtcOptmHandler = () => {
+
+        if(tabIdx === 1) {
+
+            const oderUserIds = [];
+            btchInfo.btchAcpList.forEach(item => {
+
+                if(item.ODER_PGRS_STAT === '03' || item.ODER_PGRS_STAT === '04') {
+
+                    cmm.alert('모든 물품을 수령 후 이용 가능합니다.');
+                    return false;
+                } else {
+
+                    oderUserIds.push(item.ODER_USER_ID);
+                }
+            });
+
+            if(oderUserIds.length > 0) {
+
+                cmm.util.getCurrentPosition(res => {
+
+                    cmm.ajax({
+                        url: '/api/btch/ing/btchDtcOptm',
+                        data: {
+                            oderUserIds: oderUserIds.join(','),
+                            lat: res.lat,
+                            lot: res.lot,
+                        },
+                        success: res => {
+                            // 새로 고침
+                            callBtchList();
+                        }
+                    });
+                });
+            }
+        }
+    };
+
+    /**
+     * 업무 종료
+     */
+    const dutjEndHanler = () => {
+
+        cmm.confirm('업무를 종료하시겠습니까?', () => {
+
+            cmm.ajax({
+                url: '/api/shpr/dutj',
+                data: {
+                    type: 'end'
+                },
+                success: res => {
+
+                    // 리액트 앱일 경우
+                    if(cmm.isReactApp()) {
+
+                        window.ReactNativeWebView.postMessage(JSON.stringify({
+                            type: 'LOCATION_INFO_CONSENT',
+                            data: {
+                                psitTnsmYn: false,
+                            }
+                        }))
+                    }
+
+                    // 배치 리스트 조회
+                    callBtchList();
+                }
+            });
+        });
+    };
+
+    /**
+     * 탭 클릭 시
+     * @param _tabIdx
+     */
+    const tabClickHandler = _tabIdx => {
+
+        if(_tabIdx === tabIdx) {
+
+            if(snapIdx !== 0) {
+
+                sheetRef.current.snapTo(0);
+            }
+        } else {
+
+            setTabIdx(_tabIdx);
+        }
+    };
+
+    /**
+     * PUSH 알림
+     */
+    useEffect(() => {
+
+        if(pushCnt > 0) {
+
+            if(snapIdx !== 0) {
+
+                sheetRef.current.snapTo(0);
+            }
+            setTabIdx(0);
+
+            // 배치 리스트 조회
+            callBtchList();
+        }
+    }, [pushCnt]);
+
     return (
-        // <div className={styles.index} style={{height: windowHeight}}>
         <div className={styles.index + ' ' + dnone}>
             {(isEntApv && isDutjStrt) &&
                 <>
                     <div className={styles.header}>
-                        <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={113.6} height={24.5} onClick={appTest} />
-                        <Link href={'/join/info'}>
-                            <span>{addr}<Image alt={'열기'} src={'/assets/images/icon/iconAllowDown.svg'} width={10.4} height={6} /></span>
-                        </Link>
+                        <div>
+                            <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={113.6} height={24.5} onClick={appTest} />
+                        </div>
+                        <button type={'button'} onClick={dutjEndHanler}>업무 종료</button>
                     </div>
-                    <div className={'tabArea'}>
-                        <button className={'button mr10 ' + (tabIdx === 0 ? '' : 'white')} onClick={() => setTabIdx(0)}>모든 배치 {btchInfo.btchList.length}</button>
-                        <button className={'button ' + (tabIdx === 0 ? 'white' : '')} onClick={() => setTabIdx(1)}>진행중 배치 {btchInfo.btchAcpList.length}</button>
-                    </div>
-                    <div className={styles.btchArea + ' ' +  (tabIdx === 0 ? '' : styles.ing)}>
-                        <BtchList list={btchInfo.btchList} href={'/btch'} isInit={isInit} />
-                        <BtchList list={btchInfo.btchAcpList} href={'/btch/ing'} isInit={isInit} noDataTxt={'현재 수락한 배치가 없습니다.'} isIngBtch={true} />
-                    </div>
+                    <div id="kakaoMap" style={{height: 'calc(100% - 210px)'}}></div>
+                    <Sheet ref={sheetRef} isOpen={isSheetOpen} className={'mainSheet'} onClose={() => setSheetOpen(false)} snapPoints={[window.innerHeight - 40, 155]} initialSnap={!!router.query.hasOwnProperty('tabIdx') ? 0 : 1}
+                           onSnap={sheetSnapHandler}>
+                        <Sheet.Container>
+                            <Sheet.Header>
+                            </Sheet.Header>
+                            <Sheet.Content>
+                                <Sheet.Scroller ref={sheetScrollRef} className={snapIdx === 1 ? 'noScroll' : 'noScroll'}>
+                                    {!mapShopId && !mapPsitInfo &&
+                                        <div className={'tabArea'}>
+                                            <div>
+                                                <button className={'button ' + (tabIdx === 0 ? 'on' : '')} onClick={() => tabClickHandler(0)}>모든 배치 {btchInfo.btchList.length}</button>
+                                                <button className={'button ' + (tabIdx === 0 ? '' : 'on')} onClick={() => tabClickHandler(1)}>진행중 배치 {btchInfo.btchAcpList.length}</button>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div className={'btchArea' + ' ' +  (tabIdx === 0 ? '' : 'ing') + ' '}>
+                                        <BtchList ulRef={ulBtchAll} list={btchInfo.btchList} href={'/btch'} filter={tabIdx === 0 ? {mapShopId, mapPsitInfo} : null} isInit={isInit} reflashHandler={pgrsRslt => callBtchList(false, pgrsRslt)} />
+                                        <BtchList ulRef={ulBtchIng} list={btchInfo.btchAcpList} href={'/btch/ing'} filter={tabIdx === 1 ? {mapShopId, mapPsitInfo} : null} isInit={isInit} noDataTxt={'현재 수락한 배치가 없습니다.'} isIngBtch={true} reflashHandler={pgrsRslt => callBtchList(false, pgrsRslt)} />
+                                    </div>
+                                </Sheet.Scroller>
+                            </Sheet.Content>
+                        </Sheet.Container>
+                    </Sheet>
+                    {/*{isDtcOptmBtn &&*/}
+                    {/*    <button className={styles.btnOptm} onClick={dtcOptmHandler}>*/}
+                    {/*        <Image src={'/assets/images/icon/iconDistance.svg'} width={24} height={15} alt={'동선최적화'}></Image>*/}
+                    {/*        동선최적화*/}
+                    {/*    </button>*/}
+                    {/*}*/}
                     <div className={styles.refresh} onClick={() => callBtchList()}>
-                        <Image src={'/assets/images/icon/iconRefresh.svg'} alt={'새로고침'} width={18.5} height={18.5} />
-                        <span onClick={appTest2}>새로고침</span>
+                        <Image src={'/assets/images/icon/iconRefreshBlack.svg'} alt={'새로고침'} width={18.5} height={18.5} />
+                        <span>새로고침</span>
                     </div>
                 </>
             }
@@ -319,8 +658,8 @@ export default function Index(props) {
                         }
                         {!!entRefuRsn &&
                             <p>
-                            아래 거절사유입니다.<br/>
-                            “{entRefuRsn}”
+                                아래 거절사유입니다.<br/>
+                                “{entRefuRsn}”
                             </p>
                         }
                     </div>
@@ -337,41 +676,9 @@ export default function Index(props) {
     )
 }
 
-export async function getServerSideProps({req, res}) {
+export async function getServerSideProps(context) {
 
-    const cookieEncSh = getCookie('enc_sh', {req, res});
-
-    // 쿠키에 값이 있을 경우
-    if(!!cookieEncSh) {
-
-        const resData = await cmm.ajaxServer({
-            url: process.env.NEXT_PUBLIC_LOCAL_URL + '/api/cmm/getSystCrll',
-            isExtr: true,
-            data: {
-                systCrllSc: '메인화면',
-                enc_sh: cookieEncSh,
-            },
-        });
-
-        if(resData.data === 1) {
-
-            return {
-                redirect: {
-                    permanent: false,
-                    destination: '/main',
-                },
-                props: {},
-            }
-        } else {
-
-            return {
-                props: {},
-            }
-        }
-    } else {
-
-        return {
-            props: {},
-        }
+    return {
+        props: {},
     }
 }

@@ -107,8 +107,7 @@ export default function IngOderUserId() {
                     inpFile.click();
                 });
             } else {
-
-                cmm.confirm('<span>벨누르기 완료</span>하셨나요?\n벨누르기 하지 않으면 배달 완료로\n 인정이 되지 않을 수 있으니 꼭 벨을 눌러주세요', () => {
+                cmm.confirm(`<span>${btchInfo.USER_FULL_ADDR}\n\n벨누르기 완료</span>하셨나요?\n벨누르기 하지 않으면 배달 완료로\n 인정이 되지 않을 수 있으니 꼭 벨을 눌러주세요`, () => {
 
                     // 업로드
                     shopS3Upload(cplImgList, res => {
@@ -348,7 +347,13 @@ export default function IngOderUserId() {
                                 </li>
                             }
                             <li>
-                                <h5>스토어 <em className={styles.oderNo}>(주문번호: {btchInfo.ODER_RPRE_NO.length === 11 ? cmm.util.getNumber(btchInfo.ODER_RPRE_NO.substring(6)) : btchInfo.ODER_RPRE_NO})</em></h5>
+                                <h5>스토어
+                                    {!!btchInfo?.ODER_RPRE_NO &&
+                                        <em className={styles.oderNo}>
+                                            (주문번호: {btchInfo?.ODER_RPRE_NO?.length === 11 ? cmm.util.getNumber(btchInfo?.ODER_RPRE_NO?.substring(6)) : btchInfo?.ODER_RPRE_NO})
+                                        </em>
+                                    }
+                                </h5>
                                 <p>{btchInfo.SHOP_NM}</p>
                             </li>
                             <li>
@@ -442,7 +447,14 @@ export default function IngOderUserId() {
                                 </li>
                             }
                             <li>
-                                <h5>스토어 <em className={styles.oderNo}>(주문번호: {btchInfo.ODER_RPRE_NO.length === 11 ? cmm.util.getNumber(btchInfo.ODER_RPRE_NO.substring(6)) : btchInfo.ODER_RPRE_NO})</em></h5>
+                                <h5>스토어
+
+                                    {!!btchInfo?.ODER_RPRE_NO &&
+                                        <em className={styles.oderNo}>
+                                            (주문번호: {btchInfo.ODER_RPRE_NO.length === 11 ? cmm.util.getNumber(btchInfo.ODER_RPRE_NO.substring(6)) : btchInfo.ODER_RPRE_NO})
+                                        </em>
+                                    }
+                                </h5>
                                 <p>{btchInfo.SHOP_NM}</p>
                             </li>
                             <li>

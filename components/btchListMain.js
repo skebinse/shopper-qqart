@@ -5,7 +5,7 @@ import React, {useEffect, useRef, useState} from "react";
 import cmm from "../js/common";
 import useShopS3Upload from "../hooks/useShopS3Upload";
 
-export default function  BtchList({list, href, classNm = '', noDataTxt = '현재 접수된 배치가 없습니다.',
+export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = '현재 접수된 배치가 없습니다.',
                                      isDtptBtn = false, isIngBtch = false, isInit, reflashHandler, filter}) {
 
     const [atchImgList, setAtchImgList] = useState([]);
@@ -36,16 +36,17 @@ export default function  BtchList({list, href, classNm = '', noDataTxt = '현재
      */
     useEffect(() => {
 
-        if(!!filter && (!!filter.mapShopId || !!filter.mapOderUserId)) {
+        if(!!filter && (!!filter.mapShopId || !!filter.mapPsitInfo)) {
 
             // 상점일 경우
             if(!!filter.mapShopId) {
 
-                setBtchList(list.filter(item => item.SHOP_ID === filter.mapShopId));
+                setBtchList(list.filter(item => item.SHOP_ID === filter.mapShopId && (item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03')));
             // 단일 배치일 경우
-            } else if(!!filter.mapOderUserId) {
+            } else if(!!filter.mapPsitInfo) {
 
-                setBtchList(list.filter(item => item.ODER_USER_ID === filter.mapOderUserId));
+                const psitInfo = filter.mapPsitInfo.split(',');
+                setBtchList(list.filter(item => item.ODER_DELY_ADDR_LAT === psitInfo[0] && item.ODER_DELY_ADDR_LOT === psitInfo[1] && item.ODER_PGRS_STAT === '05'));
             }
         } else {
 
@@ -230,8 +231,7 @@ export default function  BtchList({list, href, classNm = '', noDataTxt = '현재
                         }
                     }, null, title);
                 } else if(item.ODER_PGRS_STAT === '05') {
-
-                    cmm.confirm('<span>벨누르기 완료</span>하셨나요?\n벨누르기 하지 않으면 배달 완료로\n 인정이 되지 않을 수 있으니 꼭 벨을 눌러주세요', () => {
+                    cmm.confirm(`<span>${item.ODER_DELY_FULL_ADDR}\n\n벨누르기 완료</span>하셨나요?\n벨누르기 하지 않으면 배달 완료로\n 인정이 되지 않을 수 있으니 꼭 벨을 눌러주세요`, () => {
 
                         // 업로드
                         shopS3Upload(atchImgList[idx], res => {
@@ -259,7 +259,7 @@ export default function  BtchList({list, href, classNm = '', noDataTxt = '현재
     };
 
     return <>
-        <ul className={'btch ' + classNm}>
+        <ul className={'btch ' + classNm} ref={ulRef}>
             {btchList.length === 0 && !isInit &&
                 <li className={'noData'}>
                     <Image alt={'주문 X'} src={'/assets/images/img/noCart.svg'} width={234.23} height={200}/>

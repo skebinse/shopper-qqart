@@ -215,7 +215,7 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 .weekDateDiv img.noVtlz{opacity: 0.3;}
 
 /* sheet modal */
-.react-modal-sheet-container .tabArea{padding: 0 17px 24px;}
+.react-modal-sheet-container .tabArea{padding: 0 17px 14px;}
 .react-modal-sheet-container .tabArea > div{background-color: #F8F8F8;width:100%;display: flex;margin: 0 23px;border-radius: 100px;}
 .react-modal-sheet-container .tabArea button{height: 40px;padding: 0;background-color: #F8F8F8;color: #707070;font-size: 14px;font-style: normal;font-weight: 500;line-height: 22px;letter-spacing: -0.7px;border-radius: 100px;}
 .react-modal-sheet-container .tabArea button.on{border: 1px solid #02B763;background: #FFF;box-shadow: 0px 4px 4px 0px rgba(2, 183, 99, 0.10);}
@@ -223,10 +223,15 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 .react-modal-sheet-container .btchArea.ing{transform: translateX(-100%)}
 .react-modal-sheet-container .noScroll{overflow: hidden !important}
 .react-modal-sheet-container .btchArea :global .btch{height: calc(100% - 230px);overflow-y: auto;padding-top: 15px;}
-.react-modal-sheet-container .btchArea ul{position: absolute;top: 0;width: calc(100% - 34px);padding-bottom: 60px}
+.react-modal-sheet-container .btchArea ul{position: absolute;top: 0;width: calc(100% - 34px);padding-bottom: 60px;padding-top: 12px;height: 100%;overflow-y: auto;}
 .react-modal-sheet-container .btchArea ul:last-child{left: 100%;}
+.react-modal-sheet-container .btchArea ul li:last-child{margin-bottom: 90px;}
+.react-modal-sheet-container .tabArea + .btchArea > ul li:last-child{margin-bottom: 140px;}
 
 /* kakaomap */
 #kakaoMap > div > div > div > div > img{border-radius: 100px;}
 
 .mainSheet{z-index: 10 !important;}
+.markerInfo{background-color: #0073FA;border-radius: 10px;padding: 2px 10px;position: relative;color: #fff;font-size: 12px;}
+.markerInfo.customer{background-color: #FF7B52;}
+.markerInfo span{padding: 5px 5px 0px;font-weight: 700;position: absolute;top: -21px;background-color: #50627F;border-top-left-radius: 20px;border-top-right-radius: 20px;left: 50%;transform: translateX(-50%);}

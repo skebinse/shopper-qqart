@@ -305,7 +305,14 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                         <div className={'delyArea'}>
                             <div>
                                 <Image alt={'배달거리 이미지'} src={`/assets/images/icon/iconDistance${item.BTCH_ODER_PGRS_MI >= 90 ? 'W' : ''}.svg`} width={24} height={14.8} />
-                                <span>{item.ODER_DELY_DTC}Km</span>
+                                <span>
+                                    {item.ODER_DELY_DTC}Km
+                                    {item.ODER_PGRS_STAT === '05' &&
+                                        <span>
+                                            배달중
+                                        </span>
+                                    }
+                                </span>
                             </div>
                             <div>
                                 <Image alt={'상품 이미지'} src={`/assets/images/icon/iconProduct${item.BTCH_ODER_PGRS_MI >= 90 ? 'W' : ''}.svg`} width={17} height={18.4} />
@@ -318,6 +325,9 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                                 }
                             </div>
                         </div>
+                        {(!!isIngBtch && item.ODER_PGRS_STAT !== '05') &&
+                            <p>{item.ODER_DELY_FULL_ADDR}</p>
+                        }
                         {item.ODER_DELY_SLCT_VAL !== 'imm' &&
                             <p>{createTagResv(item)}</p>
                         }

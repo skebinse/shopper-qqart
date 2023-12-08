@@ -271,6 +271,10 @@ export default function Index(props) {
 
                             setTabIdx(1);
                             currentList = res.btchAcpList;
+                        } else {
+
+                            // 쇼퍼 위치 확인 후 지도 생성
+                            shopperPosition([]);
                         }
 
                     } else {

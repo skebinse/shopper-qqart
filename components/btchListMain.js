@@ -63,8 +63,8 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
         let oderDelySlctVal;
         switch (item.ODER_DELY_SLCT_VAL) {
             case 'imm' : oderDelySlctVal = '즉시 배달'; break;
-            case '2Hour' : oderDelySlctVal = '배달시간 : 2~3시간 내'; break;
-            case 'today' : oderDelySlctVal = '배달시간 : 오늘 안에만'; break;
+            case '2Hour' : oderDelySlctVal = '예약 : 2~3시간 내'; break;
+            case 'today' : oderDelySlctVal = '예약 : 오늘 안에만'; break;
             case 'resv' :
                 oderDelySlctVal = `예약 : ${item.ODER_DELY_YMD + ' ' + item.ODER_DELY_HH}`;
                 break;

@@ -66,7 +66,7 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
             case '2Hour' : oderDelySlctVal = '배달시간 : 2~3시간 내'; break;
             case 'today' : oderDelySlctVal = '배달시간 : 오늘 안에만'; break;
             case 'resv' :
-                oderDelySlctVal = `배달시간 : ${item.ODER_DELY_YMD + ' ' + item.ODER_DELY_HH}`;
+                oderDelySlctVal = `예약 : ${item.ODER_DELY_YMD + ' ' + item.ODER_DELY_HH}`;
                 break;
         }
 
@@ -325,11 +325,14 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                                 }
                             </div>
                         </div>
+                        {item.ODER_DELY_SLCT_VAL !== 'imm' &&
+                            <p className={'resv'}>
+                                <Image alt={'예약배달'} src={`/assets/images/icon/iconClock${item.BTCH_ODER_PGRS_MI >= 90 ? 'W' : ''}.svg`} width={16} height={16} />
+                                {createTagResv(item)}
+                            </p>
+                        }
                         {(!!isIngBtch && item.ODER_PGRS_STAT !== '05') &&
                             <p>{item.ODER_DELY_FULL_ADDR}</p>
-                        }
-                        {item.ODER_DELY_SLCT_VAL !== 'imm' &&
-                            <p>{createTagResv(item)}</p>
                         }
                         {!isIngBtch &&
                             <>

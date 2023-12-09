@@ -274,7 +274,7 @@ export default function Index(props) {
                         } else {
 
                             // 쇼퍼 위치 확인 후 지도 생성
-                            shopperPosition([]);
+                            shopperPosition(currentList);
                         }
 
                     } else {
@@ -449,8 +449,6 @@ export default function Index(props) {
             setMapShopId(null);
             setMapPsitInfo(null);
             sheetScrollRef.current.scrollTop = 0;
-        } else {
-
             ulBtchAll.current.scrollTop = 0;
             ulBtchIng.current.scrollTop = 0;
         }

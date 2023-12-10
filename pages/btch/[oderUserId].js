@@ -108,13 +108,15 @@ export default function OderUserId(props) {
             </Head>
             <HeadTitle type={'close'} callbackClose={() => goPage('/')} />
             <ul className={'topTitleUl'}>
-                <li>
-                    <h5>서비스이용료</h5>
-                    <p>{btchInfo.DELY_AMT}원</p>
-                    {btchInfo.SHPR_ADJ_POIN > 0 &&
-                        <span className={styles.amt}>+{cmm.util.comma(btchInfo.SHPR_ADJ_POIN)}P</span>
-                    }
-                </li>
+                {cmm.getLoginInfo('SHPR_GRD_CD') !== 'ETPS' &&
+                    <li>
+                        <h5>서비스이용료</h5>
+                        <p>{btchInfo.DELY_AMT}원</p>
+                        {btchInfo.SHPR_ADJ_POIN > 0 &&
+                            <span className={styles.amt}>+{cmm.util.comma(btchInfo.SHPR_ADJ_POIN)}P</span>
+                        }
+                    </li>
+                }
                 <li>
                     <h5>스토어와 고객과의 거리</h5>
                     <p>{btchInfo.ODER_DELY_DTC}Km</p>

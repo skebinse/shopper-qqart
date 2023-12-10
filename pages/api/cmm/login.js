@@ -51,6 +51,7 @@ export default async function handler(req, res) {
                         SHPR_NCNM: item.SHPR_NCNM,
                         SHPR_PRFL_FILE: item.SHPR_PRFL_FILE,
                         LOGIN_VER: item.LOGIN_VER,
+                        SHPR_GRD_CD: item.SHPR_GRD_CD,
                     }));
                 } else {
 

@@ -16,7 +16,7 @@ export default async function handler(req, res) {
             res.status(200).json(result({result: 1}));
             return;
         }
-        console.log(encShprId, tknSh)
+
         if(!!param.isExtr || excpUrlPathList.indexOf(param.url.substring(0, param.url.lastIndexOf('/'))) > -1 ||
             excpUrlList.indexOf(param.url) > -1) {
 

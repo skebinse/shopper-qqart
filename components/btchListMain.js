@@ -277,9 +277,18 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                         <div className={'priceArea'}>
                             <div>
                                 <p>
-                                    {item.DELY_AMT}원
-                                    {(!isIngBtch && item.SHPR_ADJ_POIN) > 0 &&
-                                        <span className={'point'}>+{cmm.util.comma(item.SHPR_ADJ_POIN)}P</span>
+                                    {cmm.getLoginInfo('SHPR_GRD_CD') !== 'ETPS' &&
+                                        <>
+                                            {item.DELY_AMT}원
+                                            {(!isIngBtch && item.SHPR_ADJ_POIN) > 0 &&
+                                                <span className={'point'}>+{cmm.util.comma(item.SHPR_ADJ_POIN)}P</span>
+                                            }
+                                        </>
+                                    }
+                                    {cmm.getLoginInfo('SHPR_GRD_CD') === 'ETPS' &&
+                                        <>
+                                            {item.SHOP_NM}
+                                        </>
                                     }
                                     {item.ODER_DRC_LDTN_YN === 'N' && item.ODER_DRC_LDTN_AMT === 0 &&
                                         <span>카드 단말기</span>

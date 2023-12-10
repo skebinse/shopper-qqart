@@ -13,11 +13,13 @@ export default function MyPage() {
         SHPR_PRFL_FILE: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNs/Q8AAg8Bhso7688AAAAASUVORK5CYII='
     });
     const [ntfy, setNtfy] = useState(false);
+    const [loginInfo, setLoginInfo] = useState({});
     const router = useRouter();
     const {goPage} = useCommon();
 
     useEffect(() => {
 
+        setLoginInfo(cmm.getLoginInfo());
         document.body.classList.add(styles.body);
 
         cmm.ajax({
@@ -151,25 +153,31 @@ export default function MyPage() {
                 <p>
                     반갑습니다. 쇼퍼님!
                     <span>{myInfo.SHPR_NCNM}</span>
-                    <span className={styles.point}>
-                        <Image src={'/assets/images/icon/iconPoint.svg'} alt={'포인트 아이콘'} width={16} height={16} />
-                        {cmm.util.comma(myInfo?.SHPR_POIN)}P
-                    </span>
+                    {loginInfo?.SHPR_GRD_CD !== 'ETPS' &&
+                        <span className={styles.point}>
+                            <Image src={'/assets/images/icon/iconPoint.svg'} alt={'포인트 아이콘'} width={16} height={16} />
+                            {cmm.util.comma(myInfo?.SHPR_POIN)}P
+                        </span>
+                    }
                 </p>
-                <Link href={'/join/info'}>
-                    <button type={'button'} className={'button short white'} >개인정보 수정</button>
-                </Link>
-            </div>
-            <div className={styles.dutjEndDiv}>
-                <button type="button" className={'button'} onClick={dutjEndHanler}>업무 종료</button>
-            </div>
-            <ul className={'ulType01'}>
-                <li>
-                    <Link href={'/mypage/delySchd'}>
-                        <h5>일정관리</h5>
-                        <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
+                {loginInfo?.SHPR_GRD_CD !== 'ETPS' &&
+                    <Link href={'/join/info'}>
+                        <button type={'button'} className={'button short white'} >개인정보 수정</button>
                     </Link>
-                </li>
+                }
+            </div>
+            {/*<div className={styles.dutjEndDiv}>*/}
+            {/*    <button type="button" className={'button'} onClick={dutjEndHanler}>업무 종료</button>*/}
+            {/*</div>*/}
+            <ul className={'ulType01'}>
+                {loginInfo?.SHPR_GRD_CD !== 'ETPS' &&
+                    <li>
+                        <Link href={'/mypage/delySchd'}>
+                            <h5>일정관리</h5>
+                            <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
+                        </Link>
+                    </li>
+                }
                 <li>
                     <div>
                         <h5>알림</h5>
@@ -186,9 +194,11 @@ export default function MyPage() {
             <div className={styles.logout}>
                 <button type={'button'} onClick={logoutClick}>로그아웃</button>
             </div>
-            <div className={styles.mbScss}>
-                <p onClick={mbScssClick}>회원 탈퇴</p>
-            </div>
+            {loginInfo?.SHPR_GRD_CD !== 'ETPS' &&
+                <div className={styles.mbScss}>
+                    <p onClick={mbScssClick}>회원 탈퇴</p>
+                </div>
+            }
             <BottomMenu idx={3} />
         </div>
     );

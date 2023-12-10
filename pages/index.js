@@ -175,9 +175,12 @@ export default function Index(props) {
 
     useEffect(() => {
 
-        if(!!document.querySelector('#ch-plugin')) {
-            document.querySelector('#ch-plugin').classList.add('d-none');
-        }
+        setTimeout(() => {
+
+            if(!!document.querySelector('#ch-plugin')) {
+                document.querySelector('#ch-plugin').classList.add('d-none');
+            }
+        }, 500);
 
         return () => {
             if(!!document.querySelector('#ch-plugin')) {
@@ -622,7 +625,7 @@ export default function Index(props) {
                         <button type={'button'} onClick={dutjStrtHandler}>업무 시작할께요!</button>
                         <span>
                             <Image alt={'경고'} src={'/assets/images/icon/iconWarningType02.svg'} width={12} height={12} />
-                            업무 종료는 <em>마이페이지</em>에서 하실수 있습니다.
+                            업무 종료시 <em>업무종료 버튼</em>을 클릭해 주세요.
                         </span>
                     </div>
                 </div>

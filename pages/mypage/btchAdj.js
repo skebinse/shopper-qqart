@@ -17,6 +17,12 @@ export default function BtchAdj() {
      */
     useEffect(() => {
 
+        // 업체 쇼퍼일 경우
+        if(cmm.getLoginInfo('SHPR_GRD_CD') === 'ETPS') {
+            setBtchList({});
+            return;
+        }
+
         if(!!searchDate) {
 
             cmm.ajax({

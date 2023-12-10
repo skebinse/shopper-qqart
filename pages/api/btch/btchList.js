@@ -216,7 +216,7 @@ export default async function handler(req, res) {
             res.status(200).json(result({
                 isEntApv: true,
                 isDutjStrt: true,
-                btchList: rows[0],
+                btchList: (!rows || rows.length === 0) ? [] : rows[0],
                 btchAcpList: rows2,
                 btchCanMin: row[0].MIN,
             }));

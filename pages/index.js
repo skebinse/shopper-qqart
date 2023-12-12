@@ -181,9 +181,6 @@ export default function Index(props) {
         setTimeout(() => {
 
             btchAreaInfo.current.translateY = window.innerHeight - 200;
-            // btchArea Y 위치 변경
-            btchAreaYPsit(btchAreaInfo.current.translateY);
-            document.querySelector('.btchListArea').classList.add(styles.transition);
 
             if(!!document.querySelector('#ch-plugin')) {
                 document.querySelector('#ch-plugin').classList.add('d-none');
@@ -379,10 +376,24 @@ export default function Index(props) {
                         }
                     }))
                 }
+
                 callBtchList();
             }
         });
     }, [callBtchList]);
+
+    /**
+     * 업무 시작일 경우
+     */
+    useEffect(() => {
+
+        if(isEntApv && isDutjStrt) {
+
+            // btchArea Y 위치 변경
+            btchAreaYPsit(btchAreaInfo.current.translateY);
+            document.querySelector('.btchListArea').classList.add(styles.transition);
+        }
+    }, [isEntApv, isDutjStrt]);
 
     useEffect(() => {
 

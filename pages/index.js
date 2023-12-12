@@ -612,6 +612,10 @@ export default function Index(props) {
      */
     const touchEndHandler = e => {
 
+        if(Math.abs(btchAreaInfo.current.startPageY - e.changedTouches[0].pageY) < 20) {
+            return;
+        }
+
         // 위로
         if(btchAreaInfo.current.startPageY > e.changedTouches[0].pageY) {
 

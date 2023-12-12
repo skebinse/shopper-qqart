@@ -87,7 +87,7 @@ export default function Index(props) {
                     tooltipInfo[key] = [];
                 }
 
-                tooltipInfo[key].push(item.ODER_RPRE_NO.length === 11 ? cmm.util.getNumber(item.ODER_RPRE_NO.substring(6)) : item.ODER_RPRE_NO);
+                tooltipInfo[key].push((!!item.ODER_RPRE_NO && item.ODER_RPRE_NO.length === 11) ? cmm.util.getNumber(item.ODER_RPRE_NO.substring(6)) : item.ODER_RPRE_NO);
             });
 
             data.list.forEach(item => {
@@ -386,9 +386,10 @@ export default function Index(props) {
      * 업무 시작일 경우
      */
     useEffect(() => {
-
+        console.log(isEntApv, isDutjStrt);
         if(isEntApv && isDutjStrt) {
 
+            btchAreaInfo.current.translateY = window.innerHeight - 200;
             // btchArea Y 위치 변경
             btchAreaYPsit(btchAreaInfo.current.translateY);
             document.querySelector('.btchListArea').classList.add(styles.transition);

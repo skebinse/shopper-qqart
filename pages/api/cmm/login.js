@@ -16,6 +16,7 @@ export default async function handler(req, res) {
                     SELECT 1 AS IS_LOGIN
                          , A.SHPR_NCNM
                          , A.SHPR_ADDR
+                         , A.SHPR_GRD_CD
                          , TO_BASE64(AES_ENCRYPT(A.SHPR_ID, ?)) AS ENC_SHPR_ID
                          , fnGetAtchFileList(A.SHPR_PRFL_ATCH_FILE_UUID) AS SHPR_PRFL_FILE
                          , DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y%m%d') AS LOING_DT

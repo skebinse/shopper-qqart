@@ -25,14 +25,16 @@ export default function Index(props) {
     const [mapShopId, setMapShopId] = useState(null);
     const [mapPsitInfo, setMapPsitInfo] = useState(null);
     const {pushCnt} = useGlobal();
-    const [btchInfo, setBtchInfo] = useState({
-        btchList: [],
-        btchAcpList: [],
-    });
+    const [btchInfo, setBtchInfo] = useState({btchList: [], btchAcpList: []});
     const sheetRef = useRef();
     const sheetScrollRef = useRef();
     const ulBtchAll = useRef();
     const ulBtchIng = useRef();
+    const isListDown = useRef(false);
+    const btchAreaInfo = useRef({
+        translateY: 1000
+    });
+    const listTranslateY = useRef(1000);
 
     /**
      * 메인 지도 생성
@@ -155,7 +157,8 @@ export default function Index(props) {
             setMapPsitInfo(item.ODER_DELY_ADDR_LAT + ',' + item.ODER_DELY_ADDR_LOT);
         }
 
-        sheetRef.current.snapTo(0);
+        // btchArea Y 위치 변경
+        btchAreaYPsit(0);
     }
 
     /**
@@ -176,6 +179,11 @@ export default function Index(props) {
     useEffect(() => {
 
         setTimeout(() => {
+
+            btchAreaInfo.current.translateY = window.innerHeight - 200;
+            // btchArea Y 위치 변경
+            btchAreaYPsit(btchAreaInfo.current.translateY);
+            document.querySelector('.btchListArea').classList.add(styles.transition);
 
             if(!!document.querySelector('#ch-plugin')) {
                 document.querySelector('#ch-plugin').classList.add('d-none');
@@ -538,9 +546,10 @@ export default function Index(props) {
 
         if(_tabIdx === tabIdx) {
 
-            if(snapIdx !== 0) {
+            if(document.querySelector('.btchListArea').style.transform !== 'translateY(0px)') {
 
-                sheetRef.current.snapTo(0);
+                // btchArea Y 위치 변경
+                btchAreaYPsit(0);
             }
         } else {
 
@@ -566,6 +575,60 @@ export default function Index(props) {
         }
     }, [pushCnt]);
 
+    /**
+     * 터치 시작
+     * @param e
+     */
+    const touchStartHandler = e => {
+
+        btchAreaInfo.current.startPageY = e.targetTouches[0].pageY;
+        if(!e.target.closest('.btchArea')) {
+
+            isListDown.current = true;
+        } else if(tabIdx === 0) {
+
+            isListDown.current = ulBtchAll.current.scrollTop === 0;
+        } else {
+
+            isListDown.current = ulBtchIng.current.scrollTop === 0;
+        }
+    };
+
+    /**
+     * 터치 종료
+     * @param e
+     */
+    const touchEndHandler = e => {
+
+        // 위로
+        if(btchAreaInfo.current.startPageY > e.changedTouches[0].pageY) {
+
+            // btchArea Y 위치 변경
+            btchAreaYPsit(0);
+        // 아래로
+        } else if(isListDown.current && btchAreaInfo.current.startPageY < e.changedTouches[0].pageY) {
+
+            // btchArea Y 위치 변경
+            btchAreaYPsit(btchAreaInfo.current.translateY);
+        }
+    };
+
+    /**
+     * btchArea Y 위치 변경
+     * @param snapIdx
+     */
+    const btchAreaYPsit = y => {
+
+        document.querySelector('.btchListArea').style.transform = `translateY(${y}px)`;
+
+        if(y > 0) {
+            setMapShopId(null);
+            setMapPsitInfo(null);
+            ulBtchAll.current.scrollTop = 0;
+            ulBtchIng.current.scrollTop = 0;
+        }
+    }
+
     return (
         <div className={styles.index + ' ' + dnone}>
             {(isEntApv && isDutjStrt) &&
@@ -577,35 +640,26 @@ export default function Index(props) {
                         <button type={'button'} onClick={dutjEndHanler}>업무 종료</button>
                     </div>
                     <div id="kakaoMap" style={{height: 'calc(100% - 210px)'}}></div>
-                    <Sheet ref={sheetRef} isOpen={isSheetOpen} className={'mainSheet'} onClose={() => setSheetOpen(false)} snapPoints={[window.innerHeight - 40, 155]} initialSnap={!!router.query.hasOwnProperty('tabIdx') ? 0 : 1}
-                           onSnap={sheetSnapHandler}>
-                        <Sheet.Container>
-                            <Sheet.Header>
-                            </Sheet.Header>
-                            <Sheet.Content>
-                                <Sheet.Scroller ref={sheetScrollRef} className={snapIdx === 1 ? 'noScroll' : 'noScroll'}>
-                                    {!mapShopId && !mapPsitInfo &&
-                                        <div className={'tabArea'}>
-                                            <div>
-                                                <button className={'button ' + (tabIdx === 0 ? 'on' : '')} onClick={() => tabClickHandler(0)}>모든 배치 {btchInfo.btchList.length}</button>
-                                                <button className={'button ' + (tabIdx === 0 ? '' : 'on')} onClick={() => tabClickHandler(1)}>진행중 배치 {btchInfo.btchAcpList.length}</button>
-                                            </div>
-                                        </div>
-                                    }
-                                    <div className={'btchArea' + ' ' +  (tabIdx === 0 ? '' : 'ing') + ' '}>
-                                        <BtchList ulRef={ulBtchAll} list={btchInfo.btchList} href={'/btch'} filter={tabIdx === 0 ? {mapShopId, mapPsitInfo} : null} isInit={isInit} reflashHandler={pgrsRslt => callBtchList(false, pgrsRslt)} />
-                                        <BtchList ulRef={ulBtchIng} list={btchInfo.btchAcpList} href={'/btch/ing'} filter={tabIdx === 1 ? {mapShopId, mapPsitInfo} : null} isInit={isInit} noDataTxt={'현재 수락한 배치가 없습니다.'} isIngBtch={true} reflashHandler={pgrsRslt => callBtchList(false, pgrsRslt)} />
+                    <div className={'btchListArea ' + styles.btchListArea} onTouchStart={touchStartHandler} onTouchEnd={touchEndHandler}>
+                        <div className={styles.btchListHeader}>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div className={styles.btchListCont}>
+                            {!mapShopId && !mapPsitInfo &&
+                                <div className={'tabArea'}>
+                                    <div>
+                                        <button className={'button ' + (tabIdx === 0 ? 'on' : '')} onClick={() => tabClickHandler(0)}>모든 배치 {btchInfo.btchList.length}</button>
+                                        <button className={'button ' + (tabIdx === 0 ? '' : 'on')} onClick={() => tabClickHandler(1)}>진행중 배치 {btchInfo.btchAcpList.length}</button>
                                     </div>
-                                </Sheet.Scroller>
-                            </Sheet.Content>
-                        </Sheet.Container>
-                    </Sheet>
-                    {/*{isDtcOptmBtn &&*/}
-                    {/*    <button className={styles.btnOptm} onClick={dtcOptmHandler}>*/}
-                    {/*        <Image src={'/assets/images/icon/iconDistance.svg'} width={24} height={15} alt={'동선최적화'}></Image>*/}
-                    {/*        동선최적화*/}
-                    {/*    </button>*/}
-                    {/*}*/}
+                                </div>
+                            }
+                            <div className={'btchArea' + ' ' +  (tabIdx === 0 ? '' : 'ing') + ' '}>
+                                <BtchList ulRef={ulBtchAll} list={btchInfo.btchList} href={'/btch'} filter={tabIdx === 0 ? {mapShopId, mapPsitInfo} : null} isInit={isInit} reflashHandler={pgrsRslt => callBtchList(false, pgrsRslt)} />
+                                <BtchList ulRef={ulBtchIng} list={btchInfo.btchAcpList} href={'/btch/ing'} filter={tabIdx === 1 ? {mapShopId, mapPsitInfo} : null} isInit={isInit} noDataTxt={'현재 수락한 배치가 없습니다.'} isIngBtch={true} reflashHandler={pgrsRslt => callBtchList(false, pgrsRslt)} />
+                            </div>
+                        </div>
+                    </div>
                     <div className={styles.refresh} onClick={() => callBtchList()}>
                         <Image src={'/assets/images/icon/iconRefreshBlack.svg'} alt={'새로고침'} width={18.5} height={18.5} />
                         <span>새로고침</span>
@@ -617,7 +671,7 @@ export default function Index(props) {
                 <div className={styles.dutjStrtDiv}>
                     <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={80} height={17} />
                     <div>
-                        <Image alt={'프로필사진'} src={loginInfo.SHPR_PRFL_FILE} width={80} height={80} />
+                        <img alt={'프로필사진'} src={loginInfo.SHPR_PRFL_FILE} />
                         <p>
                             {loginInfo.SHPR_NCNM}님
                             <b>오늘 하루도 힘내세요!</b>

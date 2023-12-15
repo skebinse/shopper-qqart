@@ -44,5 +44,24 @@ export default function useCommon() {
         }
     }, []);
 
-    return {goCheckLogin, goPage};
+    /**
+     * 화면 이동
+     * @param url
+     * @param param
+     */
+    const goReplacePage = useCallback((url, param) => {
+
+        if(!!param) {
+
+            router.replace({
+                pathname: url,
+                query: param
+            }, url);
+        } else {
+
+            router.replace(url);
+        }
+    }, []);
+
+    return {goCheckLogin, goPage, goReplacePage};
 }

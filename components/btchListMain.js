@@ -159,7 +159,16 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
 
                             reflashHandler && reflashHandler('배치수락');
                         });
-                    }
+                    }, error: res => {
+
+                        if(res.resultMsg) {
+
+                            cmm.alert(res.resultMsg, () => {
+
+                                reflashHandler && reflashHandler('배치실패');
+                            }, '실패');
+                        }
+                    },
                 });
             }, null, '배치 수락');
         } else {

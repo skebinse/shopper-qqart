@@ -158,7 +158,7 @@ export default function Index(props) {
         }
 
         // btchArea Y 위치 변경
-        btchAreaYPsit(0);
+        btchAreaYPsit('up');
     }
 
     /**
@@ -180,8 +180,13 @@ export default function Index(props) {
 
         setTimeout(() => {
 
-            btchAreaInfo.current.translateY = window.innerHeight - 200;
+            btchAreaInfo.current.translateY = 'transform: translateY(calc(100% - 196px));';
 
+
+            window.addEventListener('resize', e => {
+
+                console.log('resize')
+            });
             if(!!document.querySelector('#ch-plugin')) {
                 document.querySelector('#ch-plugin').classList.add('d-none');
             }
@@ -382,20 +387,6 @@ export default function Index(props) {
         });
     }, [callBtchList]);
 
-    /**
-     * 업무 시작일 경우
-     */
-    useEffect(() => {
-        console.log(isEntApv, isDutjStrt);
-        if(isEntApv && isDutjStrt) {
-
-            btchAreaInfo.current.translateY = window.innerHeight - 200;
-            // btchArea Y 위치 변경
-            btchAreaYPsit(btchAreaInfo.current.translateY);
-            document.querySelector('.btchListArea').classList.add(styles.transition);
-        }
-    }, [isEntApv, isDutjStrt]);
-
     useEffect(() => {
 
         window.getPosition = (lat, lon) => {
@@ -558,10 +549,10 @@ export default function Index(props) {
 
         if(_tabIdx === tabIdx) {
 
-            if(document.querySelector('.btchListArea').style.transform !== 'translateY(0px)') {
+            if(!document.querySelector('.btchListArea').classList.contains(styles.open)) {
 
                 // btchArea Y 위치 변경
-                btchAreaYPsit(0);
+                btchAreaYPsit('up');
             }
         } else {
 
@@ -620,12 +611,12 @@ export default function Index(props) {
         if(btchAreaInfo.current.startPageY > e.changedTouches[0].pageY) {
 
             // btchArea Y 위치 변경
-            btchAreaYPsit(0);
+            btchAreaYPsit('up');
         // 아래로
         } else if(isListDown.current && btchAreaInfo.current.startPageY < e.changedTouches[0].pageY) {
 
             // btchArea Y 위치 변경
-            btchAreaYPsit(btchAreaInfo.current.translateY);
+            btchAreaYPsit('down');
         }
     };
 
@@ -633,11 +624,17 @@ export default function Index(props) {
      * btchArea Y 위치 변경
      * @param snapIdx
      */
-    const btchAreaYPsit = y => {
+    const btchAreaYPsit = upDown => {
 
-        document.querySelector('.btchListArea').style.transform = `translateY(${y}px)`;
+        if(upDown === 'down') {
 
-        if(y > 0) {
+            document.querySelector('.btchListArea').classList.remove(styles.open);
+        } else {
+
+            document.querySelector('.btchListArea').classList.add(styles.open);
+        }
+
+        if(upDown === 'down') {
             setMapShopId(null);
             setMapPsitInfo(null);
             ulBtchAll.current.scrollTop = 0;

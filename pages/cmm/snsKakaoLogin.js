@@ -5,7 +5,7 @@ import {useRouter} from "next/router";
 
 export default function Login(props) {
 
-    const {goPage} = useCommon();
+    const {goPage, goReplacePage} = useCommon();
     const router = useRouter();
 
     useEffect(() => {
@@ -62,7 +62,7 @@ export default function Login(props) {
                         }
 
                         cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
-                        goPage('/');
+                        goReplacePage('/');
                     }
                 }
             });

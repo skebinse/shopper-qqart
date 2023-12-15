@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import useCommon from "../../hooks/useCommon";
 import {useRouter} from "next/router";
 import HeadTitle from "../../components/headTitle";
@@ -15,15 +15,21 @@ export default function OderUserId(props) {
     const [btchInfo, setBtchInfo] = useState({});
     const [prodList, setProdList] = useState([]);
     const [piupImgList, setPiupImgList] = useState([]);
+    const loginInfo = useRef({});
     const {goPage} = useCommon();
     const {oderUserId} = router.query;
+
+    useEffect(() => {
+
+        loginInfo.current = cmm.getLoginInfo();
+    }, []);
 
     useEffect(() => {
 
         cmm.ajax({
             url: `/api/btch/${oderUserId}`,
             success: res => {
-
+                console.log(res)
                 if(!!res && res.length > 0) {
 
                     const item = res[0];
@@ -96,6 +102,12 @@ export default function OderUserId(props) {
                             tabIdx: 1,
                         });
                     });
+                }, error: res => {
+
+                    if(res.resultMsg) {
+
+                        cmm.alert(res.resultMsg, null, '실패');
+                    }
                 }
             });
         }, null, '배치 수락');
@@ -108,7 +120,7 @@ export default function OderUserId(props) {
             </Head>
             <HeadTitle type={'close'} callbackClose={() => goPage('/')} />
             <ul className={'topTitleUl'}>
-                {cmm.getLoginInfo('SHPR_GRD_CD') !== 'ETPS' &&
+                {loginInfo.current.SHPR_GRD_CD !== 'ETPS' &&
                     <li>
                         <h5>서비스이용료</h5>
                         <p>{btchInfo.DELY_AMT}원</p>

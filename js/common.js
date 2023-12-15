@@ -73,48 +73,54 @@ const cmm = {
                     return res.json();
                 }
             })
-                .then(res => {
+            .then(res => {
 
-                    if(!!_options.isExtr) {
+                if(!!_options.isExtr) {
+
+                    if(!!_options.success) {
+
+                        _options.success(res);
+                    }
+                } else {
+
+                    if(res.resultCode === '0000') {
 
                         if(!!_options.success) {
 
-                            _options.success(res);
+                            _options.success(res.data);
                         }
+                    } else if(res.resultCode === '8000') {
+
+                        cmm.alert(res.resultMsg, () => {
+
+                            location.href = '/';
+                        });
                     } else {
 
-                        if(res.resultCode === '0000') {
+                        if(!!_options.error) {
 
-                            if(!!_options.success) {
-
-                                _options.success(res.data);
-                            }
-                        } else if(res.resultCode === '8000') {
-
-                            cmm.alert(res.resultMsg, () => {
-
-                                location.href = '/';
-                            });
+                            _options.error(res);
                         } else {
 
                             cmm.alert(res.resultMsg);
                         }
                     }
-                })
-                .catch(err => {
-                    console.log(err)
-                    if(!!_options.error) {
+                }
+            })
+            .catch(err => {
+                console.log(err)
+                if(!!_options.error) {
 
-                        _options.error();
-                    }
-                })
-                .finally(() => {
+                    _options.error();
+                }
+            })
+            .finally(() => {
 
-                    if(!_options.isExtr && !!_options.isLoaing) {
+                if(!_options.isExtr && !!_options.isLoaing) {
 
-                        cmm.loading(false);
-                    }
-                });
+                    cmm.loading(false);
+                }
+            });
         };
 
         if(!!_options.isExtr) {
@@ -256,7 +262,7 @@ const cmm = {
         document.querySelector('#alertArea').innerHTML = `
             <div class="confirmArea">
                 <div>
-                    <h3>${!!title ? title : '알림'}</h3>
+                    <h3 ${title === '실패' ? 'class="error"' : ''}>${!!title ? title : '알림'}</h3>
                     <p>${txt.replace(/\n/g, '<br/>')}</p>
                     <div>
                         <button class="button" type="button">확인</button>
@@ -825,7 +831,6 @@ const cmm = {
          * @param data
          */
         getCurrentPosition: callback => {
-
             if(cmm.isApp()) {
 
                 window.getCurrntPsPsit = (lat, lot) => {

@@ -41,9 +41,8 @@
 .index .tabArea{width: 10px;}
 .index .btnOptm{position: fixed;right: 12px;bottom: 170px;border-radius: 100px;background: #FFF;box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.10);color: #333;font-size: 14px;font-weight: 400;line-height: 22px;letter-spacing: -0.42px;border: none;display: flex;align-items: center;height: 36px;padding: 0 12px;z-index: 9}
 
-.index .btchListArea{background-color: rgb(255, 255, 255);border-top-right-radius: 8px;border-top-left-radius: 8px;height: 100%;position: absolute;top: 40px;width: 100%;z-index: 1;display: flex;flex-direction: column;touch-action: pan-y;box-shadow: rgba(0, 0, 0, 0.3) 0px -2px 16px;transform: translateY(1000px);}
-.index .btchListArea.transition{transition: 0.3s all;}
-.index .btchListArea.open{}
+.index .btchListArea{background-color: rgb(255, 255, 255);border-top-right-radius: 8px;border-top-left-radius: 8px;height: 100%;position: absolute;top: 40px;width: 100%;z-index: 1;display: flex;flex-direction: column;touch-action: pan-y;box-shadow: rgba(0, 0, 0, 0.3) 0px -2px 16px;transform: translateY(calc(100% - 196px));transition: 0.3s all;}
+.index .btchListArea.open{transform: translateY(0px);}
 .index .btchListArea .btchListHeader{height: 40px;width: 100%;position: relative;display: flex;align-items: center;justify-content: center;}
 .index .btchListArea .btchListHeader span{width: 18px;height: 4px;border-radius: 99px;background-color: rgb(221, 221, 221);transform: translateX(2px) rotate(0deg);display: block;}
 .index .btchListArea .btchListHeader span:first-child{transform: translateX(2px) rotate(0deg);}

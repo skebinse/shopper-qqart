@@ -1,11 +1,27 @@
 import {getConnectPool, result} from "../db";
-import {deleteCookie} from "cookies-next";
+import {deleteCookie, getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
+        const encShprId = getCookie('enc_sh', {req, res});
+
         try {
+
+            let query = `SELECT fnDecrypt(?, ?) AS SHPR_ID`;
+
+            const [shprIdRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+            const shprId = shprIdRow[0].SHPR_ID;
+            query = `
+                UPDATE T_SHPR_INFO
+                   SET SHPR_APP_PUSH_TKN = NULL
+                 WHERE SHPR_ID = ?
+                   AND SHPR_SCSS_YN = 'N'
+            `;
+
+            await conn.query(query, [shprId]);
+
             deleteCookie('enc_sh', {req, res});
             deleteCookie('tkn_sh', {req, res});
 

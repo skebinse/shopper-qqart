@@ -89,6 +89,12 @@ const cmm = {
 
                             _options.success(res.data);
                         }
+                    } else if(res.resultCode === '9000') {
+
+                        cmm.alert(res.resultMsg, () => {
+
+                            location.href = '/cmm/login';
+                        });
                     } else if(res.resultCode === '8000') {
 
                         cmm.alert(res.resultMsg, () => {

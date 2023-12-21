@@ -35,77 +35,27 @@ export default async function handler(req, res) {
                 await conn.query(query, [userAgent, protocol + '//' + host, ip, shprId, param.appYn]);
             }
 
-            // 정지 계정 확인
-            query = `
-                SELECT SHPR_ACT_SPNS_DT
-                  FROM T_SHPR_INFO
-                 WHERE SHPR_ID = ?
-            `;
+            // 미배치 리스트
+            query = `CALL spGetBtchNoList(?)`;
 
-            const [actSpnsRow] = await conn.query(query, [shprId]);
+            const [rows] = await conn.query(query, [shprId]);
+            const data = (!rows || rows.length === 0) ? [] : rows[0];
 
-            if (!!actSpnsRow[0] && !!actSpnsRow[0].SHPR_ACT_SPNS_DT) {
+            if(data.length > 0 && data[0].resultCode === '9000') {
 
-                res.status(200).json(result(null, '9999', '활동이 정지된 계정입니다.'));
+                res.status(200).json(result(null, '9000', data[0].resultMsg));
 
                 return;
-            }
+            } else if(data.length > 0 && data[0].resultCode === '가입승인실패') {
 
-            let row;
-
-            // 가입 승인 여부
-            query = `
-                SELECT COUNT(*) AS CNT
-                     , SHPR_ENT_REFU_RSN
-                  FROM T_SHPR_INFO
-                 WHERE SHPR_ID = ?
-                   AND SHPR_ENT_APV_DT IS NULL
-            `;
-
-            [row] = await conn.query(query, [shprId]);
-
-            if (row[0].CNT > 0) {
-
-                res.status(200).json(result({isEntApv: false, shprEntRefuRsn: row[0].SHPR_ENT_REFU_RSN}));
+                res.status(200).json(result({isEntApv: false, shprEntRefuRsn: data[0].SHPR_ENT_REFU_RSN}));
 
                 return;
-            }
-
-            // 금일 업무시작 여부
-            query = `
-                SELECT COUNT(*) AS CNT
-                  FROM T_SHPR_DUTJ_MAG
-                 WHERE SHPR_ID = ?
-                   AND SHPR_DUTJ_YMD = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y-%m-%d')
-                   AND SHPR_DUTJ_END_DT IS NULL
-            `;
-
-            [row] = await conn.query(query, [shprId]);
-
-            if (row[0].CNT === 0) {
+            } else if(data.length > 0 && data[0].resultCode === '업무미시작') {
 
                 res.status(200).json(result({isDutjStrt: false, isEntApv: true}));
 
                 return;
-            }
-
-            // 배치 취소 패널티 확인
-            query = `
-            SELECT IFNULL(TIMESTAMPDIFF(MINUTE, MAX(RGI_DT), NOW()), 60) AS MIN 
-              FROM T_BTCH_CAN_HITY
-             WHERE SHPR_ID = ?
-               AND BTCH_CAN_SANCT_YN = 'Y'
-            `;
-
-            [row] = await conn.query(query, [shprId]);
-            let rows = [];
-
-            if (row[0].MIN >= 60) {
-
-                // 미배치 리스트
-                query = `CALL spGetBtchNoList(?)`;
-
-                [rows] = await conn.query(query, [shprId]);
             }
 
             // 배치 리스트
@@ -216,9 +166,9 @@ export default async function handler(req, res) {
             res.status(200).json(result({
                 isEntApv: true,
                 isDutjStrt: true,
-                btchList: (!rows || rows.length === 0) ? [] : rows[0],
+                btchList: data.length > 0 && data[0].resultCode === '취소패널티' ? [] : data,
                 btchAcpList: rows2,
-                btchCanMin: row[0].MIN,
+                btchCanMin: data.length > 0 && data[0].resultCode === '취소패널티' ? data[0].MIN : 0,
             }));
         } catch (e) {
 

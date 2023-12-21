@@ -156,6 +156,7 @@ export default function DelySchd() {
                 />
             )}
             <ScheduleEditor
+                date={editingDate}
                 schedule={editingSchedule}
                 isVisible={isEditorVisible}
                 onSubmit={onSubmitSchedule}

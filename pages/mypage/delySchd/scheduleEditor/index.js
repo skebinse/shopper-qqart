@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "../../../../styles/scheduleEditor.module.css"
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { padStart, range } from "lodash";
 import TimeSlotList from "./timeSlotList";
 import cmm from "../../../../js/common";
@@ -19,7 +19,7 @@ const TIME_SLOT_COUNT = 14;
  * 일정 생성 및 수정 화면
  */
 export default function ScheduleEditor(props) {
-    const { schedule, isVisible, onSubmit, onClose } = props;
+    const { date, schedule, isVisible, onSubmit, onClose } = props;
 
     // Area: 지역 이름을 나타내는 문자열 (ex: '서초구 방배1동')
     const [areas, setAreas] = useState([]);
@@ -83,11 +83,19 @@ export default function ScheduleEditor(props) {
     return (
         <div className={`${styles.scheduleEditor} ${isVisible ? styles.active : ''}`}>
             <div className={styles.titleDiv}>
-                <h5>지역 및 시간 선택</h5>
-                <Image alt={'닫기'} src={'/assets/images/icon/iconClose.svg'} width={22} height={22} onClick={onClose} />
+                <h5>
+                    {(!!date ? (date.getDate() + '일(' + cmm.Cont.DAY_OF_WEEK[date.getDay()]?.charAt(0)) + ')' : '')} - 지역 및 시간 선택
+                </h5>
+                <Image alt={'닫기'} src={'/assets/images/icon/iconClose.svg'} width={22} height={22} onClick={onClose}/>
             </div>
-            <Select className={styles.select} value={areaOptions.filter(item => item.value === selectedArea)} options={areaOptions} placeholder='지역 선택' onChange={event => setSelectedArea(event.value)} />
-            <TimeSlotList slots={timeSlots} selectedSlots={selectedTimeSlots} onChangeSelection={setSelectedTimeSlots} />
+            <Select className={styles.select} value={areaOptions.filter(item => item.value === selectedArea)}
+                    options={areaOptions} placeholder='지역 선택' onChange={event => setSelectedArea(event.value)}/>
+            <p>
+                ※ 일정 등록은 퀵퀵카트와 쇼퍼의 업무 약속입니다.<br/>
+                * 보증금 발생 2만원<br/>
+                (포함: 풀타임 업무자 1일 건보장 20건, 시간제 업무자 건보장 없음)
+            </p>
+            <TimeSlotList slots={timeSlots} selectedSlots={selectedTimeSlots} onChangeSelection={setSelectedTimeSlots}/>
             <div className={styles.okButtonContainer}>
                 <div className={styles.okButton} onClick={onClickSubmit}>
                     <label className={styles.okButtonLabelText}>확인</label>

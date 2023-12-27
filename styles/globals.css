@@ -113,7 +113,8 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 .btch li p{color: #333333;font-size: 16px;padding-top: 5px;}
 .btch li p em{font-weight: 500;}
 .btch li button{background-color: #E4E4E4;color: rgba(51, 51, 51, 0.6);margin-top: 24px;}
-.btch li > button{border-radius: 8px;background-color: #FFFFFF;color:#333333;font-size: 14px;font-style: normal;font-weight: 700;line-height: 22px;border: 1px solid #E4E4E4;margin-top: 16px;}
+.btch li > .button{border-radius: 8px;background-color: #FFFFFF;color:#333333;font-size: 14px;font-style: normal;font-weight: 700;line-height: 22px;border: 1px solid #E4E4E4;margin-top: 16px;}
+.btch li > a.button{display: inline-block;text-align: center;}
 .btch li > input[type=file]{display: none;}
 .btch li > .divImgFile{display: grid;padding-top: 5px;grid-template-columns: 1fr 1fr 1fr;grid-column-gap: 10px;grid-row-gap: 10px;}
 .btch li > .divImgFile label{background-color: #F8F8F8;border-radius: 12px;display: flex;align-items: center;justify-content: center;height: 77px;}

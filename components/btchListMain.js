@@ -12,15 +12,8 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
     const [atchPrvImgList, setAtchPrvImgList] = useState([]);
     const [btchList, setBtchList] = useState([]);
     const inpFile = useRef([]);
+    const selectItem = useRef(null);
     const shopS3Upload = useShopS3Upload();
-
-    // useEffect(() => {
-    //
-    //     if(isIngBtch) {
-    //         setAtchImgList([...list.map(() => [])]);
-    //         setAtchPrvImgList([...list.map(() => [])]);
-    //     }
-    // }, [isIngBtch]);
 
     useEffect(() => {
 
@@ -77,10 +70,14 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
      * 영수증 이미지 변경
      * @param e
      */
-    const fileAtchChage = (e, idx) => {
+    const fileAtchChage = (e, item, idx) => {
 
         if(e.target.files.length > 0) {
 
+            selectItem.current = {
+                item,
+                idx
+            };
             let fileIdx = 0, uploadFile;
             cmm.loading(true);
             for(let i = 0; i < e.target.files.length; i++) {
@@ -101,6 +98,19 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
             }
         }
     };
+
+    useEffect(() => {
+
+        // 배달 시작일 경우
+        if(!!selectItem.current && selectItem.current.item.ODER_PGRS_STAT === '03') {
+
+            // 배치 버튼 클릭
+            btchBtnClickHandler(selectItem.current.item, selectItem.current.idx);
+        }
+
+        selectItem.current = null;
+
+    }, [atchImgList]);
 
     /**
      * 첨부 이미지 삭제
@@ -397,7 +407,7 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                             <button type={'button'} className={'button'}>상세보기</button>
                         }
                     </Link>
-                    <input type={'file'} ref={element => inpFile.current[idx] = element} id={'inpImgFile' + idx} onChange={e => fileAtchChage(e, idx)} multiple={true} accept={'image/*'} />
+                    <input type={'file'} ref={element => inpFile.current[idx] = element} id={'inpImgFile' + idx} onChange={e => fileAtchChage(e, item, idx)} multiple={true} accept={'image/*'} />
                     {(isIngBtch && !!atchPrvImgList[idx] && !!atchPrvImgList[idx].length > 0) &&
                         <div className={'divImgFile'}>
                             <label onClick={() => inpFile.current[idx].click()}>
@@ -413,13 +423,16 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                             ))}
                         </div>
                     }
+                    {(isIngBtch && item.ODER_PGRS_STAT !== '05' && item.ODER_KD === 'DELY') &&
+                        <Link href={href + '/' + item.ODER_USER_ID} className={'button'} >상세</Link>
+                    }
                     {item.ODER_PGRS_STAT === '02' &&
                         <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx)}>배치 수락</button>
                     }
-                    {(isIngBtch && item.ODER_PGRS_STAT === '03') &&
+                    {(isIngBtch && item.ODER_PGRS_STAT === '03' && item.ODER_KD === 'PIUP') &&
                         <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx)}>{!!atchPrvImgList[idx] && atchPrvImgList[idx].length > 0 ? '배달 시작' : '배달 시작(영수증 첨부)'}</button>
                     }
-                    {(isIngBtch && (item.ODER_PGRS_STAT === '04' || item.ODER_PGRS_STAT === '05')) &&
+                    {(isIngBtch && item.ODER_PGRS_STAT === '05') &&
                         <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx)}>{!!atchPrvImgList[idx] && atchPrvImgList[idx].length > 0 ? '배달 완료' : '배달 완료(사진 첨부)'}</button>
                     }
                 </li>

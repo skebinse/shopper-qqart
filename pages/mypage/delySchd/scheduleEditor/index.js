@@ -10,10 +10,10 @@ import Select from 'react-select'
 const AREA_CD_CODE = '68';
 
 // 시간 선택 옵션의 가장 이른 시각
-const START_TIME = 7;
+const START_TIME = 10;
 
 // 시간 선택 옵션의 개수
-const TIME_SLOT_COUNT = 14;
+const TIME_SLOT_COUNT = 12;
 
 /**
  * 일정 생성 및 수정 화면

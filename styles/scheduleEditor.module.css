@@ -20,7 +20,8 @@
     pointer-events: auto;
 }
 
-.comt{padding: 0px 16px 10px;color: #ff0000;letter-spacing: -0.5px;line-height: 25px;}
+.comt{padding: 10px 16px 0px;color: #ff0000;letter-spacing: -0.5px;line-height: 25px;}
+.comt p:first-child{padding-bottom: 10px;}
 
 .scheduleEditor .select {
     margin-bottom: 21px;

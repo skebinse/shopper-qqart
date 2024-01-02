@@ -146,11 +146,11 @@ export default function DelySchd() {
         <div>
             <HeadTitle title='일정 관리'/>
             <WeekDate onSelectDate={date => setSearchDate(date)} isNextWeek={true}/>
-            <p className={styles.comt}>
-                ※ 일정 등록은 퀵퀵카트와 쇼퍼의 업무 약속입니다.<br/>
-                * 보증금 발생 2만원<br/>
-                (포함: 풀타임 업무자 1일 건보장 20건, 시간제 업무자 건보장 없음)
-            </p>
+            <div className={styles.comt}>
+                <p>일정 등록은 퀵퀵카트와 쇼퍼의 업무 약속입니다.</p>
+                <p>* 노쇼 방지 보증금 2만원 (주급 정산시 원금 반환)</p>
+                <p>상담톡으로 일정등록완료 말씀 주시면 계좌번호 전달드리겠습니다.</p>
+            </div>
             {startDate && (
                 <ScheduleList
                     startDate={startDate}

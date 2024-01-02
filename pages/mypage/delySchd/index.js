@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import BottomMenu from "../../../components/bottomMenu";
 import WeekDate from "../../../components/date/WeekDate";
 import HeadTitle from '../../../components/headTitle';
 import { createLocalDate } from '../../../util/dateUtil';
 import ScheduleList from './scheduleList';
 import ScheduleEditor from './scheduleEditor';
+import styles from "/styles/scheduleEditor.module.css"
 import { requestGetSchedule, requestGetSchedules, requestCreateSchedule, requestUpdateSchedule, requestDeleteSchedule } from '../../../util/delySchdApis';
 import cmm from '../../../js/common';
 import { remove } from 'lodash';
@@ -145,7 +145,12 @@ export default function DelySchd() {
     return (
         <div>
             <HeadTitle title='일정 관리'/>
-            <WeekDate onSelectDate={date => setSearchDate(date)} isNextWeek={true} />
+            <WeekDate onSelectDate={date => setSearchDate(date)} isNextWeek={true}/>
+            <p className={styles.comt}>
+                ※ 일정 등록은 퀵퀵카트와 쇼퍼의 업무 약속입니다.<br/>
+                * 보증금 발생 2만원<br/>
+                (포함: 풀타임 업무자 1일 건보장 20건, 시간제 업무자 건보장 없음)
+            </p>
             {startDate && (
                 <ScheduleList
                     startDate={startDate}

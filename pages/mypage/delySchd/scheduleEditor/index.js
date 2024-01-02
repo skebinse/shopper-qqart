@@ -90,11 +90,6 @@ export default function ScheduleEditor(props) {
             </div>
             <Select className={styles.select} value={areaOptions.filter(item => item.value === selectedArea)}
                     options={areaOptions} placeholder='지역 선택' onChange={event => setSelectedArea(event.value)}/>
-            <p>
-                ※ 일정 등록은 퀵퀵카트와 쇼퍼의 업무 약속입니다.<br/>
-                * 보증금 발생 2만원<br/>
-                (포함: 풀타임 업무자 1일 건보장 20건, 시간제 업무자 건보장 없음)
-            </p>
             <TimeSlotList slots={timeSlots} selectedSlots={selectedTimeSlots} onChangeSelection={setSelectedTimeSlots}/>
             <div className={styles.okButtonContainer}>
                 <div className={styles.okButton} onClick={onClickSubmit}>

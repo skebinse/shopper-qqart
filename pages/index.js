@@ -30,6 +30,8 @@ export default function Index(props) {
     const sheetScrollRef = useRef();
     const ulBtchAll = useRef();
     const ulBtchIng = useRef();
+    const mainMap = useRef(null);
+    const markerList = useRef([]);
     const isListDown = useRef(false);
     const btchAreaInfo = useRef({
         translateY: 1000
@@ -49,9 +51,20 @@ export default function Index(props) {
             level: 5 //지도의 레벨(확대, 축소 정도)
         };
 
-        const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+        if(!mainMap.current) {
 
-        kakao.maps.event.addListener(map, 'center_changed', function() {
+            mainMap.current = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+        } else {
+
+            mainMap.current.setBounds(new kakao.maps.LatLngBounds());
+            mainMap.current.setCenter(shprLatLng);
+        }
+
+        markerList.current.forEach(item => {
+            item.setMap(null);
+        });
+
+        kakao.maps.event.addListener(mainMap.current, 'center_changed', function() {
 
             document.querySelectorAll('.markerInfo').forEach(elet => {
 
@@ -69,7 +82,8 @@ export default function Index(props) {
             image: new kakao.maps.MarkerImage(imageSrc, imageSize),
         });
 
-        marker.setMap(map);
+        markerList.current.push(marker);
+        marker.setMap(mainMap.current);
 
         const bounds = new kakao.maps.LatLngBounds();
         bounds.extend(shprLatLng);
@@ -121,6 +135,7 @@ export default function Index(props) {
                     clickable: true
                 });
 
+                markerList.current.push(marker);
                 // 마커에 클릭이벤트를 등록합니다
                 kakao.maps.event.addListener(marker, 'click', function() {
                     mapMarkerClickHandler(item);
@@ -129,15 +144,16 @@ export default function Index(props) {
                 const tooltip = new kakao.maps.CustomOverlay({
                     position : markerPosition,
                     content : `<div class="markerInfo ${classNm}">${tooltipTxt}</div>`,
-                    map: map,
+                    map: mainMap.current,
                     removable: true,
                 });
 
-                marker.setMap(map);
+                markerList.current.push(tooltip);
+                marker.setMap(mainMap.current);
             });
-
-            map.setBounds(bounds);
         }
+
+        mainMap.current.setBounds(bounds);
     };
 
     /**
@@ -166,8 +182,11 @@ export default function Index(props) {
      */
     const shopperPosition = list => {
 
+        cmm.loading(true);
         // 현재 위치 가져오기
         cmm.util.getCurrentPosition(res => {
+
+            cmm.loading(false);
             createMap({
                 shprPsitLat: res.lot,
                 shprPsitLot: res.lat,
@@ -181,7 +200,6 @@ export default function Index(props) {
         setTimeout(() => {
 
             btchAreaInfo.current.translateY = 'transform: translateY(calc(100% - 196px));';
-
 
             window.addEventListener('resize', e => {
 
@@ -452,23 +470,6 @@ export default function Index(props) {
     }, [tabIdx]);
 
     /**
-     * sheet 위치 변경
-     * @param snapIdx
-     */
-    const sheetSnapHandler = snapIdx => {
-
-        setSnapIdx(snapIdx);
-
-        if(snapIdx === 1) {
-            setMapShopId(null);
-            setMapPsitInfo(null);
-            sheetScrollRef.current.scrollTop = 0;
-            ulBtchAll.current.scrollTop = 0;
-            ulBtchIng.current.scrollTop = 0;
-        }
-    }
-
-    /**
      * 동선 최적화 버튼
      */
     const dtcOptmHandler = () => {
@@ -643,7 +644,7 @@ export default function Index(props) {
     }
 
     return (
-        <div className={styles.index + ' ' + dnone}>
+        <div className={styles.index + ' ' + dnone} style={{transform: 'translate3d(0, 0, 0)'}}>
             {(isEntApv && isDutjStrt) &&
                 <>
                     <div className={styles.header}>
@@ -730,8 +731,18 @@ export default function Index(props) {
                         }
                         {!!entRefuRsn &&
                             <p>
-                                아래 거절사유입니다.<br/>
-                                “{entRefuRsn}”
+                                {entRefuRsn !== '보류' &&
+                                    <>
+                                        아래 거절사유입니다.<br/>
+                                        “{entRefuRsn}”
+                                    </>
+                                }
+                                {entRefuRsn === '보류' &&
+                                    <>
+                                        퀵퀵카트 쇼퍼로써 업무가 불가한 상태입니다.<br/>
+                                        업무 원하시면 퀵퀵카트 쇼퍼채널로 문의주세요.
+                                    </>
+                                }
                             </p>
                         }
                     </div>

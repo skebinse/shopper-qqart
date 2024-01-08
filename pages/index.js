@@ -215,6 +215,8 @@ export default function Index(props) {
 
                 if(!!isLocationCall.current && !!psPsitInfo.current.lot) {
 
+                    isLocationCall.current = false;
+
                     createMap({
                         shprPsitLat: psPsitInfo.current.lot,
                         shprPsitLot: psPsitInfo.current.lat,
@@ -222,7 +224,6 @@ export default function Index(props) {
                     });
 
                     cmm.loading(false);
-                    isLocationCall.current = false;
                 }
             }, 1000);
         }

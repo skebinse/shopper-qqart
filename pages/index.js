@@ -33,6 +33,8 @@ export default function Index(props) {
     const mainMap = useRef(null);
     const markerList = useRef([]);
     const isListDown = useRef(false);
+    const isLocationCall = useRef(false);
+    const psPsitInfo = useRef({});
     const btchAreaInfo = useRef({
         translateY: 1000
     });
@@ -182,17 +184,48 @@ export default function Index(props) {
      */
     const shopperPosition = list => {
 
-        cmm.loading(true);
-        // 현재 위치 가져오기
-        cmm.util.getCurrentPosition(res => {
+        // 위치 정보 호출 여부
+        if(!isLocationCall.current) {
 
-            cmm.loading(false);
-            createMap({
-                shprPsitLat: res.lot,
-                shprPsitLot: res.lat,
-                list,
+            // 현재 위치 가져오기
+            cmm.util.getCurrentPosition(res => {
+
+                psPsitInfo.current = res;
+
+                // 위치 여부 호출 중일 경우
+                if(isLocationCall.current) {
+
+                    createMap({
+                        shprPsitLat: res.lot,
+                        shprPsitLot: res.lat,
+                        list,
+                    });
+
+                    cmm.loading(false);
+                }
+
+                isLocationCall.current = false;
             });
-        });
+
+            isLocationCall.current = true;
+            cmm.loading(true);
+
+            // 1초 후에도 위치 정보를 못가져오면 그냥 진행
+            setTimeout(() => {
+
+                if(!!isLocationCall.current && !!psPsitInfo.current.lot) {
+
+                    createMap({
+                        shprPsitLat: psPsitInfo.current.lot,
+                        shprPsitLot: psPsitInfo.current.lat,
+                        list,
+                    });
+
+                    cmm.loading(false);
+                    isLocationCall.current = false;
+                }
+            }, 1000);
+        }
     };
 
     useEffect(() => {

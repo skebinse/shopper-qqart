@@ -313,8 +313,10 @@ export default function Index(props) {
         document.head.appendChild(script);
 
         script.onload = () => {
+            console.log('script load');
             kakao.maps.load(() => {
 
+            console.log('kakao.maps.load');
                 if(cmm.checkLogin()) {
 
                     // 배치 리스트 조회
@@ -330,17 +332,6 @@ export default function Index(props) {
             });
         };
     }, []);
-
-    const appTest = () => {
-
-        if(process.env.NEXT_PUBLIC_RUN_MODE === 'dev') {
-
-            if(cmm.isApp()) {
-
-                webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "getlocation","callback": "window.getPosition"}));
-            }
-        }
-    };
 
     /**
      * 업무시작 호출
@@ -610,16 +601,17 @@ export default function Index(props) {
 
     return (
         <div className={styles.index + ' ' + dnone} style={{transform: 'translate3d(0, 0, 0)'}}>
-            {(isEntApv && isDutjStrt) &&
+            {!!isEntApv &&
                 <>
                     <div className={styles.header}>
                         <div>
-                            <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={113.6} height={24.5} onClick={appTest} />
+                            <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={113.6} height={24.5}/>
                         </div>
                         <button type={'button'} onClick={dutjEndHanler}>업무 종료</button>
                     </div>
                     <div id="kakaoMap" style={{height: 'calc(100% - 210px)'}}></div>
-                    <div className={'btchListArea ' + styles.btchListArea} onTouchStart={touchStartHandler} onTouchEnd={touchEndHandler}>
+                    <div className={'btchListArea ' + styles.btchListArea} onTouchStart={touchStartHandler}
+                         onTouchEnd={touchEndHandler}>
                         <div className={styles.btchListHeader}>
                             <span></span>
                             <span></span>
@@ -628,41 +620,68 @@ export default function Index(props) {
                             {!mapShopId && !mapPsitInfo &&
                                 <div className={'tabArea'}>
                                     <div>
-                                        <button className={'button ' + (tabIdx === 0 ? 'on' : '')} onClick={() => tabClickHandler(0)}>모든 배치 {btchInfo.btchList.length}</button>
-                                        <button className={'button ' + (tabIdx === 0 ? '' : 'on')} onClick={() => tabClickHandler(1)}>진행중 배치 {btchInfo.btchAcpList.length}</button>
+                                        <button className={'button ' + (tabIdx === 0 ? 'on' : '')}
+                                                onClick={() => tabClickHandler(0)}>모든
+                                            배치 {btchInfo.btchList.length}</button>
+                                        <button className={'button ' + (tabIdx === 0 ? '' : 'on')}
+                                                onClick={() => tabClickHandler(1)}>진행중
+                                            배치 {btchInfo.btchAcpList.length}</button>
                                     </div>
                                 </div>
                             }
-                            <div className={'btchArea' + ' ' +  (tabIdx === 0 ? '' : 'ing') + ' '}>
-                                <BtchList ulRef={ulBtchAll} list={btchInfo.btchList} href={'/btch'} filter={tabIdx === 0 ? {mapShopId, mapPsitInfo} : null} isInit={isInit} reflashHandler={pgrsRslt => callBtchList(false, pgrsRslt)} />
-                                <BtchList ulRef={ulBtchIng} list={btchInfo.btchAcpList} href={'/btch/ing'} filter={tabIdx === 1 ? {mapShopId, mapPsitInfo} : null} isInit={isInit} noDataTxt={'현재 수락한 배치가 없습니다.'} isIngBtch={true} reflashHandler={pgrsRslt => callBtchList(false, pgrsRslt)} />
+                            <div className={'btchArea' + ' ' + (tabIdx === 0 ? '' : 'ing') + ' '}>
+                                <BtchList ulRef={ulBtchAll} list={btchInfo.btchList} href={'/btch'}
+                                          filter={tabIdx === 0 ? {mapShopId, mapPsitInfo} : null} isInit={isInit}
+                                          reflashHandler={pgrsRslt => callBtchList(false, pgrsRslt)}/>
+                                <BtchList ulRef={ulBtchIng} list={btchInfo.btchAcpList} href={'/btch/ing'}
+                                          filter={tabIdx === 1 ? {mapShopId, mapPsitInfo} : null} isInit={isInit}
+                                          noDataTxt={'현재 수락한 배치가 없습니다.'} isIngBtch={true}
+                                          reflashHandler={pgrsRslt => callBtchList(false, pgrsRslt)}/>
                             </div>
                         </div>
                     </div>
                     <div className={styles.refresh} onClick={() => callBtchList()}>
-                        <Image src={'/assets/images/icon/iconRefreshBlack.svg'} alt={'새로고침'} width={18.5} height={18.5} />
+                        <Image src={'/assets/images/icon/iconRefreshBlack.svg'} alt={'새로고침'} width={18.5}
+                               height={18.5}/>
                         <span>새로고침</span>
                     </div>
+                    {(!!loginInfo && !isDutjStrt) &&
+                        <div className={styles.dutjStrtDiv}>
+                            <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={80} height={17}/>
+                            <div>
+                                <img alt={'프로필사진'} src={loginInfo.SHPR_PRFL_FILE}/>
+                                <p>
+                                    {loginInfo.SHPR_NCNM}님
+                                    <b>오늘 하루도 힘내세요!</b>
+                                </p>
+                                <button type={'button'} onClick={dutjStrtHandler}>업무 시작할께요!</button>
+                                <span>
+                                <Image alt={'경고'} src={'/assets/images/icon/iconWarningType02.svg'} width={12} height={12}/>
+                                업무 종료시 <em>업무종료 버튼</em>을 클릭해 주세요.
+                            </span>
+                            </div>
+                        </div>
+                    }
                 </>
             }
-            <BottomMenu idx={0} />
-            {(!!loginInfo && !isDutjStrt && isEntApv) &&
-                <div className={styles.dutjStrtDiv}>
-                    <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={80} height={17} />
-                    <div>
-                        <img alt={'프로필사진'} src={loginInfo.SHPR_PRFL_FILE} />
-                        <p>
-                            {loginInfo.SHPR_NCNM}님
-                            <b>오늘 하루도 힘내세요!</b>
-                        </p>
-                        <button type={'button'} onClick={dutjStrtHandler}>업무 시작할께요!</button>
-                        <span>
-                            <Image alt={'경고'} src={'/assets/images/icon/iconWarningType02.svg'} width={12} height={12} />
-                            업무 종료시 <em>업무종료 버튼</em>을 클릭해 주세요.
-                        </span>
-                    </div>
-                </div>
-            }
+            <BottomMenu idx={0}/>
+            {/*{(!!loginInfo && !isDutjStrt && isEntApv) &&*/}
+            {/*    <div className={styles.dutjStrtDiv}>*/}
+            {/*        <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={80} height={17}/>*/}
+            {/*        <div>*/}
+            {/*            <img alt={'프로필사진'} src={loginInfo.SHPR_PRFL_FILE}/>*/}
+            {/*            <p>*/}
+            {/*                {loginInfo.SHPR_NCNM}님*/}
+            {/*                <b>오늘 하루도 힘내세요!</b>*/}
+            {/*            </p>*/}
+            {/*            <button type={'button'} onClick={dutjStrtHandler}>업무 시작할께요!</button>*/}
+            {/*            <span>*/}
+            {/*                <Image alt={'경고'} src={'/assets/images/icon/iconWarningType02.svg'} width={12} height={12}/>*/}
+            {/*                업무 종료시 <em>업무종료 버튼</em>을 클릭해 주세요.*/}
+            {/*            </span>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*}*/}
             {!isEntApv &&
                 <div className={styles.entApvDiv}>
                     <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={80} height={17} />

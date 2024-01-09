@@ -836,9 +836,11 @@ const cmm = {
          * 현재 위치(좌표)
          * @param data
          */
-        getCurrentPosition: callback => {
+        getCurrentPosition: (callback, timer) => {
+
             if(cmm.isApp()) {
 
+                let isCallback = false;
                 window.getCurrntPsPsit = (lat, lot) => {
 
                     cmm.ajax({
@@ -853,8 +855,31 @@ const cmm = {
                         error: res => {}
                     });
 
-                    callback({lat, lot});
+                    if(!isCallback) {
+
+                        isCallback = true;
+                        callback({lat, lot});
+                    }
                 };
+
+                if(!!timer) {
+
+                    setTimeout(() => {
+
+                        cmm.ajax({
+                            url: '/api/shpr/getPsPsit',
+                            isLoaing: false,
+                            success: res => {
+
+                                if(res.length > 0 && !isCallback) {
+                                    isCallback = true;
+                                    callback({lat: res[0].SHPR_PSIT_LOT, lot: res[0].SHPR_PSIT_LAT});
+                                }
+                            },
+                            error: res => {}
+                        });
+                    }, timer);
+                }
 
                 webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({
                     "action": "getlocation",

@@ -11,7 +11,7 @@ import {useGlobal} from "../context/globalContext";
 export default function Index(props) {
 
     const router = useRouter();
-    const [addr, setAddr] = useState('');
+    const {isPushOpen, setIsPushOpen} = useGlobal();
     const [isInit, setIsInit] = useState(true);
     const [tabIdx, setTabIdx] = useState(0);
     const [loginInfo, setLoginInfo] = useState(null);
@@ -19,22 +19,16 @@ export default function Index(props) {
     const [isDutjStrt, setIsDutjStrt] = useState(false);
     const [isEntApv, setIsEntApv] = useState(true);
     const [entRefuRsn, setEntRefuRsn] = useState('');
-    const [isSheetOpen, setSheetOpen] = useState(false);
     const [isDtcOptmBtn, setIsDtcOptmBtn] = useState(false);
-    const [snapIdx, setSnapIdx] = useState(1);
     const [mapShopId, setMapShopId] = useState(null);
     const [mapPsitInfo, setMapPsitInfo] = useState(null);
-    const {pushCnt} = useGlobal();
     const [btchInfo, setBtchInfo] = useState({btchList: [], btchAcpList: []});
-    const sheetRef = useRef();
-    const sheetScrollRef = useRef();
     const ulBtchAll = useRef();
     const ulBtchIng = useRef();
     const mainMap = useRef(null);
     const markerList = useRef([]);
     const isListDown = useRef(false);
     const isLocationCall = useRef(false);
-    const psPsitInfo = useRef({});
     const btchAreaInfo = useRef({
         translateY: 1000
     });
@@ -187,44 +181,18 @@ export default function Index(props) {
         // 위치 정보 호출 여부
         if(!isLocationCall.current) {
 
+            cmm.loading(true);
+
             // 현재 위치 가져오기
             cmm.util.getCurrentPosition(res => {
 
-                psPsitInfo.current = res;
+                createMap({
+                    shprPsitLat: res.lot,
+                    shprPsitLot: res.lat,
+                    list,
+                });
 
-                // 위치 여부 호출 중일 경우
-                if(isLocationCall.current) {
-
-                    createMap({
-                        shprPsitLat: res.lot,
-                        shprPsitLot: res.lat,
-                        list,
-                    });
-
-                    cmm.loading(false);
-                }
-
-                isLocationCall.current = false;
-            });
-
-            isLocationCall.current = true;
-            cmm.loading(true);
-
-            // 1초 후에도 위치 정보를 못가져오면 그냥 진행
-            setTimeout(() => {
-
-                if(!!isLocationCall.current && !!psPsitInfo.current.lot) {
-
-                    isLocationCall.current = false;
-
-                    createMap({
-                        shprPsitLat: psPsitInfo.current.lot,
-                        shprPsitLot: psPsitInfo.current.lat,
-                        list,
-                    });
-
-                    cmm.loading(false);
-                }
+                cmm.loading(false);
             }, 1000);
         }
     };
@@ -256,11 +224,9 @@ export default function Index(props) {
      */
     const callBtchList = (isInit, pgrsRslt) => {
 
-        if(!isInit) {
+        cmm.loading(true);
 
-            cmm.loading(true);
-            let isAjaxResult = false;
-            let isTimeResult = false;
+        if(!isInit) {
 
             cmm.ajax({
                 url: '/api/btch/btchList',
@@ -274,17 +240,12 @@ export default function Index(props) {
                         setBtchInfo({btchList: res.btchList, btchAcpList: res.btchAcpList});
                     } else {
 
+                        cmm.loading(false);
                         setLoginInfo(cmm.getLoginInfo());
                     }
 
                     setDnone('');
                     setIsDutjStrt(res.isDutjStrt);
-
-                    isAjaxResult = true;
-                    if(isTimeResult) {
-
-                        cmm.loading(false);
-                    }
 
                     if(!!pgrsRslt) {
 
@@ -294,15 +255,6 @@ export default function Index(props) {
                 }
             });
 
-            setTimeout(() => {
-
-                isTimeResult = true;
-                if(isAjaxResult) {
-
-                    cmm.loading(false);
-                }
-
-            }, 500);
         } else {
 
             let dateInfo = cmm.util.getLs('dateInfo');
@@ -310,6 +262,7 @@ export default function Index(props) {
 
             cmm.ajax({
                 url: '/api/btch/btchList',
+                isLoaing: false,
                 data:{
                     isLog: dateInfo.log !== cmm.date.getToday(''),
                     appYn: cmm.isApp() ? 'Y' : 'N'
@@ -335,7 +288,7 @@ export default function Index(props) {
                         } else if(res.btchAcpList.length > 0) {
 
                             setTabIdx(1);
-                            currentList = res.btchAcpList;
+                            cmm.loading(false);
                         } else {
 
                             // 쇼퍼 위치 확인 후 지도 생성
@@ -367,12 +320,6 @@ export default function Index(props) {
             kakao.maps.load(() => {
 
                 if(cmm.checkLogin()) {
-
-                    let shprAddr = cmm.getLoginInfo('SHPR_ADDR');
-                    shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
-                    shprAddr = shprAddr.substring(shprAddr.indexOf(' ') + 1);
-
-                    setAddr(shprAddr);
 
                     // 배치 리스트 조회
                     callBtchList(true);
@@ -478,16 +425,6 @@ export default function Index(props) {
         // 업무시작 호출
         callDutjStrt();
     };
-
-    /**
-     * sheet open/close
-     */
-    useEffect(() => {
-
-        if(!isSheetOpen) {
-            setSheetOpen(true);
-        }
-    }, [isSheetOpen]);
 
     /**
      * 모든배치/진행중 배치 탭 변경
@@ -600,18 +537,16 @@ export default function Index(props) {
      */
     useEffect(() => {
 
-        if(pushCnt > 0) {
+        if(isPushOpen > 0) {
 
-            if(snapIdx !== 0) {
-
-                sheetRef.current.snapTo(0);
-            }
+            setIsPushOpen(false);
             setTabIdx(0);
-
+            // btchArea Y 위치 변경
+            btchAreaYPsit('up');
             // 배치 리스트 조회
             callBtchList();
         }
-    }, [pushCnt]);
+    }, [isPushOpen]);
 
     /**
      * 터치 시작

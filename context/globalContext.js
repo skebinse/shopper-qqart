@@ -8,7 +8,7 @@ export function GlobalProvider({children}) {
 
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-    const [pushCnt, setPushCnt] = useState(0);
+    const [isPushOpen, setIsPushOpen] = useState(false);
     const [sAlert, setSAlert] = useState({
         show: false,
         title: '알림',
@@ -96,9 +96,9 @@ export function GlobalProvider({children}) {
      */
     const pushAlertClickHandler = e => {
 
-        if(location.href.indexOf('/main') > -1) {
+        if(location.href.indexOf('/') > -1) {
 
-            setPushCnt(prevState => prevState + 1);
+            setIsPushOpen(true);
         } else {
 
             router.push(e.target.getAttribute('data-url'));
@@ -107,7 +107,7 @@ export function GlobalProvider({children}) {
     };
 
     return (
-        <GlobalContext.Provider value={{sAlert, setSAlert, sConfirm, setSConfirm, isLoading, setIsLoading, pushCnt}}>
+        <GlobalContext.Provider value={{sAlert, setSAlert, sConfirm, setSConfirm, isLoading, setIsLoading, isPushOpen, setIsPushOpen}}>
             <div className={'webPushDiv'}>
                 <div>
                     <h5 id={'webPushTit'} data-id={1}></h5>

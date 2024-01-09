@@ -39,10 +39,10 @@ export default async function handler(req, res) {
                 // 쿠키 등록
                 if(item.IS_LOGIN === 1) {
                     setCookie('enc_sh', item.ENC_SHPR_ID, {
-                        req, res, maxAge: 2592000, sameSite: 'strict', httpOnly: true,  secure: true
+                        req, res, maxAge: 2592000, sameSite: 'strict', httpOnly: process.env.NEXT_PUBLIC_RUN_MODE !== 'local',  secure: process.env.NEXT_PUBLIC_RUN_MODE !== 'local'
                     });
                     setCookie('tkn_sh', item.SHPR_DPLC_LOGIN_TKN, {
-                        req, res, maxAge: 2592000, sameSite: 'strict', httpOnly: true,  secure: true
+                        req, res, maxAge: 2592000, sameSite: 'strict', httpOnly: process.env.NEXT_PUBLIC_RUN_MODE !== 'local',  secure: process.env.NEXT_PUBLIC_RUN_MODE !== 'local'
                     });
 
                     res.status(200).json(result({

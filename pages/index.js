@@ -28,7 +28,6 @@ export default function Index(props) {
     const mainMap = useRef(null);
     const markerList = useRef([]);
     const isListDown = useRef(false);
-    const isLocationCall = useRef(false);
     const btchAreaInfo = useRef({
         translateY: 1000
     });
@@ -178,23 +177,19 @@ export default function Index(props) {
      */
     const shopperPosition = list => {
 
-        // 위치 정보 호출 여부
-        if(!isLocationCall.current) {
+        cmm.loading(true);
 
-            cmm.loading(true);
+        // 현재 위치 가져오기
+        cmm.util.getCurrentPosition(res => {
 
-            // 현재 위치 가져오기
-            cmm.util.getCurrentPosition(res => {
+            createMap({
+                shprPsitLat: res.lot,
+                shprPsitLot: res.lat,
+                list,
+            });
 
-                createMap({
-                    shprPsitLat: res.lot,
-                    shprPsitLot: res.lat,
-                    list,
-                });
-
-                cmm.loading(false);
-            }, 1000);
-        }
+            cmm.loading(false);
+        }, 1000);
     };
 
     useEffect(() => {
@@ -297,6 +292,7 @@ export default function Index(props) {
 
                     } else {
 
+                        cmm.loading(false);
                         setLoginInfo(cmm.getLoginInfo());
                     }
 

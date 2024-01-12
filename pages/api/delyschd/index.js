@@ -63,6 +63,7 @@ async function getSchedules(conn, req, res) {
                     SHPR_SCHD_YMD,
                     SHPR_SCHD_AREA,
                     SHPR_SCHD_HH,
+                    SHPR_SCHD_APV_STAT,
                     DATE_FORMAT(RGI_DT, '%Y-%m-%d') AS RGI_DT,
                     RGI_ID,
                     DATE_FORMAT(MDFC_DT, '%Y-%m-%d') AS MDFC_DT,

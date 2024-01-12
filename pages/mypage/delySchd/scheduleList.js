@@ -74,28 +74,33 @@ function renderList(items) {
         const scheduleStyleKeySuffix = disabled ? 'disabled' : schedule === undefined ? 'unregistered' : '';
 
         // 오늘 날짜 이후이고 등록한 일정이 있으면 삭제 버튼 표시
-        const isDeleteButtonVisible = !disabled && schedule !== undefined;
- 
+        const isDeleteButtonVisible = !disabled && schedule !== undefined && schedule.SHPR_SCHD_APV_STAT !== '03';
+
         return (
-            <li key={dateString} onClick={disabled ? undefined : onClickItem}>
+            <li key={dateString} onClick={disabled || (!!schedule && schedule.SHPR_SCHD_APV_STAT === '03') ? undefined : onClickItem}>
                 <div className={styles.dayContainer}>
                     <label className={`${styles.dateText} ${styles[dateStyleKeySuffix]}`}>{dateString}</label>
                     <label className={`${styles.dayText} ${styles[dateStyleKeySuffix]}`}>{dayString}</label>
                 </div>
                 <div className={`${styles.scheduleContainerTail} ${styles[scheduleStyleKeySuffix]}`} />
                 <div className={`${styles.scheduleContainer} ${styles[scheduleStyleKeySuffix]}`}>
-                    {schedule && !disabled && (
+                    {(!!schedule && schedule.SHPR_SCHD_APV_STAT === '03') &&
                         <Image alt={'일정'} src={'/assets/images/icon/iconCheck.svg'} width={12} height={12} style={{marginRight: 8}}/>
-                    )}
+                    }
                     <label className={`${styles.scheduleText} ${styles[scheduleStyleKeySuffix]}`}>{scheduleString}</label>
+                    {(!!schedule && schedule.SHPR_SCHD_APV_STAT !== '03') &&
+                        <span className={styles.wtng}>
+                            대기
+                        </span>
+                    }
                 </div>
                 {isDeleteButtonVisible && (
                     <Image
-                        className={styles.deleteButton} 
-                        src={'/assets/images/btn/btnDel.svg'} 
-                        alt={'삭제'} 
-                        width={20} 
-                        height={20} 
+                        className={styles.deleteButton}
+                        src={'/assets/images/btn/btnDel.svg'}
+                        alt={'삭제'}
+                        width={20}
+                        height={20}
                         onClick={onClickDelete}
                     />
                 )}

@@ -85,8 +85,22 @@
     border-radius: 8px;
     background-color: #FFFFFF;
     box-shadow: 3px 4px 12px 0px #00000014;
+    position: relative;
+    overflow: hidden;
 }
 
+.scheduleList ul li .scheduleContainer .wtng {
+    background-color: #6c757d;
+    color: #FFFFFF;
+    font-size: 13px;
+    padding: 5px 40px;
+    text-align: center;
+    position: absolute;
+    top: 10px;
+    left: -30px;
+    transform: rotateZ(315deg);
+    box-shadow: #00000033 0px 0px 16px;
+}
 .scheduleList ul li .scheduleContainer.disabled {
     background-color: #F8F8F8;
 }

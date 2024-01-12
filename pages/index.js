@@ -313,10 +313,8 @@ export default function Index(props) {
         document.head.appendChild(script);
 
         script.onload = () => {
-            console.log('script load');
             kakao.maps.load(() => {
 
-            console.log('kakao.maps.load');
                 if(cmm.checkLogin()) {
 
                     // 배치 리스트 조회

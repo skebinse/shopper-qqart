@@ -904,8 +904,20 @@ const cmm = {
 
                 navigator.geolocation.getCurrentPosition(res => {
 
+                    cmm.ajax({
+                        url: '/api/cmm/insPsPsit',
+                        isLoaing: false,
+                        data: {
+                            lat: res.coords.latitude,
+                            lot: res.coords.longitude,
+                            shprAppYn: 'N',
+                        },
+                        success: res => {},
+                        error: res => {}
+                    });
+
                     callback({lat: res.coords.latitude, lot: res.coords.longitude});
-                }, res => cmm.alert('위치 권한이 없습니다.'))
+                }, res => cmm.alert('위치 권한이 없습니다.\n'))
             }
         },
     },

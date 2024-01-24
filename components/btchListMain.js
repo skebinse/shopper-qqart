@@ -344,13 +344,13 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                             </div>
                             <div>
                                 <Image alt={'상품 이미지'} src={`/assets/images/icon/iconProduct${item.BTCH_ODER_PGRS_MI >= 90 ? 'W' : ''}.svg`} width={17} height={18.4} />
-                                {(item.ODER_KD === 'PIUP' && !!item.ODER_DELY_ARTG && item.ODER_DELY_ARTG.indexOf('김장') > -1) &&
-                                    <span className={'type01'}>픽업(김장)</span>
-                                }
-
-                                {(!item.ODER_DELY_ARTG || item.ODER_DELY_ARTG.indexOf('김장') === -1) &&
-                                    <span>{item.ODER_KD === 'PIUP' ? '픽업' : item.PROD_CNT + '개 상품'}</span>
-                                }
+                                {/*{(item.ODER_KD === 'PIUP' && !!item.ODER_DELY_ARTG && item.ODER_DELY_ARTG.indexOf('김장') > -1) &&*/}
+                                {/*    <span className={'type01'}>픽업(김장)</span>*/}
+                                {/*}*/}
+                                {/*{(item.ODER_KD === 'DELY' || !item.ODER_DELY_ARTG || item.ODER_DELY_ARTG.indexOf('김장') === -1) &&*/}
+                                {/*    <span>{item.ODER_KD === 'PIUP' ? '픽업' : item.PROD_CNT + '개 상품'}</span>*/}
+                                {/*}*/}
+                                <span>{item.ODER_KD === 'PIUP' ? '픽업' : item.PROD_CNT + '개 상품'}</span>
                             </div>
                         </div>
                         {item.ODER_DELY_SLCT_VAL !== 'imm' &&

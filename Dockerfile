@@ -1,5 +1,5 @@
 # Stage 1: install dependencies
-FROM public.ecr.aws/node:18-alpine3.17 AS base
+FROM public.ecr.aws/docker/library/node:18.19.0-alpine3.17 AS base
 
 RUN apk update && apk add bash
 RUN apk add g++ make python3 curl
@@ -16,7 +16,7 @@ COPY package*.json .
 RUN npm install --production
 
 # Stage 2: build
-FROM public.ecr.aws/node:18-alpine3.17 AS builder
+FROM public.ecr.aws/docker/library/node:18.19.0-alpine3.17 AS builder
 
 WORKDIR /app
 

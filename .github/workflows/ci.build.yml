@@ -3,7 +3,7 @@ name: Build Docker Image
 on:
   workflow_dispatch:
   push:
-    branches: [ develop ]
+    branches: [ real ]
 
 env:
   ECS_SERVICE: qqcart-shopper
@@ -12,11 +12,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-#    strategy:
-#      matrix:
-#        architecture:
-#          - arm64
 
     steps:
       - uses: actions/checkout@v4

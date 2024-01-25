@@ -42,4 +42,4 @@ COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/package.json ./
 
 EXPOSE 3000
-CMD ["yarn", "start:dev"]
+CMD ["yarn", "start:prod"]

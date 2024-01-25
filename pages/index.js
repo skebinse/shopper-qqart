@@ -5,7 +5,6 @@ import {useRouter} from "next/router";
 import cmm from "../js/common";
 import BtchList from "../components/btchListMain";
 import BottomMenu from "../components/bottomMenu";
-import Sheet from 'react-modal-sheet';
 import {useGlobal} from "../context/globalContext";
 
 export default function Index(props) {

@@ -68,6 +68,12 @@ export default function CompDtpt({id, onClose}) {
                         <label>배달완료시간</label>
                         <span>{dtptInfo.ODER_DELY_CPL_DT}</span>
                     </li>
+                    {!!dtptInfo.SHPR_POIN_RRV_RSN &&
+                        <li>
+                            <label>포인트 내용</label>
+                            <span>{dtptInfo.SHPR_POIN_RRV_RSN}</span>
+                        </li>
+                    }
                 </ul>
             </div>
             <div className={styles.divArea}>

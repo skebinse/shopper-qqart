@@ -72,6 +72,7 @@ export default async function handler(req, res) {
                        ELSE DATE_FORMAT(DATE_ADD(EE.ODER_REQ_YMD, INTERVAL 9 HOUR), '%y년 %m월 %d일 %H:%i') END AS ODER_REQ_YMD
                      , DATE_FORMAT(DATE_ADD(EE.ODER_DELY_CPL_DT, INTERVAL 9 HOUR), '%y년 %m월 %d일 %H:%i') AS ODER_DELY_CPL_DT
                      , FF.ODER_DELY_AMT
+                     , IFNULL(GG.SHPR_POIN_RRV_RSN, IFNULL(HH.ADIX_ADJ_NM, '')) AS SHPR_POIN_RRV_RSN
                 FROM T_ODER_USER_INFO EE
                      INNER JOIN T_SHOP_MAG BB
                   ON BB.SHOP_ID = EE.SHOP_ID
@@ -86,6 +87,11 @@ export default async function handler(req, res) {
                   ON CC.PROD_ID = AA.PROD_ID
                      LEFT OUTER JOIN T_USER_INFO DD
                   ON DD.USER_ID = EE.USER_ID
+                     LEFT OUTER JOIN T_SHPR_POIN GG
+                  ON GG.SHPR_ID = EE.SHPR_ID
+                 AND GG.ODER_USER_ID = EE.ODER_USER_ID
+                     LEFT OUTER JOIN T_SHPR_ADIX_ADJ_MAG HH
+                  ON HH.ADIX_ADJ_ID = GG.ADIX_ADJ_ID
                WHERE EE.ODER_USER_ID = ?
                  AND EE.SHPR_ID = ?
             ORDER BY AA.SPBK_HNDC_PROD_NM

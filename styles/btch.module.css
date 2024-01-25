@@ -33,13 +33,13 @@
 .compDtptDiv .summDiv{padding: 16px 20px;border-bottom: solid 8px #F2F2F2;}
 .compDtptDiv h5{font-weight: 700;font-size: 14px;line-height: 17px;color: #333333;padding-bottom: 8px;}
 .compDtptDiv .summDiv p{position: relative;font-weight: 700;font-size: 24px;line-height: 29px;color: #333333;}
-.compDtptDiv .summDiv p em{font-size: 20px;}
+.compDtptDiv .summDiv p em{border-radius: 100px;background: #02B763;padding: 4px 8px;color: #FFF;font-size: 12px;font-weight: 700;line-height: 16px;position: relative;left: 8px;bottom: 3px;}
 .compDtptDiv .summDiv p span{border: 2px solid #FF7676;border-radius: 8px;padding: 3px 4px;font-weight: 700;font-size: 12px;line-height: 15px;color: #FF7676;position: absolute;right: 0;}
 .compDtptDiv .summDiv p span.adj{color: #02B763;border: 2px solid #02B763;}
 .compDtptDiv .divArea{padding: 0 20px;border-bottom: solid 8px #F2F2F2;}
 .compDtptDiv ul{padding-top: 32px;}
 .compDtptDiv ul li{font-size: 14px;line-height: 17px;color: #333333;display: flex;padding-bottom: 20px;}
-.compDtptDiv ul li label{flex: 1;}
+.compDtptDiv ul li label{flex: 1;min-width: 75px;}
 .compDtptDiv ul li span{max-width: 80%;text-align: right;}
 .compDtptDiv .uploadArea{padding: 32px 20px;}
 .compDtptDiv .uploadArea h5{padding-bottom: 20px;}

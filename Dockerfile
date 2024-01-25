@@ -3,7 +3,7 @@ FROM --platform=linux/amd64 node:18.16.0-alpine3.17 AS base
 
 RUN apk update && apk add bash
 RUN apk add g++ make python3 curl
-RUN npm install --arch=arm64 --platform=linux --libc=musl sharp
+RUN apk add --update --no-cache --repository https://dl-cdn.alpinelinux.org/alpine/v3.19/community --repository https://dl-cdn.alpinelinux.org/alpine/v3.19/main vips-dev
 
 ARG ENV="prod"
 ENV ENV=${ENV}

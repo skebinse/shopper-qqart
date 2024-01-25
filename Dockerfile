@@ -7,7 +7,7 @@ RUN npm install --arch=arm64 --platform=linuxmusl sharp
 
 ARG ENV="prod"
 ENV ENV=${ENV}
-ENV NODE_ENV=${ENV}
+ENV NODE_ENV=production
 ENV PYTHONPATH /usr/lib/python/site-packages
 
 WORKDIR /app
@@ -21,18 +21,16 @@ FROM --platform=linux/amd64 node:18.16.0-alpine3.17 AS builder
 WORKDIR /app
 
 COPY --from=base /app/node_modules ./node_modules
-COPY src ./src
-COPY public ./public
-COPY package.json next.config.js ./
+COPY . .
 
-RUN npm run build
+RUN yarn build
 
 # Stage 3: run
 FROM base as production
 
 ARG ENV="prod"
 ENV ENV=${ENV}
-ENV NODE_ENV=${ENV}
+ENV NODE_ENV=production
 ENV PYTHONPATH /usr/lib/python/site-packages
 
 WORKDIR /app

@@ -144,7 +144,7 @@ export default function Login(props) {
                     <div>
                         <span>상호: (주) 베리비지비</span>
                         <span>대표 : 김채영</span>
-                        <span>사업장주소: 서울특별시 송파구 송이로 242, 602호</span>
+                        {/*<span>사업장주소: 서울특별시 송파구 송이로 242, 602호</span>*/}
                         <span>사업자등록번호 : 664-88-02585</span>
                         <span>대표전화번호: 1533-9171</span>
                     </div>

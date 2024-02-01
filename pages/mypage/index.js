@@ -166,17 +166,22 @@ export default function MyPage() {
                     </Link>
                 }
             </div>
-            {/*<div className={styles.dutjEndDiv}>*/}
-            {/*    <button type="button" className={'button'} onClick={dutjEndHanler}>업무 종료</button>*/}
-            {/*</div>*/}
             <ul className={'ulType01'}>
                 {loginInfo?.SHPR_GRD_CD !== 'ETPS' &&
+                    <>
                     <li>
                         <Link href={'/mypage/delySchd'}>
                             <h5>일정관리</h5>
                             <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
                         </Link>
                     </li>
+                    <li>
+                        <Link href={'/mypage/poinHity'}>
+                            <h5>포인트 내역</h5>
+                            <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
+                        </Link>
+                    </li>
+                    </>
                 }
                 <li>
                     <div>

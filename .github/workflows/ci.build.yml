@@ -7,61 +7,17 @@ on:
 
 env:
   ECS_SERVICE: qqcart-shopper
+  SERVICE_ENV: prd
   AWS_REGION : ap-northeast-2
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18.17.0
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v3
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Build
-        working-directory: ${{ env.working-directory }}
-        run: |
-          yarn install --network-timeout 100000
-          yarn build
-
-  publish:
+  deploy:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     outputs:
       server-gitlog: ${{ steps.commit-msg.outputs.log }}
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Set build env for prd
-        if: ${{ github.ref == 'refs/heads/real' }}
-        run: |
-          echo "BUILD_ENV=prd" >> $GITHUB_ENV
-          echo "ECS_TASK_DEFINITION=qqcart-shopper-prd" >> $GITHUB_ENV
-          echo "ECS_CLUSTER=qqcart-prd" >> $GITHUB_ENV
-
-      - name: Set build env for ft/heads/develop
-        if: ${{ github.ref == 'refs/heads/develop' }}
-        run: |
-          echo "BUILD_ENV=dev" >> $GITHUB_ENV
-          echo "ECS_TASK_DEFINITION=qqcart-shopper-dev" >> $GITHUB_ENV
-          echo "ECS_CLUSTER=qqcart-dev" >> $GITHUB_ENV
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -69,55 +25,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Docker Setup QEMU
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: 'arm64,arm'
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECS_SERVICE }}
-          tags: ${{ env.BUILD_ENV }}
-
-      - name: Build/Push Docker image to AWS ECR
-        id: build-and-push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          platforms: linux/arm64,linux/arm64
-          tags: ${{ steps.meta.outputs.tags }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Download Amazon ECS task definition
+      - name: Deploy
         run: |
-          aws ecs describe-task-definition --task-definition ${{ env.ECS_TASK_DEFINITION }} --query taskDefinition > ${{ env.ECS_TASK_DEFINITION }}.json
-
-      - name: Modify Amazon ECS task definition
-        id: ecs-task-definition
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}.json
-          container-name: ${{ env.ECS_TASK_DEFINITION }}
-          image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECS_SERVICE }}:${{ env.BUILD_ENV }}
-
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.ecs-task-definition.outputs.task-definition }}
-          service: ${{ env.ECS_SERVICE }}
-          cluster: ${{ env.ECS_CLUSTER }}
-          wait-for-service-stability: true
+          instance_id=$(aws ec2 describe-instances \
+          --filters Name=tag:Name,Values=${{ env.ECS_SERVICE }}-${{ env.SERVICE_ENV }} Name=instance-state-name,Values=running \
+          --query "Reservations[].Instances[*].InstanceId" \
+          --output text | tr '\n' ',' | sed 's/,$//' | tr "," "\n")
+          if [ -n "$instance_id" ]; then
+            for id in ${instance_id[@]}; do
+              aws ssm send-command \
+              --instance-ids "$id" \
+              --document-name "AWS-RunShellScript" \
+              --parameters commands="runuser -l ubuntu -c /home/ubuntu/deploy.sh" \
+              --region ap-northeast-2 > /dev/null
+            done
+          else
+            echo "No running instances found."
+          fi
 
       - name: Set Commit Message
         id: commit-msg

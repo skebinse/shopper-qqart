@@ -113,9 +113,9 @@ export default function CompDtpt({id, onClose}) {
                 <Swiper slidesPerView={'auto'}>
                     {dtptInfoImg?.map((url, idx) => (
                         <SwiperSlide key={'prop' + idx}>
-                            <div className={'imgZoomArea'}>
+                            <div className={'imgZoomArea'}  onClick={() => cmm.util.showImageZoom(dtptInfoImg, idx)}>
                                 <Image className={'img'} alt={'영수증 이미지'} src={url} width={278} height={278} />
-                                <Image className={'zoom'} onClick={() => cmm.util.showImageZoom(dtptInfoImg, idx)}
+                                <Image className={'zoom'}
                                        alt={'확대 이미지'} src={'/assets/images/btn/btnZoom.svg'} width={24} height={24} />
                             </div>
                         </SwiperSlide>

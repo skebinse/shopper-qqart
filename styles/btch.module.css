@@ -41,7 +41,7 @@
 .compDtptDiv ul li{font-size: 14px;line-height: 17px;color: #333333;display: flex;padding-bottom: 20px;}
 .compDtptDiv ul li label{flex: 1;min-width: 75px;}
 .compDtptDiv ul li span{max-width: 80%;text-align: right;}
-.compDtptDiv .uploadArea{padding: 32px 20px;}
+.compDtptDiv .uploadArea{padding: 32px 20px 84px;}
 .compDtptDiv .uploadArea h5{padding-bottom: 20px;}
 
 /* 신용카드 결제 */

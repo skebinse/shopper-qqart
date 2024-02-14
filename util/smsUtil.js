@@ -8,14 +8,14 @@ import cmm from "../js/common";
  */
 export function smsSend(receiver, msg, callback) {
 
-    if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
+    if(process.env.NEXT_PUBLIC_RUN_MODE === 'local2') {
 
         console.log(msg);
         callback(true);
     } else {
 
         cmm.ajax({
-            url: 'https://apis.aligo.in/send/',
+            url: 'http://3.39.208.157:8080/send/',
             isLoaing: false,
             isExtr: true,
             data: {

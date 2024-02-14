@@ -1,0 +1,49 @@
+name: Build Docker Image
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ real ]
+
+env:
+  ECS_SERVICE: qqcart-shopper
+  SERVICE_ENV: prd
+  AWS_REGION : ap-northeast-2
+
+jobs:
+  deploy:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      server-gitlog: ${{ steps.commit-msg.outputs.log }}
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy
+        run: |
+          instance_id=$(aws ec2 describe-instances \
+          --filters Name=tag:Name,Values=${{ env.ECS_SERVICE }}-${{ env.SERVICE_ENV }} Name=instance-state-name,Values=running \
+          --query "Reservations[].Instances[*].InstanceId" \
+          --output text | tr '\n' ',' | sed 's/,$//' | tr "," "\n")
+          if [ -n "$instance_id" ]; then
+            for id in ${instance_id[@]}; do
+              aws ssm send-command \
+              --instance-ids "$id" \
+              --document-name "AWS-RunShellScript" \
+              --parameters commands="runuser -l ubuntu -c /home/ubuntu/deploy.sh" \
+              --region ap-northeast-2 > /dev/null
+            done
+          else
+            echo "No running instances found."
+          fi
+
+      - name: Set Commit Message
+        id: commit-msg
+        run: |
+          echo "log=$(git log -1 --no-merges --pretty=format:"%s | %h")" >> $GITHUB_OUTPUT

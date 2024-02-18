@@ -42,6 +42,7 @@ export default function useShopS3Upload() {
 
         cmm.ajax({
             url: '/api/cmm/upload',
+            isLoaing: false,
             dataType: 'json',
             data: uploadList,
             success: res => {

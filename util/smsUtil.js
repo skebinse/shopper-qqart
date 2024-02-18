@@ -8,7 +8,7 @@ import cmm from "../js/common";
  */
 export function smsSend(receiver, msg, callback) {
 
-    if(process.env.NEXT_PUBLIC_RUN_MODE === 'local2') {
+    if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
 
         console.log(msg);
         callback(true);

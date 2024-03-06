@@ -424,7 +424,7 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                         </div>
                     }
                     {(isIngBtch && item.ODER_PGRS_STAT !== '05' && item.ODER_KD === 'DELY') &&
-                        <Link href={href + '/' + item.ODER_USER_ID} className={'button'} >상세</Link>
+                        <Link href={href + '/' + item.ODER_USER_ID} className={'button'} >{item.ODER_PGRS_STAT === '03' ? '스토어 이동중' : ''}{item.ODER_PGRS_STAT === '04' ? '장보기 진행중' : ''}</Link>
                     }
                     {item.ODER_PGRS_STAT === '02' &&
                         <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx)}>배치 수락</button>

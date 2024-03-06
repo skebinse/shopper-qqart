@@ -309,7 +309,7 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                                             {item.SHOP_NM}
                                         </>
                                     }
-                                    {item.ODER_DRC_LDTN_YN === 'N' && item.ODER_DRC_LDTN_AMT === 0 &&
+                                    {item.ODER_KD === 'PIUP' && item.ODER_DRC_LDTN_YN === 'N' && item.ODER_DRC_LDTN_AMT === 0 &&
                                         <span>카드 단말기</span>
                                     }
                                     {item.ODER_DRC_LDTN_YN === 'N' && item.ODER_DRC_LDTN_AMT > 0 &&

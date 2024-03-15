@@ -64,7 +64,7 @@ export default function  BtchList({list, href, classNm = '', noDataTxt = '현재
                         </div>
                         {!!item.ODER_RPRE_NO &&
                             <p>
-                                주문번호: <em>{item.ODER_RPRE_NO.length === 11 ? cmm.util.getNumber(item.ODER_RPRE_NO.substring(6)) : item.ODER_RPRE_NO}</em>
+                                주문번호: <em>{String(cmm.util.getNumber(item.ODER_RPRE_NO)).length === 11 ? cmm.util.getNumber(item.ODER_RPRE_NO.substring(6)) : item.ODER_RPRE_NO}</em>
                                 {(!!item.ODER_DELY_ARTG && (item.ODER_DELY_ARTG.indexOf('계란') > -1 || item.ODER_DELY_ARTG.indexOf('계란') > -1)) &&
                                     <span className={'atnt'}>파손주의</span>
                                 }

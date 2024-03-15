@@ -85,7 +85,7 @@ export default function Index(props) {
                     tooltipInfo[key] = [];
                 }
 
-                tooltipInfo[key].push(item.ODER_RPRE_NO.length === 11 ? cmm.util.getNumber(item.ODER_RPRE_NO.substring(6)) : item.ODER_RPRE_NO);
+                tooltipInfo[key].push(String(cmm.util.getNumber(item.ODER_RPRE_NO)).length === 11 ? cmm.util.getNumber(item.ODER_RPRE_NO.substring(6)) : item.ODER_RPRE_NO);
             });
 
             data.list.forEach(item => {

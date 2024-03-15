@@ -140,7 +140,6 @@ export async function adminSendNtfy(conn, options) {
 
         const [rows] = await conn.query(query, [options.shprId, options.oderUserId]);
 
-        console.log(rows)
         if(!!rows[0]) {
             notification.title = '배치 취소';
             notification.body = `${rows[0].SHPR_NCNM}쇼퍼가 ${rows[0].SHOP_NM}${!!rows[0].ODER_RPRE_NO ? ' 접수번호 : ' + rows[0].ODER_RPRE_NO : ''} 수락을 취소하였습니다.`;

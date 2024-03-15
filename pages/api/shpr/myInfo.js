@@ -35,6 +35,7 @@ async function getMyInfo(conn, req, res) {
         
         query = `
                 SELECT SHPR_CRCTNO
+                     , SHPR_GRD_CD
                      , SHPR_LOGIN_ID
                      , SHPR_SNS_TYPE
                      , SHPR_NCNM

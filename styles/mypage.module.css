@@ -2,10 +2,19 @@
 .mypage .head{display: flex;align-items: center;padding: 20px 17px 18px;background-color: #FFFFFF;}
 .mypage .mbScss{text-align: right;padding: 16px;}
 .mypage .mbScss p{font-size: 14px;color: #333333;display: inline-block;}
-.mypage .head img{border-radius: 100%;object-fit: cover;}
+.mypage .head > div img{border-radius: 100%;object-fit: cover;}
+.mypage .head > div .level{position: relative;left: -16px}
 .mypage .head p{color: #373454;font-size: 13px;padding-left: 16px;flex: 1;}
-.mypage .head p span{display: block;color: #02B763;font-size: 18px;font-weight: 500;}
-.mypage .head p span.point{border-radius: 100px;background: #E6F8EF;display: inline-flex;padding: 4px 8px 4px 4px;justify-content: center;align-items: center;gap: 6px;color: #02B763;font-size: 12px;font-style: normal;font-weight: 700;line-height: 16px;margin-top: 6px;}
+.mypage .head p span{display: block;color: #02B763;font-size: 18px;font-weight: 500;padding-top: 5px;}
+.mypage .head p span.shprGrdHoney{display: inline-block;font-size: 13px;color:#FFA800;padding: 0 3px;}
+.mypage .head p span.shprGrdBumb{display: inline-block;font-size: 13px;color:#FF6814;padding: 0 3px;}
+.mypage .head > div.info{text-align: right;}
+.mypage .head > div.info a{font-size: 12px;color: #787E90;display: flex;align-items: center;justify-content: flex-end;padding: 5px 0;}
+.mypage .head > div.info a img{padding-right: 3px;}
+.mypage .head > div.info .point{border-radius: 100px;background: #E6F8EF;display: inline-flex;padding: 4px 8px 4px 4px;justify-content: center;align-items: center;gap: 6px;color: #02B763;font-size: 12px;font-style: normal;font-weight: 700;line-height: 16px;margin-top: 6px;}
+.mypage .modInfo{background-color: #FFFFFF;padding-bottom: 24px;}
+.mypage .modInfo a{width: 100%;padding: 0 17px;}
+.mypage .modInfo a button{width: calc(100% - 34px);height: 40px;}
 .mypage .dutjEndDiv{padding: 6px 16px 24px;background-color: #FFFFFF;}
 .mypage hr{background-color: #E4E4E4;height: 1px;width: 100%;margin: 0;border: none;}
 .mypage .logout{padding-top: 8px;}
@@ -63,3 +72,20 @@
 .pointDiv .cont .list ul li.more button{font-size: 16px;font-weight: 500;color: #707070;padding: 10.5px 56px;background-color: #FFFFFF;border: #E4E4E4 solid 1px;border-radius: 12px;}
 .pointDiv .cont .list .noData{width: 100%;text-align: center;padding-top: 100px;}
 .pointDiv .cont .list .noData p{color: #333333;font-size: 14px;padding-top: 10px;}
+
+/* 등급 정보 */
+.lvlInfoDiv{transition: all 0.3s ease-in;top: 100%;position: fixed;height: 100%;width: 100%;background-color: #FFFFFF;z-index: 1;opacity: 0;overflow: auto;}
+.lvlInfoDiv.active{transition: top 0.3s ease-out;top: 0;opacity: 1;}
+.lvlInfoDiv .titleDiv{display: flex;padding: 22.5px 20px;align-items: center;position: sticky; top: 0;background-color: #FFFFFF;z-index: 1;}
+.lvlInfoDiv .titleDiv h5{font-weight: 700;font-size: 18px;line-height: 19px;color: #333333;flex: 1;}
+.lvlInfoDiv > ul{padding: 0 20px 65px;}
+.lvlInfoDiv > ul > li{padding-top: 20px;}
+.lvlInfoDiv > ul > li:first-child{padding-top: 0;}
+.lvlInfoDiv > ul > li h4{font-size: 15px;font-weight: 700;color:#FF6814;display: flex;align-items: center;}
+.lvlInfoDiv > ul > li h4.honey{color:#FFA800;}
+.lvlInfoDiv > ul > li h4 img{padding-right: 6px;}
+.lvlInfoDiv > ul > li h4 span{background-image: url("/assets/images/bg/bgPsLvl.svg");width: 64px;height: 20px;font-size: 11px;font-weight: 500;color: #535867;display: flex;align-items: center;justify-content: center;margin-left: 5px;}
+.lvlInfoDiv > ul > li ul{display: grid;grid-template-columns: repeat(3, 1fr);margin: 0 20px 0 40px;padding: 10px 0 10px;border-bottom: 1px #E4E4E4 solid;}
+.lvlInfoDiv > ul > li ul li{font-size: 13px;color: #373454;font-weight: 500;padding-bottom: 8px;}
+.lvlInfoDiv > ul > li ul li:nth-child(3n){padding-left: 10px;}
+.lvlInfoDiv > ul > li ul li h3{color: #787E90;font-size: 11px;font-weight: 400;padding-bottom: 3px;}

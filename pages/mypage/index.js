@@ -6,6 +6,7 @@ import BottomMenu from "../../components/bottomMenu";
 import Link from "next/link";
 import useCommon from "../../hooks/useCommon";
 import {useRouter} from "next/router";
+import LvlInfo from "../../components/mypage/lvlInfo";
 
 export default function MyPage() {
 
@@ -13,6 +14,7 @@ export default function MyPage() {
         SHPR_PRFL_FILE: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNs/Q8AAg8Bhso7688AAAAASUVORK5CYII='
     });
     const [ntfy, setNtfy] = useState(false);
+    const [isOpenLvlInfo, setIsOpenLvlInfo] = useState(false);
     const [loginInfo, setLoginInfo] = useState({});
     const router = useRouter();
     const {goPage} = useCommon();
@@ -144,28 +146,63 @@ export default function MyPage() {
         });
     };
 
+    useEffect(() => {
+
+        if(isOpenLvlInfo) {
+
+            if(!!document.querySelector('#ch-plugin')) {
+                document.querySelector('#ch-plugin').classList.add('d-none');
+            }
+        } else {
+
+            if(!!document.querySelector('#ch-plugin')) {
+                document.querySelector('#ch-plugin').classList.remove('d-none');
+            }
+        }
+    }, [isOpenLvlInfo]);
+
     return (
         <div className={styles.mypage}>
             <div className={styles.head}>
                 {!!myInfo.SHPR_PRFL_FILE &&
-                    <Image src={myInfo.SHPR_PRFL_FILE} width={48} height={48} alt={'프로필 사진'} />
+                    <div>
+                        <img src={myInfo.SHPR_PRFL_FILE} width={48} height={48} alt={'프로필 사진'} />
+                        {(!!myInfo.SHPR_GRD_CD && (myInfo.SHPR_GRD_CD.indexOf('HONEY') > -1 || myInfo.SHPR_GRD_CD.indexOf('BUMB') > -1)) &&
+                            <Image className={styles.level} src={`/assets/images/icon/iconLvl${myInfo.SHPR_GRD_CD}.svg`}  width={24} height={24} />
+                        }
+                    </div>
                 }
                 <p>
-                    반갑습니다. 쇼퍼님!
+                    반갑습니다.
+                    {(!!myInfo.SHPR_GRD_CD && myInfo.SHPR_GRD_CD.indexOf('HONEY') > -1) &&
+                        <span className={styles.shprGrdHoney}>허니비</span>
+                    }
+                    {(!!myInfo.SHPR_GRD_CD && myInfo.SHPR_GRD_CD.indexOf('BUMB') > -1) &&
+                        <span className={styles.shprGrdBumb}>범블비</span>
+                    }
+                    쇼퍼님!
                     <span>{myInfo.SHPR_NCNM}</span>
-                    {loginInfo?.SHPR_GRD_CD !== 'ETPS' &&
+                </p>
+                {loginInfo?.SHPR_GRD_CD !== 'ETPS' &&
+                    <div className={styles.info}>
+                        <Link href={'#'} onClick={() => setIsOpenLvlInfo(true)}>
+                            <Image src={'/assets/images/icon/iconInfoType01.svg'} width={14} height={14}/>
+                            등급정보
+                        </Link>
                         <span className={styles.point}>
                             <Image src={'/assets/images/icon/iconPoint.svg'} alt={'포인트 아이콘'} width={16} height={16} />
                             {cmm.util.comma(myInfo?.SHPR_POIN)}P
                         </span>
-                    }
-                </p>
-                {loginInfo?.SHPR_GRD_CD !== 'ETPS' &&
+                    </div>
+                }
+            </div>
+            {loginInfo?.SHPR_GRD_CD !== 'ETPS' &&
+                <div className={styles.modInfo}>
                     <Link href={'/join/info'}>
                         <button type={'button'} className={'button short white'} >개인정보 수정</button>
                     </Link>
-                }
-            </div>
+                </div>
+            }
             <ul className={'ulType01'}>
                 {loginInfo?.SHPR_GRD_CD !== 'ETPS' &&
                     <>
@@ -204,6 +241,7 @@ export default function MyPage() {
                     <p onClick={mbScssClick}>회원 탈퇴</p>
                 </div>
             }
+            <LvlInfo isOpenLvlInfo={isOpenLvlInfo} onClose={() => setIsOpenLvlInfo(false)} shprGrdCd={myInfo.SHPR_GRD_CD} />
             <BottomMenu idx={3} />
         </div>
     );

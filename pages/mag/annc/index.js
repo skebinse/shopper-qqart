@@ -4,6 +4,7 @@ import styles from "../../../styles/mag.module.css";
 import cmm from "../../../js/common";
 import Link from "next/link";
 import BottomMenu from "../../../components/bottomMenu";
+import KakaoTalkChat from "../../../components/kakaoTalkChat";
 
 export default function Index() {
     const [tabIdx, setTabIdx] = useState(0);
@@ -35,6 +36,7 @@ export default function Index() {
                 <List list={tabIdx === 0 ? anncList : []} noDataTxt={'등록된 공지사항이 없습니다.'}/>
                 <List list={tabIdx === 1 ? anncList : []} noDataTxt={'등록된 이벤트가 없습니다.'} />
             </div>
+            <KakaoTalkChat />
             <BottomMenu idx={2} />
         </div>
     );

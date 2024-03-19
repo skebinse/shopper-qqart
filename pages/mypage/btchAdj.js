@@ -5,6 +5,7 @@ import Image from "next/image";
 import CompDtpt from "../../components/btch/comp/compDtpt";
 import BottomMenu from "../../components/bottomMenu";
 import WeekDate from "../../components/date/WeekDate";
+import KakaoTalkChat from "../../components/kakaoTalkChat";
 
 export default function BtchAdj() {
 
@@ -167,6 +168,7 @@ export default function BtchAdj() {
                 </div>
             </div>
             <CompDtpt id={oderUserId} onClose={() => setOderUserId(-1)} />
+            <KakaoTalkChat />
             <BottomMenu idx={1} />
         </div>
     );

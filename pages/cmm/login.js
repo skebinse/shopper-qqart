@@ -6,6 +6,7 @@ import useCommon from "../../hooks/useCommon";
 import Script from "next/script";
 import {useRouter} from "next/router";
 import {deleteCookie} from "cookies-next";
+import KakaoTalkChat from "../../components/kakaoTalkChat";
 
 export default function Login(props) {
 
@@ -160,6 +161,7 @@ export default function Login(props) {
                     <button type={"button"} onClick={loginClick} disabled={!loginInfo.userId || !loginInfo.userPw}>로그인</button>
                 </div>
             </div>
+            <KakaoTalkChat />
         </>
     );
 }

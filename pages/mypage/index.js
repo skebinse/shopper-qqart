@@ -7,6 +7,7 @@ import Link from "next/link";
 import useCommon from "../../hooks/useCommon";
 import {useRouter} from "next/router";
 import LvlInfo from "../../components/mypage/lvlInfo";
+import KakaoTalkChat from "../../components/kakaoTalkChat";
 
 export default function MyPage() {
 
@@ -168,7 +169,7 @@ export default function MyPage() {
                     <div>
                         <img src={myInfo.SHPR_PRFL_FILE} width={48} height={48} alt={'프로필 사진'} />
                         {(!!myInfo.SHPR_GRD_CD && (myInfo.SHPR_GRD_CD.indexOf('HONEY') > -1 || myInfo.SHPR_GRD_CD.indexOf('BUMB') > -1)) &&
-                            <Image className={styles.level} src={`/assets/images/icon/iconLvl${myInfo.SHPR_GRD_CD}.svg`}  width={24} height={24} />
+                            <Image alt={'등급'} className={styles.level} src={`/assets/images/icon/iconLvl${myInfo.SHPR_GRD_CD}.svg`}  width={24} height={24} />
                         }
                     </div>
                 }
@@ -186,7 +187,7 @@ export default function MyPage() {
                 {loginInfo?.SHPR_GRD_CD !== 'ETPS' &&
                     <div className={styles.info}>
                         <Link href={'#'} onClick={() => setIsOpenLvlInfo(true)}>
-                            <Image src={'/assets/images/icon/iconInfoType01.svg'} width={14} height={14}/>
+                            <Image alt={'등급확인'} src={'/assets/images/icon/iconInfoType01.svg'} width={14} height={14}/>
                             등급정보
                         </Link>
                         <span className={styles.point}>
@@ -242,6 +243,7 @@ export default function MyPage() {
                 </div>
             }
             <LvlInfo isOpenLvlInfo={isOpenLvlInfo} onClose={() => setIsOpenLvlInfo(false)} shprGrdCd={myInfo.SHPR_GRD_CD} />
+            <KakaoTalkChat />
             <BottomMenu idx={3} />
         </div>
     );

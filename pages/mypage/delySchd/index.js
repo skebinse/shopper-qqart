@@ -62,10 +62,10 @@ export default function DelySchd() {
      * Schedule 객체의 ID로 서버에 요청
      */
     const removeSchedule = (schedule) => {
-        requestDeleteSchedule(schedule.SHPR_SCHD_ID, () => {
+        requestDeleteSchedule(schedule.SHPR_SCHD_YMD, () => {
             setSchedules(prev => {
                 const newSchedules = [...prev];
-                remove(newSchedules, storedSchedule => storedSchedule.SHPR_SCHD_ID === schedule.SHPR_SCHD_ID);
+                remove(newSchedules, storedSchedule => storedSchedule.SHPR_SCHD_YMD === schedule.SHPR_SCHD_YMD);
                 return newSchedules;
             });
         })
@@ -94,9 +94,8 @@ export default function DelySchd() {
         setSchedules(prev => {
             const updatedSchedules = [...prev];
             let isFound = false;
-
             for (let i = 0; i < prev.length; i++) {
-                if (updatedSchedules[i]?.SHPR_SCHD_ID === updatedSchedule.SHPR_SCHD_ID) {
+                if (updatedSchedules[i]?.SHPR_SCHD_YMD === updatedSchedule.SHPR_SCHD_YMD) {
                     updatedSchedules[i] = updatedSchedule;
                     isFound = true;
                     break;
@@ -113,7 +112,7 @@ export default function DelySchd() {
     /**
      * 전달 받은 Schedule 객체의 ID를 서버에 요청해서 최신 Schedule 객체를 받아 온 뒤에 저장되어 있는 값 교체
      */
-    const refreshSchedule = (scheduleId) => requestGetSchedule(scheduleId, replaceSchedule);
+    const refreshSchedule = (scheduleId) => requestGetSchedules(searchDate, setSchedules);
 
     /**
      * Date 객체와 지역 이름 문자열과 시간으로 서버에 일정 생성 요청
@@ -121,19 +120,18 @@ export default function DelySchd() {
     const createSchedule = (date, area, timeSlots) => requestCreateSchedule(date, area, timeSlots, refreshSchedule);
 
     /**
-     * Schedule 객체의 ID와 지역 이름 문자열과 시간으로 서버에 일정 수정 요청
-     */
-    const updateSchedule = (scheduleId, area, timeSlots) => 
-        requestUpdateSchedule(scheduleId, area, timeSlots, refreshSchedule);
-
-    /**
      * 일정 생성 및 수정 화면에서 확인 버튼을 눌렀을 때에 저장되어 있는 Schedule 객체가 없으면 생성 요청, 있으면 수정 요청
      */
-    const onSubmitSchedule = (area, timeSlots) => {
+    const onSubmitSchedule = (area, timeSlots, schedule) => {
+
         if (editingSchedule === undefined) {
             createSchedule(editingDate, area, timeSlots);
         } else {
-            updateSchedule(editingSchedule.SHPR_SCHD_ID, area, timeSlots);
+            requestDeleteSchedule(schedule.SHPR_SCHD_YMD, () => {
+
+                createSchedule(editingDate, area, timeSlots);
+            })
+            // updateSchedule(editingSchedule.SHPR_SCHD_ID, area, timeSlots);
         }
 
         closeScheduleEditor();

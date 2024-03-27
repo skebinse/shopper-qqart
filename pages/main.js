@@ -7,6 +7,7 @@ import BtchList from "../components/btchListMain";
 import BottomMenu from "../components/bottomMenu";
 import Sheet from 'react-modal-sheet';
 import {useGlobal} from "../context/globalContext";
+import useCommon from "../hooks/useCommon";
 
 export default function Index(props) {
 
@@ -33,6 +34,7 @@ export default function Index(props) {
     const sheetScrollRef = useRef();
     const ulBtchAll = useRef();
     const ulBtchIng = useRef();
+    const {goPage} = useCommon();
 
     /**
      * 메인 지도 생성
@@ -310,9 +312,9 @@ export default function Index(props) {
                     setIsInit(false);
                 } else {
 
-                    cmm.alert('로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.', () => {
+                    cmm.alert('로그인 후 이용가능합니다1.\n로그인 화면으로 이동합니다.', () => {
 
-                        location.href = '/cmm/login';
+                        goPage('/cmm/login');
                     });
                 }
             });

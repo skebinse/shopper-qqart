@@ -4,7 +4,6 @@ import styles from "../../../styles/btch.module.css";
 import Image from "next/image";
 import {Swiper, SwiperSlide} from "swiper/react";
 import 'swiper/css';
-import Head from "next/head";
 import Script from "next/script";
 
 export default function CompDtpt({id, onClose}) {
@@ -50,6 +49,12 @@ export default function CompDtpt({id, onClose}) {
                 <h5>완료된 배치 상세내역</h5>
                 <Image alt={'닫기'} src={'/assets/images/icon/iconClose.svg'} width={22} height={22} onClick={onClose} />
             </div>
+            {dtptInfo.ODER_ERRR_SPPN_YN === 'Y' &&
+                <div className={styles.errrSppn}>
+                    <Image src={'/assets/images/icon/iconWarningType04.svg'} alt={'경고'} width={25} height={24} />
+                    <p>앗! 배송이 잘못되었어요!!</p>
+                </div>
+            }
             <div className={styles.summDiv}>
                 <h5>정산금액</h5>
                 <p>

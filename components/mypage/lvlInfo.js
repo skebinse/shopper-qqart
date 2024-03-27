@@ -79,7 +79,7 @@ export default function LvlInfo({isOpenLvlInfo, onClose, shprGrdCd}) {
                         </li>
                         <li>
                             <h3>오배달</h3>
-                            8~10건
+                            9건 이하
                         </li>
                         <li>
                             <h3>인센티브</h3>
@@ -116,7 +116,7 @@ export default function LvlInfo({isOpenLvlInfo, onClose, shprGrdCd}) {
                         </li>
                         <li>
                             <h3>오배달</h3>
-                            6~7건
+                            7건 이하
                         </li>
                         <li>
                             <h3>인센티브</h3>
@@ -153,7 +153,7 @@ export default function LvlInfo({isOpenLvlInfo, onClose, shprGrdCd}) {
                         </li>
                         <li>
                             <h3>오배달</h3>
-                            3~5건
+                            5건 이하
                         </li>
                         <li>
                             <h3>인센티브</h3>
@@ -190,7 +190,7 @@ export default function LvlInfo({isOpenLvlInfo, onClose, shprGrdCd}) {
                         </li>
                         <li>
                             <h3>오배달</h3>
-                            0~2건
+                            2건 이하
                         </li>
                         <li>
                             <h3>인센티브</h3>

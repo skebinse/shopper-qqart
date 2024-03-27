@@ -28,6 +28,8 @@
 
 .compDtptDiv{transition: all 0.3s ease-in;top: 100%;position: fixed;height: 100%;width: 100%;background-color: #FFFFFF;z-index: 1;opacity: 0;overflow: auto;}
 .compDtptDiv.active{transition: top 0.3s ease-out;top: 0;opacity: 1;}
+.compDtptDiv .errrSppn{margin: 0 20px;padding: 20px 0;background-color: #FFF4F4;text-align: center;}
+.compDtptDiv .errrSppn p{padding-top: 8px;color: #F75B5B;font-size: 16px;font-weight: 500;}
 .compDtptDiv .titleDiv{display: flex;padding: 22.5px 20px;align-items: center;position: sticky; top: 0;background-color: #FFFFFF;z-index: 1;}
 .compDtptDiv .titleDiv h5{font-weight: 500;font-size: 16px;line-height: 19px;color: #333333;flex: 1;}
 .compDtptDiv .summDiv{padding: 16px 20px;border-bottom: solid 8px #F2F2F2;}

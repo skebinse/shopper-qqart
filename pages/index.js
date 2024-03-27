@@ -6,6 +6,7 @@ import cmm from "../js/common";
 import BtchList from "../components/btchListMain";
 import BottomMenu from "../components/bottomMenu";
 import {useGlobal} from "../context/globalContext";
+import useCommon from "../hooks/useCommon";
 
 export default function Index(props) {
 
@@ -30,7 +31,7 @@ export default function Index(props) {
     const btchAreaInfo = useRef({
         translateY: 1000
     });
-    const listTranslateY = useRef(1000);
+    const {goPage} = useCommon();
 
     /**
      * 메인 지도 생성
@@ -323,7 +324,7 @@ export default function Index(props) {
 
                     cmm.alert('로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.', () => {
 
-                        location.href = '/cmm/login';
+                        goPage('/cmm/login');
                     });
                 }
             });

@@ -27,13 +27,17 @@ export default function BottomMenu({idx}) {
                 </li>
                 <li className={idx === 1 ? 'on' : ''} style={{display: display}}>
                     <Link href={'/mypage/btchAdj'}>
-                        <Image alt={'정산 아이콘'} src={`/assets/images/btn/btnMenuPay${idx === 1 ? 'On' : ''}.svg`} width={24} height={24} />
+                        <div className={'divAdjNtfy'}>
+                            미정산
+                        </div>
+                        <Image alt={'정산 아이콘'} src={`/assets/images/btn/btnMenuPay${idx === 1 ? 'On' : ''}.svg`}
+                               width={24} height={24}/>
                         <span>정산</span>
                     </Link>
                 </li>
                 <li className={idx === 2 ? 'on' : ''} style={{display: display}}>
                     <Link href={'/mag/annc'}>
-                        <Image alt={'공지 아이콘'} src={`/assets/images/btn/btnMenuAnnc${idx === 2 ? 'On' : ''}.svg`} width={24} height={24} />
+                    <Image alt={'공지 아이콘'} src={`/assets/images/btn/btnMenuAnnc${idx === 2 ? 'On' : ''}.svg`} width={24} height={24} />
                         <span>공지</span>
                     </Link>
                 </li>

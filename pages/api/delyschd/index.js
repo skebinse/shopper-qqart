@@ -21,29 +21,35 @@ async function setSchedule(conn, req, res) {
     const encShprId = getCookie('enc_sh', {req, res});
 
     try {
-        const query =`
-            INSERT INTO T_SHPR_SCHD_MAG (
-                    SHPR_ID,
-                    SHPR_SCHD_YMD,
-                    SHPR_SCHD_AREA,
-                    SHPR_SCHD_HH,
-                    RGI_DT,
-                    RGI_ID,
-                    MDFC_DT,
-                    MDFC_ID
-            ) VALUES (
-                    fnDecrypt(?, ?),
-                    DATE_FORMAT(?, '%Y-%m-%d'),
-                    ?,
-                    ?,
-                    NOW(),
-                    NULL,
-                    NOW(),
-                    NULL
-            )
-        `;
 
-        const [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY, date, area, schedule]);
+        let query, rows;
+        for (const areaTxt of area.split(',')) {
+
+            query =`
+                INSERT INTO T_SHPR_SCHD_MAG (
+                        SHPR_ID,
+                        SHPR_SCHD_YMD,
+                        SHPR_SCHD_AREA,
+                        SHPR_SCHD_HH,
+                        RGI_DT,
+                        RGI_ID,
+                        MDFC_DT,
+                        MDFC_ID
+                ) VALUES (
+                        fnDecrypt(?, ?),
+                        DATE_FORMAT(?, '%Y-%m-%d'),
+                        ?,
+                        ?,
+                        NOW(),
+                        NULL,
+                        NOW(),
+                        NULL
+                )
+            `;
+
+            [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY, date, areaTxt, schedule]);
+        }
+
         res.status(200).json(result(rows.insertId));
     } catch (e) {
         console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
@@ -58,20 +64,17 @@ async function getSchedules(conn, req, res) {
 
     try {
         const query = `
-            SELECT SHPR_SCHD_ID,
-                    SHPR_ID,
-                    SHPR_SCHD_YMD,
-                    SHPR_SCHD_AREA,
+             SELECT DATE_FORMAT(SHPR_SCHD_YMD, '%Y-%m-%d') AS SHPR_SCHD_YMD,
+                    GROUP_CONCAT(SHPR_SCHD_AREA) AS SHPR_SCHD_AREA,
                     SHPR_SCHD_HH,
-                    SHPR_SCHD_APV_STAT,
-                    DATE_FORMAT(RGI_DT, '%Y-%m-%d') AS RGI_DT,
-                    RGI_ID,
-                    DATE_FORMAT(MDFC_DT, '%Y-%m-%d') AS MDFC_DT,
-                    MDFC_ID
-                FROM T_SHPR_SCHD_MAG
-                WHERE SHPR_ID = fnDecrypt(?, ?)
+                    SHPR_SCHD_APV_STAT
+               FROM T_SHPR_SCHD_MAG
+              WHERE SHPR_ID = fnDecrypt(?, ?)
                 AND SHPR_SCHD_YMD IS NOT NULL
-                AND SHPR_SCHD_YMD BETWEEN CONCAT(DATE_FORMAT(?, '%Y-%m-%d'), ' 00:00:00') AND CONCAT(DATE_FORMAT(?, '%Y-%m-%d'), ' 23:59:59')
+                AND SHPR_SCHD_YMD BETWEEN ? AND ?
+           GROUP BY SHPR_SCHD_YMD,
+                    SHPR_SCHD_HH,
+                    SHPR_SCHD_APV_STAT
         `;
 
         const [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY, startdate, enddate]);

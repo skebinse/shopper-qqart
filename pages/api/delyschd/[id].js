@@ -23,7 +23,7 @@ async function getSchedule(conn, req, res) {
         const query = `
             SELECT SHPR_SCHD_ID,
                 SHPR_ID,
-                SHPR_SCHD_YMD,
+                DATE_FORMAT(SHPR_SCHD_YMD, '%Y-%m-%d') AS SHPR_SCHD_YMD,
                 SHPR_SCHD_AREA,
                 SHPR_SCHD_HH,
                 DATE_FORMAT(RGI_DT, '%Y-%m-%d') AS RGI_DT,
@@ -51,7 +51,7 @@ async function setSchedule(conn, req, res) {
             UPDATE T_SHPR_SCHD_MAG
                 SET SHPR_SCHD_AREA = ?,
                     SHPR_SCHD_HH = ?
-                WHERE SHPR_SCHD_ID = ?
+              WHERE SHPR_SCHD_ID = ?
         `;
 
         await conn.query(query, [area, schedule, id]);
@@ -69,7 +69,7 @@ async function deleteSchedule(conn, req, res) {
     try {
         const query =`
             DELETE FROM T_SHPR_SCHD_MAG
-                WHERE SHPR_SCHD_ID = ?
+             WHERE SHPR_SCHD_YMD = ?
         `;
 
         await conn.query(query, [id]);

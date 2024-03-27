@@ -23,21 +23,20 @@ export default function ScheduleEditor(props) {
 
     // Area: 지역 이름을 나타내는 문자열 (ex: '서초구 방배1동')
     const [areas, setAreas] = useState([]);
-    const [selectedArea, setSelectedArea] = useState('');
+    const [selectedArea, setSelectedArea] = useState([]);
     // TimeSlot: 일정 선택 옵션의 시작 시각을 나타내는 두 자리의 문자열 (ex: '07')
     const [selectedTimeSlots, setSelectedTimeSlots] = useState([]);
 
     useEffect(() => {
         // 지역 목록 요청
         cmm.biz.commCdList(AREA_CD_CODE, response => {
-            setAreas(response.map(cd => cd.CD_NM));
+            setAreas(response.map(cd => ({ value: cd.CD_NM, label: cd.CD_NM })));
         });
     }, []);
 
     useEffect(() => {
-        setSelectedArea(schedule?.SHPR_SCHD_AREA ?? '');
+        setSelectedArea(!!schedule?.SHPR_SCHD_AREA ? schedule?.SHPR_SCHD_AREA.split(',').map(text => ({value: text, label: text})) : '');
         setSelectedTimeSlots(schedule?.SHPR_SCHD_HH.split(',') ?? []);
-
     }, [schedule]);
 
 
@@ -56,7 +55,7 @@ export default function ScheduleEditor(props) {
      * 선택한 지역과 시간을 부모 페이지로 전달
      */
     const submit = () => {
-        onSubmit(selectedArea, selectedTimeSlots);
+        onSubmit(selectedArea.map(item => item.value), selectedTimeSlots, schedule);
         setSelectedArea('');
         setSelectedTimeSlots([]);
     }
@@ -65,6 +64,7 @@ export default function ScheduleEditor(props) {
      * 확인 버튼 클릭 하면 입력 값 검증
      */
     const onClickSubmit = () => {
+
         if (selectedArea.length === 0) {
             cmm.alert('지역을 선택해 주세요.');
         } else if (selectedTimeSlots.length === 0) {
@@ -74,8 +74,9 @@ export default function ScheduleEditor(props) {
         }
     };
 
-    // 지역 목록을 드랍다운 옵션으로 생성
-    const areaOptions = areas.map(area => ({ value: area, label: area }));
+    useEffect(() => {
+    }, [selectedArea]);
+
     
     // TIME_SLOT_COUNT 개수만큼의 시간 선택 옵션 생성
     const timeSlots = range(TIME_SLOT_COUNT).map(offset => padStart(`${offset + START_TIME}`, 2, '0'));
@@ -88,8 +89,10 @@ export default function ScheduleEditor(props) {
                 </h5>
                 <Image alt={'닫기'} src={'/assets/images/icon/iconClose.svg'} width={22} height={22} onClick={onClose}/>
             </div>
-            <Select className={styles.select} value={areaOptions.filter(item => item.value === selectedArea)}
-                    options={areaOptions} placeholder='지역 선택' onChange={event => setSelectedArea(event.value)}/>
+            {(!!areas && areas.length > 0 && isVisible) &&
+                <Select className={styles.select} isMulti closeMenuOnSelect={false} value={selectedArea}
+                        options={areas} placeholder='지역 선택' onChange={event => {setSelectedArea(event)}}/>
+            }
             <TimeSlotList slots={timeSlots} selectedSlots={selectedTimeSlots} onChangeSelection={setSelectedTimeSlots}/>
             <div className={styles.okButtonContainer}>
                 <div className={styles.okButton} onClick={onClickSubmit}>

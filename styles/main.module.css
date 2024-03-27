@@ -1,5 +1,5 @@
 .index {overflow: hidden;position: absolute;width: 100%;height: 100%;}
-.index .header{background-color: #02B763;padding: 17px 17px;display: flex; align-items: center;position: sticky;top: 0;z-index: 1;display: flex;}
+.index .header{background-color: #02B763;padding: 17px 17px;align-items: center;position: sticky;top: 0;z-index: 1;display: flex;}
 .index .header div{flex: 1;text-align: left;}
 .index .header button{background: none;border: none;color: #FFFFFF;font-size: 15px;}
 .index .btnArea{display: flex;padding: 24px 17px 9px;}

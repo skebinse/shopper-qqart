@@ -14,6 +14,7 @@ export default async function handler(req, res) {
                 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
             }
 
+            // 배치 수락
             const query = 'CALL spInsShprBtchAcp(fnDecrypt(?, ?), ?, ?)';
 
             const [rows, fields] = await conn.query(query, [encShprId, process.env.ENC_KEY, param.oderUserId, param.oderPiupFrcsMi]);

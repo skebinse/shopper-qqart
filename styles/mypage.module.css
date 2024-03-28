@@ -36,6 +36,9 @@
 .btchAdjDiv .btchArea .adjDiv > p{font-weight: 700;font-size: 24px;line-height: 29px;color: #333333;padding-top: 8px;}
 .btchAdjDiv .btchArea .adjDiv li{display: flex;font-weight: 400;font-size: 14px;line-height: 17px;color: #333333;padding-top: 20px;}
 .btchAdjDiv .btchArea .adjDiv li p{flex: 1; text-align: right;}
+.btchAdjDiv .btchArea .adjDiv > button{position: absolute;right: 16px;width: auto;padding: 6px 14px;top: 160px;font-weight: 400;font-size: 15px;}
+.btchAdjDiv .btchArea .adjDiv > span{font-size: 12px;font-weight: 700;position: absolute;right: 16px;top: 160px;padding: 6px 8px;border-radius: 8px;border: #02B763 solid 2px;color: #02B763;}
+.btchAdjDiv .btchArea .adjDiv > .adjIng{border: #FFAB5E solid 2px;color: #FFAB5E;}
 .btchAdjDiv .btchArea .compListDiv{padding: 12px 20px 145px;}
 .btchAdjDiv .btchArea .compListDiv > ul > li{border-bottom: 1px solid #E6E6E6;padding: 20px 0;}
 .btchAdjDiv .btchArea .compListDiv > ul > li.active{}
@@ -57,7 +60,10 @@
 .btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv li span{font-size: 14px;line-height: 17px;color: #333333;}
 .btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv li span:first-child{flex: 1;}
 .btchAdjDiv .btchArea .btnArea{position: fixed;bottom: 65px;width: calc(100% - 32px);background-color: #FFFFFF;padding: 16px;border-top: 1px solid #E6E6E6;}
-.btchAdjDiv .btchArea .adjDiv > button{position: absolute;right: 16px;width: auto;padding: 6px 14px;top: 160px;font-weight: 400;font-size: 15px;}
+.btchAdjDiv .widCont{background-color: #F2FCF7;display: flex;padding: 12px;margin-bottom: 24px;}
+.btchAdjDiv .widCont > div{flex: 1;text-align: center;}
+.btchAdjDiv .widCont > div span{color: #333333;font-size: 14px;font-weight: 400;}
+.btchAdjDiv .widCont > div p{color: #02B763;font-size: 14px;font-weight: 500;display: block;padding-top: 4px;}
 
 /* 포인트화면 */
 .pointDiv .cont{}

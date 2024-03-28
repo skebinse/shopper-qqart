@@ -27,8 +27,12 @@ export default async function handler(req, res) {
                 SELECT AA.SHPR_GRD_YM
                      , AA.SHPR_GRD_CD
                      , AA.SHPR_GRD_CMSS_RATE
+                     , CASE
+                           WHEN DATEDIFF(DATE_ADD(NOW(), INTERVAL 9 HOUR), ?) >= 3 AND DAYOFWEEK(DATE_ADD(NOW(), INTERVAL 9 HOUR)) = 4 AND DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%H') >= 18 THEN 'Y'
+                           WHEN DATEDIFF(DATE_ADD(NOW(), INTERVAL 9 HOUR), ?) >= 3 AND DAYOFWEEK(DATE_ADD(NOW(), INTERVAL 9 HOUR)) = 5 THEN 'Y'
+                           WHEN DATEDIFF(DATE_ADD(NOW(), INTERVAL 9 HOUR), ?) >= 3 AND DAYOFWEEK(DATE_ADD(NOW(), INTERVAL 9 HOUR)) = 6 AND DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%H') < 18 THEN 'Y'
+                       ELSE 'N' END AS IS_WID
                   FROM T_SHPR_GRD_HITY AA
-                       INNER JOIN T_SHPR_GRD_INFO BB
                  WHERE SHPR_ID = ?
                 AND (
                         (AA.SHPR_GRD_STRT_YMD < ? AND AA.SHPR_GRD_END_YMD >= ?)
@@ -42,7 +46,7 @@ export default async function handler(req, res) {
                   , AA.SHPR_GRD_CMSS_RATE
             `;
 
-            [rows] = await conn.query(query, [shprId, param.toDt, param.toDt, param.fromDt, param.fromDt, param.fromDt, param.toDt]);
+            [rows] = await conn.query(query, [param.toDt, param.toDt, param.toDt, shprId, param.toDt, param.toDt, param.fromDt, param.fromDt, param.fromDt, param.toDt]);
 
             resultMap.shprGrdList = rows;
 
@@ -51,6 +55,7 @@ export default async function handler(req, res) {
                 SELECT SHPR_OHRS_ADJ_NM
                      , SHPR_OHRS_ADJ_AMT
                      , SHPR_OHRS_ADJ_CMSS_YN
+                     , SHPR_OHRS_ADJ_TWH_YN
                      , DATE_FORMAT(SHPR_OHRS_ADJ_YMD, '%m') AS SHPR_OHRS_ADJ_MM
                   FROM T_SHPR_OHRS_ADJ_MAG
                  WHERE SHPR_ID = ?
@@ -61,6 +66,21 @@ export default async function handler(req, res) {
             [rows] = await conn.query(query, [shprId, param.fromDt, param.toDt]);
 
             resultMap.ohrsAdjList = rows;
+
+            // 출금여부
+            query = `
+                SELECT COUNT(1) AS IS_REQ
+                     , SHPR_ADJ_APV_DT
+                     , SHPR_ADJ_AMT
+                  FROM T_SHPR_ADJ_MAG
+                 WHERE SHPR_ID = ?
+                   AND SHPR_ADJ_STRT_YMD = ?
+                   AND SHPR_ADJ_END_YMD = ?
+            `;
+
+            [rows] = await conn.query(query, [shprId, param.fromDt, param.toDt]);
+
+            resultMap.widReqInfo = rows[0];
 
             res.status(200).json(result(resultMap));
         } catch (e) {

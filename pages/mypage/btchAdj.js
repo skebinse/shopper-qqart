@@ -227,7 +227,7 @@ export default function BtchAdj() {
                 <WeekDate onSelectDate={date => setSearchDate(date)}/>
                 <div className={styles.adjDiv}>
                     <h5>정산금액</h5>
-                    {(isWidBtn && shprGrdList.length > 0 && widReqInfo.IS_REQ === 0) &&
+                    {(isWidBtn && shprGrdList.length > 0 && widReqInfo.IS_REQ === 0 && btchList?.summ?.adjAmt > 0) &&
                         <>
                             <p>0원</p>
                             <button onClick={() => setIsWidPopup(true)} className={'button'} type={'button'}>출금하기</button>

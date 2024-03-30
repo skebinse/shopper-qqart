@@ -123,7 +123,7 @@ export default function BtchAdj() {
                     // 정산예정 - 전체 수수료
                     totalAdjAmt -= totalCmssAmt;
                     // 원천세
-                    const srTax = Math.floor((totalAdjAmt - totalAdjAmtEcpt) * 0.033) * 10;
+                    const srTax = Math.floor((totalAdjAmt - totalAdjAmtEcpt) * 0.033 / 10) * 10;
 
                     setBtchList({
                         compList,

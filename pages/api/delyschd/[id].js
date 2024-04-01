@@ -1,4 +1,5 @@
 import { getConnectPool, result } from "../db";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
     await getConnectPool(async conn => {
@@ -65,14 +66,16 @@ async function setSchedule(conn, req, res) {
 
 async function deleteSchedule(conn, req, res) {
     const { id } = req.query;
+    const encShprId = getCookie('enc_sh', {req, res});
 
     try {
         const query =`
             DELETE FROM T_SHPR_SCHD_MAG
              WHERE SHPR_SCHD_YMD = ?
+               AND SHPR_ID = fnDecrypt(?, ?)
         `;
 
-        await conn.query(query, [id]);
+        await conn.query(query, [id, encShprId, process.env.ENC_KEY]);
         res.status(200).json(result(id));
     } catch (e) {
         console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));

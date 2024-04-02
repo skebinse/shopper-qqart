@@ -226,21 +226,24 @@ export default function BtchAdj() {
             <div className={styles.btchArea}>
                 <WeekDate onSelectDate={date => setSearchDate(date)}/>
                 <div className={styles.adjDiv}>
-                    <h5>정산금액</h5>
                     {(isWidBtn && shprGrdList.length > 0 && widReqInfo.IS_REQ === 0 && btchList?.summ?.adjAmt > 0) &&
                         <>
+                            <h5>정산금액</h5>
                             <p>0원</p>
-                            <button onClick={() => setIsWidPopup(true)} className={'button'} type={'button'}>출금하기</button>
+                            <button onClick={() => setIsWidPopup(true)} className={'button'} type={'button'}>출금하기
+                            </button>
                         </>
                     }
                     {(widReqInfo.IS_REQ > 0 && !widReqInfo.SHPR_ADJ_APV_DT) &&
                         <>
+                            <h5>정산금액</h5>
                             <p>0원</p>
                             <span className={styles.adjIng}>정산 진행중</span>
                         </>
                     }
                     {(widReqInfo.IS_REQ > 0 && !!widReqInfo.SHPR_ADJ_APV_DT) &&
                         <>
+                            <h5>정산금액</h5>
                             <p>{cmm.util.comma(widReqInfo.SHPR_ADJ_AMT)}원</p>
                             <span className={styles.adj}>정산완료</span>
                         </>
@@ -265,7 +268,7 @@ export default function BtchAdj() {
                         {shprGrdList.length > 0 &&
                             <li>
                                 <label>원천세(3.3%)</label>
-                                <p>{btchList?.summ?.srTax === 0 ? '' : '-'}{btchList?.summ?.srTax}원</p>
+                                <p>{btchList?.summ?.srTax === 0 ? '' : '-'}{cmm.util.comma(btchList?.summ?.srTax)}원</p>
                             </li>
                         }
                         <li>

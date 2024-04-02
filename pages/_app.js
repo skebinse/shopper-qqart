@@ -147,7 +147,11 @@ export default function MyApp({ Component, pageProps }) {
             }
 
             cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
-        }
+        };
+
+        // 좌표 호출(앱에서 자동으로 호출: 사용안함)
+        window.call_position = () => {
+        };
 
         // 앱이고 토큰 정보가 스토리지에 없는 경우
         if(cmm.isApp()) {

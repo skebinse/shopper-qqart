@@ -182,6 +182,7 @@ export default function Index(props) {
         // 현재 위치 가져오기
         cmm.util.getCurrentPosition(res => {
 
+            // Map 생성
             createMap({
                 shprPsitLat: res.lot,
                 shprPsitLot: res.lat,

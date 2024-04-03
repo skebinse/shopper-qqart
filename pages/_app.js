@@ -166,6 +166,12 @@ export default function MyApp({ Component, pageProps }) {
             // 로그인 시
             if(cmm.checkLogin()) {
 
+                // 쇼퍼 현재 위치
+                cmm.util.setLs(cmm.Cont.SHPR_PS_PSIT, {
+                    shprPsitLat: lot,
+                    shprPsitLot: lat
+                });
+
                 cmm.ajax({
                     url: '/api/cmm/insPsPsit',
                     isLoaing: false,

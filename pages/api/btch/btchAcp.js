@@ -15,9 +15,9 @@ export default async function handler(req, res) {
             }
 
             // 배치 수락
-            const query = 'CALL spInsShprBtchAcp(fnDecrypt(?, ?), ?, ?)';
+            const query = 'CALL spInsShprBtchAcp(fnDecrypt(?, ?), ?, ?, ?, ?)';
 
-            const [rows, fields] = await conn.query(query, [encShprId, process.env.ENC_KEY, param.oderUserId, param.oderPiupFrcsMi]);
+            const [rows, fields] = await conn.query(query, [encShprId, process.env.ENC_KEY, param.oderUserId, param.oderPiupFrcsMi, param.shprPsitLat, param.shprPsitLot]);
 
             if(!rows[0]) {
 

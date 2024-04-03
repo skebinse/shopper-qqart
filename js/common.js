@@ -8,6 +8,7 @@ const cmm = {
         JOIN_INFO: 'shopperJoinInfo',
         WEB_TOKEN: 'webToken',
         APP_TOKEN: 'appToken',
+        SHPR_PS_PSIT: 'shprPsPsit',
         DAY_OF_WEEK: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
         APP_MESSAGE_TYPE: {
             NOTIFICATION: 'NOTIFICATION',
@@ -843,6 +844,12 @@ const cmm = {
                 let isCallback = false;
                 window.getCurrntPsPsit = (lat, lot) => {
 
+                    // 쇼퍼 현재 위치
+                    cmm.util.setLs(cmm.Cont.SHPR_PS_PSIT, {
+                        shprPsitLat: lot,
+                        shprPsitLot: lat
+                    });
+
                     cmm.ajax({
                         url: '/api/cmm/insPsPsit',
                         isLoaing: false,
@@ -904,6 +911,12 @@ const cmm = {
 
                 navigator.geolocation.getCurrentPosition(res => {
 
+                    // 쇼퍼 현재 위치
+                    cmm.util.setLs(cmm.Cont.SHPR_PS_PSIT, {
+                        shprPsitLat: res.coords.longitude,
+                        shprPsitLot: res.coords.latitude
+                    });
+
                     cmm.ajax({
                         url: '/api/cmm/insPsPsit',
                         isLoaing: false,
@@ -951,7 +964,7 @@ const cmm = {
                     cmm.ajax({
                         url: `https://apis.openapi.sk.com/tmap/geo/fullAddrGeo?addressFlag=F02&coordType=WGS84GEO&version=1&fullAddr=${encodeURIComponent(data.roadAddress)}&page=1&count=20`,
                         headers: {
-                            appKey: process.env.NEXT_PUBLIC_TMAP_KEY
+                            appKey: process.env.NEXT_PUBLIC_API_TAMP_FREE_KEY
                         },
                         isExtr: true,
                         contextType: 'application/json',

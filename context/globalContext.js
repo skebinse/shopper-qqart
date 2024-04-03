@@ -96,13 +96,12 @@ export function GlobalProvider({children}) {
      */
     const pushAlertClickHandler = e => {
 
-        if(location.href.indexOf('/') > -1) {
-
-            setIsPushOpen(true);
-        } else {
+        if(location.pathname !== '/') {
 
             router.push(e.target.getAttribute('data-url'));
         }
+
+        setIsPushOpen(true);
         document.querySelector('.webPushDiv').classList = 'webPushDiv';
     };
 

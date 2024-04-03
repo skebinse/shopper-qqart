@@ -523,7 +523,7 @@ export default function Index(props) {
      */
     useEffect(() => {
 
-        if(isPushOpen > 0) {
+        if(!!isPushOpen) {
 
             setIsPushOpen(false);
             setTabIdx(0);

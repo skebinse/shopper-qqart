@@ -191,7 +191,10 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
             getShprDtcCal(item, res => {
 
                 cmm.confirm(`${item.SHOP_NM} 매장까지 
-                        픽업예상 <span style="color: #02B763;font-weight: 700">"${res.oderPiupFrcsMi}분"</span>으로 확인됩니다.`, () => {
+                        픽업예상 <span style="color: #02B763;font-weight: 700">"${res.oderPiupFrcsMi}분"</span>으로 확인됩니다.
+                        
+                        매장은 쇼퍼님을 기다리고 있으니 
+                        빠르게 이동해 주세요.`, () => {
 
                     cmm.ajax({
                         url: '/api/btch/btchAcp',

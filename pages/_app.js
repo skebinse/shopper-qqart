@@ -246,7 +246,7 @@ export default function MyApp({ Component, pageProps }) {
             }
         }, 1000);
 
-        if(process.env.NEXT_PUBLIC_RUN_MODE === 'prod') {
+        if(process.env.NEXT_PUBLIC_RUN_MODE !== 'prod') {
 
             window.onerror = function(msg,file,line) {
 
@@ -258,19 +258,8 @@ export default function MyApp({ Component, pageProps }) {
 
             window.onerror = function(msg,file,line) {
 
-                cmm.ajax({
-                    url: '/api/cmm/insLog',
-                    isLoaing: false,
-                    data: {
-                        logKd: '스크립트 오류',
-                        logParam: "오류메세지\t"+msg+"\n"+"파일위치\t"+file+"\n"+"라인번호\t"+line
-                    },
-                    success: res => {
-
-                    }, error: res => {
-
-                    },
-                });
+                // DB에 로그 남기기
+                cmm.insDbLog('스크립트 오류', "오류메세지 : "+msg+" "+" 파일위치 : "+file+" 라인번호 : "+line);
             }
         }
 

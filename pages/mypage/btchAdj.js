@@ -336,7 +336,8 @@ export default function BtchAdj() {
                             </div>
                             <div>
                                 <span>출금일</span>
-                                <p>{widDate}</p>
+                                <p>영업일 5~10일</p>
+                                {/*<p>{widDate}</p>*/}
                             </div>
                         </div>
                         <div>

@@ -161,7 +161,6 @@ const cmm = {
                 }
             });
         }
-
     },
 
     /**
@@ -225,6 +224,27 @@ const cmm = {
         })
         .finally(() => {
 
+        });
+    },
+
+    /**
+     * DB에 로그 남기기
+      * @param logKd
+     * @param logParam
+     * @param logRslt
+     */
+    insDbLog: (logKd, logParam, logRslt = '') => {
+
+        cmm.ajax({
+            url: '/api/cmm/insLog',
+            isLoaing: false,
+            data: {
+                logKd,
+                logParam,
+                logRslt
+            },
+            success: res => {},
+            error: res => {},
         });
     },
 

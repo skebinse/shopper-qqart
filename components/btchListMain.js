@@ -157,19 +157,8 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
             resCoordType: 'WGS84GEO',
         };
 
-        cmm.ajax({
-            url: '/api/cmm/insLog',
-            isLoaing: false,
-            data: {
-                logKd: '배치수락 예상시간',
-                logParam: JSON.stringify(param)
-            },
-            success: res => {
-
-            }, error: res => {
-
-            },
-        });
+        // DB에 로그 남기기
+        cmm.insDbLog('배치수락 예상시간', JSON.stringify(param));
 
         cmm.loading(true);
         cmm.ajax({

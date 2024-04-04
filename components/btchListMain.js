@@ -146,38 +146,46 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
     const getShprDtcCal = (item, callback) => {
 
         // 쇼퍼 현재 위치
-        const shprPsPsit = cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT);
+        const shprPsPsitInfo = cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT);
         const param = {
             directionOption: 1,
             endX: item.SHOP_ADDR_LAT,
             endY: item.SHOP_ADDR_LOT,
             reqCoordType: 'WGS84GEO',
-            startX: shprPsPsit.shprPsitLat,
-            startY: shprPsPsit.shprPsitLot,
+            startX: shprPsPsitInfo.shprPsitLat,
+            startY: shprPsPsitInfo.shprPsitLot,
             resCoordType: 'WGS84GEO',
         };
 
-        // DB에 로그 남기기
-        cmm.insDbLog('배치수락 예상시간', JSON.stringify(param));
+        if(!!shprPsPsitInfo) {
 
-        cmm.loading(true);
-        cmm.ajax({
-            url: 'https://apis.openapi.sk.com/tmap/routes?version=1&callback=function',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                appKey: process.env.NEXT_PUBLIC_TMAP_KEY
-            },
-            isExtr: true,
-            data: param,
-            success: res => {
+            // DB에 로그 남기기
+            cmm.insDbLog('배치수락 예상시간', JSON.stringify(param));
 
-                cmm.loading(false);
+            cmm.loading(true);
+            cmm.ajax({
+                url: 'https://apis.openapi.sk.com/tmap/routes?version=1&callback=function',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    appKey: process.env.NEXT_PUBLIC_TMAP_KEY
+                },
+                isExtr: true,
+                data: param,
+                success: res => {
 
-                const disItem = res.features[0].properties;
-                callback({...shprPsPsit, oderPiupFrcsMi: Math.ceil(disItem.totalTime / 60) + 5});
-            },
-        });
+                    cmm.loading(false);
+
+                    const disItem = res.features[0].properties;
+                    callback({...shprPsPsitInfo, oderPiupFrcsMi: Math.ceil(disItem.totalTime / 60) + 5});
+                },
+            });
+        } else {
+
+            // DB에 로그 남기기
+            cmm.insDbLog('배치수락 예상시간', 'shprPsPsitInfo is null');
+            callback({shprPsitLat: '', shprPsitLot: '', oderPiupFrcsMi: 30});
+        }
     };
 
     /**

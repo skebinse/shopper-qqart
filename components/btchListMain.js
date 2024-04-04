@@ -160,7 +160,7 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
         if(!!shprPsPsitInfo) {
 
             // DB에 로그 남기기
-            cmm.insDbLog('배치수락 예상시간', JSON.stringify(param));
+            cmm.insDbLog('배치수락 예상시간', JSON.stringify({...param, ODER_USER_ID: item.ODER_USER_ID, SHOP_NM: item.SHOP_NM}));
 
             cmm.loading(true);
             cmm.ajax({

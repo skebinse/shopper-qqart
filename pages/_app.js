@@ -246,13 +246,31 @@ export default function MyApp({ Component, pageProps }) {
             }
         }, 1000);
 
-        if(process.env.NEXT_PUBLIC_RUN_MODE !== 'prod') {
+        if(process.env.NEXT_PUBLIC_RUN_MODE === 'prod') {
 
             window.onerror = function(msg,file,line) {
 
                 alert("오류메세지\t"+msg+"\n"+"파일위치\t"+file+"\n"+"라인번호\t"+line);
 
                 return false;  //true를 return하면 오류메세지를 발생시키지 않음
+            }
+        } else {
+
+            window.onerror = function(msg,file,line) {
+
+                cmm.ajax({
+                    url: '/api/cmm/insLog',
+                    isLoaing: false,
+                    data: {
+                        logKd: '스크립트 오류',
+                        logParam: "오류메세지\t"+msg+"\n"+"파일위치\t"+file+"\n"+"라인번호\t"+line
+                    },
+                    success: res => {
+
+                    }, error: res => {
+
+                    },
+                });
             }
         }
 

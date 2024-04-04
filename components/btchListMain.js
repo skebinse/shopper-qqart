@@ -147,6 +147,29 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
 
         // 쇼퍼 현재 위치
         const shprPsPsit = cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT);
+        const param = {
+            directionOption: 1,
+            endX: item.SHOP_ADDR_LAT,
+            endY: item.SHOP_ADDR_LOT,
+            reqCoordType: 'WGS84GEO',
+            startX: shprPsPsit.shprPsitLat,
+            startY: shprPsPsit.shprPsitLot,
+            resCoordType: 'WGS84GEO',
+        };
+
+        cmm.ajax({
+            url: '/api/cmm/insLog',
+            isLoaing: false,
+            data: {
+                logKd: '배치수락 예상시간',
+                logParam: JSON.stringify(param)
+            },
+            success: res => {
+
+            }, error: res => {
+
+            },
+        });
 
         cmm.loading(true);
         cmm.ajax({
@@ -157,15 +180,7 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                 appKey: process.env.NEXT_PUBLIC_TMAP_KEY
             },
             isExtr: true,
-            data: {
-                directionOption: 1,
-                endX: item.SHOP_ADDR_LAT,
-                endY: item.SHOP_ADDR_LOT,
-                reqCoordType: 'WGS84GEO',
-                startX: shprPsPsit.shprPsitLat,
-                startY: shprPsPsit.shprPsitLot,
-                resCoordType: 'WGS84GEO',
-            },
+            data: param,
             success: res => {
 
                 cmm.loading(false);
@@ -185,7 +200,6 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
 
         // 배치 수락
         if(item.ODER_PGRS_STAT === '02') {
-
 
             // 쇼퍼와의 거리 계산
             getShprDtcCal(item, res => {

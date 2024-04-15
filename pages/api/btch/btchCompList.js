@@ -31,7 +31,7 @@ export default async function handler(req, res) {
                            WHEN DATEDIFF(DATE_ADD(NOW(), INTERVAL 9 HOUR), ?) >= 3 AND DAYOFWEEK(DATE_ADD(NOW(), INTERVAL 9 HOUR)) = 4 AND DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%H') >= 18 THEN 'Y'
                            WHEN DATEDIFF(DATE_ADD(NOW(), INTERVAL 9 HOUR), ?) >= 3 AND DAYOFWEEK(DATE_ADD(NOW(), INTERVAL 9 HOUR)) = 5 THEN 'Y'
                            WHEN DATEDIFF(DATE_ADD(NOW(), INTERVAL 9 HOUR), ?) >= 3 AND DAYOFWEEK(DATE_ADD(NOW(), INTERVAL 9 HOUR)) = 6 AND DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%H') < 18 THEN 'Y'
-                       ELSE 'N' END AS IS_WID
+                       ELSE 'Y' END AS IS_WID
                   FROM T_SHPR_GRD_HITY AA
                  WHERE SHPR_ID = ?
                 AND (
@@ -70,6 +70,8 @@ export default async function handler(req, res) {
             // 출금여부
             query = `
                 SELECT COUNT(1) AS IS_REQ
+                     , SHPR_ADJ_CHCK_YMD
+                     , SHPR_ADJ_REQ_DT
                      , SHPR_ADJ_APV_DT
                      , SHPR_ADJ_AMT
                   FROM T_SHPR_ADJ_MAG

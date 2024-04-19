@@ -70,6 +70,8 @@ export default async function handler(req, res) {
             // 출금여부
             query = `
                 SELECT COUNT(1) AS IS_REQ
+                     , SHPR_ADJ_CHCK_YMD
+                     , SHPR_ADJ_REQ_DT
                      , SHPR_ADJ_APV_DT
                      , SHPR_ADJ_AMT
                   FROM T_SHPR_ADJ_MAG

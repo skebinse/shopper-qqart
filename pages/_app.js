@@ -129,24 +129,31 @@ export default function MyApp({ Component, pageProps }) {
         // PUSH 토큰 가져오기
         window.getPushToken = token => {
 
-            if(cmm.checkLogin()) {
+            if(!token) {
 
-                // 토큰 정보가 다를 경우
-                if(cmm.util.getLs(cmm.Cont.APP_TOKEN) !== token) {
+                // PUSH Token
+                cmm.app.getPushToken();
+            } else {
 
-                    cmm.ajax({
-                        url: '/api/cmm/modAppPushTkn',
-                        isLoaing: false,
-                        data: {
-                            token
-                        },
-                        success: res => {},
-                        error: res => {}
-                    });
+                if(cmm.checkLogin()) {
+
+                    // 토큰 정보가 다를 경우
+                    if(cmm.util.getLs(cmm.Cont.APP_TOKEN) !== token) {
+
+                        cmm.ajax({
+                            url: '/api/cmm/modAppPushTkn',
+                            isLoaing: false,
+                            data: {
+                                token
+                            },
+                            success: res => {},
+                            error: res => {}
+                        });
+                    }
                 }
-            }
 
-            cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
+                cmm.util.setLs(cmm.Cont.APP_TOKEN, token);
+            }
         };
 
         // 좌표 호출(앱에서 자동으로 호출: 사용안함)
@@ -156,8 +163,14 @@ export default function MyApp({ Component, pageProps }) {
         // 앱이고 토큰 정보가 스토리지에 없는 경우
         if(cmm.isApp()) {
 
-            // PUSH Token
-            cmm.app.getPushToken();
+            if(!!localStorage.appToken) {
+
+                cmm.util.setLs(localStorage.appToken.replace(/\"/g, ''));
+            } else {
+
+                // PUSH Token
+                cmm.app.getPushToken();
+            }
         }
 
         // 현재 위치

@@ -110,6 +110,10 @@ export default function Login(props) {
         window.Kakao.Auth.authorize({
             redirectUri: location.origin + '/cmm/snsKakaoLogin',
         });
+        setTimeout(() => {
+
+            cmm.loading(false);
+        }, 3000);
     };
 
     return (

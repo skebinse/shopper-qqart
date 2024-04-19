@@ -226,7 +226,7 @@ export default function BtchAdj() {
             <div className={styles.btchArea}>
                 <WeekDate onSelectDate={date => setSearchDate(date)}/>
                 <div className={styles.adjDiv}>
-                    {(isWidBtn && shprGrdList.length > 0 && !!widReqInfo.SHPR_ADJ_CHCK_YMD && !widReqInfo.SHPR_ADJ_REQ_DT && btchList?.summ?.adjAmt > 0) &&
+                    {(isWidBtn && shprGrdList.length > 0 && widReqInfo.IS_REQ === 0 && btchList?.summ?.adjAmt > 0) &&
                         <>
                             <h5>정산금액</h5>
                             <p>0원</p>
@@ -234,14 +234,14 @@ export default function BtchAdj() {
                             </button>
                         </>
                     }
-                    {(!!widReqInfo.SHPR_ADJ_CHCK_YMD && !!widReqInfo.SHPR_ADJ_REQ_DT && !widReqInfo.SHPR_ADJ_APV_DT) &&
+                    {(widReqInfo.IS_REQ > 0 && !widReqInfo.SHPR_ADJ_APV_DT) &&
                         <>
                             <h5>정산금액</h5>
                             <p>0원</p>
                             <span className={styles.adjIng}>정산 진행중</span>
                         </>
                     }
-                    {(!!widReqInfo.SHPR_ADJ_CHCK_YMD && !!widReqInfo.SHPR_ADJ_APV_DT) &&
+                    {(widReqInfo.IS_REQ > 0 && !!widReqInfo.SHPR_ADJ_APV_DT) &&
                         <>
                             <h5>정산금액</h5>
                             <p>{cmm.util.comma(widReqInfo.SHPR_ADJ_AMT)}원</p>

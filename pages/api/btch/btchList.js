@@ -58,6 +58,26 @@ export default async function handler(req, res) {
                 return;
             }
 
+            // 앱 토큰 저장
+            if(!!param.appToken) {
+
+                query = `SELECT SHPR_APP_PUSH_TKN
+                           FROM T_SHPR_INFO
+                          WHERE SHPR_ID = ?`;
+
+                const [shprAppPushTkn] = await conn.query(query, [shprId]);
+
+                // 토큰 정보가 다를 경우
+                if(shprAppPushTkn[0].SHPR_APP_PUSH_TKN !== param.appToken) {
+
+                    query = `UPDATE T_SHPR_INFO
+                                SET SHPR_APP_PUSH_TKN = ?
+                              WHERE SHPR_ID = ?`;
+
+                    await conn.query(query, [param.appToken, shprId]);
+                }
+            }
+
             // 배치 리스트
             query = `
             SELECT AA.ODER_MNGR_RGI_YN

@@ -222,11 +222,17 @@ export default function Index(props) {
 
         cmm.loading(true);
 
+        // 앱 토큰 정보 가져오기
+        let appToken = cmm.util.getLs(cmm.Cont.APP_TOKEN);
+
         if(!isInit) {
 
             cmm.ajax({
                 url: '/api/btch/btchList',
                 isLoaing: false,
+                data: {
+                    appToken: !!appToken ? appToken : ''
+                },
                 success: res => {
 
                     if(res.isDutjStrt) {
@@ -260,6 +266,7 @@ export default function Index(props) {
                 url: '/api/btch/btchList',
                 isLoaing: false,
                 data:{
+                    appToken: !!appToken ? appToken : '',
                     isLog: dateInfo.log !== cmm.date.getToday(''),
                     appYn: cmm.isApp() ? 'Y' : 'N'
                 },

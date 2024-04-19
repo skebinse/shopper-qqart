@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
             const dataJson = cmm.util.queryStringToJSON(iconv.decode(data, 'utf-8').toString());
 
-            res.redirect(`/join/essInfoInpt?name=${encodeURI(dataJson.NAME)}&nameHash=${encodeURI(await bcrypt.hash(dataJson.NAME, 10))}&iden=${dataJson.IDEN}&phone=${dataJson.PHONE}`);
+            res.redirect(`/join/essInfoInpt?name=${encodeURI(dataJson.NAME)}&nameHash=${encodeURI(await bcrypt.hash(dataJson.NAME, 10))}&iden=${dataJson.IDEN}&cphoneNo=${dataJson.PHONE}`);
         },
         error: () => {
 

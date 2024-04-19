@@ -9,15 +9,18 @@ export default async function handler(req, res) {
 
         try {
 
-            const [rows, fields] = await conn.query('call spShprJoin(?, ?, ?, ?, ?, ?, ' +
+            const [rows, fields] = await conn.query('call spInsShprJoin(?, ?, ?, ?, ?, ?, ' +
                                                                     '?, ?, ?, ?, ?, ?, ' +
                                                                     '?, ?, ?, ?, ?, ?, ' +
-                                                                    '?, ?, ?, ?, ?, ?)', [
+                                                                    '?, ?, ?, ?, ?, ?,' +
+                                                                    '?, ?, ?, ?, ?, ?, ?, ?)', [
                 param.userCrctno, param.userEmal, param.userNcnm, param.userPrfl, param.userTnalPrfl, param.userSnsType,
                 param.userStdoCd, param.userZipc, param.userAddr, '', param.cphoneNo, param.userAddrLat,
                 param.userAddrLot, '', '', param.atchFileUuid, param.shprSfitdText, process.env.ENC_KEY,
-                param.userId, param.userPw, (param.appToken === 'null' ? '' : param.appToken), param.shprDelyPosDtc, param.mktnAgrYn, param.isLogin
+                param.userId, param.userPw, (param.appToken === 'null' ? '' : param.appToken), param.shprDelyPosDtc, param.mktnAgrYn, param.isLogin,
+                param.name, param.bankNm, param.bankNum, param.shprDrvLicAtchFileUuid, param.shprVhclKd, param.shprVhclNm, param.shprVhclNo, param.iden
             ]);
+
             const item = rows[0][0];
 
             // 쿠키 등록

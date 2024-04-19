@@ -56,8 +56,8 @@ export default function ClauAgr() {
         joinInfoLS.mktnAgrYn = !!document.querySelector('#clauAgrChk05').checked ? 'Y' : 'N'
         cmm.util.setLs(cmm.Cont.JOIN_INFO, joinInfoLS);
 
-        goPage('/join/cphone');
-        // goPage('/join/selfCfm');
+        // goPage('/join/cphone');
+        goPage('/join/selfCfm');
     };
 
     return (

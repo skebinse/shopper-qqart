@@ -62,6 +62,8 @@
 .join .content ul.info > li > div.zip{display: flex;align-items: center;padding-top: 10px;}
 .join .content ul.info > li > div.zip p{flex: 1;padding-right: 10px;}
 .join .content ul.info > li > div.zip p span{color: #333333;opacity: 0.5;font-size: 17px;font-weight: 300;}
+.join .content ul.info > li :global .css-1dimb5e-singleValue{font-size: 17px;}
+.join .content ul.info > li :global .css-1fdsijx-ValueContainer{padding-left: 0;}
 .join .content .profile{text-align: center;}
 .join .content .profile img{width: 96px;height: 96px;border-radius: 100%;display: block;margin: 0 auto;margin: 32px auto 13px;object-fit: cover;}
 .join .content .profile input{display: none}
@@ -103,3 +105,13 @@
 .join .callInfo{padding-top: 30px;font-weight: 500;}
 .join .callInfo em{display: block;padding-bottom: 10px;font-weight: 700;font-size: 22px;
 }
+.bankInfo{z-index: 1;}
+.bankInfo > div > div{width: 100%;padding: 0;}
+.bankInfo > div > div ul{width: 100%;padding-bottom: 15px;}
+.bankInfo > div > div ul li{padding-top: 20px;}
+.bankInfo > div > div ul li label{padding-bottom: 10px;display: block;}
+.bankInfo > div > div ul li .select2 > div > div{width: 100%;border-color: hsl(0, 0%, 80%);border-style: solid;border-width: 1px;}
+.bankInfo > div > div ul li input{color: #333333;font-size: 17px;width: 100%;border-color: hsl(0, 0%, 80%);border-style: solid;border-width: 1px;padding: 8px 5px;width: calc(100% - 10px);}
+.bankInfo > div > div ul li input:focus{outline: none;}
+.bankInfo > div > div ul li input::placeholder{font-weight: 300;opacity: 0.5;}
+.bankInfo > div > div ul li :global .css-1dimb5e-singleValue{font-size: 17px;}

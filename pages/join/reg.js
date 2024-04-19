@@ -35,38 +35,10 @@ export default function Reg() {
         setJoinInfoLS(cmm.util.getLs(cmm.Cont.JOIN_INFO));
         setJoinInfo(prevState => ({...prevState, appToken: !!cmm.util.getLs(cmm.Cont.APP_TOKEN) ? cmm.util.getLs(cmm.Cont.APP_TOKEN) : ''}));
 
-        if(!cmm.checkLogin() && !cmm.util.getLs(cmm.Cont.JOIN_INFO).basis) {
-            cmm.alert('로그인정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {
+        if(!cmm.util.getLs(cmm.Cont.JOIN_INFO)) {
+            cmm.alert('가입정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {
                 goPage('/cmm/login');
             });
-        } else {
-
-            if(!!cmm.checkLogin()) {
-
-                cmm.ajax({
-                    url: '/api/shpr/myInfo',
-                    method: 'GET',
-                    success: res => {
-
-                        setJoinInfo({
-                            isLogin: 'Y',
-                            userCrctno: res.SHPR_CRCTNO,
-                            userId: res.SHPR_LOGIN_ID,
-                            userNcnm: res.SHPR_NCNM,
-                            shprSfitdText: res.SHPR_SFITD_TEXT,
-                            profile: res.SHPR_NCNM,
-                            addrTxt: res.SHPR_ADDR,
-                            userStdoCd: res.SHPR_STDO_CD,
-                            userZipc: res.SHPR_ZIPC,
-                            userAddr: res.SHPR_ADDR,
-                            userAddrLat: res.SHPR_ADDR_LAT,
-                            userAddrLot: res.SHPR_ADDR_LOT,
-                            atchFileUuid: res.SHPR_PRFL_ATCH_FILE_UUID,
-                        });
-                        setPrflPrvImg(cmm.getLoginInfo('SHPR_PRFL_FILE'));
-                    }
-                });
-            }
         }
 
     }, [router.query.userCrctno, router.query.basis, goPage]);
@@ -171,23 +143,27 @@ export default function Reg() {
                                 success: res => {
 
                                     cmm.util.setLs(cmm.Cont.LOGIN_INFO, res);
+                                    window.drvLicImg = null;
+                                    cmm.util.rmLs(cmm.Cont.JOIN_INFO);
                                     goPage('./comp');
                                 }
                             });
                         };
 
-                        if(!!joinInfo.atchFileUuid) {
-
-                            call({...joinInfo, ...joinInfoLS});
-                        } else {
-
-                            shopS3Upload(joinInfo.profile, res => {
+                        if(!!window.drvLicImg) {
+                            shopS3Upload(window.drvLicImg, resLic => {
 
                                 const param = {...joinInfo, ...joinInfoLS};
-                                param.atchFileUuid = res.atchFileUuid;
-                                setJoinInfo(prevState => ({...prevState, atchFileUuid: res.atchFileUuid}));
+                                param.shprDrvLicAtchFileUuid = resLic.atchFileUuid;
+                                setJoinInfo(prevState => ({...prevState, shprDrvLicAtchFileUuid: resLic.atchFileUuid}));
 
-                                call(param);
+                                shopS3Upload(joinInfo.profile, res => {
+
+                                    param.atchFileUuid = res.atchFileUuid;
+                                    setJoinInfo(prevState => ({...prevState, atchFileUuid: res.atchFileUuid}));
+
+                                    call(param);
+                                });
                             });
                         }
                     }

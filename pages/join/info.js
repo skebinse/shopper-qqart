@@ -19,6 +19,7 @@ export default function Info() {
     const [joinInfoLS, setJoinInfoLS] = useState({});
     const [isBankPopup, setIsBankPopup] = useState(false);
     const [carKdList, setCarKdList] = useState([]);
+    const [danalTid, setDanalTid] = useState('');
     const [joinInfo, setJoinInfo] = useState({
         inpBankCd: '',
         inpBankNum: '',
@@ -72,11 +73,6 @@ export default function Info() {
 
     useEffect(() => {
 
-        if(!!cmm.util.getLs(cmm.Cont.JOIN_INFO)) {
-
-            setJoinInfoLS(cmm.util.getLs(cmm.Cont.JOIN_INFO));
-        }
-
         if(!cmm.checkLogin() && !cmm.util.getLs(cmm.Cont.JOIN_INFO) && !cmm.util.getLs(cmm.Cont.JOIN_INFO)?.userCrctno) {
             cmm.alert('로그인정보가 없습니다.\n로그인 화면으로 이동합니다.', () => {
                 goPage('/cmm/login');
@@ -122,7 +118,9 @@ export default function Info() {
                                     shprBankAcno: res.SHPR_BANK_ACNO,
                                     shprBrdt: res.SHPR_BRDT,
                                     shprName: res.SHPR_NAME,
+                                    shprGrdCd: res.SHPR_GRD_CD,
                                 });
+
                                 setPrflPrvImg(res.SHPR_PRFL_FILE);
                             }
                         });
@@ -349,20 +347,48 @@ export default function Info() {
         }
     };
 
+    /**
+     * 본인 인증하기
+     */
+    const selfCfmHandler = () => {
+        cmm.ajax({
+            url: '/api/cmm/selfCfmReq',
+            data:{
+                orderId: 'info',
+            },
+            success: res => {
+
+                if(res.RETURNCODE === '0000') {
+                    setDanalTid(res.TID);
+                } else {
+                    cmm.alert('본인확인 초기화에 실패하였습니다.');
+                }
+            }
+        });
+    };
+
+    useEffect(() => {
+
+        if(!!danalTid) {
+            frmSelfCfm.submit();
+        }
+    }, [danalTid]);
+
     return (
         <div className={styles.join}>
             <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" defer/>
-            <HeadTitle title={joinInfo.isLogin ? '개인정보수정' : ''} />
+            <HeadTitle title={joinInfo.isLogin ? '개인정보수정' : ''}/>
             {!joinInfo.isLogin &&
-                <NaviStep step={3} />
+                <NaviStep step={3}/>
             }
             <div className={styles.content} style={joinInfo.isLogin ? {paddingTop: '0px'} : {}}>
                 {!joinInfo.isLogin &&
                     <h3>기본 정보 설정</h3>
                 }
                 <div className={styles.profile}>
-                    <Image src={!!prflPrvImg ? prflPrvImg : "/assets/images/img/noProfile.svg"} priority={true} alt={'프로필 사진'} width={96} height={96} />
-                    <input id={'inpFile'} type={"file"} accept={'image/*'} onChange={fileChage} />
+                    <Image src={!!prflPrvImg ? prflPrvImg : "/assets/images/img/noProfile.svg"} priority={true}
+                           alt={'프로필 사진'} width={96} height={96}/>
+                    <input id={'inpFile'} type={"file"} accept={'image/*'} onChange={fileChage}/>
                     <label htmlFor={'inpFile'}>
                         사진업로드
                     </label>
@@ -380,53 +406,66 @@ export default function Info() {
                         <label>차종</label>
                         <div className={styles.select2}>
                             <Select placeholder={'차종을 선택해 주세요'}
-                                value={!!joinInfo.shprVhclKd ? {label: joinInfo.shprVhclKd, value: joinInfo.shprVhclKd} : null}
-                                onChange={e => setJoinInfo(prevState => ({
-                                    ...prevState,
-                                    shprVhclKd: e.label,
-                                }))} options={carKdList}/>
+                                    value={!!joinInfo.shprVhclKd ? {
+                                        label: joinInfo.shprVhclKd,
+                                        value: joinInfo.shprVhclKd
+                                    } : null}
+                                    onChange={e => setJoinInfo(prevState => ({
+                                        ...prevState,
+                                        shprVhclKd: e.label,
+                                    }))} options={carKdList}/>
                         </div>
                     </li>
                     <li>
                         <label>차량명</label>
                         <div>
                             <input value={joinInfo.shprVhclNm}
-                               onChange={e => setJoinInfo(prevState => ({
-                                   ...prevState,
-                                   shprVhclNm: e.target.value
-                               }))}
-                               type="text" placeholder="차량명을 입력해 주세요"/>
+                                   onChange={e => setJoinInfo(prevState => ({
+                                       ...prevState,
+                                       shprVhclNm: e.target.value
+                                   }))}
+                                   type="text" placeholder="차량명을 입력해 주세요"/>
                         </div>
                     </li>
                     <li>
                         <label>차량 번호</label>
                         <div>
                             <input value={joinInfo.shprVhclNo}
-                               onChange={e => setJoinInfo(prevState => ({
-                                   ...prevState,
-                                   shprVhclNo: e.target.value
-                               }))}
-                               type="text" placeholder="123퀵4567"/>
+                                   onChange={e => setJoinInfo(prevState => ({
+                                       ...prevState,
+                                       shprVhclNo: e.target.value
+                                   }))}
+                                   type="text" placeholder="123퀵4567"/>
                         </div>
                     </li>
-                    {!!joinInfo.shprBrdt &&
+                    {joinInfo?.shprGrdCd !== 'ETPS' &&
                         <li>
                             <label>은행/계좌정보</label>
                             <div className={styles.zip}>
-                                <p>
-                                    {!!joinInfo.bankNm &&
-                                        <>
-                                            {joinInfo.bankNm} / {joinInfo.bankNum}
-                                        </>
-                                    }
-                                    {!!joinInfo.shprBankNm &&
-                                        <>
-                                            {joinInfo.shprBankNm} / {joinInfo.shprBankAcno}
-                                        </>
-                                    }
-                                </p>
-                                <button type={'button'} onClick={bankPopupHandler}>수정</button>
+                                {!!joinInfo.shprBrdt &&
+                                    <>
+                                        <p>
+                                            {!!joinInfo.bankNm &&
+                                                <>
+                                                    {joinInfo.bankNm} / {joinInfo.bankNum}
+                                                </>
+                                            }
+                                            {!!joinInfo.shprBankNm &&
+                                                <>
+                                                    {joinInfo.shprBankNm} / {joinInfo.shprBankAcno}
+                                                </>
+                                            }
+                                        </p>
+                                        <button type={'button'} onClick={bankPopupHandler}>수정</button>
+                                    </>
+                                }
+                                {!joinInfo.shprBrdt &&
+                                    <button className={styles.btnSelfAhrz} type={'button'} onClick={selfCfmHandler}>본인인증</button>
+                                }
                             </div>
+                            {!joinInfo.shprBrdt &&
+                                <p className={styles.infoTxt2}>* 최초 본인인증 후 등록 가능합니다.</p>
+                            }
                         </li>
                     }
                     <li>
@@ -477,7 +516,7 @@ export default function Info() {
                                 <li>
                                     <label>예금주</label>
                                     <div>
-                                        <input value={joinInfo.shprName} disabled={true} />
+                                        <input value={joinInfo.shprName} disabled={true}/>
                                     </div>
                                 </li>
                                 <li>
@@ -499,7 +538,7 @@ export default function Info() {
                                     <label>통장번호</label>
                                     <div>
                                         <input value={joinInfo.inpBankNum}
-                                            onChange={e => setJoinInfo(prevState => ({
+                                               onChange={e => setJoinInfo(prevState => ({
                                                    ...prevState,
                                                    inpBankNum: e.target.value
                                                }))}
@@ -515,6 +554,16 @@ export default function Info() {
                         </div>
                     </div>
                 </div>
+            }
+            {!joinInfo.shprBrdt &&
+                <form id={'frmSelfCfm'} action={'https://wauth.teledit.com/Danal/WebAuth/Web/Start.php'} method={'POST'}>
+                    <input type={'hidden'} name={'TID'} value={danalTid}/>
+                    <input type={'hidden'} name={'BgColor'} value={'00'}/>
+                    <input type={'hidden'} name={'BackURL'} value={process.env.NEXT_PUBLIC_LOCAL_URL + '/join/info'}/>
+                    <input type={'hidden'} name={'IsCharSet'} value={'EUC-KR'}/>
+                    <input type={'hidden'} name={'ByBuffer'} value={'This value bypass to CPCGI Page'}/>
+                    <input type={'hidden'} name={'ByAnyName'} value={'Anyvalue'}/>
+                </form>
             }
         </div>
     );

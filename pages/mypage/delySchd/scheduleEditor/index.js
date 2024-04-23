@@ -74,9 +74,6 @@ export default function ScheduleEditor(props) {
         }
     };
 
-    useEffect(() => {
-    }, [selectedArea]);
-
     
     // TIME_SLOT_COUNT 개수만큼의 시간 선택 옵션 생성
     const timeSlots = range(TIME_SLOT_COUNT).map(offset => padStart(`${offset + START_TIME}`, 2, '0'));

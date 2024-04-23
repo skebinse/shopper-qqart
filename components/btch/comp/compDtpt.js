@@ -56,13 +56,13 @@ export default function CompDtpt({id, onClose}) {
                 </div>
             }
             <div className={styles.summDiv}>
-                <h5>정산금액</h5>
+                <h5>배달금액</h5>
                 <p>
                     {cmm.util.comma(dtptInfo.ODER_DELY_AMT)}원
                     {!!dtptInfo.SHPR_ADJ_POIN &&
                         <em> +{cmm.util.comma(dtptInfo.SHPR_ADJ_POIN)}P</em>
                     }
-                    <span className={dtptInfo.ODER_ADJ_YN === 'Y' ? styles.adj : ''}>{dtptInfo.ODER_ADJ_YN === 'Y' ? '정산완료' : '정산예정'}</span>
+                    {/*<span className={dtptInfo.ODER_ADJ_YN === 'Y' ? styles.adj : ''}>{dtptInfo.ODER_ADJ_YN === 'Y' ? '정산완료' : '정산예정'}</span>*/}
                 </p>
                 <ul>
                     <li>

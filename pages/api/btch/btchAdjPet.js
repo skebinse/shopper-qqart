@@ -9,7 +9,6 @@ export default async function handler(req, res) {
         const encShprId = getCookie('enc_sh', {req, res});
 
         try {
-            const query = ``;
 
             // 배송 완료 리스트
             let [rows] = await conn.query('call spInsShprAdjReq(fnDecrypt(?, ?), ?, ?, ?)',

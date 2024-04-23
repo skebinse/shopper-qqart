@@ -12,6 +12,7 @@ export default function EssInfoInpt(props) {
     const {goPage} = useCommon();
     const router = useRouter();
     const [userInfo, setUserInfo] = useState({});
+    const [carKdList, setCarKdList] = useState([]);
     const [prvImg, setPrvImg] = useState(null);
     const options = [
         {value: '0002', label: '산업은행'},
@@ -72,7 +73,18 @@ export default function EssInfoInpt(props) {
 
             setUserInfo(!!cmm.util.getLs('selfCfm') ? cmm.util.getLs('selfCfm') : {});
         }
-        // https://localhost:3000/join/essInfoInpt?name=박장용&nameHash=$2b$10$FmebTEUUXulJC63UgYNpHuuWcC18MIVKu/xktT.WK7LS5A5bY5.wO&iden=8304081&phone=01098767527
+        // https://localhost:3000/join/essInfoInpt?name=박장용&nameHash=$2b$10$FmebTEUUXulJC63UgYNpHuuWcC18MIVKu/xktT.WK7LS5A5bY5.wO&iden=8304081&cphoneNo=01098767527
+
+        cmm.ajax({
+            url: '/api/cmm/commCdList',
+            data: {
+                cdSppoId: 208
+            },
+            success: res => {
+
+                setCarKdList(res.map(item => ({value: item.CD_NM, label: item.CD_NM})));
+            },
+        });
 
         return () => {
             if(!!document.querySelector('#ch-plugin')) {
@@ -86,14 +98,25 @@ export default function EssInfoInpt(props) {
      */
     const nextHandler = () => {
 
-        if(!userInfo.bankCd) {
+        if(!window.drvLicImg) {
+            cmm.alert('면허증 사진을 올려주세요.');
+            return;
+        } else if(!userInfo.shprVhclKd) {
+            cmm.alert('차종을 선택해 주세요.');
+            return;
+        } else if(!userInfo.shprVhclNm) {
+            cmm.alert('차량명을 입력해 주세요.');
+            return;
+        } else if(!userInfo.shprVhclNo) {
+            cmm.alert('차량번호를 입력해 주세요.');
+            return;
+        } else if(!userInfo.bankCd) {
             cmm.alert('은행을 선택해 주세요.');
             return;
         } else if(!userInfo.bankNum) {
             cmm.alert('통장번호를 입력해 주세요.');
             return;
         }
-
         cmm.ajax({
             url: '/api/join/bnkbSelfAhrz',
             data: userInfo,
@@ -129,6 +152,22 @@ export default function EssInfoInpt(props) {
         }
     };
 
+    /**
+     * 이미지 회전
+     */
+    const drvLicImgRotateHandler = () => {
+
+        cmm.loading(true);
+
+        // 썸네일
+        cmm.util.getThumbFile({file: window.drvLicImg, maxSize: 1024, type: window.drvLicImg.type, rotate: 90}).then(imgData => {
+            setPrvImg(window.URL.createObjectURL(imgData.blob));
+            window.drvLicImg = imgData.blob;
+
+            cmm.loading(false);
+        });
+    };
+
     return (
         <div className={styles.join}>
             <HeadTitle callbackClose={() => goPage('/join/selfCfm')} />
@@ -144,13 +183,40 @@ export default function EssInfoInpt(props) {
                             사진 등록
                         </button>
                     </label>
-                    <img src={prvImg} onClick={() => inpFile.click()} />
+                    <div>
+                        <img src={prvImg} onClick={() => inpFile.click()} />
+                        <span onClick={drvLicImgRotateHandler}>
+                            <img src={'/assets/images/icon/iconRefresh.svg'}/>
+                        </span>
+                    </div>
                 </div>
                 <ul className={styles.info}>
                     <li>
+                        <label>차종</label>
+                        <div className={styles.select2}>
+                            <Select placeholder={'차종을 선택해 주세요'}
+                                    onChange={e => setUserInfo(prevState => ({
+                                        ...prevState,
+                                        shprVhclKd: e.label,
+                                    }))} options={carKdList}/>
+                        </div>
+                    </li>
+                    <li>
+                    <label>차량명</label>
+                        <div>
+                            <input onChange={e => setUserInfo(prevState => ({...prevState, shprVhclNm: e.target.value}))} type="text" placeholder="차량명을 입력해 주세요"/>
+                        </div>
+                    </li>
+                    <li>
+                        <label>차량 번호</label>
+                        <div>
+                            <input onChange={e => setUserInfo(prevState => ({...prevState, shprVhclNo: e.target.value}))} type="text" placeholder="123퀵4567"/>
+                        </div>
+                    </li>
+                    <li>
                         <label>이름</label>
                         <div>
-                            <input defaultValue={userInfo.name} type="text" placeholder="아이디를 입력해 주세요" readOnly />
+                            <input defaultValue={userInfo.name} type="text" placeholder="아이디를 입력해 주세요" readOnly/>
                         </div>
                     </li>
                     <li>
@@ -163,15 +229,19 @@ export default function EssInfoInpt(props) {
                     <li>
                         <label>은행</label>
                         <div className={styles.select2}>
-                            <Select placeholder={'은행을 선택해주세요'}
-                                    onChange={e => setUserInfo(prevState => ({...prevState, bankCd: e.value, bankNm: e.label}))} options={options} />
+                            <Select placeholder={'은행을 선택해 주세요'}
+                                    onChange={e => setUserInfo(prevState => ({
+                                        ...prevState,
+                                        bankCd: e.value,
+                                        bankNm: e.label
+                                    }))} options={options}/>
                         </div>
                     </li>
                     <li>
                         <label>통장번호</label>
                         <div>
                             <input onChange={e => setUserInfo(prevState => ({...prevState, bankNum: e.target.value}))}
-                                   type="text" placeholder="통장번호를 입력해 주세요" />
+                                   type="text" placeholder="통장번호를 입력해 주세요"/>
                         </div>
                     </li>
                 </ul>
@@ -184,7 +254,7 @@ export default function EssInfoInpt(props) {
 }
 
 export async function getServerSideProps(context) {
-    const { req, params  } = context;
+    const {req, params  } = context;
 
     return {
         props: {},

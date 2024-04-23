@@ -7,7 +7,7 @@ popbill.config( {
     SecretKey : 'U6kWl5TthWbi5+DNWte20qcTlrNhP2KGlHNI/KLrqDk=',
 
     // 연동환경 설정값, (true-개발용, false-상업용)
-    IsTest : true,
+    IsTest : false,
 
     // 인증토큰 IP제한기능 사용여부, 권장(true)
     IPRestrictOnOff: true,

@@ -1,8 +1,14 @@
 import cmm from "../../../js/common";
 import iconv from "iconv-lite";
 import {result} from "../db";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
+
+    const encShprId = getCookie('enc_sh', {req, res});
+
+    const param = req.body;
+    const ORDERID = !!param.orderId ? encodeURIComponent(encShprId) : '';
 
     cmm.ajax({
         url: 'https://uas.teledit.com/uas/',
@@ -17,7 +23,7 @@ export default async function handler(req, res) {
             CPPWD: encodeURI(process.env.NEXT_PUBLIC_API_DANAL_CPPWD),
             TARGETURL: encodeURI(process.env.NEXT_PUBLIC_LOCAL_URL + '/api/join/callbackSelfCfm'),
             USERID: '',
-            ORDERID: '',
+            ORDERID
         },
         success: data => {
 

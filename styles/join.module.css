@@ -62,11 +62,15 @@
 .join .content ul.info > li > div.zip{display: flex;align-items: center;padding-top: 10px;}
 .join .content ul.info > li > div.zip p{flex: 1;padding-right: 10px;}
 .join .content ul.info > li > div.zip p span{color: #333333;opacity: 0.5;font-size: 17px;font-weight: 300;}
+.join .content ul.info > li > div .btnSelfAhrz{width: 100%;padding: 10px 0;}
+.join .content ul.info > li :global .css-1dimb5e-singleValue{font-size: 17px;}
+.join .content ul.info > li :global .css-1fdsijx-ValueContainer{padding-left: 0;}
 .join .content .profile{text-align: center;}
 .join .content .profile img{width: 96px;height: 96px;border-radius: 100%;display: block;margin: 0 auto;margin: 32px auto 13px;object-fit: cover;}
 .join .content .profile input{display: none}
 .join .content .profile label{border: 1px solid #CDCDCD;border-radius: 6px;color: #333333;font-size: 16px;padding: 11px 14px;background-color: #ffffff;font-weight: 700;display: inline-block;}
 .join .content .infoTxt{color: #F4997A;font-size: 14px;font-weight: 700;text-align: center}
+.join .content .infoTxt2{color: #F4997A;font-size: 12px;font-weight: 700;padding-top: 5px;}
 .join .popup{top: 100%;position: fixed;transition: all 0.5s;width: 100%;height: 100%;background-color: #ececec;opacity: 0;z-index: 1;}
 .join .popup.active{top: 0;opacity: 1}
 .join .daumPost > div{width: 100% !important;}
@@ -93,13 +97,25 @@
 .join .select2 > div > div > div:last-child span{display: none;}
 .join .drvLicDiv{border-radius: 12px;border: 1px solid #E4E4E4;background: #F8F8F8;padding: 58px 16px 16px;align-items: center;margin-top: 24px;}
 .join .drvLicDiv input{display: none;}
-.join .drvLicDiv span{color: #707070;font-size: 15px;font-style: normal;font-weight: 400;line-height: 19px;display: block;text-align: center;padding-bottom: 39px;}
+.join .drvLicDiv label span{color: #707070;font-size: 15px;font-style: normal;font-weight: 400;line-height: 19px;display: block;text-align: center;padding-bottom: 39px;}
 .join .drvLicDiv button{border-radius: 12px;background: #FFF;box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.05);color: #333;font-size: 16px;font-weight: 500;line-height: normal;letter-spacing: -0.48px;padding: 16px 0;border: none; width: 100%;display: flex;align-items: center;justify-content: center;pointer-events: none;}
 .join .drvLicDiv button img{padding-right: 8px;}
 .join .drvLicDiv.prevImgShow{padding: 0;border: none;height: 206px;}
 .join .drvLicDiv.prevImgShow > label{display: none;}
-.join .drvLicDiv.prevImgShow > img{width: 100%;height: 100%;object-fit: cover;border-radius: 12px;}
+.join .drvLicDiv.prevImgShow > div{height: 100%;position: relative;}
+.join .drvLicDiv.prevImgShow > div > img{width: 100%;height: 100%;object-fit: cover;border-radius: 12px;}
+.join .drvLicDiv.prevImgShow > div > span{background-color: rgba(0, 0, 0, 0.5);padding: 8px 8px 3px;position: absolute;right: 10px;bottom: 10px;border-radius: 10px;transform: rotateY(180deg);}
 
 .join .callInfo{padding-top: 30px;font-weight: 500;}
 .join .callInfo em{display: block;padding-bottom: 10px;font-weight: 700;font-size: 22px;
 }
+.bankInfo{z-index: 1;}
+.bankInfo > div > div{width: 100%;padding: 0;}
+.bankInfo > div > div ul{width: 100%;padding-bottom: 15px;}
+.bankInfo > div > div ul li{padding-top: 20px;}
+.bankInfo > div > div ul li label{padding-bottom: 10px;display: block;}
+.bankInfo > div > div ul li .select2 > div > div{width: 100%;border-color: hsl(0, 0%, 80%);border-style: solid;border-width: 1px;}
+.bankInfo > div > div ul li input{color: #333333;font-size: 17px;width: 100%;border-color: hsl(0, 0%, 80%);border-style: solid;border-width: 1px;padding: 8px 5px;width: calc(100% - 10px);}
+.bankInfo > div > div ul li input:focus{outline: none;}
+.bankInfo > div > div ul li input::placeholder{font-weight: 300;opacity: 0.5;}
+.bankInfo > div > div ul li :global .css-1dimb5e-singleValue{font-size: 17px;}

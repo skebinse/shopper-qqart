@@ -54,6 +54,13 @@ async function getMyInfo(conn, req, res) {
                      , SHPR_DELY_POS_DTC
                      , SHPR_NCNM
                      , SHPR_NTFY_YN
+                     , SHPR_VHCL_KD
+                     , SHPR_VHCL_NM
+                     , SHPR_VHCL_NO
+                     , SHPR_BANK_NM
+                     , SHPR_BRDT
+                     , SHPR_NAME
+                     , CASE WHEN LENGTH(IFNULL(SHPR_BANK_ACNO, '') > 4) THEN CONCAT(REPEAT('*', CHAR_LENGTH(SHPR_BANK_ACNO) - 4), RIGHT(SHPR_BANK_ACNO, 4)) ELSE SHPR_BANK_ACNO END AS SHPR_BANK_ACNO
                      , fnGetAtchFileList(SHPR_PRFL_ATCH_FILE_UUID) AS SHPR_PRFL_FILE
                      , fnGetShprPoint(SHPR_ID) AS SHPR_POIN
                   FROM T_SHPR_INFO

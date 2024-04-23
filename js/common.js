@@ -778,10 +778,24 @@ const cmm = {
                         height = maxSize;
                     }
                 }
-                canvas.width = width;
-                canvas.height = height;
-                canvas.getContext("2d").drawImage(image, 0, 0, width, height);
+
+                // 이미지 회전
+                if(options.rotate > 0) {
+
+                    canvas.width = height;
+                    canvas.height = width;
+                    const ctx = canvas.getContext('2d');
+                    ctx.translate(canvas.width / 2, canvas.height / 2);
+                    ctx.rotate(options.rotate * Math.PI / 180);
+                    ctx.drawImage(image, -width / 2, -height / 2);
+                } else {
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    canvas.getContext("2d").drawImage(image, 0, 0, width, height);
+                }
                 const dataUrl = canvas.toDataURL("image/jpeg");
+
                 return dataURItoBlob(dataUrl);
             };
 

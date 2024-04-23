@@ -377,7 +377,7 @@ export default function Info() {
     return (
         <div className={styles.join}>
             <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" defer/>
-            <HeadTitle title={joinInfo.isLogin ? '개인정보수정' : ''}/>
+            <HeadTitle title={joinInfo.isLogin ? '개인정보수정' : ''} callbackClose={() => goPage('/mypage')}/>
             {!joinInfo.isLogin &&
                 <NaviStep step={3}/>
             }
@@ -567,4 +567,12 @@ export default function Info() {
             }
         </div>
     );
+}
+
+export async function getServerSideProps(context) {
+    const {req, params  } = context;
+
+    return {
+        props: {},
+    }
 }

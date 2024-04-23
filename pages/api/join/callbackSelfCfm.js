@@ -31,9 +31,7 @@ export default async function handler(req, res) {
 
                         const [shprIdRow] = await conn.query(query, [dataJson.ORDERID, process.env.ENC_KEY]);
                         const shprId = shprIdRow[0].SHPR_ID;
-                        console.log('encShprId', dataJson.ORDERID)
-                        console.log('shprId', shprId)
-                        console.log(dataJson)
+
                         query = `
                             UPDATE T_SHPR_INFO
                                SET SHPR_NAME = ?

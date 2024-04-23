@@ -152,6 +152,22 @@ export default function EssInfoInpt(props) {
         }
     };
 
+    /**
+     * 이미지 회전
+     */
+    const drvLicImgRotateHandler = () => {
+
+        cmm.loading(true);
+
+        // 썸네일
+        cmm.util.getThumbFile({file: window.drvLicImg, maxSize: 1024, type: window.drvLicImg.type, rotate: 90}).then(imgData => {
+            setPrvImg(window.URL.createObjectURL(imgData.blob));
+            window.drvLicImg = imgData.blob;
+
+            cmm.loading(false);
+        });
+    };
+
     return (
         <div className={styles.join}>
             <HeadTitle callbackClose={() => goPage('/join/selfCfm')} />
@@ -167,7 +183,12 @@ export default function EssInfoInpt(props) {
                             사진 등록
                         </button>
                     </label>
-                    <img src={prvImg} onClick={() => inpFile.click()} />
+                    <div>
+                        <img src={prvImg} onClick={() => inpFile.click()} />
+                        <span onClick={drvLicImgRotateHandler}>
+                            <img src={'/assets/images/icon/iconRefresh.svg'}/>
+                        </span>
+                    </div>
                 </div>
                 <ul className={styles.info}>
                     <li>

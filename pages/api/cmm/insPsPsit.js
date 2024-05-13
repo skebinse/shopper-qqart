@@ -3,6 +3,12 @@ import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
+    if(process.env.NEXT_PUBLIC_RUN_MODE === 'local' && process.env.DB_PROD_YN === 'Y') {
+
+        res.status(200).json(result(''));
+        return;
+    }
+
     await getConnectPool(async conn => {
 
         const param = req.body;

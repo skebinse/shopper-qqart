@@ -66,6 +66,7 @@ export default async function handler(req, res) {
                           WHERE SHPR_ID = ?`;
 
                 const [shprAppPushTkn] = await conn.query(query, [shprId]);
+                let isTokenModify = false;
 
                 // 토큰 정보가 다를 경우
                 if(shprAppPushTkn[0].SHPR_APP_PUSH_TKN !== param.appToken) {
@@ -75,7 +76,45 @@ export default async function handler(req, res) {
                               WHERE SHPR_ID = ?`;
 
                     await conn.query(query, [param.appToken, shprId]);
+                    isTokenModify = true;
                 }
+
+                query = `
+                    INSERT INTO T_LOG_MAG(
+                         SHPR_ID
+                       , LOG_KD
+                       , LOG_PARAM
+                       , LOG_RSLT
+                    )
+                  SELECT ?
+                       , '토큰정보 - 배치'
+                       , ?
+                       , ?
+                    FROM T_CD_MAG
+                   WHERE CD_ID = 217
+                     AND CD_RMK = 'Y'
+                `;
+
+                await conn.query(query, [shprId, param.appToken, shprAppPushTkn[0].SHPR_APP_PUSH_TKN + ' : ' + isTokenModify]);
+            } else {
+
+                query = `
+                    INSERT INTO T_LOG_MAG(
+                         SHPR_ID
+                       , LOG_KD
+                       , LOG_PARAM
+                       , LOG_RSLT
+                    )
+                  SELECT ?
+                       , '토큰정보 - 배치'
+                       , 'null'
+                       , ''
+                    FROM T_CD_MAG
+                   WHERE CD_ID = 217
+                     AND CD_RMK = 'Y'
+                `;
+
+                await conn.query(query, [shprId]);
             }
 
             // 배치 리스트

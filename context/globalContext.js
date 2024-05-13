@@ -57,18 +57,6 @@ export function GlobalProvider({children}) {
 
     useEffect(() => {
 
-        if(cmm.isApp()) {
-
-            // PUSH Token
-            cmm.app.getPushToken(() => {
-                if(!!cmm.checkLogin() && cmm.date.getToday('') !== cmm.getLoginInfo('LOING_DT')) {
-
-                    // 로그인 정보 갱신
-                    loginInfoRnw();
-                }
-            });
-        }
-
         if(notLoginList.indexOf(router.route) === -1) {
 
             // 로그인 체크

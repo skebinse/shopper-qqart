@@ -163,14 +163,13 @@ export default function MyApp({ Component, pageProps }) {
         // 앱이고 토큰 정보가 스토리지에 없는 경우
         if(cmm.isApp()) {
 
-            if(!!localStorage.appToken) {
+            if(!!localStorage.pushid) {
 
-                cmm.util.setLs(localStorage.appToken.replace(/\"/g, ''));
-            } else {
-
-                // PUSH Token
-                cmm.app.getPushToken();
+                cmm.util.setLs(cmm.Cont.APP_TOKEN, localStorage.pushid);
             }
+
+            // PUSH Token
+            cmm.app.getPushToken();
         }
 
         // 현재 위치

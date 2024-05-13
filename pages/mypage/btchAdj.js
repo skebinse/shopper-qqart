@@ -67,6 +67,7 @@ export default function BtchAdj() {
 
                         // 수수료가 있을 경우
                         const shprGrdIdx = mthlCmss.indexOf(date.substring(0, 2));
+
                         if(shprGrdIdx > -1) {
 
                             // 수수료
@@ -101,7 +102,7 @@ export default function BtchAdj() {
                             // 수수료가 있을 경우
                             const shprGrdIdx = mthlCmss.indexOf(item.SHPR_OHRS_ADJ_MM);
                             // 수수료 금액 합계
-                            res.shprGrdList[shprGrdIdx].cmssAmt += item.SHPR_OHRS_ADJ_AMT * res.shprGrdList[shprGrdIdx].SHPR_GRD_CMSS_RATE / 100;;
+                            res.shprGrdList[shprGrdIdx].cmssAmt += item.SHPR_OHRS_ADJ_AMT * res.shprGrdList[shprGrdIdx].SHPR_GRD_CMSS_RATE / 100;
                         }
 
                         // 원천세 제외
@@ -120,6 +121,7 @@ export default function BtchAdj() {
 
                         return item;
                     });
+
                     // 정산예정 - 전체 수수료
                     totalAdjAmt -= totalCmssAmt;
                     // 원천세

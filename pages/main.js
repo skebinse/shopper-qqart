@@ -312,7 +312,7 @@ export default function Index(props) {
                     setIsInit(false);
                 } else {
 
-                    cmm.alert('로그인 후 이용가능합니다1.\n로그인 화면으로 이동합니다.', () => {
+                    cmm.alert('로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.', () => {
 
                         goPage('/cmm/login');
                     });

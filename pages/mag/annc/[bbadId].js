@@ -73,8 +73,12 @@ export default function AnncDtpt() {
             <HeadTitle title={title} />
             <div className={styles.content}>
                 <h3>{anncDtpt.BBAD_TITL}</h3>
-                <p>{anncDtpt.RGI_DT}</p>
-                <div className={'editor'}></div>
+                <p>
+                    {anncDtpt.BBAD_KD !== '공지' &&
+                        <>{anncDtpt.RGI_DT}</>
+                    }
+                </p>
+                    <div className={'editor'}></div>
             </div>
         </div>
     );

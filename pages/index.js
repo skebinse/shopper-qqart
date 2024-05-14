@@ -225,10 +225,16 @@ export default function Index(props) {
         // 앱 토큰 정보 가져오기
         let appToken = cmm.util.getLs(cmm.Cont.APP_TOKEN);
 
-        if(!appToken || appToken.length < 30) {
+        if(cmm.isApp()) {
 
-            // PUSH Token
-            cmm.app.getPushToken();
+            if(!appToken || appToken.length < 30) {
+
+                // PUSH Token
+                cmm.app.getPushToken();
+            }
+        } else {
+
+            appToken = '';
         }
 
         if(!isInit) {

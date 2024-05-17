@@ -201,13 +201,15 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 .webPushDiv{background: #FFFFFF;border-radius: 12px;padding: 20px 17px 20px 34px;position: fixed;top: 20px;width: calc(100% - 81px);z-index: 10;left: 15px;transition: all 0.5s;transform: translateY(-140%);box-shadow: #00000033 0px 0px 16px;}
 .webPushDiv.active{transform: translateY(0%);}
 .webPushDiv div h5{color: #000000;font-size: 16px;font-weight: bold;}
-.webPushDiv div p{color: #000000;font-size: 14px;padding: 10px 0 40px;}
+.webPushDiv.message div p{color: #000000;font-size: 14px;padding: 10px 0 40px;overflow: auto;}
 .webPushDiv div div{width: 100%;position: absolute;bottom: 0;left: 0;display: flex;}
 .webPushDiv div div button{width: 100%;border: none;height: 40px;}
 .webPushDiv div div button:first-child{background-color: #02B763;border-bottom-left-radius: 12px;color: #FFFFFF;}
 .webPushDiv div div button:last-child{border-bottom-right-radius: 12px;background-color: #787878;color: #FFFFFF;}
 .webPushDiv div div button.d-none + button{border-bottom-left-radius: 12px;}
 .webPushDiv img{position: absolute;top: 5px;right: 5px;}
+.webPushDiv.notice div > p{padding: 10px 0 15px;}
+.webPushDiv.notice div > p p{padding-bottom: 16px;}
 
 /* Tab */
 .tabArea{display: flex;padding: 24px 17px 9px;}

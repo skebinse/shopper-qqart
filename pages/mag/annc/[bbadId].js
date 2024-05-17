@@ -32,9 +32,6 @@ export default function AnncDtpt() {
                             setAnncDtpt(res);
                             setTitle(res.BBAD_KD === '공지' ? '공지사항' : res.BBAD_KD);
 
-                            const toolbarElement = editor.ui.view.toolbar.element;
-                            toolbarElement.style.display = 'none';
-
                             editor.enableReadOnlyMode('.editor');
 
                             editor.setData(res.BBAD_TEXT);
@@ -78,7 +75,7 @@ export default function AnncDtpt() {
                         <>{anncDtpt.RGI_DT}</>
                     }
                 </p>
-                    <div className={'editor'}></div>
+                <div className={'editor'}></div>
             </div>
         </div>
     );

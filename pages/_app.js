@@ -104,7 +104,7 @@ export default function MyApp({ Component, pageProps }) {
         }
 
         // 채널톡
-        // cmm.plugin.channelIO();
+        cmm.plugin.channelIO();
 
         // PUSH
         window.onPushMessage = data => {
@@ -112,17 +112,35 @@ export default function MyApp({ Component, pageProps }) {
             // 로그인 시
             if(cmm.checkLogin()) {
 
-                webPushTit.innerHTML = data.notification.title;
-                webPushTxt.innerHTML = data.notification.body;
-                if(!!data.notification.additionalData && !!data.notification.additionalData.custom_url) {
+                if(data.notification.additionalData.type === 'NOTICE') {
 
-                    btnWebPushUrl.classList = '';
-                    btnWebPushUrl.setAttribute('data-url', data.notification.additionalData.custom_url);
+                    // 게시판 상세 조회
+                    cmm.ajax({
+                        url: `/api${data.notification.additionalData.custom_url.replace('annc/', 'anncs/')}`,
+                        success: res => {
+
+                            webPushNoticeTit.innerHTML = res.BBAD_KD;
+                            webPushNoticeTxt.innerHTML = res.BBAD_TEXT;
+                            webPushNoticeTxt.style.maxHeight = (window.innerHeight - 200) + 'px'
+
+                            document.querySelector('.webPushDiv.notice').classList = 'webPushDiv notice active';
+                        }
+                    });
                 } else {
 
-                    btnWebPushUrl.classList = 'd-none';
+                    webPushTit.innerHTML = data.notification.title;
+                    webPushTxt.innerHTML = data.notification.body;
+                    if(!!data.notification.additionalData && !!data.notification.additionalData.custom_url) {
+
+                        btnWebPushUrl.classList = '';
+                        btnWebPushUrl.setAttribute('data-url', data.notification.additionalData.custom_url);
+                    } else {
+
+                        btnWebPushUrl.classList = 'd-none';
+                    }
+
+                    document.querySelector('.webPushDiv.message').classList = 'webPushDiv message active';
                 }
-                document.querySelector('.webPushDiv').classList = 'webPushDiv active';
             }
         };
 

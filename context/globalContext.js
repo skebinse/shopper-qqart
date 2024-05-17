@@ -94,14 +94,29 @@ export function GlobalProvider({children}) {
     };
 
     return (
-        <GlobalContext.Provider value={{sAlert, setSAlert, sConfirm, setSConfirm, isLoading, setIsLoading, isPushOpen, setIsPushOpen}}>
-            <div className={'webPushDiv'}>
+        <GlobalContext.Provider
+            value={{sAlert, setSAlert, sConfirm, setSConfirm, isLoading, setIsLoading, isPushOpen, setIsPushOpen}}>
+            <div className={'webPushDiv notice'}>
                 <div>
+                    <h5 id={'webPushNoticeTit'} data-id={1}></h5>
+                    <p id={'webPushNoticeTxt'}></p>
+                    <div>
+                        <button className={'d-none'}></button>
+                        <button
+                            onClick={() => document.querySelector('.webPushDiv.notice').classList = 'webPushDiv notice'}>닫기
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div className={'webPushDiv message'}>
+            <div>
                     <h5 id={'webPushTit'} data-id={1}></h5>
                     <p id={'webPushTxt'}></p>
                     <div>
                         <button id={'btnWebPushUrl'} onClick={pushAlertClickHandler}>이동하기</button>
-                        <button onClick={() => document.querySelector('.webPushDiv').classList = 'webPushDiv'}>닫기</button>
+                        <button
+                            onClick={() => document.querySelector('.webPushDiv.message').classList = 'webPushDiv message'}>닫기
+                        </button>
                     </div>
                 </div>
             </div>

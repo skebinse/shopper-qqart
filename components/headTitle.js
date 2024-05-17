@@ -1,9 +1,11 @@
 import {useRouter} from "next/navigation";
 import Image from "next/image";
+import useCommon from "../hooks/useCommon";
 
 export default function HeadTitle({title, type, callbackClose, children}) {
 
     const router = useRouter();
+    const {goPage} = useCommon();
 
     return (
         <div className={'headTitle'}>
@@ -13,7 +15,14 @@ export default function HeadTitle({title, type, callbackClose, children}) {
                     if(callbackClose) {
                         callbackClose();
                     } else {
-                        router.back();
+
+                        if(history.length === 1) {
+
+                            goPage('/');
+                        } else {
+
+                            router.back();
+                        }
                     }
                 }} />
             }

@@ -35,6 +35,7 @@ export default async function handler(req, res) {
 
             if(cmm.util.getNumber(rows[0].ODER_PGRS_STAT) >= 6) {
 
+                await conn.commit();
                 res.status(500).json(result('', '8000', '이미 배달이 완료된 건입니다.'));
 
                 return;

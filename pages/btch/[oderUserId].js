@@ -70,47 +70,88 @@ export default function OderUserId(props) {
     }, [goPage, oderUserId]);
 
     /**
+     * 쇼퍼와의 거리 계산
+     */
+    const getShprDtcCal = (item, callback) => {
+
+        // 쇼퍼 현재 위치
+        const shprPsPsitInfo = cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT);
+        const param = {
+            directionOption: 1,
+            endX: item.SHOP_ADDR_LAT,
+            endY: item.SHOP_ADDR_LOT,
+            reqCoordType: 'WGS84GEO',
+            startX: shprPsPsitInfo.shprPsitLat,
+            startY: shprPsPsitInfo.shprPsitLot,
+            resCoordType: 'WGS84GEO',
+        };
+
+        if(!!shprPsPsitInfo) {
+
+            cmm.loading(true);
+            cmm.ajax({
+                url: 'https://apis.openapi.sk.com/tmap/routes?version=1&callback=function',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    appKey: process.env.NEXT_PUBLIC_TMAP_KEY
+                },
+                isExtr: true,
+                data: param,
+                success: res => {
+
+                    cmm.loading(false);
+
+                    const disItem = res.features[0].properties;
+                    callback({...shprPsPsitInfo, oderPiupFrcsMi: Math.ceil(disItem.totalTime / 60) + 5});
+                },
+            });
+        } else {
+
+            // DB에 로그 남기기
+            cmm.insDbLog('배치수락 예상시간', 'shprPsPsitInfo is null');
+            callback({shprPsitLat: '', shprPsitLot: '', oderPiupFrcsMi: 30});
+        }
+    };
+
+    /**
      * 배치 수락
      */
     const btchAcpClick = () => {
 
-        let options = `<option value="15">15분</option>
-                        <option value="30" selected >30분</option>`;
+        // 쇼퍼와의 거리 계산
+        getShprDtcCal(btchInfo, res => {
 
-        // 급한 배달건일 경우
-        if(!!btchInfo.BTCH_RGI_PGRS_MI) {
+            cmm.confirm(`${btchInfo.SHOP_NM} 매장까지 
+                        픽업예상 <span style="color: #02B763;font-weight: 700">"${res.oderPiupFrcsMi}분"</span>으로 확인됩니다.
+                        
+                        매장은 쇼퍼님을 기다리고 있으니 
+                        빠르게 이동해 주세요.`, () => {
 
-            options = `<option value="${btchInfo.BTCH_RGI_PGRS_MI}">${btchInfo.BTCH_RGI_PGRS_MI}분</option>`;
-        }
+                cmm.ajax({
+                    url: '/api/btch/btchAcp',
+                    data: {
+                        ...res,
+                        oderUserId: btchInfo.ODER_USER_ID,
+                    },
+                    success: res => {
 
-        cmm.confirm(`배치를 수락하시려면\n 픽업예상 시간을 선택해 주세요.
-                        <select id="oderPiupFrcsMi" style="width: 100%;margin-top: 16px;">
-                            ${options}
-                        </select>`, () => {
+                        cmm.alert('배치 수락이 완료되었습니다.', () => {
 
-            cmm.ajax({
-                url: '/api/btch/btchAcp',
-                data: {
-                    oderUserId,
-                    oderPiupFrcsMi: oderPiupFrcsMi.value
-                },
-                success: res => {
-
-                    cmm.alert('배치 수락이 완료되었습니다.', () => {
-
-                        goPage('/', {
-                            tabIdx: 1,
+                            goPage('/', {
+                                tabIdx: 1,
+                            });
                         });
-                    });
-                }, error: res => {
+                    }, error: res => {
 
-                    if(res.resultMsg) {
+                        if(res.resultMsg) {
 
-                        cmm.alert(res.resultMsg, null, '실패');
-                    }
-                }
-            });
-        }, null, '배치 수락');
+                            cmm.alert(res.resultMsg, null, '실패');
+                        }
+                    },
+                });
+            }, null, '배치 수락');
+        });
     };
 
     return (

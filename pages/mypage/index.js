@@ -207,18 +207,28 @@ export default function MyPage() {
             <ul className={'ulType01'}>
                 {loginInfo?.SHPR_GRD_CD !== 'ETPS' &&
                     <>
-                    <li>
-                        <Link href={'/mypage/delySchd'}>
-                            <h5>일정관리</h5>
-                            <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
-                        </Link>
-                    </li>
-                    <li>
-                        <Link href={'/mypage/poinHity'}>
-                            <h5>포인트 내역</h5>
-                            <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
-                        </Link>
-                    </li>
+                    {myInfo.SHPR_HONEY_MONE > 0 &&
+                        <li>
+                            <div className={styles.honey}>
+                                <h5>
+                                    꿀단지
+                                    <span>{cmm.util.comma(myInfo.SHPR_HONEY_MONE)}</span>
+                                </h5>
+                            </div>
+                        </li>
+                    }
+                        <li>
+                            <Link href={'/mypage/delySchd'}>
+                                <h5>일정관리</h5>
+                                <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href={'/mypage/poinHity'}>
+                                <h5>포인트 내역</h5>
+                                <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
+                            </Link>
+                        </li>
                     </>
                 }
                 <li>

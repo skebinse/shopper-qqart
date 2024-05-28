@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import cmm from "../../js/common";
 import styles from "../../styles/mypage.module.css"
 import Image from "next/image";
@@ -18,6 +18,7 @@ export default function BtchAdj() {
     const [widDate, setWidDate] = useState(null);
     const [isWidPopup, setIsWidPopup] = useState(false);
     const [isWidBtn, setIsWidBtn] = useState(false);
+    const [adjMaxAmt, setAdjMaxAmt] = useState(0);
 
     /**
      * 배치 완료 리스트 호출
@@ -40,6 +41,7 @@ export default function BtchAdj() {
                         item.cmssAmt = 0;
                         mthlCmss.push(item.SHPR_GRD_YM.slice(-2));
                         setIsWidBtn(item.IS_WID === 'Y');
+                        setAdjMaxAmt(item.ADJ_MAX_AMT);
                     });
 
                     let date = '';
@@ -330,11 +332,13 @@ export default function BtchAdj() {
                 <div className="confirmArea">
                     <div>
                         <h3>출금</h3>
-                        <p>아래 내용으로 출금 신청 하시겠습니까?</p>
+                        <p>
+                            아래 내용으로 출금 신청 하시겠습니까?
+                        </p>
                         <div className={styles.widCont}>
                             <div>
                                 <span>정산금액</span>
-                                <p>{cmm.util.comma(btchList?.summ?.adjAmt)}원</p>
+                                <p>{cmm.util.comma((btchList?.summ?.adjAmt > adjMaxAmt ? adjMaxAmt : btchList?.summ?.adjAmt))}원</p>
                             </div>
                             <div>
                                 <span>출금일</span>
@@ -342,6 +346,13 @@ export default function BtchAdj() {
                                 {/*<p>{widDate}</p>*/}
                             </div>
                         </div>
+                        {btchList?.summ?.adjAmt > adjMaxAmt &&
+                            <p style={{paddingTop: '0'}}>
+                                최대 출금 가능금액은 <span>{cmm.util.comma(adjMaxAmt)}원</span> 입니다.
+                                <br/>
+                                나머지 금액은 <span>{cmm.util.comma(btchList?.summ?.adjAmt - adjMaxAmt)}원</span>은 <span>꿀단지</span>로 적립 됩니다.
+                            </p>
+                        }
                         <div>
                             <button className='button white mr16' type="button" onClick={() => setIsWidPopup(false)}>취소</button>
                             <button className='button' type="button" onClick={widReqHandler}>출금</button>

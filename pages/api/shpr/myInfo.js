@@ -63,6 +63,7 @@ async function getMyInfo(conn, req, res) {
                      , CASE WHEN LENGTH(IFNULL(SHPR_BANK_ACNO, '') > 4) THEN CONCAT(REPEAT('*', CHAR_LENGTH(SHPR_BANK_ACNO) - 4), RIGHT(SHPR_BANK_ACNO, 4)) ELSE SHPR_BANK_ACNO END AS SHPR_BANK_ACNO
                      , fnGetAtchFileList(SHPR_PRFL_ATCH_FILE_UUID) AS SHPR_PRFL_FILE
                      , fnGetShprPoint(SHPR_ID) AS SHPR_POIN
+                     , fnGetHoneyMone(SHPR_ID) AS SHPR_HONEY_MONE
                   FROM T_SHPR_INFO
                  WHERE SHPR_ID = ?
                    AND SHPR_SCSS_YN = 'N'

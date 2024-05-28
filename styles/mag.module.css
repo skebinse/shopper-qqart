@@ -6,7 +6,7 @@
 .anncList .anncArea ul{height: calc(100% - 210px);overflow-y: auto;padding: 15px 0 10px;position: absolute;top: 0;width: 100%;}
 .anncList .anncArea ul:last-child{left: 100%;}
 .anncList .anncArea ul li{padding: 16px;border-bottom: 1px solid #E4E4E4;}
-.anncList .anncArea ul li.noData{text-align: center;padding-top: 50%;}
+.anncList .anncArea ul li.noData{text-align: center;padding-top: 50%;border: none;}
 .anncList .anncArea ul li h5{font-weight: 400;font-size: 16px;line-height: 25px;letter-spacing: -0.03em;color: #333333;}
 .anncList .anncArea ul li p{font-weight: 400;font-size: 13px;line-height: 32px;letter-spacing: 0.03em;color: #333333;}
 

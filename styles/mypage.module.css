@@ -21,6 +21,8 @@
 .mypage .logout button{color: #333333;font-size: 15px;background-color: #FFFFFF;border: none;padding: 20px 0;width: 100%;}
 .mypage :global .ulType01 li > div{display: flex;align-items: center;padding: 26px 17px 25px 33px;}
 .mypage :global .ulType01 li > div h5{color: #333333;font-size: 15px;flex: 1 1;}
+.mypage li div.honey > h5{display: flex;color: #333333;}
+.mypage li div.honey > h5 span{flex: 1;text-align: right;color: #FFA800;font-weight: 500;}
 
 
 .btchAdjDiv .headTitle{padding: 20px 35px;background-color: #FFFFFF;position: sticky;top:0;z-index: 1;}

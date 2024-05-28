@@ -1,13 +1,20 @@
 import {getConnectPool, result} from "../../db";
+import {getCookie} from "cookies-next";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         const param = req.body;
+        const encShprId = getCookie('enc_sh', {req, res});
 
         try {
-            const query = `
+            let query = `SELECT fnDecrypt(?, ?) AS SHPR_ID`;
+
+            const [shprIdRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
+            const shprId = shprIdRow[0].SHPR_ID;
+
+            query = `
                 SELECT BBAD_ID
                      , BBAD_KD
                      , BBAD_TRGT
@@ -23,7 +30,13 @@ export default async function handler(req, res) {
                      , RGI_DT DESC
             `;
 
-            const [rows, fields] = await conn.query(query, [param.bbadKd]);
+            let [rows, fields] = await conn.query(query, [param.bbadKd]);
+
+            // TODO 슈퍼범블비 권한
+            if(param.bbadKd === '이벤트' && (shprId == 1799 || shprId == 3448 || shprId == 281 || shprId == 2079)) {
+
+                rows = [];
+            }
 
             res.status(200).json(result(rows));
         } catch (e) {

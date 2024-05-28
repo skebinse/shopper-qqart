@@ -391,6 +391,12 @@ export default function IngOderUserId() {
                                 <h5>배달 시간</h5>
                                 <p>{btchInfo.oderDelySlctVal}</p>
                             </li>
+                            {!!btchInfo.ODER_DELY_REQ_MATT &&
+                                <li>
+                                    <h5>주문시 요청 사항</h5>
+                                    <p>{btchInfo.ODER_DELY_REQ_MATT}</p>
+                                </li>
+                            }
                             {!!btchInfo.ODER_RRV_ID &&
                                 <li>
                                     <h5>스토어 적립</h5>

@@ -5,10 +5,12 @@ import cmm from "../../../js/common";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import Head from "next/head";
+import useCommon from "../../../hooks/useCommon";
 
 export default function AnncDtpt() {
 
     const router = useRouter();
+    const {goPage} = useCommon();
     const [title, setTitle] = useState('');
     const [anncDtpt, setAnncDtpt] = useState({});
     const {bbadId} = router.query;
@@ -24,19 +26,33 @@ export default function AnncDtpt() {
             })
                 .then( editor => {
 
-                    // 게시판 상세 조회
-                    cmm.ajax({
-                        url: `/api/mag/anncs/${bbadId}`,
-                        success: res => {
+                    // 업체 쇼퍼일 경우
+                    if(cmm.getLoginInfo('SHPR_GRD_CD') === 'ETPS') {
 
-                            setAnncDtpt(res);
-                            setTitle(res.BBAD_KD === '공지' ? '공지사항' : res.BBAD_KD);
+                        goPage('/');
+                    } else {
 
-                            editor.enableReadOnlyMode('.editor');
+                        // 게시판 상세 조회
+                        cmm.ajax({
+                            url: `/api/mag/anncs/${bbadId}`,
+                            success: res => {
 
-                            editor.setData(res.BBAD_TEXT);
-                        }
-                    });
+                                if(!!res.invisible) {
+
+                                    goPage('/');
+                                } else {
+
+                                    setAnncDtpt(res);
+                                    setTitle(res.BBAD_KD === '공지' ? '공지사항' : res.BBAD_KD);
+
+                                    editor.enableReadOnlyMode('.editor');
+
+                                    editor.setData(res.BBAD_TEXT);
+                                }
+
+                            }
+                        });
+                    }
 
                 })
                 .catch( error => {

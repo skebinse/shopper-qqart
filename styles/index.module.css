@@ -39,4 +39,6 @@
 .index .entApvDiv .kakaoDiv p{color: #FFF;font-size: 13px;font-weight: 500;line-height: 21px;padding-left: 12px;}
 .index .entApvDiv .kakaoDiv p a{color: #FFF;font-size: 13px;font-weight: 500;line-height: 21px;}
 
-.index .listDiv{}
+.btnExcpArea{display: flex;gap: 10px;}
+.btnExcpArea button{background-color: #FFFFFF !important;color: #333333 !important;border: 1px solid #E4E4E4;}
+.btnExcpArea button:disabled{background: #F8F8F8 !important;border:none;color: #595959 !important;}

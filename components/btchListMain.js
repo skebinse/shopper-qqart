@@ -11,6 +11,7 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
     const [atchImgList, setAtchImgList] = useState([]);
     const [atchPrvImgList, setAtchPrvImgList] = useState([]);
     const [btchList, setBtchList] = useState([]);
+    const [btnType, setBtnType] = useState([]);
     const inpFile = useRef([]);
     const selectItem = useRef(null);
     const shopS3Upload = useShopS3Upload();
@@ -190,49 +191,85 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
      *
      * @param idx
      */
-    const btchBtnClickHandler = (item, idx) => {
+    const btchBtnClickHandler = (item, idx, _btnType) => {
 
         // 배치 수락
         if(item.ODER_PGRS_STAT === '02') {
+            //
+            // // 쇼퍼와의 거리 계산
+            // getShprDtcCal(item, res => {
+            //
+            //     cmm.confirm(`${item.SHOP_NM} 매장까지
+            //             픽업예상 <span style="color: #02B763;font-weight: 700">"${res.oderPiupFrcsMi}분"</span>으로 확인됩니다.
+            //
+            //             매장은 쇼퍼님을 기다리고 있으니
+            //             빠르게 이동해 주세요.`, () => {
+            //
+            //         cmm.ajax({
+            //             url: '/api/btch/btchAcp',
+            //             data: {
+            //                 ...res,
+            //                 oderUserId: item.ODER_USER_ID,
+            //             },
+            //             success: res => {
+            //
+            //                 cmm.alert('배치 수락이 완료되었습니다.', () => {
+            //
+            //                     reflashHandler && reflashHandler('배치수락');
+            //                 });
+            //             }, error: res => {
+            //
+            //                 if(res.resultMsg) {
+            //
+            //                     cmm.alert(res.resultMsg, () => {
+            //
+            //                         reflashHandler && reflashHandler('배치실패');
+            //                     }, '실패');
+            //                 }
+            //             },
+            //         });
+            //     }, null, '배치 수락');
+            // });
 
-            // 쇼퍼와의 거리 계산
-            getShprDtcCal(item, res => {
+            let options = `<option value="15">15분</option><option value="30" selected >30분</option>`;
 
-                cmm.confirm(`${item.SHOP_NM} 매장까지 
-                        픽업예상 <span style="color: #02B763;font-weight: 700">"${res.oderPiupFrcsMi}분"</span>으로 확인됩니다.
-                        
-                        매장은 쇼퍼님을 기다리고 있으니 
-                        빠르게 이동해 주세요.`, () => {
+            cmm.confirm(`배치를 수락하시려면\n 픽업예상 시간을 선택해 주세요.
+                        <select id="oderPiupFrcsMi" style="width: 100%;margin-top: 16px;">
+                            ${options}
+                        </select>`, () => {
 
-                    cmm.ajax({
-                        url: '/api/btch/btchAcp',
-                        data: {
-                            ...res,
-                            oderUserId: item.ODER_USER_ID,
-                        },
-                        success: res => {
+                const shprPsPsitInfo = cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT);
 
-                            cmm.alert('배치 수락이 완료되었습니다.', () => {
+                cmm.ajax({
+                    url: '/api/btch/btchAcp',
+                    data: {
+                        ...shprPsPsitInfo,
+                        oderUserId: item.ODER_USER_ID,
+                        oderPiupFrcsMi: oderPiupFrcsMi.value
+                    },
+                    success: res => {
 
-                                reflashHandler && reflashHandler('배치수락');
-                            });
-                        }, error: res => {
+                        cmm.alert('배치 수락이 완료되었습니다.', () => {
 
-                            if(res.resultMsg) {
+                            reflashHandler && reflashHandler('배치수락');
+                        });
+                    }, error: res => {
 
-                                cmm.alert(res.resultMsg, () => {
+                        if(res.resultMsg) {
 
-                                    reflashHandler && reflashHandler('배치실패');
-                                }, '실패');
-                            }
-                        },
-                    });
-                }, null, '배치 수락');
-            });
+                            cmm.alert(res.resultMsg, () => {
+
+                                reflashHandler && reflashHandler('배치실패');
+                            }, '실패');
+                        }
+                    },
+                });
+            }, null, '배치 수락');
         } else {
 
             if(!atchPrvImgList[idx] || atchPrvImgList[idx].length === 0) {
 
+                setBtnType(_btnType);
                 inpFile.current[idx].click();
             } else {
 
@@ -298,28 +335,57 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                         }
                     }, null, title);
                 } else if(item.ODER_PGRS_STAT === '05') {
-                    cmm.confirm(`<span>${item.ODER_DELY_FULL_ADDR}\n\n벨누르기 완료</span>하셨나요?\n벨누르기 하지 않으면 배달 완료로\n 인정이 되지 않을 수 있으니 꼭 벨을 눌러주세요`, () => {
 
-                        // 업로드
-                        shopS3Upload(atchImgList[idx], res => {
+                    if(btnType === '배달 완료') {
 
-                            cmm.ajax({
-                                url: '/api/btch/ing/btchComp',
-                                data: {
-                                    oderUserId: item.ODER_USER_ID,
-                                    atchFileUuid: res.atchFileUuid,
-                                },
-                                success: res => {
+                        cmm.confirm(`<span>${item.ODER_DELY_FULL_ADDR}\n\n벨누르기 완료</span>하셨나요?\n벨누르기 하지 않으면 배달 완료로\n 인정이 되지 않을 수 있으니 꼭 벨을 눌러주세요`, () => {
 
-                                    cmm.alert('배달을 완료하였습니다.\n수고하셨습니다.', () => {
-                                        reflashHandler && reflashHandler('배달완료');
+                            // 업로드
+                            shopS3Upload(atchImgList[idx], res => {
 
-                                        imageAtchDelHandler(idx, 'all');
-                                    });
-                                },
+                                cmm.ajax({
+                                    url: '/api/btch/ing/btchComp',
+                                    data: {
+                                        oderUserId: item.ODER_USER_ID,
+                                        atchFileUuid: res.atchFileUuid,
+                                    },
+                                    success: res => {
+
+                                        cmm.alert('배달을 완료하였습니다.\n수고하셨습니다.', () => {
+                                            reflashHandler && reflashHandler('배달완료');
+
+                                            imageAtchDelHandler(idx, 'all');
+                                        });
+                                    },
+                                });
                             });
-                        });
-                    }, null, '배달 완료');
+                        }, null, '배달 완료');
+                    }  else {
+
+                        cmm.confirm(`${btnType}을 진행하시겠습니까?`, () => {
+
+                            // 업로드
+                            shopS3Upload(atchImgList[idx], res => {
+
+                                cmm.ajax({
+                                    url: '/api/btch/btchExcp',
+                                    data: {
+                                        oderUserId: item.ODER_USER_ID,
+                                        oderExcpKd: btnType.replace(' 신청', ''),
+                                        atchFileUuid: res.atchFileUuid,
+                                    },
+                                    success: res => {
+
+                                        cmm.alert('신청 되었습니다.', () => {
+                                            reflashHandler && reflashHandler();
+
+                                            imageAtchDelHandler(idx, 'all');
+                                        });
+                                    },
+                                });
+                            });
+                        }, null, btnType);
+                    }
                 }
             }
         }
@@ -481,7 +547,20 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                         <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx)}>{!!atchPrvImgList[idx] && atchPrvImgList[idx].length > 0 ? '배달 시작' : '배달 시작(영수증 첨부)'}</button>
                     }
                     {(isIngBtch && item.ODER_PGRS_STAT === '05') &&
-                        <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx)}>{!!atchPrvImgList[idx] && atchPrvImgList[idx].length > 0 ? '배달 완료' : '배달 완료(사진 첨부)'}</button>
+                        <>
+                            {!atchPrvImgList[idx] || atchPrvImgList[idx].length === 0 &&
+                                <>
+                                    {/*<div className={styles.btnExcpArea}>*/}
+                                    {/*    <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx, '과적 신청')} disabled={item.EXCP_OVER > 0}>과적 신청 {item.EXCP_OVER > 0 ? ' 중...' : ''}</button>*/}
+                                    {/*    <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx, '주차비 신청')} disabled={item.EXCP_PKG > 0}>주차비 신청 {item.EXCP_PKG > 0 ? ' 중...' : ''}</button>*/}
+                                    {/*</div>*/}
+                                    <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx, '배달 완료')}>{!!atchPrvImgList[idx] && atchPrvImgList[idx].length > 0 ? '배달 완료' : '배달 완료(사진 첨부)'}</button>
+                                </>
+                            }
+                            {!!atchPrvImgList[idx] && atchPrvImgList[idx].length > 0 &&
+                                <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx)}>{btnType}</button>
+                            }
+                        </>
                     }
                 </li>
             ))}

@@ -111,6 +111,8 @@ export default async function handler(req, res) {
                  , AA.ODER_DELY_ADDR_LOT
                  , AA.SHOP_ID
                  , AA.ODER_DELY_ARTG
+                 , AA.EXCP_OVER
+                 , AA.EXCP_PKG
               FROM (
                 SELECT AA.ODER_MNGR_RGI_YN
                      , fnGetOderReqYmd(AA.ODER_MNGR_RGI_YN, AA.ODER_REQ_YMD) AS ODER_REQ_YMD
@@ -148,6 +150,8 @@ export default async function handler(req, res) {
                        ELSE TIMESTAMPDIFF(MINUTE, AA.ODER_REQ_YMD, NOW()) END AS BTCH_ODER_PGRS_MI
                      , CASE WHEN AA.ODER_PGRS_STAT = '03' THEN BB.SHOP_ADDR_LAT ELSE AA.ODER_DELY_ADDR_LAT END AS ODER_DELY_ADDR_LAT
                      , CASE WHEN AA.ODER_PGRS_STAT = '03' THEN BB.SHOP_ADDR_LOT ELSE AA.ODER_DELY_ADDR_LOT END AS ODER_DELY_ADDR_LOT
+                     , (SELECT COUNT(1) FROM T_ODER_EXCP A WHERE A.ODER_USER_ID = AA.ODER_USER_ID AND A.ODER_EXCP_KD = '과적') AS EXCP_OVER
+                     , (SELECT COUNT(1) FROM T_ODER_EXCP A WHERE A.ODER_USER_ID = AA.ODER_USER_ID AND A.ODER_EXCP_KD = '주차비') AS EXCP_PKG
                   FROM T_ODER_USER_INFO AA
                        INNER JOIN T_SHOP_MAG BB
                     ON BB.SHOP_ID = AA.SHOP_ID

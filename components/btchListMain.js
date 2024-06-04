@@ -195,76 +195,41 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
 
         // 배치 수락
         if(item.ODER_PGRS_STAT === '02') {
-            //
-            // // 쇼퍼와의 거리 계산
-            // getShprDtcCal(item, res => {
-            //
-            //     cmm.confirm(`${item.SHOP_NM} 매장까지
-            //             픽업예상 <span style="color: #02B763;font-weight: 700">"${res.oderPiupFrcsMi}분"</span>으로 확인됩니다.
-            //
-            //             매장은 쇼퍼님을 기다리고 있으니
-            //             빠르게 이동해 주세요.`, () => {
-            //
-            //         cmm.ajax({
-            //             url: '/api/btch/btchAcp',
-            //             data: {
-            //                 ...res,
-            //                 oderUserId: item.ODER_USER_ID,
-            //             },
-            //             success: res => {
-            //
-            //                 cmm.alert('배치 수락이 완료되었습니다.', () => {
-            //
-            //                     reflashHandler && reflashHandler('배치수락');
-            //                 });
-            //             }, error: res => {
-            //
-            //                 if(res.resultMsg) {
-            //
-            //                     cmm.alert(res.resultMsg, () => {
-            //
-            //                         reflashHandler && reflashHandler('배치실패');
-            //                     }, '실패');
-            //                 }
-            //             },
-            //         });
-            //     }, null, '배치 수락');
-            // });
 
-            let options = `<option value="15">15분</option><option value="30" selected >30분</option>`;
+            // 쇼퍼와의 거리 계산
+            getShprDtcCal(item, res => {
 
-            cmm.confirm(`배치를 수락하시려면\n 픽업예상 시간을 선택해 주세요.
-                        <select id="oderPiupFrcsMi" style="width: 100%;margin-top: 16px;">
-                            ${options}
-                        </select>`, () => {
+                cmm.confirm(`${item.SHOP_NM} 매장까지 
+                        픽업예상 <span style="color: #02B763;font-weight: 700">"${res.oderPiupFrcsMi}분"</span>으로 확인됩니다.
+                        
+                        매장은 쇼퍼님을 기다리고 있으니 
+                        빠르게 이동해 주세요.`, () => {
 
-                const shprPsPsitInfo = cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT);
+                    cmm.ajax({
+                        url: '/api/btch/btchAcp',
+                        data: {
+                            ...res,
+                            oderUserId: item.ODER_USER_ID,
+                        },
+                        success: res => {
 
-                cmm.ajax({
-                    url: '/api/btch/btchAcp',
-                    data: {
-                        ...shprPsPsitInfo,
-                        oderUserId: item.ODER_USER_ID,
-                        oderPiupFrcsMi: oderPiupFrcsMi.value
-                    },
-                    success: res => {
+                            cmm.alert('배치 수락이 완료되었습니다.', () => {
 
-                        cmm.alert('배치 수락이 완료되었습니다.', () => {
+                                reflashHandler && reflashHandler('배치수락');
+                            });
+                        }, error: res => {
 
-                            reflashHandler && reflashHandler('배치수락');
-                        });
-                    }, error: res => {
+                            if(res.resultMsg) {
 
-                        if(res.resultMsg) {
+                                cmm.alert(res.resultMsg, () => {
 
-                            cmm.alert(res.resultMsg, () => {
-
-                                reflashHandler && reflashHandler('배치실패');
-                            }, '실패');
-                        }
-                    },
-                });
-            }, null, '배치 수락');
+                                    reflashHandler && reflashHandler('배치실패');
+                                }, '실패');
+                            }
+                        },
+                    });
+                }, null, '배치 수락');
+            });
         } else {
 
             if(!atchPrvImgList[idx] || atchPrvImgList[idx].length === 0) {

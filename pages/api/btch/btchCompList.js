@@ -99,8 +99,8 @@ export default async function handler(req, res) {
                              WHERE AA.SHPR_ID = ?
                            ) AA
                            LEFT OUTER JOIN T_COMM_YMD_MAG BB
-                        ON COMM_YMD > AA.STD_YMD
-                       AND COMM_YMD_HLDY_YN = 'N'
+                        ON BB.COMM_YMD > AA.STD_YMD
+                       AND BB.COMM_YMD_HLDY_YN = 'N'
                        ) AA
                  WHERE NUM = AA.CD_RMK2
             `;

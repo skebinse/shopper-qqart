@@ -344,7 +344,7 @@ export default function BtchAdj() {
                             </div>
                             <div>
                                 <span>출금일</span>
-                                <p>{widReqInfo.PY_DT} 영업일내</p>
+                                <p>{widReqInfo.PY_DT}</p>
                                 {/*<p>{widDate}</p>*/}
                             </div>
                         </div>

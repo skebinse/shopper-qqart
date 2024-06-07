@@ -74,22 +74,35 @@ export default async function handler(req, res) {
 
             // 출금여부
             query = `
-                SELECT COUNT(CC.SHPR_ID) AS IS_REQ
-                     , CC.SHPR_ADJ_CHCK_YMD
-                     , CC.SHPR_ADJ_REQ_DT
-                     , CC.SHPR_ADJ_APV_DT
-                     , CC.SHPR_ADJ_AMT
-                     , DATE_FORMAT(DATE_ADD(DATE_ADD((CASE WHEN CC.SHPR_ADJ_REQ_DT IS NULL THEN NOW() ELSE CC.SHPR_ADJ_REQ_DT END)
-                        , INTERVAL 9 HOUR), INTERVAL BB.CD_RMK2 DAY), '%m월 %d일') AS PY_DT
-                  FROM T_SHPR_INFO AA
-                       INNER JOIN T_CD_MAG BB
-                    ON BB.CD_SPPO_ID = 158
-                   AND BB.CD_RMK = AA.SHPR_GRD_CD
-                       LEFT OUTER JOIN T_SHPR_ADJ_MAG CC
-                    ON CC.SHPR_ID = AA.SHPR_ID
-                   AND CC.SHPR_ADJ_STRT_YMD = ?
-                   AND CC.SHPR_ADJ_END_YMD = ?
-                 WHERE AA.SHPR_ID = ?
+                SELECT *
+                     , DATE_FORMAT(AA.COMM_YMD, '%m월 %d일') AS PY_DT
+                  FROM (
+                    SELECT *
+                         , ROW_NUMBER() OVER (ORDER BY BB.COMM_YMD) AS NUM
+                      FROM (
+                            SELECT COUNT(CC.SHPR_ID) AS IS_REQ
+                                 , CC.SHPR_ADJ_CHCK_YMD
+                                 , CC.SHPR_ADJ_REQ_DT
+                                 , CC.SHPR_ADJ_APV_DT
+                                 , CC.SHPR_ADJ_AMT
+                                 , DATE_ADD((CASE WHEN CC.SHPR_ADJ_REQ_DT IS NULL THEN NOW() ELSE CC.SHPR_ADJ_REQ_DT END)
+                                    , INTERVAL 9 HOUR) AS STD_YMD
+                                 , BB.CD_RMK2
+                              FROM T_SHPR_INFO AA
+                                   INNER JOIN T_CD_MAG BB
+                                ON BB.CD_SPPO_ID = 158
+                               AND BB.CD_RMK = AA.SHPR_GRD_CD
+                                   LEFT OUTER JOIN T_SHPR_ADJ_MAG CC
+                                ON CC.SHPR_ID = AA.SHPR_ID
+                               AND CC.SHPR_ADJ_STRT_YMD = ?
+                               AND CC.SHPR_ADJ_END_YMD = ?
+                             WHERE AA.SHPR_ID = ?
+                           ) AA
+                           LEFT OUTER JOIN T_COMM_YMD_MAG BB
+                        ON COMM_YMD > AA.STD_YMD
+                       AND COMM_YMD_HLDY_YN = 'N'
+                       ) AA
+                 WHERE NUM = AA.CD_RMK2
             `;
 
             [rows] = await conn.query(query, [param.fromDt, param.toDt, shprId]);

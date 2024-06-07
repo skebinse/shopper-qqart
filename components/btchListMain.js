@@ -11,6 +11,7 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
     const [atchImgList, setAtchImgList] = useState([]);
     const [atchPrvImgList, setAtchPrvImgList] = useState([]);
     const [btchList, setBtchList] = useState([]);
+    const [btnType, setBtnType] = useState([]);
     const inpFile = useRef([]);
     const selectItem = useRef(null);
     const shopS3Upload = useShopS3Upload();
@@ -190,7 +191,7 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
      *
      * @param idx
      */
-    const btchBtnClickHandler = (item, idx) => {
+    const btchBtnClickHandler = (item, idx, _btnType) => {
 
         // 배치 수락
         if(item.ODER_PGRS_STAT === '02') {
@@ -233,6 +234,7 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
 
             if(!atchPrvImgList[idx] || atchPrvImgList[idx].length === 0) {
 
+                setBtnType(_btnType);
                 inpFile.current[idx].click();
             } else {
 
@@ -298,28 +300,57 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                         }
                     }, null, title);
                 } else if(item.ODER_PGRS_STAT === '05') {
-                    cmm.confirm(`<span>${item.ODER_DELY_FULL_ADDR}\n\n벨누르기 완료</span>하셨나요?\n벨누르기 하지 않으면 배달 완료로\n 인정이 되지 않을 수 있으니 꼭 벨을 눌러주세요`, () => {
 
-                        // 업로드
-                        shopS3Upload(atchImgList[idx], res => {
+                    if(btnType === '배달 완료') {
 
-                            cmm.ajax({
-                                url: '/api/btch/ing/btchComp',
-                                data: {
-                                    oderUserId: item.ODER_USER_ID,
-                                    atchFileUuid: res.atchFileUuid,
-                                },
-                                success: res => {
+                        cmm.confirm(`<span>${item.ODER_DELY_FULL_ADDR}\n\n벨누르기 완료</span>하셨나요?\n벨누르기 하지 않으면 배달 완료로\n 인정이 되지 않을 수 있으니 꼭 벨을 눌러주세요`, () => {
 
-                                    cmm.alert('배달을 완료하였습니다.\n수고하셨습니다.', () => {
-                                        reflashHandler && reflashHandler('배달완료');
+                            // 업로드
+                            shopS3Upload(atchImgList[idx], res => {
 
-                                        imageAtchDelHandler(idx, 'all');
-                                    });
-                                },
+                                cmm.ajax({
+                                    url: '/api/btch/ing/btchComp',
+                                    data: {
+                                        oderUserId: item.ODER_USER_ID,
+                                        atchFileUuid: res.atchFileUuid,
+                                    },
+                                    success: res => {
+
+                                        cmm.alert('배달을 완료하였습니다.\n수고하셨습니다.', () => {
+                                            reflashHandler && reflashHandler('배달완료');
+
+                                            imageAtchDelHandler(idx, 'all');
+                                        });
+                                    },
+                                });
                             });
-                        });
-                    }, null, '배달 완료');
+                        }, null, '배달 완료');
+                    }  else {
+
+                        cmm.confirm(`${btnType}을 진행하시겠습니까?`, () => {
+
+                            // 업로드
+                            shopS3Upload(atchImgList[idx], res => {
+
+                                cmm.ajax({
+                                    url: '/api/btch/btchExcp',
+                                    data: {
+                                        oderUserId: item.ODER_USER_ID,
+                                        oderExcpKd: btnType.replace(' 신청', ''),
+                                        atchFileUuid: res.atchFileUuid,
+                                    },
+                                    success: res => {
+
+                                        cmm.alert('신청 되었습니다.', () => {
+                                            reflashHandler && reflashHandler();
+
+                                            imageAtchDelHandler(idx, 'all');
+                                        });
+                                    },
+                                });
+                            });
+                        }, null, btnType);
+                    }
                 }
             }
         }
@@ -481,7 +512,20 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                         <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx)}>{!!atchPrvImgList[idx] && atchPrvImgList[idx].length > 0 ? '배달 시작' : '배달 시작(영수증 첨부)'}</button>
                     }
                     {(isIngBtch && item.ODER_PGRS_STAT === '05') &&
-                        <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx)}>{!!atchPrvImgList[idx] && atchPrvImgList[idx].length > 0 ? '배달 완료' : '배달 완료(사진 첨부)'}</button>
+                        <>
+                            {!atchPrvImgList[idx] || atchPrvImgList[idx].length === 0 &&
+                                <>
+                                    {/*<div className={styles.btnExcpArea}>*/}
+                                    {/*    <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx, '과적 신청')} disabled={item.EXCP_OVER > 0}>과적 신청 {item.EXCP_OVER > 0 ? ' 중...' : ''}</button>*/}
+                                    {/*    <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx, '주차비 신청')} disabled={item.EXCP_PKG > 0}>주차비 신청 {item.EXCP_PKG > 0 ? ' 중...' : ''}</button>*/}
+                                    {/*</div>*/}
+                                    <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx, '배달 완료')}>{!!atchPrvImgList[idx] && atchPrvImgList[idx].length > 0 ? '배달 완료' : '배달 완료(사진 첨부)'}</button>
+                                </>
+                            }
+                            {!!atchPrvImgList[idx] && atchPrvImgList[idx].length > 0 &&
+                                <button type={'button'} className={'button'} onClick={() => btchBtnClickHandler(item, idx)}>{btnType}</button>
+                            }
+                        </>
                     }
                 </li>
             ))}

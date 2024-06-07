@@ -34,7 +34,9 @@
 .btchAdjDiv .btchArea .searchDiv img:last-child{transform: rotate(180deg)}
 .btchAdjDiv .btchArea .searchDiv img.noVtlz{opacity: 0.3;}
 .btchAdjDiv .btchArea .adjDiv{padding: 32px 20px;border-bottom: solid 8px #F2F2F2;}
-.btchAdjDiv .btchArea .adjDiv h5{font-weight: 700;font-size: 14px;line-height: 17px;color: #333333;}
+.btchAdjDiv .btchArea .adjDiv h5{font-weight: 700;font-size: 14px;line-height: 17px;color: #333333;display: flex;}
+.btchAdjDiv .btchArea .adjDiv h5 span{font-weight: 700;font-size: 14px;line-height: 17px;color: #333333;width: 100%;}
+.btchAdjDiv .btchArea .adjDiv h5 span:last-child{text-align: right;}
 .btchAdjDiv .btchArea .adjDiv > p{font-weight: 700;font-size: 24px;line-height: 29px;color: #333333;padding-top: 8px;}
 .btchAdjDiv .btchArea .adjDiv li{display: flex;font-weight: 400;font-size: 14px;line-height: 17px;color: #333333;padding-top: 20px;}
 .btchAdjDiv .btchArea .adjDiv li p{flex: 1; text-align: right;}

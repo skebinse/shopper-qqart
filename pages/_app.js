@@ -114,18 +114,22 @@ export default function MyApp({ Component, pageProps }) {
 
                 if(data.notification.additionalData.type === 'NOTICE') {
 
-                    // 게시판 상세 조회
-                    cmm.ajax({
-                        url: `/api${data.notification.additionalData.custom_url.replace('annc/', 'anncs/')}`,
-                        success: res => {
+                    // 업체가 아닐경우
+                    if(cmm.getLoginInfo('SHPR_GRD_CD') !== 'ETPS') {
 
-                            webPushNoticeTit.innerHTML = res.BBAD_KD;
-                            webPushNoticeTxt.innerHTML = res.BBAD_TEXT;
-                            webPushNoticeTxt.style.maxHeight = (window.innerHeight - 200) + 'px'
+                        // 게시판 상세 조회
+                        cmm.ajax({
+                            url: `/api${data.notification.additionalData.custom_url.replace('annc/', 'anncs/')}`,
+                            success: res => {
 
-                            document.querySelector('.webPushDiv.notice').classList = 'webPushDiv notice active';
-                        }
-                    });
+                                webPushNoticeTit.innerHTML = res.BBAD_KD;
+                                webPushNoticeTxt.innerHTML = res.BBAD_TEXT;
+                                webPushNoticeTxt.style.maxHeight = (window.innerHeight - 200) + 'px'
+
+                                document.querySelector('.webPushDiv.notice').classList = 'webPushDiv notice active';
+                            }
+                        });
+                    }
                 } else {
 
                     webPushTit.innerHTML = data.notification.title;

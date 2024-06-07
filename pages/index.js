@@ -197,12 +197,8 @@ export default function Index(props) {
 
         setTimeout(() => {
 
-            btchAreaInfo.current.translateY = 'transform: translateY(calc(100% - 196px));';
+            // btchAreaInfo.current.translateY = 'transform: translateY(calc(100% - 196px));';
 
-            window.addEventListener('resize', e => {
-
-                console.log('resize')
-            });
             if(!!document.querySelector('#ch-plugin')) {
                 document.querySelector('#ch-plugin').classList.add('d-none');
             }

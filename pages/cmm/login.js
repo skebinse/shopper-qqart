@@ -154,7 +154,7 @@ export default function Login(props) {
                         <span>대표전화번호: 1533-9171</span>
                     </div>
                     <div>
-                        <span>고객센터 운영시간 : 09:00 ~ 21:00(연중무휴)</span>
+                        <span>고객센터 운영시간 : 10:00 ~ 20:00(연중무휴)</span>
                         <span>대표 이메일: <a href="mailto:qqcart.shop@gmail.com">qqcart.shop@gmail.com</a></span>
                     </div>
                     <div>

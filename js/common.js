@@ -1054,7 +1054,7 @@ const cmm = {
                     s.addEventListener('load', () => {
                         document.querySelector('#ch-plugin').attr = '100';
 
-                        if(location.href.indexOf('/main') > -1) {
+                        if(location.pathname === '/') {
                             document.querySelector('#ch-plugin').classList.add('d-none');
                         }
                     });

@@ -207,9 +207,15 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 .webPushDiv div div button:first-child{background-color: #02B763;border-bottom-left-radius: 12px;color: #FFFFFF;}
 .webPushDiv div div button:last-child{border-bottom-right-radius: 12px;background-color: #787878;color: #FFFFFF;}
 .webPushDiv div div button.d-none + button{border-bottom-left-radius: 12px;}
-.webPushDiv img{position: absolute;top: 5px;right: 5px;}
+/*.webPushDiv img{position: absolute;top: 5px;right: 5px;}*/
+.webPushDiv.notice div{overflow-y: auto;overflow-wrap: break-word;}
 .webPushDiv.notice div > p{padding: 10px 0 15px;}
 .webPushDiv.notice div > p p{padding-bottom: 16px;}
+.webPushDiv.notice div ul{padding-left: 40px;}
+.webPushDiv.notice div ul li{list-style-type: disc;}
+.webPushDiv.notice div ol li{list-style-type: decimal;}
+.webPushDiv.notice figure{margin: 0;}
+.webPushDiv.notice figure img{width: 100%;}
 
 /* Tab */
 .tabArea{display: flex;padding: 24px 17px 9px;}

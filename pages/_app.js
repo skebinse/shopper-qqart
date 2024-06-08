@@ -114,18 +114,9 @@ export default function MyApp({ Component, pageProps }) {
 
                 if(data.notification.additionalData.type === 'NOTICE') {
 
-                    if(cmm.getLoginInfo('SHPR_NCNM') === '테스트 계정') {
-
-                        alert(cmm.getLoginInfo());
-                    }
-
                     // 업체가 아닐경우
                     if(cmm.getLoginInfo('SHPR_GRD_CD') !== 'ETPS') {
 
-                        if(cmm.getLoginInfo('SHPR_NCNM') === '테스트 계정') {
-
-                            alert('call');
-                        }
                         // 게시판 상세 조회
                         cmm.ajax({
                             url: `/api${data.notification.additionalData.custom_url.replace('annc/', 'anncs/')}`,

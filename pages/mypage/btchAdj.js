@@ -241,8 +241,7 @@ export default function BtchAdj() {
                     {(!!widReqInfo.SHPR_ADJ_CHCK_YMD && !!widReqInfo.SHPR_ADJ_REQ_DT && !widReqInfo.SHPR_ADJ_APV_DT) &&
                         <>
                             <h5>
-                                {/*정산금액(지급예정일 {widReqInfo.PY_DT})*/}
-                                정산금액
+                                정산금액(지급예정일 {widReqInfo.PY_DT})
                             </h5>
                             <p>0원</p>
                             <span className={styles.adjIng}>정산 진행중</span>

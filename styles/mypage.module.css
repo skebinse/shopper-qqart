@@ -69,11 +69,16 @@
 
 /* 포인트화면 */
 .pointDiv .cont{}
-.pointDiv .cont .point{padding: 16px 20px;position: sticky;top: 74px;background-color: #FFFFFF;display: flex;align-items: center;}
+.pointDiv .cont .point{padding: 16px 20px;display: flex;align-items: center;position: sticky;top: 74px;background-color: #FFFFFF;}
 .pointDiv .cont .point div{width: 100%;}
 .pointDiv .cont .point div h5{color: #333333;font-size: 14px;font-weight: 700;}
 .pointDiv .cont .point div p{color: #333333;font-size: 24px;font-weight: 700;padding-top: 7px;}
-.pointDiv .cont .point button{width: 120px;padding: 6px 14px;font-weight: 400;font-size: 15px;height: 35px}
+.pointDiv .cont .point button.widPet{width: 120px;padding: 6px 14px;font-weight: 400;font-size: 15px;height: 35px;background-color: #FFFFFF;border: 1px solid #02B763;color: #02B763;border-radius: 8px;}
+.pointDiv .cont .point button.acRgi{width: 120px;font-weight: 400;font-size: 15px;height: 35px;padding: 6px 14px;}
+.pointDiv .cont .point > p{width: 220px;text-align: right;display: flex;flex-direction: column;align-items: flex-end;}
+.pointDiv .cont .point > p > em{font-size: 14px;padding-bottom: 5px;}
+.pointDiv .cont .point > p > span{font-size: 12px;font-weight: 700;padding: 6px 8px;border-radius: 8px;border: #FFAB5E solid 2px;color: #FFAB5E;text-align: center;width: 60px;}
+.pointDiv .cont .point + div{background-color: #F8F8F8;margin: 0 20px 20px;color: #707070;font-size: 12px;font-weight: 400;padding: 17px 19px;border-radius: 8px;line-height: 18px;}
 .pointDiv .cont hr{background-color: #F2F2F2;height: 8px;border: none;margin: 0;}
 .pointDiv .cont .list ul{}
 .pointDiv .cont .list ul li{display: flex;margin: 0 20px;border-bottom: 1px solid #E6E6E6;padding: 20px 0;align-items: flex-end;}
@@ -84,6 +89,12 @@
 .pointDiv .cont .list ul li.more button{font-size: 16px;font-weight: 500;color: #707070;padding: 10.5px 56px;background-color: #FFFFFF;border: #E4E4E4 solid 1px;border-radius: 12px;}
 .pointDiv .cont .list .noData{width: 100%;text-align: center;padding-top: 100px;}
 .pointDiv .cont .list .noData p{color: #333333;font-size: 14px;padding-top: 10px;}
+.pointDiv .widPopup .widCont{width: 100%;}
+.pointDiv .widPopup .widCont div{width: 100%;padding: 0 20px 20px;}
+.pointDiv .widPopup .widCont div span{display: block;padding-bottom: 10px;}
+.pointDiv .widPopup .widCont div span em{color: #02B763;font-size: 13px;}
+.pointDiv .widPopup .widCont div input{border-radius: 8px;border: 1px solid #e4e4e4;background-color: #fff;padding: 10px;width: 100%;text-align: right}
+.pointDiv .widPopup .txt{text-align: left;font-size: 12px;font-weight: 400;padding: 20px 10px 0;}
 
 /* 등급 정보 */
 .lvlInfoDiv{transition: all 0.3s ease-in;top: 100%;position: fixed;height: 100%;width: 100%;background-color: #FFFFFF;z-index: 1;opacity: 0;overflow: auto;}

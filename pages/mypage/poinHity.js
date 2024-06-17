@@ -118,7 +118,7 @@ export default function PoinHity() {
                     {(myInfo.AC_INPT_YN === 'Y' && cmm.util.getNumber(myInfo.SHPR_POIN) >= 100000 && !myInfo.PY_DT) &&
                         <button className={'button ' + styles.widPet} onClick={() => setIsWidPopup(true)}>출금 신청</button>
                     }
-                    {(myInfo.AC_INPT_YN && !myInfo.PY_DT) === 'N' &&
+                    {(myInfo.AC_INPT_YN === 'N' && !myInfo.PY_DT) &&
                         <button className={'button white ' + styles.acRgi} onClick={() => goPage('/join/info')}>계좌 등록</button>
                     }
                     {!!myInfo.PY_DT &&

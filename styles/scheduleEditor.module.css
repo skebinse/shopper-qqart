@@ -20,7 +20,7 @@
     pointer-events: auto;
 }
 
-.comt{padding: 10px 16px 0px;color: #ff0000;letter-spacing: -0.5px;line-height: 25px;}
+.comt{background-color: #F8F8F8;margin: 0 20px 20px;color: red;font-size: 12px;font-weight: 400;padding: 17px 19px;border-radius: 8px;margin-top: 20px;}
 .comt p:first-child{padding-bottom: 10px;}
 
 .scheduleEditor .select {

@@ -82,6 +82,9 @@ export default function PoinHity() {
         if(cmm.util.getNumber(widPoint) < 100000) {
 
             cmm.alert('100,000P 이상부터 출금 가능합니다.');
+        } else if(cmm.util.getNumber(widPoint) > 1000000) {
+
+            cmm.alert('최대 1,000,000P 까지 출금 가능합니다.');
         } else if(cmm.util.getNumber(widPoint) > cmm.util.getNumber(myInfo.SHPR_POIN)) {
 
             cmm.alert(`출금 가능 포인트는 최대 ${myInfo.SHPR_POIN}P 입니다.`);
@@ -129,7 +132,7 @@ export default function PoinHity() {
                     }
                 </div>
                 <div>
-                    - 100,000P 이상부터 현금 출금 신청 가능<br/>
+                    - 100,000P 이상부터 최대 1,000,000P 현금 출금 신청 가능<br/>
                     - 현금 출금 신청 시, 10% 수수료 공제 후 지급<br/>
                     - 회원 정보에 등록된 이름과 동일한 예금주 명의 계좌만 등록 가능<br/>
                     - 입출금 계좌만 등록 가능(정기예금, 적금, CMA와 같은 계좌는 등록 불가)
@@ -176,7 +179,7 @@ export default function PoinHity() {
                     <div>
                         <h3>출금</h3>
                         <p className={styles.txt}>
-                            - 100,000P 이상부터 현금 출금 신청 가능<br/>
+                            - 100,000P 이상부터 최대 1,000,000P 현금 출금 신청 가능<br/>
                             - 현금 출금 신청 시, 10% 수수료 공제 후 지급<br/>
                             - 회원 정보에 등록된 이름과 동일한 예금주 명의 계좌만 등록 가능<br/>
                             - 입출금 계좌만 등록 가능(정기예금, 적금, CMA와 같은 계좌는 등록 불가)

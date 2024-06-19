@@ -22,7 +22,11 @@ export default async function handler(req, res) {
 
             let [rows] = await conn.query(query, [shprId]);
 
-            if(cmm.util.getNumber(param.widPoint) > cmm.util.getNumber(rows[0].SHPR_POINT)) {
+            // 백만P 이상일 경우
+            if(cmm.util.getNumber(param.widPoint) > 1000000) {
+
+                res.status(200).json(result('', '9999', `최대 1,000,000P 까지 출금 가능합니다.`));
+            } else if(cmm.util.getNumber(param.widPoint) > cmm.util.getNumber(rows[0].SHPR_POINT)) {
 
                 res.status(200).json(result('', '9999', `출금 가능 포인트는 최대 ${rows[0].SHPR_POINT}P 입니다.`));
             } else {

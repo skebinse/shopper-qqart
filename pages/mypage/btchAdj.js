@@ -211,6 +211,7 @@ export default function BtchAdj() {
                     fromDt: searchDate.fromDt,
                     toDt: searchDate.toDt,
                     adjAmt: btchList?.summ?.adjAmt,
+                    pyDt: widReqInfo.PY_DT,
                 },
                 success: res => {
 
@@ -241,7 +242,7 @@ export default function BtchAdj() {
                     {(!!widReqInfo.SHPR_ADJ_CHCK_YMD && !!widReqInfo.SHPR_ADJ_REQ_DT && !widReqInfo.SHPR_ADJ_APV_DT) &&
                         <>
                             <h5>
-                                정산금액(지급예정일 {widReqInfo.PY_DT})
+                                정산금액(지급예정일 {widReqInfo.PY_MM_DD})
                             </h5>
                             <p>0원</p>
                             <span className={styles.adjIng}>정산 진행중</span>
@@ -344,7 +345,7 @@ export default function BtchAdj() {
                             </div>
                             <div>
                                 <span>출금일</span>
-                                <p>{widReqInfo.PY_DT}</p>
+                                <p>{widReqInfo.PY_MM_DD}</p>
                                 {/*<p>{widDate}</p>*/}
                             </div>
                         </div>

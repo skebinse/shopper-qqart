@@ -11,8 +11,8 @@ export default async function handler(req, res) {
         try {
 
             // 배송 완료 리스트
-            let [rows] = await conn.query('call spInsShprAdjReq(fnDecrypt(?, ?), ?, ?, ?)',
-                [encShprId, process.env.ENC_KEY, param.fromDt.replaceAll('-', ''), param.toDt.replaceAll('-', ''), param.adjAmt]);
+            let [rows] = await conn.query('call spInsShprAdjReq(fnDecrypt(?, ?), ?, ?, ?, ?)',
+                [encShprId, process.env.ENC_KEY, param.fromDt.replaceAll('-', ''), param.toDt.replaceAll('-', ''), param.pyDt, param.adjAmt]);
 
             res.status(200).json(result(rows[0]));
         } catch (e) {

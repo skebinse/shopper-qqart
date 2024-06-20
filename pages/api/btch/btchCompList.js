@@ -75,7 +75,8 @@ export default async function handler(req, res) {
             // 출금여부
             query = `
                 SELECT *
-                     , DATE_FORMAT(AA.COMM_YMD, '%m월 %d일') AS PY_DT
+                     , DATE_FORMAT(AA.COMM_YMD, '%Y-%m-%d') AS PY_DT
+                     , DATE_FORMAT(AA.COMM_YMD, '%m월 %d일') AS PY_MM_DD
                   FROM (
                     SELECT *
                          , ROW_NUMBER() OVER (ORDER BY BB.COMM_YMD) AS NUM

@@ -37,11 +37,15 @@ export default async function handler(req, res) {
                       , SHPR_ADJ_KD
                       , SHPR_ADJ_AMT
                       , SHPR_ADJ_REQ_DT
+                      , SHPR_ADJ_PAR_YMD
                     ) VALUES (
                         ?
                       , 'POIN'
                       , ?
                       , NOW()
+                      , CASE 
+                          WHEN DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%d') > 20 THEN DATE_FORMAT(DATE_ADD(DATE_ADD(NOW(), INTERVAL 9 HOUR), INTERVAL 1 MONTH), '%Y-%m-01')
+                        ELSE DATE_FORMAT(LAST_DAY(DATE_ADD(NOW(), INTERVAL 9 HOUR)), '%Y-%m-%d') END
                     );
                 `;
 

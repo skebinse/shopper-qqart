@@ -44,7 +44,7 @@ export default async function handler(req, res) {
                       , ?
                       , NOW()
                       , CASE 
-                          WHEN DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%d') > 20 THEN DATE_FORMAT(DATE_ADD(DATE_ADD(NOW(), INTERVAL 9 HOUR), INTERVAL 1 MONTH), '%Y-%m-01')
+                          WHEN DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%d') > 20 THEN DATE_FORMAT(LAST_DAY(DATE_ADD(DATE_ADD(NOW(), INTERVAL 9 HOUR), INTERVAL 1 MONTH)), '%Y-%m-%d')
                         ELSE DATE_FORMAT(LAST_DAY(DATE_ADD(NOW(), INTERVAL 9 HOUR)), '%Y-%m-%d') END
                     );
                 `;

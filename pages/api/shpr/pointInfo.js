@@ -18,7 +18,7 @@ export default async function handler(req, res) {
             query = `
                SELECT AA.*
                     , CASE 
-                        WHEN DATE_FORMAT(SHPR_ADJ_REQ_DT, '%d') > 20 THEN DATE_FORMAT(DATE_ADD(SHPR_ADJ_REQ_DT, INTERVAL 1 MONTH), '%m월 01일')
+                        WHEN DATE_FORMAT(SHPR_ADJ_REQ_DT, '%d') > 20 THEN DATE_FORMAT(LAST_DAY(DATE_ADD(SHPR_ADJ_REQ_DT, INTERVAL 1 MONTH)), '%m월 %d일')
                       ELSE DATE_FORMAT(LAST_DAY(SHPR_ADJ_REQ_DT), '%m월 %d일') END AS PY_DT
                  FROM (
                     SELECT BB.CD_RMK2

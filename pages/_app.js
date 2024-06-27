@@ -293,7 +293,7 @@ export default function MyApp({ Component, pageProps }) {
             window.onerror = function(msg,file,line) {
 
                 // DB에 로그 남기기
-                cmm.insDbLog('스크립트 오류', "오류메세지 : "+msg+" "+" 파일위치 : "+file+" 라인번호 : "+line);
+                cmm.insDbLog('스크립트 오류', `화면: ${location.href} 오류메세지 : ${msg} 파일위치 : ${file} 라인번호 : ${line}`);
             }
         }
 

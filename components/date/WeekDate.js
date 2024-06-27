@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import Image from "next/image";
 import cmm from "../../js/common";
 
-export default function WeekDate({onSelectDate, isNextWeek = false}) {
+export default function WeekDate({onSelectDate, isNextWeek = false, title = ''}) {
 
     const [searchDate, setSearchDate] = useState({toDt: '', fromDt: ''});
     const [isLastDate, setIsLastDate] = useState(false);
@@ -47,9 +47,12 @@ export default function WeekDate({onSelectDate, isNextWeek = false}) {
 
     return (
         <div className={'weekDateDiv'}>
-            <Image src={'/assets/images/icon/iconArrowL.svg'} alt={'이전일자'} width={24} height={24} onClick={() => searchDateChange('prev')} />
-            <span>{searchDate?.text}</span>
-            <Image className={isLastDate ? 'noVtlz' : ''} src={'/assets/images/icon/iconArrowL.svg'} alt={'다음일자'} width={24} height={24} onClick={() => searchDateChange('next')} />
+            <span>{title}</span>
+            <div>
+                <Image src={'/assets/images/icon/iconArrowL.svg'} alt={'이전일자'} width={24} height={24} onClick={() => searchDateChange('prev')} />
+                <span>{searchDate?.text}</span>
+                <Image className={isLastDate ? 'noVtlz' : ''} src={'/assets/images/icon/iconArrowL.svg'} alt={'다음일자'} width={24} height={24} onClick={() => searchDateChange('next')} />
+            </div>
         </div>
     );
 }

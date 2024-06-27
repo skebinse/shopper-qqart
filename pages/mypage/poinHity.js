@@ -162,7 +162,7 @@ export default function PoinHity() {
                                     <p>{item.SHPR_POIN_RRV_RSN}</p>
                                 </div>
                                 <p>
-                                    {tabIdx === 0 ? '+' : '-'}{item.SHPR_POIN_AMT}
+                                    {tabIdx === 0 ? '+' : '-'}{cmm.util.comma(item.SHPR_POIN_AMT)}
                                 </p>
                             </li>
                         )}

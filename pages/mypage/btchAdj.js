@@ -229,7 +229,7 @@ export default function BtchAdj() {
                 <h3>정산</h3>
             </div>
             <div className={styles.btchArea}>
-                <WeekDate onSelectDate={date => setSearchDate(date)}/>
+                <WeekDate onSelectDate={date => setSearchDate(date)} title={'배송일'}/>
                 <div className={styles.adjDiv}>
                     {(isWidBtn && shprGrdList.length > 0 && !!widReqInfo.SHPR_ADJ_CHCK_YMD && !widReqInfo.SHPR_ADJ_REQ_DT && btchList?.summ?.adjAmt > 0) &&
                         <>

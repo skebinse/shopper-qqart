@@ -100,19 +100,19 @@ export default function Reg() {
         if(!joinInfo.profile) {
 
             cmm.alert('사진을 등록해 주세요.');
-        } else if(!joinInfo.userId){
+        } else if(joinInfoLS.userSnsType !== 'KAKAO' && !joinInfo.userId){
 
             cmm.alert('아이디를 입력해 주세요.');
-        } else if(!cmm.util.checkId(joinInfo.userId)){
+        } else if(joinInfoLS.userSnsType !== 'KAKAO' && !cmm.util.checkId(joinInfo.userId)){
 
             cmm.alert('아이디는 최소 4자이상 \n알파벳, 숫자만 입력해 주세요.');
-        } else if(!joinInfo.userPw){
+        } else if(joinInfoLS.userSnsType !== 'KAKAO' && !joinInfo.userPw){
 
             cmm.alert('비밀번호를 입력해 주세요.');
-        } else if(joinInfo.userPw !== joinInfo.userPwCfm){
+        } else if(joinInfoLS.userSnsType !== 'KAKAO' && joinInfo.userPw !== joinInfo.userPwCfm){
 
             cmm.alert('비밀번호가 서로 다릅니다.');
-        } else if(!cmm.util.checkPassword(joinInfo.userPw)){
+        } else if(joinInfoLS.userSnsType !== 'KAKAO' && !cmm.util.checkPassword(joinInfo.userPw)){
 
             cmm.alert('비밀번호는 최소 6자리 이상으로\n알파벳, 숫자, 특수기호가 포함되어야 합니다.');
         } else if(!joinInfo.userNcnm){
@@ -185,24 +185,28 @@ export default function Reg() {
                     </label>
                 </div>
                 <ul className={styles.info}>
-                    <li>
-                        <label>아이디</label>
-                        <div>
-                            <input value={joinInfo.userId} onChange={e => setJoinInfo(prevState => ({...prevState, userId: e.target.value}))} type="text"  placeholder="아이디를 입력해주세요" maxLength={8} />
-                        </div>
-                    </li>
-                    <li>
-                        <label>비밀번호</label>
-                        <div>
-                            <input value={joinInfo.userPw} onChange={e => setJoinInfo(prevState => ({...prevState, userPw: e.target.value}))} type="password"  placeholder="비밀번호를 입력해주세요" />
-                        </div>
-                    </li>
-                    <li>
-                        <label>비밀번호 확인</label>
-                        <div>
-                            <input value={joinInfo.userPwCfm} onChange={e => setJoinInfo(prevState => ({...prevState, userPwCfm: e.target.value}))} type="password"  placeholder="비밀번호를 다시 입력해주세요" />
-                        </div>
-                    </li>
+                    {joinInfoLS.userSnsType !== 'KAKAO' &&
+                        <>
+                            <li>
+                                <label>아이디</label>
+                                <div>
+                                    <input value={joinInfo.userId} onChange={e => setJoinInfo(prevState => ({...prevState, userId: e.target.value}))} type="text"  placeholder="아이디를 입력해주세요" maxLength={8} />
+                                </div>
+                            </li>
+                            <li>
+                                <label>비밀번호</label>
+                                <div>
+                                    <input value={joinInfo.userPw} onChange={e => setJoinInfo(prevState => ({...prevState, userPw: e.target.value}))} type="password"  placeholder="비밀번호를 입력해주세요" />
+                                </div>
+                            </li>
+                            <li>
+                                <label>비밀번호 확인</label>
+                                <div>
+                                    <input value={joinInfo.userPwCfm} onChange={e => setJoinInfo(prevState => ({...prevState, userPwCfm: e.target.value}))} type="password"  placeholder="비밀번호를 다시 입력해주세요" />
+                                </div>
+                            </li>
+                        </>
+                    }
                     <li>
                         <label>닉네임</label>
                         <div>

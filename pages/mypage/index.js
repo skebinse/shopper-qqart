@@ -223,6 +223,12 @@ export default function MyPage() {
                                 <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
                             </Link>
                         </li>
+                        {/*<li>*/}
+                        {/*    <Link href={'/mypage/adjHity'}>*/}
+                        {/*        <h5>정산 내역</h5>*/}
+                        {/*        <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />*/}
+                        {/*    </Link>*/}
+                        {/*</li>*/}
                         <li>
                             <Link href={'/mypage/poinHity'}>
                                 <h5>포인트 내역</h5>

@@ -222,10 +222,12 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 
 
 /* 주달력 */
-.weekDateDiv{display: flex;align-items: center;padding: 12px 20px;border-bottom: 1px solid #CCCCCC;position: sticky;top: 74px;background: #fff;z-index: 1;}
-.weekDateDiv span{flex: 1;font-weight: 500;font-size: 14px;line-height: 17px;color: #333333;display: inline-block;text-align: center;}
-.weekDateDiv img:last-child{transform: rotate(180deg)}
-.weekDateDiv img.noVtlz{opacity: 0.3;}
+.weekDateDiv{display: flex;align-items: center;padding: 0 20px 12px;border-bottom: 1px solid #CCCCCC;position: sticky;top: 74px;background: #fff;z-index: 1;flex-direction: column;}
+.weekDateDiv > span{font-weight: 500;font-size: 14px;line-height: 17px;color: #333333;padding-bottom: 5px;}
+.weekDateDiv div{display: flex;align-items: center;width: 100%;}
+.weekDateDiv div span{flex: 1;font-weight: 500;font-size: 14px;line-height: 17px;color: #333333;display: inline-block;text-align: center;}
+.weekDateDiv div img:last-child{transform: rotate(180deg)}
+.weekDateDiv div img.noVtlz{opacity: 0.3;}
 
 /* sheet modal */
 .react-modal-sheet-container .tabArea{padding: 0 17px 14px;}

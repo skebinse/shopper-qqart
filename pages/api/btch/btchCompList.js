@@ -76,7 +76,7 @@ export default async function handler(req, res) {
             query = `
                 SELECT *
                      , DATE_FORMAT(AA.COMM_YMD, '%Y-%m-%d') AS PY_DT
-                     , DATE_FORMAT(AA.COMM_YMD, '%m월 %d일') AS PY_MM_DD
+                     , DATE_FORMAT(IFNULL(AA.SHPR_ADJ_PAR_YMD, AA.COMM_YMD), '%m월 %d일') AS PY_MM_DD
                   FROM (
                     SELECT *
                          , ROW_NUMBER() OVER (ORDER BY BB.COMM_YMD) AS NUM
@@ -86,6 +86,7 @@ export default async function handler(req, res) {
                                  , CC.SHPR_ADJ_REQ_DT
                                  , CC.SHPR_ADJ_APV_DT
                                  , CC.SHPR_ADJ_AMT
+                                 , CC.SHPR_ADJ_PAR_YMD
                                  , DATE_ADD((CASE WHEN CC.SHPR_ADJ_REQ_DT IS NULL THEN NOW() ELSE CC.SHPR_ADJ_REQ_DT END)
                                     , INTERVAL 9 HOUR) AS STD_YMD
                                  , BB.CD_RMK2

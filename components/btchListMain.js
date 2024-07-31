@@ -445,6 +445,12 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                             <>
                                 <p>{item.SHOP_NM}</p>
                                 <p>{item.SHOP_FULL_ADDR}</p>
+                                <div className={'storeArea'}>
+                                    <h5>
+                                        고객 주소
+                                    </h5>
+                                    <p>{item.ODER_DELY_FULL_ADDR}</p>
+                                </div>
                             </>
                         }
                         {!!isIngBtch &&

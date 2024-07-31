@@ -242,6 +242,14 @@ export default function OderUserId(props) {
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <h5>고객 주소</h5>
+                    <p>
+                        {btchInfo.ODER_DELY_ADDR}
+                        <Image alt={'주소 복사'} src={'/assets/images/btn/btnCopy.svg'} width={44} height={23}
+                               onClick={() => cmm.util.clipboard(btchInfo.ODER_DELY_ADDR)}/>
+                    </p>
+                </li>
                 {!!btchInfo.ODER_DELY_REQ_MATT &&
                     <li>
                         <h5>주문시 요청 사항</h5>

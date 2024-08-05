@@ -75,7 +75,7 @@
 .pointDiv .cont .point div p{color: #333333;font-size: 24px;font-weight: 700;padding-top: 7px;}
 .pointDiv .cont .point button.widPet{width: 120px;padding: 6px 14px;font-weight: 400;font-size: 15px;height: 35px;background-color: #FFFFFF;border: 1px solid #02B763;color: #02B763;border-radius: 8px;}
 .pointDiv .cont .point button.acRgi{width: 120px;font-weight: 400;font-size: 15px;height: 35px;padding: 6px 14px;}
-.pointDiv .cont .point > p{width: 220px;text-align: right;display: flex;flex-direction: column;align-items: flex-end;}
+.pointDiv .cont .point > p{width: 230px;text-align: right;display: flex;flex-direction: column;align-items: flex-end;}
 .pointDiv .cont .point > p > em{font-size: 14px;padding-bottom: 5px;}
 .pointDiv .cont .point > p > span{font-size: 12px;font-weight: 700;padding: 6px 8px;border-radius: 8px;border: #FFAB5E solid 2px;color: #FFAB5E;text-align: center;width: 60px;}
 .pointDiv .cont .point + div{background-color: #F8F8F8;margin: 0 20px 20px;color: #707070;font-size: 12px;font-weight: 400;padding: 17px 19px;border-radius: 8px;line-height: 18px;}

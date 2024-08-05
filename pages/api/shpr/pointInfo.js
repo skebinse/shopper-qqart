@@ -23,11 +23,16 @@ export default async function handler(req, res) {
                  FROM (
                     SELECT BB.CD_RMK2
                          , CASE WHEN AA.SHPR_BANK_ACNO != '' THEN 'Y' ELSE 'N' END AS AC_INPT_YN
-                         , fnGetShprPoint(AA.SHPR_ID) AS SHPR_POIN
+                         , REPLACE(fnGetShprPoint(AA.SHPR_ID) COLLATE utf8mb4_unicode_ci, ',', '') - (SELECT IFNULL(SUM(A.SHPR_ADJ_AMT), 0) 
+                              FROM T_SHPR_ADJ_MAG A 
+                             WHERE A.SHPR_ID = AA.SHPR_ID 
+                               AND A.SHPR_ADJ_KD = 'POIN' 
+                               AND A.SHPR_ADJ_APV_DT IS NULL) AS SHPR_POIN
                          , (SELECT DATE_ADD(MIN(A.SHPR_ADJ_REQ_DT), INTERVAL 9 HOUR) 
                               FROM T_SHPR_ADJ_MAG A 
                              WHERE A.SHPR_ID = AA.SHPR_ID 
                                AND A.SHPR_ADJ_KD = 'POIN' 
+                               AND A.SHPR_ADJ_REQ_DT >= CONCAT(DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y%m'), '01')
                                AND A.SHPR_ADJ_APV_DT IS NULL) AS SHPR_ADJ_REQ_DT
                       FROM T_SHPR_INFO AA
                            INNER JOIN T_CD_MAG BB

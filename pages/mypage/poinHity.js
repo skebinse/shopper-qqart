@@ -116,7 +116,7 @@ export default function PoinHity() {
                 <div className={styles.point}>
                     <div>
                         <h5>보유 포인트</h5>
-                        <p>{myInfo.SHPR_POIN}원</p>
+                        <p>{cmm.util.comma(myInfo.SHPR_POIN)}원</p>
                     </div>
                     {(myInfo.AC_INPT_YN === 'Y' && cmm.util.getNumber(myInfo.SHPR_POIN) >= 100000 && !myInfo.PY_DT) &&
                         <button className={'button ' + styles.widPet} onClick={() => setIsWidPopup(true)}>출금 신청</button>

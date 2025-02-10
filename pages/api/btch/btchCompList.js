@@ -28,9 +28,7 @@ export default async function handler(req, res) {
                      , AA.SHPR_GRD_CD
                      , AA.SHPR_GRD_CMSS_RATE
                      , CASE
-                           WHEN DATEDIFF(DATE_ADD(NOW(), INTERVAL 9 HOUR), ?) >= 3 AND DAYOFWEEK(DATE_ADD(NOW(), INTERVAL 9 HOUR)) = 4 AND DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%H') >= 18 THEN 'Y'
-                           WHEN DATEDIFF(DATE_ADD(NOW(), INTERVAL 9 HOUR), ?) >= 3 AND DAYOFWEEK(DATE_ADD(NOW(), INTERVAL 9 HOUR)) = 5 THEN 'Y'
-                           WHEN DATEDIFF(DATE_ADD(NOW(), INTERVAL 9 HOUR), ?) >= 3 AND DAYOFWEEK(DATE_ADD(NOW(), INTERVAL 9 HOUR)) = 6 AND DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%H') < 18 THEN 'Y'
+                           WHEN DAY(NOW()) IN (6, 7, 8, 9, 10, 21, 22, 23, 24, 25) THEN 'Y'
                        ELSE ${process.env.NEXT_PUBLIC_RUN_MODE === 'local' ? "'Y'" : "'N'"} END AS IS_WID
                      , (
                         SELECT CD_RMK
@@ -51,7 +49,7 @@ export default async function handler(req, res) {
                   , AA.SHPR_GRD_CMSS_RATE
             `;
 
-            [rows] = await conn.query(query, [param.toDt, param.toDt, param.toDt, shprId, param.toDt, param.toDt, param.fromDt, param.fromDt, param.fromDt, param.toDt]);
+            [rows] = await conn.query(query, [shprId, param.toDt, param.toDt, param.fromDt, param.fromDt, param.fromDt, param.toDt]);
 
             resultMap.shprGrdList = rows;
 

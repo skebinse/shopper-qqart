@@ -6,6 +6,7 @@ import CompDtpt from "../../components/btch/comp/compDtpt";
 import BottomMenu from "../../components/bottomMenu";
 import WeekDate from "../../components/date/WeekDate";
 import KakaoTalkChat from "../../components/kakaoTalkChat";
+import MonthHalfDate from "../../components/date/MonthHalfDate";
 
 export default function BtchAdj() {
 
@@ -159,8 +160,17 @@ export default function BtchAdj() {
 
             // 출금일자
             const toDate = cmm.date.parseDate(searchDate.toDt);
-            const widDate = cmm.date.calDate(toDate, 'D', 11 - toDate.getDay(), '');
-            setWidDate(`${widDate.substring(4, 6)}월 ${widDate.substring(6)}일`);
+
+            let widDate;
+            if(toDate.getDate() === 15) {
+
+                toDate.setDate(1);
+                widDate = cmm.date.calDate(cmm.date.calDate(toDate, 'M', 1, ''), 'D', -1, '');
+            } else {
+
+                widDate = cmm.date.calDate(toDate, 'D', 15, '');
+            }
+            setWidDate(widDate);
 
             // 출금 버튼(수 오후 6시부터 금요일 오후 6시까지)
 
@@ -211,7 +221,7 @@ export default function BtchAdj() {
                     fromDt: searchDate.fromDt,
                     toDt: searchDate.toDt,
                     adjAmt: btchList?.summ?.adjAmt,
-                    pyDt: widReqInfo.PY_DT,
+                    pyDt: widDate,
                 },
                 success: res => {
 
@@ -229,7 +239,7 @@ export default function BtchAdj() {
                 <h3>정산</h3>
             </div>
             <div className={styles.btchArea}>
-                <WeekDate onSelectDate={date => setSearchDate(date)} title={'배송일'}/>
+                <MonthHalfDate onSelectDate={date => setSearchDate(date)} title={'배송일'}/>
                 <div className={styles.adjDiv}>
                     {(isWidBtn && shprGrdList.length > 0 && !!widReqInfo.SHPR_ADJ_CHCK_YMD && !widReqInfo.SHPR_ADJ_REQ_DT && btchList?.summ?.adjAmt > 0) &&
                         <>
@@ -242,7 +252,7 @@ export default function BtchAdj() {
                     {(!!widReqInfo.SHPR_ADJ_CHCK_YMD && !!widReqInfo.SHPR_ADJ_REQ_DT && !widReqInfo.SHPR_ADJ_APV_DT) &&
                         <>
                             <h5>
-                                정산금액(지급예정일 {widReqInfo.PY_MM_DD})
+                                정산금액(지급예정일 {widDate.substring(4, 6)}월 {widDate.substring(6)}일)
                             </h5>
                             <p>0원</p>
                             <span className={styles.adjIng}>정산 진행중</span>
@@ -345,8 +355,8 @@ export default function BtchAdj() {
                             </div>
                             <div>
                                 <span>출금일</span>
-                                <p>{widReqInfo.PY_MM_DD}</p>
-                                {/*<p>{widDate}</p>*/}
+                                {/*<p>{widReqInfo.PY_MM_DD}</p>*/}
+                                <p>{widDate.substring(4, 6)}월 {widDate.substring(6)}일</p>
                             </div>
                         </div>
                         {btchList?.summ?.adjAmt > adjMaxAmt &&

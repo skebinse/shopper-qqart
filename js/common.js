@@ -1070,7 +1070,7 @@ const cmm = {
             })();
 
             const options = {
-                "pluginKey": "0486be4e-a136-4c55-b767-f625b42e7a75"
+                "pluginKey": "38d789a7-b479-4878-85fd-62f4f091d368"
             };
 
             if(cmm.checkLogin()) {

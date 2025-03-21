@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 export default function BottomMenu({idx}) {
 
     const [display, setDisplay] = useState('list-item');
+    const [isETPS, setIsETPS] = useState(false);
 
     useEffect(() => {
 
@@ -13,6 +14,7 @@ export default function BottomMenu({idx}) {
         if(cmm.getLoginInfo('SHPR_GRD_CD') === 'ETPS') {
 
             setDisplay('none');
+            setIsETPS(true);
         }
     }, []);
 
@@ -35,6 +37,15 @@ export default function BottomMenu({idx}) {
                         <span>정산</span>
                     </Link>
                 </li>
+                {isETPS &&
+                    <li className={idx === 1 ? 'on' : ''}>
+                        <Link href={'/mypage/delyHity'}>
+                            <Image alt={'내역 아이콘'} src={`/assets/images/btn/btnMenuPay${idx === 1 ? 'On' : ''}.svg`}
+                                   width={24} height={24}/>
+                            <span>내역</span>
+                        </Link>
+                    </li>
+                }
                 <li className={idx === 2 ? 'on' : ''} style={{display: display}}>
                     <Link href={'/mag/annc'}>
                     <Image alt={'공지 아이콘'} src={`/assets/images/btn/btnMenuAnnc${idx === 2 ? 'On' : ''}.svg`} width={24} height={24} />

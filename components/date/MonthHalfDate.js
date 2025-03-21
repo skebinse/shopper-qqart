@@ -64,7 +64,7 @@ export default function MonthHalfDate({onSelectDate, isNextWeek = false, title =
         const selectDate = {
             fromDt,
             toDt,
-            text: `${fromDt.substring(5).replace('-', '월')}일 ~ ${toDt.substring(5).replace('-', '월')}일`
+            text: `${fromDt.substring(2).replace('-', '년 ').replace('-', '월')}일 ~ ${toDt.substring(5).replace('-', '월')}일`
         };
 
         setSearchDate(selectDate);

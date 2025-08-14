@@ -234,145 +234,162 @@ export default function BtchAdj() {
     };
 
     return (
+
         <div className={styles.btchAdjDiv}>
             <div className={styles.headTitle}>
                 <h3>정산</h3>
             </div>
-            <div className={styles.btchArea}>
-                <MonthHalfDate onSelectDate={date => setSearchDate(date)} title={'배송일'}/>
-                <div className={styles.adjDiv}>
-                    {(isWidBtn && shprGrdList.length > 0 && !!widReqInfo.SHPR_ADJ_CHCK_YMD && !widReqInfo.SHPR_ADJ_REQ_DT && btchList?.summ?.adjAmt > 0) &&
-                        <>
-                            <h5>정산금액</h5>
-                            <p>0원</p>
-                            <button onClick={() => setIsWidPopup(true)} className={'button'} type={'button'}>출금하기
-                            </button>
-                        </>
-                    }
-                    {(!!widReqInfo.SHPR_ADJ_CHCK_YMD && !!widReqInfo.SHPR_ADJ_REQ_DT && !widReqInfo.SHPR_ADJ_APV_DT) &&
-                        <>
-                            <h5>
-                                정산금액(지급예정일 {widDate.substring(4, 6)}월 {widDate.substring(6)}일)
-                            </h5>
-                            <p>0원</p>
-                            <span className={styles.adjIng}>정산 진행중</span>
-                        </>
-                    }
-                    {(!!widReqInfo.SHPR_ADJ_CHCK_YMD && !!widReqInfo.SHPR_ADJ_APV_DT) &&
-                        <>
-                            <h5>정산금액</h5>
-                            <p>{cmm.util.comma(widReqInfo.SHPR_ADJ_AMT)}원</p>
-                            <span className={styles.adj}>정산완료</span>
-                        </>
-                    }
-                    <ul>
-                        <li>
-                            <label>배달완료({btchList?.summ?.cnt}건)</label>
-                            <p>{cmm.util.comma(btchList?.summ?.amt)}원</p>
-                        </li>
-                        {ohrsAdjList.map((item, idx) =>
-                            <li key={'ohrsAdj' + idx}>
-                                <label>{item.SHPR_OHRS_ADJ_NM}</label>
-                                <p>{cmm.util.comma(item.SHPR_OHRS_ADJ_AMT)}원</p>
-                            </li>
-                        )}
-                        {shprGrdList.map((item, idx) =>
-                            <li key={'shprGrd' + idx}>
-                                <label>{item.SHPR_GRD_YM.slice(-2)}월 수수료({item.SHPR_GRD_CMSS_RATE}%)</label>
-                                <p>{item.cmssAmt === 0 ? '' : '-'}{cmm.util.comma(item.cmssAmt)}원</p>
-                            </li>
-                        )}
-                        {shprGrdList.length > 0 &&
-                            <li>
-                                <label>원천세(3.3%)</label>
-                                <p>{btchList?.summ?.srTax === 0 ? '' : '-'}{cmm.util.comma(btchList?.summ?.srTax)}원</p>
-                            </li>
-                        }
-                        <li>
-                            <label>정산예정</label>
-                            <p>{cmm.util.comma(btchList?.summ?.adjAmt)}원</p>
-                        </li>
-                        {!!btchList?.summ?.point &&
-                            <li>
-                                <label>포인트</label>
-                                <p>{cmm.util.comma(btchList?.summ?.point)}P</p>
-                            </li>
-                        }
-                    </ul>
-                </div>
-                <div className={styles.compListDiv}>
-                    <ul>
-                        {btchList?.compList?.map((item, idx) =>
-                            <li key={'comp' + idx} className={!!item.active ? styles.active : ''}>
-                                <h5>{item.date}</h5>
-                                <div className={styles.smryDiv} onClick={() => liClickHandler(idx)}>
-                                    <p>
-                                        {cmm.util.comma(item.amt)}원
-                                        {!!item.point &&
-                                            <em> +{cmm.util.comma(item.point)}P</em>
-                                        }
-                                    </p>
-                                    <span>{item.cnt}건</span>
-                                    <Image alt={'상세'}
-                                           src={!!item.active ? '/assets/images/icon/iconArrowUColor.svg' : '/assets/images/icon/iconArrowL.svg'}
-                                           width={24} height={24}/>
-                                </div>
-                                <div className={styles.dtptDiv}>
-                                    <ul>
-                                        {item.list.map((itemDtpt, idxDtpt) =>
-                                            <li key={'compDtpt' + idxDtpt}
-                                                onClick={() => setOderUserId(itemDtpt.ODER_USER_ID)}>
-                                                <span>
-                                                    {cmm.util.comma(itemDtpt.ODER_DELY_AMT)}원
-                                                    {!!itemDtpt.SHPR_ADJ_POIN &&
-                                                        <em> +{cmm.util.comma(itemDtpt.SHPR_ADJ_POIN)}P</em>
-                                                    }
-                                                </span>
-                                                <span>{itemDtpt.SHOP_NM}({itemDtpt.ODER_RPRE_NO})</span>
-                                            </li>
-                                        )}
-                                    </ul>
-                                </div>
-                            </li>
-                        )}
-                    </ul>
-                </div>
+            <div style={{padding: '0 16px'}}>
+                <img src={'/assets/images/icon/iconWarning.svg'} width={50} height={50} style={{display: 'block',textAlign: 'center',margin: '0 auto',padding: '20px 0'}} />
+                <br/>
+                재정산으로 인한 내용으로 조정중입니다.<br/><br/>
+                일시적으로 정산내역 확인 어려운 점 양해 부탁드립니다
             </div>
-            <CompDtpt id={oderUserId} onClose={() => setOderUserId(-1)}/>
             <KakaoTalkChat/>
             <BottomMenu idx={1}/>
-            {isWidPopup &&
-                <div className="confirmArea">
-                    <div>
-                        <h3>출금</h3>
-                        <p>
-                            아래 내용으로 출금 신청 하시겠습니까?
-                        </p>
-                        <div className={styles.widCont}>
-                            <div>
-                                <span>정산금액</span>
-                                <p>{cmm.util.comma((btchList?.summ?.adjAmt > adjMaxAmt ? adjMaxAmt : btchList?.summ?.adjAmt))}원</p>
-                            </div>
-                            <div>
-                                <span>출금일</span>
-                                {/*<p>{widReqInfo.PY_MM_DD}</p>*/}
-                                <p>{widDate.substring(4, 6)}월 {widDate.substring(6)}일</p>
-                            </div>
-                        </div>
-                        {btchList?.summ?.adjAmt > adjMaxAmt &&
-                            <p style={{paddingTop: '0'}}>
-                                최대 출금 가능금액은 <span>{cmm.util.comma(adjMaxAmt)}원</span> 입니다.
-                                <br/>
-                                나머지 금액은 <span>{cmm.util.comma(btchList?.summ?.adjAmt - adjMaxAmt)}원</span>은 <span>꿀단지</span>로 적립 됩니다.
-                            </p>
-                        }
-                        <div>
-                            <button className='button white mr16' type="button" onClick={() => setIsWidPopup(false)}>취소</button>
-                            <button className='button' type="button" onClick={widReqHandler}>출금</button>
-                        </div>
-                    </div>
-                </div>
-            }
         </div>
     );
+
+    // return (
+    //     <div className={styles.btchAdjDiv}>
+    //         <div className={styles.headTitle}>
+    //             <h3>정산</h3>
+    //         </div>
+    //         <div className={styles.btchArea}>
+    //             <MonthHalfDate onSelectDate={date => setSearchDate(date)} title={'배송일'}/>
+    //             <div className={styles.adjDiv}>
+    //                 {(isWidBtn && shprGrdList.length > 0 && !!widReqInfo.SHPR_ADJ_CHCK_YMD && !widReqInfo.SHPR_ADJ_REQ_DT && btchList?.summ?.adjAmt > 0) &&
+    //                     <>
+    //                         <h5>정산금액</h5>
+    //                         <p>0원</p>
+    //                         <button onClick={() => setIsWidPopup(true)} className={'button'} type={'button'}>출금하기
+    //                         </button>
+    //                     </>
+    //                 }
+    //                 {(!!widReqInfo.SHPR_ADJ_CHCK_YMD && !!widReqInfo.SHPR_ADJ_REQ_DT && !widReqInfo.SHPR_ADJ_APV_DT) &&
+    //                     <>
+    //                         <h5>
+    //                             정산금액(지급예정일 {widDate.substring(4, 6)}월 {widDate.substring(6)}일)
+    //                         </h5>
+    //                         <p>0원</p>
+    //                         <span className={styles.adjIng}>정산 진행중</span>
+    //                     </>
+    //                 }
+    //                 {(!!widReqInfo.SHPR_ADJ_CHCK_YMD && !!widReqInfo.SHPR_ADJ_APV_DT) &&
+    //                     <>
+    //                         <h5>정산금액</h5>
+    //                         <p>{cmm.util.comma(widReqInfo.SHPR_ADJ_AMT)}원</p>
+    //                         <span className={styles.adj}>정산완료</span>
+    //                     </>
+    //                 }
+    //                 <ul>
+    //                     <li>
+    //                         <label>배달완료({btchList?.summ?.cnt}건)</label>
+    //                         <p>{cmm.util.comma(btchList?.summ?.amt)}원</p>
+    //                     </li>
+    //                     {ohrsAdjList.map((item, idx) =>
+    //                         <li key={'ohrsAdj' + idx}>
+    //                             <label>{item.SHPR_OHRS_ADJ_NM}</label>
+    //                             <p>{cmm.util.comma(item.SHPR_OHRS_ADJ_AMT)}원</p>
+    //                         </li>
+    //                     )}
+    //                     {shprGrdList.map((item, idx) =>
+    //                         <li key={'shprGrd' + idx}>
+    //                             <label>{item.SHPR_GRD_YM.slice(-2)}월 수수료({item.SHPR_GRD_CMSS_RATE}%)</label>
+    //                             <p>{item.cmssAmt === 0 ? '' : '-'}{cmm.util.comma(item.cmssAmt)}원</p>
+    //                         </li>
+    //                     )}
+    //                     {shprGrdList.length > 0 &&
+    //                         <li>
+    //                             <label>원천세(3.3%)</label>
+    //                             <p>{btchList?.summ?.srTax === 0 ? '' : '-'}{cmm.util.comma(btchList?.summ?.srTax)}원</p>
+    //                         </li>
+    //                     }
+    //                     <li>
+    //                         <label>정산예정</label>
+    //                         <p>{cmm.util.comma(btchList?.summ?.adjAmt)}원</p>
+    //                     </li>
+    //                     {!!btchList?.summ?.point &&
+    //                         <li>
+    //                             <label>포인트</label>
+    //                             <p>{cmm.util.comma(btchList?.summ?.point)}P</p>
+    //                         </li>
+    //                     }
+    //                 </ul>
+    //             </div>
+    //             <div className={styles.compListDiv}>
+    //                 <ul>
+    //                     {btchList?.compList?.map((item, idx) =>
+    //                         <li key={'comp' + idx} className={!!item.active ? styles.active : ''}>
+    //                             <h5>{item.date}</h5>
+    //                             <div className={styles.smryDiv} onClick={() => liClickHandler(idx)}>
+    //                                 <p>
+    //                                     {cmm.util.comma(item.amt)}원
+    //                                     {!!item.point &&
+    //                                         <em> +{cmm.util.comma(item.point)}P</em>
+    //                                     }
+    //                                 </p>
+    //                                 <span>{item.cnt}건</span>
+    //                                 <Image alt={'상세'}
+    //                                        src={!!item.active ? '/assets/images/icon/iconArrowUColor.svg' : '/assets/images/icon/iconArrowL.svg'}
+    //                                        width={24} height={24}/>
+    //                             </div>
+    //                             <div className={styles.dtptDiv}>
+    //                                 <ul>
+    //                                     {item.list.map((itemDtpt, idxDtpt) =>
+    //                                         <li key={'compDtpt' + idxDtpt}
+    //                                             onClick={() => setOderUserId(itemDtpt.ODER_USER_ID)}>
+    //                                             <span>
+    //                                                 {cmm.util.comma(itemDtpt.ODER_DELY_AMT)}원
+    //                                                 {!!itemDtpt.SHPR_ADJ_POIN &&
+    //                                                     <em> +{cmm.util.comma(itemDtpt.SHPR_ADJ_POIN)}P</em>
+    //                                                 }
+    //                                             </span>
+    //                                             <span>{itemDtpt.SHOP_NM}({itemDtpt.ODER_RPRE_NO})</span>
+    //                                         </li>
+    //                                     )}
+    //                                 </ul>
+    //                             </div>
+    //                         </li>
+    //                     )}
+    //                 </ul>
+    //             </div>
+    //         </div>
+    //         <CompDtpt id={oderUserId} onClose={() => setOderUserId(-1)}/>
+    //         <KakaoTalkChat/>
+    //         <BottomMenu idx={1}/>
+    //         {isWidPopup &&
+    //             <div className="confirmArea">
+    //                 <div>
+    //                     <h3>출금</h3>
+    //                     <p>
+    //                         아래 내용으로 출금 신청 하시겠습니까?
+    //                     </p>
+    //                     <div className={styles.widCont}>
+    //                         <div>
+    //                             <span>정산금액</span>
+    //                             <p>{cmm.util.comma((btchList?.summ?.adjAmt > adjMaxAmt ? adjMaxAmt : btchList?.summ?.adjAmt))}원</p>
+    //                         </div>
+    //                         <div>
+    //                             <span>출금일</span>
+    //                             {/*<p>{widReqInfo.PY_MM_DD}</p>*/}
+    //                             <p>{widDate.substring(4, 6)}월 {widDate.substring(6)}일</p>
+    //                         </div>
+    //                     </div>
+    //                     {btchList?.summ?.adjAmt > adjMaxAmt &&
+    //                         <p style={{paddingTop: '0'}}>
+    //                             최대 출금 가능금액은 <span>{cmm.util.comma(adjMaxAmt)}원</span> 입니다.
+    //                             <br/>
+    //                             나머지 금액은 <span>{cmm.util.comma(btchList?.summ?.adjAmt - adjMaxAmt)}원</span>은 <span>꿀단지</span>로 적립 됩니다.
+    //                         </p>
+    //                     }
+    //                     <div>
+    //                         <button className='button white mr16' type="button" onClick={() => setIsWidPopup(false)}>취소</button>
+    //                         <button className='button' type="button" onClick={widReqHandler}>출금</button>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         }
+    //     </div>
+    // );
 }

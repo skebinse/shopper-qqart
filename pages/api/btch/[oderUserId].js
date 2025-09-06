@@ -63,6 +63,7 @@ export default async function handler(req, res) {
                      , EE.ODER_URG_DELY_MI
                      , EE.ODER_DELY_MENS
                      , EE.ODER_DELY_ARTG
+                     , IFNULL(EE.ODER_BOX_NCN, 1) AS ODER_BOX_NCN
                      , fnGetPromPoin(EE.SHOP_ID, fnDecrypt(?, ?)) AS SHPR_ADJ_POIN
                      , IFNULL(EE.ODER_DRC_LDTN_AMT, 0) AS ODER_DRC_LDTN_AMT
                      , FORMAT(fnGetShprDelyDtcAmt(EE.ODER_USER_ID, fnDecrypt(?, ?), EE.ODER_DELY_DTC) + EE.ODER_SHPR_TIP_AMT, 0) AS DELY_AMT

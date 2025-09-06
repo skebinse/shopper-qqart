@@ -113,6 +113,7 @@ export default async function handler(req, res) {
                  , AA.ODER_DELY_ARTG
                  , AA.EXCP_OVER
                  , AA.EXCP_PKG
+                 , AA.ODER_BOX_NCN
               FROM (
                 SELECT AA.ODER_MNGR_RGI_YN
                      , fnGetOderReqYmd(AA.ODER_MNGR_RGI_YN, AA.ODER_REQ_YMD) AS ODER_REQ_YMD
@@ -128,6 +129,7 @@ export default async function handler(req, res) {
                      , AA.ODER_DELY_HH
                      , AA.ODER_URG_DELY_MI
                      , AA.SHPR_ADJ_POIN
+                     , AA.ODER_BOX_NCN
                      , IFNULL(AA.ODER_OPTM_DTC_SEQ, 99) AS ODER_OPTM_DTC_SEQ
                      , AA.ODER_DELY_ARTG
                      , BB.SHOP_NM

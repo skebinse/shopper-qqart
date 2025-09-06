@@ -203,6 +203,10 @@ export default function OderUserId(props) {
                     <h5>배달 시간</h5>
                     <p>{btchInfo.oderDelySlctVal}</p>
                 </li>
+                <li>
+                    <h5>박스 수</h5>
+                    <p>{btchInfo.ODER_BOX_NCN}개</p>
+                </li>
                 {!!btchInfo.ODER_DELY_ARTG &&
                     <li>
                         <h5>배달 물품</h5>

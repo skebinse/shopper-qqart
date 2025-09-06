@@ -431,6 +431,10 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
                                 {/*}*/}
                                 <span>{item.ODER_KD === 'PIUP' ? '픽업' : item.PROD_CNT + '개 상품'}</span>
                             </div>
+                            <div>
+                                <Image alt={'상품 이미지'} src={`/assets/images/icon/iconBox${item.BTCH_ODER_PGRS_MI >= 90 ? 'W' : ''}.svg`} width={24} height={24} />
+                                <span>{item.ODER_BOX_NCN}</span>
+                            </div>
                         </div>
                         {item.ODER_DELY_SLCT_VAL !== 'imm' &&
                             <p className={'resv'}>

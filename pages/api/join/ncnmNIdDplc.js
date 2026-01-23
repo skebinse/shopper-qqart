@@ -9,10 +9,11 @@ export default async function handler(req, res) {
         try {
             let [rows] = await conn.query(`
                 SELECT COUNT(*) AS CNT
-                 FROM T_SHPR_INFO
+                FROM T_SHPR_INFO
                 WHERE SHPR_SCSS_YN = 'N'
                   AND SHPR_NCNM = ?
-            `, [param.userNcnm]);
+                  AND SHPR_SYSTEM = ?
+            `, [param.userNcnm, process.env.NEXT_PUBLIC_SYSTEM]);
 
             if(rows[0].CNT === 1) {
 
@@ -21,9 +22,10 @@ export default async function handler(req, res) {
 
                 let [rows] = await conn.query(`
                     SELECT COUNT(*) AS CNT
-                     FROM T_SHPR_INFO
+                    FROM T_SHPR_INFO
                     WHERE SHPR_LOGIN_ID = ?
-                `, [param.userId]);
+                      AND SHPR_SYSTEM = ?
+                `, [param.userId, process.env.NEXT_PUBLIC_SYSTEM]);
 
                 if(rows[0].CNT === 1) {
 

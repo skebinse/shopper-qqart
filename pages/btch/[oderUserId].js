@@ -120,38 +120,72 @@ export default function OderUserId(props) {
     const btchAcpClick = () => {
 
         // 쇼퍼와의 거리 계산
-        getShprDtcCal(btchInfo, res => {
+        // getShprDtcCal(btchInfo, res => {
+        //
+        //     cmm.confirm(`${btchInfo.SHOP_NM} 매장까지
+        //                 픽업예상 <span style="color: #02B763;font-weight: 700">"${res.oderPiupFrcsMi}분"</span>으로 확인됩니다.
+        //
+        //                 매장은 쇼퍼님을 기다리고 있으니
+        //                 빠르게 이동해 주세요.`, () => {
+        //
+        //         cmm.ajax({
+        //             url: '/api/btch/btchAcp',
+        //             data: {
+        //                 ...res,
+        //                 oderUserId: btchInfo.ODER_USER_ID,
+        //             },
+        //             success: res => {
+        //
+        //                 cmm.alert('배치 수락이 완료되었습니다.', () => {
+        //
+        //                     goPage('/', {
+        //                         tabIdx: 1,
+        //                     });
+        //                 });
+        //             }, error: res => {
+        //
+        //                 if(res.resultMsg) {
+        //
+        //                     cmm.alert(res.resultMsg, null, '실패');
+        //                 }
+        //             },
+        //         });
+        //     }, null, '배치 수락');
+        // });
 
-            cmm.confirm(`${btchInfo.SHOP_NM} 매장까지 
-                        픽업예상 <span style="color: #02B763;font-weight: 700">"${res.oderPiupFrcsMi}분"</span>으로 확인됩니다.
-                        
-                        매장은 쇼퍼님을 기다리고 있으니 
-                        빠르게 이동해 주세요.`, () => {
+        let options = `<option value="15">15분</option><option value="30" selected >30분</option>`;
 
-                cmm.ajax({
-                    url: '/api/btch/btchAcp',
-                    data: {
-                        ...res,
-                        oderUserId: btchInfo.ODER_USER_ID,
-                    },
-                    success: res => {
+        cmm.confirm(`배치를 수락하시려면\n 픽업예상 시간을 선택해 주세요.
+                        <select id="oderPiupFrcsMi" style="width: 100%;margin-top: 16px;">
+                            ${options}
+                        </select>`, () => {
 
-                        cmm.alert('배치 수락이 완료되었습니다.', () => {
+            const shprPsPsitInfo = cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT);
 
-                            goPage('/', {
-                                tabIdx: 1,
-                            });
+            cmm.ajax({
+                url: '/api/btch/btchAcp',
+                data: {
+                    ...shprPsPsitInfo,
+                    oderUserId: btchInfo.ODER_USER_ID,
+                    oderPiupFrcsMi: oderPiupFrcsMi.value
+                },
+                success: res => {
+
+                    cmm.alert('배치 수락이 완료되었습니다.', () => {
+
+                        goPage('/', {
+                            tabIdx: 1,
                         });
-                    }, error: res => {
+                    });
+                }, error: res => {
 
-                        if(res.resultMsg) {
+                    if(res.resultMsg) {
 
-                            cmm.alert(res.resultMsg, null, '실패');
-                        }
-                    },
-                });
-            }, null, '배치 수락');
-        });
+                        cmm.alert(res.resultMsg, null, '실패');
+                    }
+                },
+            });
+        }, null, '배치 수락');
     };
 
     return (

@@ -53,14 +53,14 @@ export default async function handler(req, res) {
             [rows] = await conn.query(query, [param.atchFileUuid, param.oderUserId, shprId]);
 
             // 픽업 자동정산
-            query = `CALL spInsPiupAtmtAdj(?, fnDecrypt(?, ?), 'N')`;
+            query = `CALL spInsPiupAtmtAdj(?, ?, 'N')`;
 
-            await conn.query(query, [param.oderUserId, encShprId, process.env.ENC_KEY]);
+            await conn.query(query, [param.oderUserId, shprId]);
 
             // 쇼퍼 현재 주문 최대치 수정
-            query = 'CALL spModShprPsOderMxva(fnDecrypt(?, ?))';
+            query = 'CALL spModShprPsOderMxva(?)';
 
-            await conn.query(query, [encShprId, process.env.ENC_KEY]);
+            await conn.query(query, [shprId]);
 
             await conn.commit();
             res.status(200).json(result(rows));

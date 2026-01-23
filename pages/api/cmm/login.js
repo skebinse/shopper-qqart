@@ -13,16 +13,16 @@ export default async function handler(req, res) {
             if(process.env.NEXT_PUBLIC_RUN_MODE === 'local' && process.env.DB_PROD_YN === 'Y') {
 
                 const [rows] = await conn.query(`
-                    SELECT 1 AS IS_LOGIN
-                         , A.SHPR_NCNM
-                         , A.SHPR_ADDR
-                         , A.SHPR_GRD_CD
-                         , TO_BASE64(AES_ENCRYPT(A.SHPR_ID, ?)) AS ENC_SHPR_ID
-                         , fnGetAtchFileList(A.SHPR_PRFL_ATCH_FILE_UUID) AS SHPR_PRFL_FILE
-                         , DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y%m%d') AS LOING_DT
-                         , 'v1.0' AS LOGIN_VER
-                      FROM T_SHPR_INFO A
-                     WHERE A.SHPR_ID = ?`,
+                            SELECT 1 AS IS_LOGIN
+                                 , A.SHPR_NCNM
+                                 , A.SHPR_ADDR
+                                 , A.SHPR_GRD_CD
+                                 , TO_BASE64(AES_ENCRYPT(A.SHPR_ID, ?)) AS ENC_SHPR_ID
+                                 , fnGetAtchFileList(A.SHPR_PRFL_ATCH_FILE_UUID) AS SHPR_PRFL_FILE
+                                 , DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 9 HOUR), '%Y%m%d') AS LOING_DT
+                                 , 'v1.0' AS LOGIN_VER
+                            FROM T_SHPR_INFO A
+                            WHERE A.SHPR_ID = ?`,
                     [process.env.ENC_KEY, param.userId]);
                 const item = rows[0];
 
@@ -33,7 +33,7 @@ export default async function handler(req, res) {
                 res.status(200).json(result(item));
             } else {
 
-                const [rows] = await conn.query(`call spShprLogin(?, ?, ?, ?, ?, ?, ?)`, [encShprId, param.userCrctno, param.userSnsType, process.env.ENC_KEY, param.userId, param.userPw, (param.appToken === 'null' ? '' : param.appToken)]);
+                const [rows] = await conn.query(`call spGetShprLogin(?, ?, ?, ?, ?, ?, ?, ?)`, [encShprId, param.userCrctno, param.userSnsType, process.env.ENC_KEY, param.userId, param.userPw, (param.appToken === 'null' ? '' : param.appToken), process.env.NEXT_PUBLIC_SYSTEM]);
                 const item = rows[0][0];
 
                 // 쿠키 등록

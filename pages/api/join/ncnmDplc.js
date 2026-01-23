@@ -8,11 +8,12 @@ export default async function handler(req, res) {
 
         try {
             const [rows] = await conn.query(`
-                SELECT COUNT(*) AS CNT
+               SELECT COUNT(*) AS CNT
                  FROM T_SHPR_INFO
                 WHERE SHPR_SCSS_YN = 'N'
                   AND SHPR_NCNM = ?
-            `, [param.userNcnm]);
+                  AND SHPR_SYSTEM = ?
+            `, [param.userNcnm, process.env.NEXT_PUBLIC_SYSTEM]);
 
             res.status(200).json(result(rows[0]));
         } catch (e) {

@@ -104,7 +104,7 @@ export default function MyApp({ Component, pageProps }) {
         }
 
         // 채널톡
-        cmm.plugin.channelIO();
+        // cmm.plugin.channelIO();
 
         // PUSH
         window.onPushMessage = data => {

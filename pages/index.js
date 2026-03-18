@@ -179,6 +179,17 @@ export default function Index(props) {
 
         cmm.loading(true);
 
+        if(!!cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT)) {
+
+            // Map 생성
+            createMap({
+                ...cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT),
+                list,
+            });
+
+            cmm.loading(false);
+        }
+
         // 현재 위치 가져오기
         cmm.util.getCurrentPosition(res => {
 

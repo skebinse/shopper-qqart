@@ -195,13 +195,19 @@ export default function Index(props) {
         if(!!cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT)) {
 
             cmm.alert('call : ' + JSON.stringify(cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT)), () => {});
-            // Map 생성
-            createMap({
-                ...cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT),
-                list,
-            });
 
-            cmm.loading(false);
+            setTimeout(() => {
+
+                // Map 생성
+                createMap({
+                    // ...cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT),
+                    shprPsitLat: 126.8853936,
+                    shprPsitLot: 37.6662708,
+                    list,
+                });
+
+                cmm.loading(false);
+            }, 1000);
 
             // 현재 위치 가져오기
             cmm.util.getCurrentPosition(() => {}, 1000);
@@ -621,6 +627,16 @@ export default function Index(props) {
     };
 
     /**
+     * 터치 영역 클릭
+     * @param e
+     */
+    const touchClickHandler = e => {
+
+        // btchArea Y 위치 변경
+        btchAreaYPsit(document.querySelector('.btchListArea').classList.contains(styles.open) ? 'down' : 'up');
+    };
+
+    /**
      * btchArea Y 위치 변경
      * @param snapIdx
      */
@@ -655,7 +671,7 @@ export default function Index(props) {
                     <div id="kakaoMap" style={{height: 'calc(100% - 210px)'}}></div>
                     <div className={'btchListArea ' + styles.btchListArea} onTouchStart={touchStartHandler}
                          onTouchEnd={touchEndHandler}>
-                        <div className={styles.btchListHeader}>
+                        <div className={styles.btchListHeader} onClick={touchClickHandler}>
                             <span></span>
                             <span></span>
                         </div>

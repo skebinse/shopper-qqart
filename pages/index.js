@@ -179,33 +179,45 @@ export default function Index(props) {
 
         cmm.loading(true);
 
-        if(!!cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT)) {
+        // 현재 위치 가져오기
+        cmm.util.getCurrentPosition(res => {
 
             // Map 생성
             createMap({
-                ...cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT),
+                shprPsitLat: res.lot,
+                shprPsitLot: res.lat,
                 list,
             });
 
             cmm.loading(false);
-
-            // 현재 위치 가져오기
-            cmm.util.getCurrentPosition(() => {}, 1000);
-        } else {
-
-            // 현재 위치 가져오기
-            cmm.util.getCurrentPosition(res => {
-
-                // Map 생성
-                createMap({
-                    shprPsitLat: res.lot,
-                    shprPsitLot: res.lat,
-                    list,
-                });
-
-                cmm.loading(false);
-            }, 1000);
-        }
+        }, 1000);
+        // if(!!cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT)) {
+        //
+        //     // Map 생성
+        //     createMap({
+        //         ...cmm.util.getLs(cmm.Cont.SHPR_PS_PSIT),
+        //         list,
+        //     });
+        //
+        //     cmm.loading(false);
+        //
+        //     // 현재 위치 가져오기
+        //     cmm.util.getCurrentPosition(() => {}, 1000);
+        // } else {
+        //
+        //     // 현재 위치 가져오기
+        //     cmm.util.getCurrentPosition(res => {
+        //
+        //         // Map 생성
+        //         createMap({
+        //             shprPsitLat: res.lot,
+        //             shprPsitLot: res.lat,
+        //             list,
+        //         });
+        //
+        //         cmm.loading(false);
+        //     }, 1000);
+        // }
     };
 
     useEffect(() => {

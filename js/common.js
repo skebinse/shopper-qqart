@@ -135,6 +135,13 @@ const cmm = {
             callAjax();
         } else {
 
+            // 위치저장 시 중복 로그인 체크 제외
+            if(_options.url === '/api/cmm/insPsPsit') {
+
+                callAjax();
+                return;
+            }
+
             // 중복 로그인 체크
             fetch('/api/cmm/dplcLogin', {
                 method: 'POST',

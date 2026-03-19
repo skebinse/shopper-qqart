@@ -28,13 +28,15 @@ export default function BottomMenu({idx}) {
                     </Link>
                 </li>
                 <li className={idx === 1 ? 'on' : ''} style={{display: display}}>
-                    <Link href={'/mypage/btchAdj'}>
+                    <Link href={'/mypage/delyHity'}>
+                    {/*<Link href={'/mypage/btchAdj'}>*/}
                         <div className={'divAdjNtfy'}>
                             미정산
                         </div>
                         <Image alt={'정산 아이콘'} src={`/assets/images/btn/btnMenuPay${idx === 1 ? 'On' : ''}.svg`}
                                width={24} height={24}/>
-                        <span>정산</span>
+                        {/*<span>정산</span>*/}
+                        <span>내역</span>
                     </Link>
                 </li>
                 {isETPS &&

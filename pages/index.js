@@ -149,7 +149,7 @@ export default function Index(props) {
             });
         }
 
-        if(cmm.app.isApp()) {
+        if(cmm.isApp()) {
 
             setTimeout(() => {
                 mainMap.current.relayout();

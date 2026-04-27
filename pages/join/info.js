@@ -267,7 +267,7 @@ export default function Info() {
                         goPage('./comp');
                     } else {
 
-                        cmm.alert('계좌 정보가 등록되었습니다.', () => {
+                        cmm.alert('저장되었습니다.', () => {
 
                             router.reload();
                         });

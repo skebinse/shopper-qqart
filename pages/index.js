@@ -12,6 +12,7 @@ export default function Index(props) {
 
     const router = useRouter();
     const {isPushOpen, setIsPushOpen} = useGlobal();
+    const [isApp, setIsApp] = useState(false);
     const [isInit, setIsInit] = useState(true);
     const [tabIdx, setTabIdx] = useState(0);
     const [loginInfo, setLoginInfo] = useState(null);
@@ -212,6 +213,8 @@ export default function Index(props) {
     };
 
     useEffect(() => {
+
+        setIsApp(cmm.isApp());
 
         setTimeout(() => {
 
@@ -434,6 +437,14 @@ export default function Index(props) {
                     console.error(err);
                 });
         };
+
+        // QR코드 호출 시
+        window.getQrcode = qrText => {
+
+            if(!!qrText) {
+                router.replace(qrText.replace(location.origin, ''));
+            }
+        }
     }, [callDutjStrt]);
 
     /**
@@ -641,6 +652,14 @@ export default function Index(props) {
         }
     }
 
+    /**
+     * QR Code 호출
+     */
+    const qrCodeHandler = () => {
+
+        webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "qrcamera","callback": "window.getQrCode"}));
+    };
+
     return (
         <div className={styles.index + ' ' + dnone} style={{transform: 'translate3d(0, 0, 0)'}}>
             {!!isEntApv &&
@@ -649,6 +668,11 @@ export default function Index(props) {
                         <div>
                             <Image alt={'로고'} src={'/assets/images/logoWhite.svg'} width={113.6} height={24.5}/>
                         </div>
+                        {isApp &&
+                            <button type={'button'} onClick={qrCodeHandler} style={{position: 'relative',top: '2px'}}>
+                                <img src={'/assets/images/btn/btnQrCode.svg'} alt={'QR Code'}/>
+                            </button>
+                        }
                         <button type={'button'} onClick={dutjEndHanler}>업무 종료</button>
                     </div>
                     <div id="kakaoMap" style={{height: 'calc(100% - 210px)'}}></div>

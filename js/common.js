@@ -383,8 +383,14 @@ const cmm = {
      * 앱여부
      */
     isApp: () => {
+        console.log(window)
+        if(!!window) {
 
-        return !!window.webkit && !!window.webkit.messageHandlers && !!window.webkit.messageHandlers.cordova_iab;
+            return  !!window.webkit && !!window.webkit.messageHandlers && !!window.webkit.messageHandlers.cordova_iab;
+        } else {
+
+            return false;
+        }
     },
 
     /**

@@ -330,6 +330,8 @@ export default function Index(props) {
                 webkit.messageHandlers.cordova_iab.postMessage(JSON.stringify({"action": "getlocation","callback": "window.getPosition"}));
             }
         }
+
+
     };
 
     /**

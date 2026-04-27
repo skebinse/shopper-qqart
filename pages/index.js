@@ -442,7 +442,6 @@ export default function Index(props) {
         window.getQrCode = qrText => {
 
             cmm.alert(qrText)
-            cmm.alert(location.origin)
             if(!!qrText) {
                 // router.replace(qrText.replace(location.origin, ''));
             }

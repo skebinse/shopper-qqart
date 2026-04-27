@@ -214,11 +214,11 @@ export default function Index(props) {
 
     useEffect(() => {
 
-        setIsApp(cmm.isApp());
 
         setTimeout(() => {
 
             // btchAreaInfo.current.translateY = 'transform: translateY(calc(100% - 196px));';
+            setIsApp(cmm.isApp());
 
             if(!!document.querySelector('#ch-plugin')) {
                 document.querySelector('#ch-plugin').classList.add('d-none');
@@ -441,7 +441,6 @@ export default function Index(props) {
         // QR코드 호출 시
         window.getQrCode = qrText => {
 
-            cmm.alert(qrText.replace(location.origin, ''));
             if(!!qrText) {
                 router.replace(qrText.replace(location.origin, ''));
             }

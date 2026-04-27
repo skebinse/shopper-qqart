@@ -443,7 +443,7 @@ export default function Index(props) {
 
             cmm.alert(qrText.replace(location.origin, ''));
             if(!!qrText) {
-                // router.replace(qrText.replace(location.origin, ''));
+                router.replace(qrText.replace(location.origin, ''));
             }
         }
     }, [callDutjStrt]);

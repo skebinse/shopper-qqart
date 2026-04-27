@@ -149,7 +149,16 @@ export default function Index(props) {
             });
         }
 
-        mainMap.current.setBounds(bounds);
+        if(cmm.app.isApp()) {
+
+            setTimeout(() => {
+                mainMap.current.relayout();
+                mainMap.current.setBounds(bounds);
+            }, 100);
+        } else {
+
+            mainMap.current.setBounds(bounds);
+        }
     };
 
     /**

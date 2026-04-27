@@ -441,7 +441,7 @@ export default function Index(props) {
         // QR코드 호출 시
         window.getQrCode = qrText => {
 
-            cmm.alert(qrText)
+            cmm.alert(qrText.replace(location.origin, ''));
             if(!!qrText) {
                 // router.replace(qrText.replace(location.origin, ''));
             }

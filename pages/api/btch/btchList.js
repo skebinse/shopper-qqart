@@ -114,6 +114,8 @@ export default async function handler(req, res) {
                  , AA.EXCP_OVER
                  , AA.EXCP_PKG
                  , AA.ODER_BOX_NCN
+                 , AA.SHOP_ADDR_LAT
+                 , AA.SHOP_ADDR_LOT
               FROM (
                 SELECT AA.ODER_MNGR_RGI_YN
                      , fnGetOderReqYmd(AA.ODER_MNGR_RGI_YN, AA.ODER_REQ_YMD) AS ODER_REQ_YMD
@@ -150,8 +152,8 @@ export default async function handler(req, res) {
                      , CASE 
                         WHEN AA.ODER_DELY_SLCT_VAL = 'resv' THEN TIMESTAMPDIFF(MINUTE, STR_TO_DATE(CONCAT(AA.ODER_DELY_YMD, ' ', SUBSTRING(AA.ODER_DELY_HH, 1, 5)), '%Y-%m-%d %H:%i'), DATE_ADD(NOW(), INTERVAL 9 HOUR))
                        ELSE TIMESTAMPDIFF(MINUTE, AA.ODER_REQ_YMD, NOW()) END AS BTCH_ODER_PGRS_MI
-                     , CASE WHEN AA.ODER_PGRS_STAT = '03' THEN BB.SHOP_ADDR_LAT ELSE AA.ODER_DELY_ADDR_LAT END AS ODER_DELY_ADDR_LAT
-                     , CASE WHEN AA.ODER_PGRS_STAT = '03' THEN BB.SHOP_ADDR_LOT ELSE AA.ODER_DELY_ADDR_LOT END AS ODER_DELY_ADDR_LOT
+                     , AA.ODER_DELY_ADDR_LAT
+                     , AA.ODER_DELY_ADDR_LOT
                      , (SELECT COUNT(1) FROM T_ODER_EXCP A WHERE A.ODER_USER_ID = AA.ODER_USER_ID AND A.ODER_EXCP_KD = '과적') AS EXCP_OVER
                      , (SELECT COUNT(1) FROM T_ODER_EXCP A WHERE A.ODER_USER_ID = AA.ODER_USER_ID AND A.ODER_EXCP_KD = '주차비') AS EXCP_PKG
                   FROM T_ODER_USER_INFO AA

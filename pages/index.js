@@ -91,30 +91,28 @@ export default function Index(props) {
             const tooltipInfo = {};
             data.list.forEach(item => {
 
-                const key = item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT;
+                let key = item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT;
                 if(!tooltipInfo[key]) {
 
                     tooltipInfo[key] = [];
                 }
 
                 tooltipInfo[key].push((!!item.ODER_RPRE_NO && String(cmm.util.getNumber(item.ODER_RPRE_NO)).length === 11) ? cmm.util.getNumber(item.ODER_RPRE_NO.substring(6)) : item.ODER_RPRE_NO);
-            });
-
-            data.list.forEach(item => {
-
-                // 마커 주소입니다 ODER_OPTM_DTC_SEQ
-                let imageSrc = (item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03') ? '/assets/images/icon/map/iconMapStore.png' : '/assets/images/icon/map/iconMapUser.png';
-                let tooltipTxt = '';
-                let classNm = 'store';
 
                 if(!!(item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03')) {
 
-                    tooltipTxt = tooltipInfo[item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT].length + '건';
-                } else {
+                    let key = item.SHOP_ADDR_LAT + item.SHOP_ADDR_LOT;
+                    if(!tooltipInfo[key]) {
 
-                    classNm = 'customer';
-                    tooltipTxt = '주문번호 ' + tooltipInfo[item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT].join(',');
+                        tooltipInfo[key] = [];
+                    }
+
+                    tooltipInfo[key].push((!!item.ODER_RPRE_NO && String(cmm.util.getNumber(item.ODER_RPRE_NO)).length === 11) ? cmm.util.getNumber(item.ODER_RPRE_NO.substring(6)) : item.ODER_RPRE_NO);
                 }
+
+            });
+
+            const addMarkerTooltip = (item, imageSrc, tooltipTxt, classNm) => {
 
                 if(!!item.ODER_OPTM_DTC_SEQ && item.ODER_OPTM_DTC_SEQ < 99) {
                     imageSrc = `/assets/images/icon/map/icoMapPersonalNum_${item.ODER_OPTM_DTC_SEQ}.png`
@@ -146,6 +144,32 @@ export default function Index(props) {
 
                 markerList.current.push(tooltip);
                 marker.setMap(mainMap.current);
+            };
+
+            data.list.forEach(item => {
+
+                // 마커 주소입니다 ODER_OPTM_DTC_SEQ
+                let imageSrc = (item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03') ? '/assets/images/icon/map/iconMapStore.png' : '/assets/images/icon/map/iconMapUser.png';
+                let tooltipTxt = '';
+
+                if(!!(item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03')) {
+
+                    imageSrc = '/assets/images/icon/map/iconMapUser.png';
+                    tooltipTxt = '주문번호 ' + tooltipInfo[item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT].join(',');
+                    addMarkerTooltip(item, imageSrc, tooltipTxt, 'customer_prev');
+
+                    imageSrc = '/assets/images/icon/map/iconMapStore.png';
+                    tooltipTxt = tooltipInfo[item.SHOP_ADDR_LAT + item.SHOP_ADDR_LOT].length + '건';
+                    addMarkerTooltip({
+                        ...item,
+                        ODER_DELY_ADDR_LAT: item.SHOP_ADDR_LAT,
+                        ODER_DELY_ADDR_LOT: item.SHOP_ADDR_LOT,
+                    }, imageSrc, tooltipTxt, 'store');
+                } else {
+
+                    tooltipTxt = '주문번호 ' + tooltipInfo[item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT].join(',');
+                    addMarkerTooltip(item, imageSrc, tooltipTxt, 'customer');
+                }
             });
         }
 

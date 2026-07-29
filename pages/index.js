@@ -253,15 +253,17 @@ export default function Index(props) {
             // btchAreaInfo.current.translateY = 'transform: translateY(calc(100% - 196px));';
             setIsApp(cmm.isApp());
 
-            if(!!document.querySelector('#ch-plugin')) {
-                document.querySelector('#ch-plugin').classList.add('d-none');
-            }
+            // 채널톡 제거 주석처리 26/07/29
+            // if(!!document.querySelector('#ch-plugin')) {
+            //     document.querySelector('#ch-plugin').classList.add('d-none');
+            // }
         }, 500);
 
         return () => {
-            if(!!document.querySelector('#ch-plugin')) {
-                document.querySelector('#ch-plugin').classList.remove('d-none');
-            }
+            // 채널톡 제거 주석처리 26/07/29
+            // if(!!document.querySelector('#ch-plugin')) {
+            //     document.querySelector('#ch-plugin').classList.remove('d-none');
+            // }
         };
     }, []);
 

@@ -1068,7 +1068,9 @@ const cmm = {
                         document.querySelector('#ch-plugin').attr = '100';
 
                         if(location.pathname === '/') {
-                            document.querySelector('#ch-plugin').classList.add('d-none');
+
+                            // 채널톡 제거 주석처리 26/07/29
+                            // document.querySelector('#ch-plugin').classList.add('d-none');
                         }
                     });
                 }
@@ -1083,7 +1085,8 @@ const cmm = {
             })();
 
             const options = {
-                "pluginKey": "38d789a7-b479-4878-85fd-62f4f091d368"
+                "pluginKey": "48f8e99a-d65b-4694-ba1c-a0bf365be854",
+                "mobileMarginY": '120'
             };
 
             if(cmm.checkLogin()) {

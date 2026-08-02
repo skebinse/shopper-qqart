@@ -364,19 +364,19 @@ export default function IngOderUserId() {
                                 </p>
                                 <ul className={'naviLinkUl'}>
                                     <li>
-                                        <a href={`kakaomap://search?q=${encodeURIComponent(btchInfo.SHOP_FULL_ADDR || '')}`} >
+                                        <a href={`kakaomap://search?q=${encodeURIComponent(btchInfo.SHOP_ADDR || '')}`} >
                                             <Image alt={'카카오맵'} src={'/assets/images/icon/iconKakaonavi.svg'} width={24} height={24} />
                                             카카오맵 연결하기
                                         </a>
                                     </li>
                                     <li>
-                                        <a href={`tmap://search?name=${encodeURIComponent(btchInfo.SHOP_FULL_ADDR || '')}`} >
+                                        <a href={`tmap://search?name=${encodeURIComponent(btchInfo.SHOP_ADDR || '')}`} >
                                             <Image alt={'티맵'} src={'/assets/images/icon/iconTmap.png'} width={24} height={24} />
                                             티맵 연결하기
                                         </a>
                                     </li>
                                     <li>
-                                        <a href={`nmap://search?query=${encodeURIComponent(btchInfo.SHOP_FULL_ADDR || '')}`} >
+                                        <a href={`nmap://search?query=${encodeURIComponent(btchInfo.SHOP_ADDR || '')}`} >
                                             <Image alt={'네이버지도'} src={'/assets/images/icon/iconNavermap.png'} width={24} height={24} />
                                             네이버지도 연결하기
                                         </a>
@@ -483,19 +483,19 @@ export default function IngOderUserId() {
                                 </p>
                                 <ul className={'naviLinkUl'}>
                                     <li>
-                                        <a href={`kakaomap://search?q=${encodeURIComponent(btchInfo.USER_FULL_ADDR || '')}`} >
+                                        <a href={`kakaomap://search?q=${encodeURIComponent(btchInfo.ODER_DELY_ADDR || '')}`} >
                                             <Image alt={'카카오맵'} src={'/assets/images/icon/iconKakaonavi.svg'} width={24} height={24} />
                                             카카오맵 연결하기
                                         </a>
                                     </li>
                                     <li>
-                                        <a href={`tmap://search?name=${encodeURIComponent(btchInfo.USER_FULL_ADDR || '')}`} >
+                                        <a href={`tmap://search?name=${encodeURIComponent(btchInfo.ODER_DELY_ADDR || '')}`} >
                                             <Image alt={'티맵'} src={'/assets/images/icon/iconTmap.png'} width={24} height={24} />
                                             티맵 연결하기
                                         </a>
                                     </li>
                                     <li>
-                                        <a href={`nmap://search?query=${encodeURIComponent(btchInfo.USER_FULL_ADDR || '')}`} >
+                                        <a href={`nmap://search?query=${encodeURIComponent(btchInfo.ODER_DELY_ADDR || '')}`} >
                                             <Image alt={'네이버지도'} src={'/assets/images/icon/iconNavermap.png'} width={24} height={24} />
                                             네이버지도 연결하기
                                         </a>

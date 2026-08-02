@@ -32,6 +32,7 @@ export default async function handler(req, res) {
                      , CC.SPBK_ID
                      , IFNULL(DD.PROD_NM, CC.SPBK_HNDC_PROD_NM) AS PROD_NM
                      , IFNULL(DD.PROD_DIS_PRICE, DD.PROD_PRICE) AS PROD_PRICE
+                     , BB.SHOP_ADDR
                      , BB.SHOP_ADDR_LAT
                      , BB.SHOP_ADDR_LOT
                      , EE.USER_ADDR_LAT

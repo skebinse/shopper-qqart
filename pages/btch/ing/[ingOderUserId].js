@@ -364,19 +364,19 @@ export default function IngOderUserId() {
                                 </p>
                                 <ul className={'naviLinkUl'}>
                                     <li>
-                                        <a href={`kakaomap://route?ep=${btchInfo.SHOP_ADDR_LOT},${btchInfo.SHOP_ADDR_LAT}&by=CAR`} >
+                                        <a href={`kakaomap://search?q=${encodeURIComponent(btchInfo.SHOP_ADDR || '')}`} >
                                             <Image alt={'카카오맵'} src={'/assets/images/icon/iconKakaonavi.svg'} width={24} height={24} />
                                             카카오맵 연결하기
                                         </a>
                                     </li>
                                     <li>
-                                        <a href={`tmap://route?goalname=${btchInfo.SHOP_NM}&goaly=${btchInfo.SHOP_ADDR_LOT}&goalx=${btchInfo.SHOP_ADDR_LAT}`} >
+                                        <a href={`tmap://search?name=${encodeURIComponent(btchInfo.SHOP_ADDR || '')}`} >
                                             <Image alt={'티맵'} src={'/assets/images/icon/iconTmap.png'} width={24} height={24} />
                                             티맵 연결하기
                                         </a>
                                     </li>
                                     <li>
-                                        <a href={`nmap://route/car?dlat=${btchInfo.SHOP_ADDR_LOT}&dlng=${btchInfo.SHOP_ADDR_LAT}&dname=${btchInfo.SHOP_NM}`} >
+                                        <a href={`nmap://search?query=${encodeURIComponent(btchInfo.SHOP_ADDR || '')}`} >
                                             <Image alt={'네이버지도'} src={'/assets/images/icon/iconNavermap.png'} width={24} height={24} />
                                             네이버지도 연결하기
                                         </a>
@@ -483,19 +483,19 @@ export default function IngOderUserId() {
                                 </p>
                                 <ul className={'naviLinkUl'}>
                                     <li>
-                                        <a href={`kakaomap://route?ep=${btchInfo.ODER_DELY_ADDR_LOT},${btchInfo.ODER_DELY_ADDR_LAT}&by=CAR`} >
+                                        <a href={`kakaomap://search?q=${encodeURIComponent(btchInfo.ODER_DELY_ADDR || '')}`} >
                                             <Image alt={'카카오맵'} src={'/assets/images/icon/iconKakaonavi.svg'} width={24} height={24} />
                                             카카오맵 연결하기
                                         </a>
                                     </li>
                                     <li>
-                                        <a href={`tmap://route?goalname=${btchInfo.ODER_ACPP_NM} 고객&goaly=${btchInfo.ODER_DELY_ADDR_LOT}&goalx=${btchInfo.ODER_DELY_ADDR_LAT}`} >
+                                        <a href={`tmap://search?name=${encodeURIComponent(btchInfo.ODER_DELY_ADDR || '')}`} >
                                             <Image alt={'티맵'} src={'/assets/images/icon/iconTmap.png'} width={24} height={24} />
                                             티맵 연결하기
                                         </a>
                                     </li>
                                     <li>
-                                        <a href={`nmap://route/car?dlat=${btchInfo.ODER_DELY_ADDR_LOT}&dlng=${btchInfo.ODER_DELY_ADDR_LAT}&dname=${btchInfo.ODER_ACPP_NM} 고객`} >
+                                        <a href={`nmap://search?query=${encodeURIComponent(btchInfo.ODER_DELY_ADDR || '')}`} >
                                             <Image alt={'네이버지도'} src={'/assets/images/icon/iconNavermap.png'} width={24} height={24} />
                                             네이버지도 연결하기
                                         </a>

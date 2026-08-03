@@ -34,39 +34,43 @@ async function getMyInfo(conn, req, res) {
         const shprId = shprIdRow[0].SHPR_ID;
         
         query = `
-                SELECT SHPR_CRCTNO
-                     , SHPR_GRD_CD
-                     , SHPR_LOGIN_ID
-                     , SHPR_SNS_TYPE
-                     , SHPR_NCNM
-                     , SHPR_PRFL_ATCH_FILE_UUID
-                     , SHPR_STDO_CD
-                     , SHPR_ZIPC
-                     , SHPR_ADDR
-                     , SHPR_DTPT_ADDR
-                     , SHPR_ADDR_LAT
-                     , SHPR_ADDR_LOT
-                     , SHPR_TNAL_PRFL
-                     , SHPR_SNS_TYPE
-                     , SHPR_SFITD_TEXT
-                     , SHPR_SCSS_YN
-                     , SHPR_SCSS_YMD
-                     , SHPR_DELY_POS_DTC
-                     , SHPR_NCNM
-                     , SHPR_NTFY_YN
-                     , SHPR_VHCL_KD
-                     , SHPR_VHCL_NM
-                     , SHPR_VHCL_NO
-                     , SHPR_BANK_NM
-                     , SHPR_BRDT
-                     , SHPR_NAME
-                     , CASE WHEN LENGTH(IFNULL(SHPR_BANK_ACNO, '') > 4) THEN CONCAT(REPEAT('*', CHAR_LENGTH(SHPR_BANK_ACNO) - 4), RIGHT(SHPR_BANK_ACNO, 4)) ELSE SHPR_BANK_ACNO END AS SHPR_BANK_ACNO
-                     , fnGetAtchFileList(SHPR_PRFL_ATCH_FILE_UUID) AS SHPR_PRFL_FILE
-                     , fnGetShprPoint(SHPR_ID) AS SHPR_POIN
-                     , fnGetHoneyMone(SHPR_ID) AS SHPR_HONEY_MONE
-                  FROM T_SHPR_INFO
-                 WHERE SHPR_ID = ?
-                   AND SHPR_SCSS_YN = 'N'
+                SELECT AA.SHPR_CRCTNO
+                     , AA.SHPR_GRD_CD
+                     , AA.SHPR_LOGIN_ID
+                     , AA.SHPR_SNS_TYPE
+                     , AA.SHPR_NCNM
+                     , AA.SHPR_PRFL_ATCH_FILE_UUID
+                     , AA.SHPR_STDO_CD
+                     , AA.SHPR_ZIPC
+                     , AA.SHPR_ADDR
+                     , AA.SHPR_DTPT_ADDR
+                     , AA.SHPR_ADDR_LAT
+                     , AA.SHPR_ADDR_LOT
+                     , AA.SHPR_TNAL_PRFL
+                     , AA.SHPR_SNS_TYPE
+                     , AA.SHPR_SFITD_TEXT
+                     , AA.SHPR_SCSS_YN
+                     , AA.SHPR_SCSS_YMD
+                     , AA.SHPR_DELY_POS_DTC
+                     , AA.SHPR_NCNM
+                     , AA.SHPR_NTFY_YN
+                     , AA.SHPR_VHCL_KD
+                     , AA.SHPR_VHCL_NM
+                     , AA.SHPR_VHCL_NO
+                     , AA.SHPR_BANK_NM
+                     , AA.SHPR_BRDT
+                     , AA.SHPR_NAME
+                     , BB.CD_NM AS SHPR_GRD_NM
+                     , CASE WHEN LENGTH(IFNULL(AA.SHPR_BANK_ACNO, '') > 4) THEN CONCAT(REPEAT('*', CHAR_LENGTH(AA.SHPR_BANK_ACNO) - 4), RIGHT(AA.SHPR_BANK_ACNO, 4)) ELSE AA.SHPR_BANK_ACNO END AS SHPR_BANK_ACNO
+                     , fnGetAtchFileList(AA.SHPR_PRFL_ATCH_FILE_UUID) AS SHPR_PRFL_FILE
+                     , fnGetShprPoint(AA.SHPR_ID) AS SHPR_POIN
+                     , fnGetHoneyMone(AA.SHPR_ID) AS SHPR_HONEY_MONE
+                  FROM T_SHPR_INFO AA
+                       LEFT OUTER JOIN T_CD_MAG BB
+                    ON BB.CD_SPPO_ID = 158
+                   AND BB.CD_RMK = AA.SHPR_GRD_CD
+                 WHERE AA.SHPR_ID = ?
+                   AND AA.SHPR_SCSS_YN = 'N'
             `;
 
         const [rows] = await conn.query(query, [shprId]);

@@ -175,25 +175,22 @@ export default function MyPage() {
                 }
                 <p>
                     반갑습니다.
-                    {(!!myInfo.SHPR_GRD_CD && myInfo.SHPR_GRD_CD.indexOf('HONEY') > -1) &&
-                        <span className={styles.shprGrdHoney}>허니비</span>
-                    }
-                    {(!!myInfo.SHPR_GRD_CD && myInfo.SHPR_GRD_CD.indexOf('BUMB') > -1) &&
-                        <span className={styles.shprGrdBumb}>범블비</span>
+                    {(!!myInfo.SHPR_GRD_CD && myInfo.SHPR_GRD_CD !== 'ETPS') &&
+                        <span className={styles.shprGrdHoney}>{myInfo.SHPR_GRD_NM}</span>
                     }
                     쇼퍼님!
                     <span>{myInfo.SHPR_NCNM}</span>
                 </p>
                 {loginInfo?.SHPR_GRD_CD !== 'ETPS' &&
                     <div className={styles.info}>
-                        <Link href={'#'} onClick={() => setIsOpenLvlInfo(true)}>
-                            <Image alt={'등급확인'} src={'/assets/images/icon/iconInfoType01.svg'} width={14} height={14}/>
-                            등급정보
-                        </Link>
-                        <span className={styles.point}>
-                            <Image src={'/assets/images/icon/iconPoint.svg'} alt={'포인트 아이콘'} width={16} height={16} />
-                            {cmm.util.comma(myInfo?.SHPR_POIN)}P
-                        </span>
+                        {/*<Link href={'#'} onClick={() => setIsOpenLvlInfo(true)}>*/}
+                        {/*    <Image alt={'등급확인'} src={'/assets/images/icon/iconInfoType01.svg'} width={14} height={14}/>*/}
+                        {/*    등급정보*/}
+                        {/*</Link>*/}
+                        {/*<span className={styles.point}>*/}
+                        {/*    <Image src={'/assets/images/icon/iconPoint.svg'} alt={'포인트 아이콘'} width={16} height={16} />*/}
+                        {/*    {cmm.util.comma(myInfo?.SHPR_POIN)}P*/}
+                        {/*</span>*/}
                     </div>
                 }
             </div>
@@ -207,16 +204,16 @@ export default function MyPage() {
             <ul className={'ulType01'}>
                 {loginInfo?.SHPR_GRD_CD !== 'ETPS' &&
                     <>
-                    {myInfo.SHPR_HONEY_MONE > 0 &&
-                        <li>
-                            <div className={styles.honey}>
-                                <h5>
-                                    꿀단지
-                                    <span>{cmm.util.comma(myInfo.SHPR_HONEY_MONE)}</span>
-                                </h5>
-                            </div>
-                        </li>
-                    }
+                    {/*{myInfo.SHPR_HONEY_MONE > 0 &&*/}
+                    {/*    <li>*/}
+                    {/*        <div className={styles.honey}>*/}
+                    {/*            <h5>*/}
+                    {/*                꿀단지*/}
+                    {/*                <span>{cmm.util.comma(myInfo.SHPR_HONEY_MONE)}</span>*/}
+                    {/*            </h5>*/}
+                    {/*        </div>*/}
+                    {/*    </li>*/}
+                    {/*}*/}
                         <li>
                             <Link href={'/mypage/delySchd'}>
                                 <h5>일정관리</h5>
@@ -229,12 +226,12 @@ export default function MyPage() {
                         {/*        <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />*/}
                         {/*    </Link>*/}
                         {/*</li>*/}
-                        <li>
-                            <Link href={'/mypage/poinHity'}>
-                                <h5>포인트 내역</h5>
-                                <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />
-                            </Link>
-                        </li>
+                        {/*<li>*/}
+                        {/*    <Link href={'/mypage/poinHity'}>*/}
+                        {/*        <h5>포인트 내역</h5>*/}
+                        {/*        <Image src={'/assets/images/icon/iconArrowR.svg'} width={9} height={16} alt={'바로가기'} />*/}
+                        {/*    </Link>*/}
+                        {/*</li>*/}
                     </>
                 }
                 <li>

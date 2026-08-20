@@ -19,8 +19,12 @@ export default function QrCode(props) {
                 },
                 success: res => {
 
-                    cmm.alert('배달 시작으로 변경됩니다.');
-                    router.replace('/');
+                    const oderNo = res?.ODER_RPRE_NO?.length === 11 ? cmm.util.getNumber(res.ODER_RPRE_NO.substring(6)) : res?.ODER_RPRE_NO;
+
+                    cmm.alert(`주문번호 ${oderNo}의 박스 수는 ${res?.ODER_BOX_NCN}개 입니다.<br/>배달 시작으로 상태가 변경됐습니다.`, () => {
+
+                        router.replace('/');
+                    });
                 },
                 error: res => {
 

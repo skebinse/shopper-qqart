@@ -77,6 +77,17 @@ export default async function handler(req, res) {
                    AND ODER_PGRS_STAT != '06'
                 `;
 
+            await conn.query(query, [param.oderUserId, shprId]);
+
+            // 주문번호, 박스 수 조회
+            query = `
+                SELECT ODER_RPRE_NO
+                     , ODER_BOX_NCN
+                  FROM T_ODER_USER_INFO
+                 WHERE ODER_USER_ID = ?
+                   AND SHPR_ID = ?
+            `;
+
             const [rows] = await conn.query(query, [param.oderUserId, shprId]);
 
             // 고객에게 알림 전송(기존 배치 수락시 발송을 배달 시작 시로 변경)
@@ -92,7 +103,7 @@ export default async function handler(req, res) {
             // admin 알림 발송
             adminSendNtfy(conn, {ntfyType: 'delyStrt', oderUserId: param.oderUserId});
 
-            res.status(200).json(result(rows));
+            res.status(200).json(result(rows[0]));
         } catch (e) {
 
             console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));

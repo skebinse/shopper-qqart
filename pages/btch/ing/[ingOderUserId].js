@@ -357,6 +357,10 @@ export default function IngOderUserId() {
                                 <p>{btchInfo.SHOP_NM}</p>
                             </li>
                             <li>
+                                <h5>박스 수</h5>
+                                <p>{btchInfo.ODER_BOX_NCN}</p>
+                            </li>
+                            <li>
                                 <h5>주소</h5>
                                 <p>
                                     {btchInfo.SHOP_FULL_ADDR}

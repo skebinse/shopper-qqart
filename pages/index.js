@@ -149,13 +149,14 @@ export default function Index(props) {
             data.list.forEach(item => {
 
                 // 마커 주소입니다 ODER_OPTM_DTC_SEQ
-                let imageSrc = (item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03') ? '/assets/images/icon/map/iconMapStore.png' : '/assets/images/icon/map/iconMapUser.png';
+                let imageSrc = (item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03') ? '/assets/images/icon/map/iconMapStore.png' : '/assets/images/icon/map/iconMapUser.svg';
                 let tooltipTxt = '';
 
                 if(!!(item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03')) {
 
-                    imageSrc = '/assets/images/icon/map/iconMapUser.png';
-                    tooltipTxt = '주문번호 ' + tooltipInfo[item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT].join(',');
+                    // 픽업 전(02, 03) 고객 위치는 초록 마커로 구분
+                    imageSrc = '/assets/images/icon/map/iconMapUserPrev.svg';
+                    tooltipTxt = '픽업예정 ' + tooltipInfo[item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT].join(',');
                     addMarkerTooltip(item, imageSrc, tooltipTxt, 'customer_prev');
 
                     imageSrc = '/assets/images/icon/map/iconMapStore.png';
@@ -167,7 +168,7 @@ export default function Index(props) {
                     }, imageSrc, tooltipTxt, 'store');
                 } else {
 
-                    tooltipTxt = '주문번호 ' + tooltipInfo[item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT].join(',');
+                    tooltipTxt = '배달중 ' + tooltipInfo[item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT].join(',');
                     addMarkerTooltip(item, imageSrc, tooltipTxt, 'customer');
                 }
             });

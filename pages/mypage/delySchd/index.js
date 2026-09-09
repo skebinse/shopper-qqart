@@ -14,7 +14,7 @@ export default function DelySchd() {
     // SHPR_SCHD_ID:	INT             쇼퍼 일정 관리 ID	AUTO_INCREMENT
     // SHPR_ID:         INT             쇼퍼 ID	
     // SHPR_SCHD_YMD:	DATE	        쇼퍼 일정 일자	
-    // SHPR_SCHD_AREA:	VARCHAR(100)	쇼퍼 일정 지역	
+    // SHPR_SCHD_AREA:	VARCHAR(100)	쇼퍼 일정 스토어 (T_SHOP_MAG.SHOP_ID)	
     // SHPR_SCHD_HH:	VARCHAR(100)	쇼퍼 일정 시간	    예) 08,09,13,16
     // RGI_DT:	        DATETIME	    등록 일시	
     // RGI_ID:	        INT	            등록 ID	
@@ -115,7 +115,7 @@ export default function DelySchd() {
     const refreshSchedule = (scheduleId) => requestGetSchedules(searchDate, setSchedules);
 
     /**
-     * Date 객체와 지역 이름 문자열과 시간으로 서버에 일정 생성 요청
+     * Date 객체와 스토어 ID 목록과 시간으로 서버에 일정 생성 요청
      */
     const createSchedule = (date, area, timeSlots) => requestCreateSchedule(date, area, timeSlots, refreshSchedule);
 

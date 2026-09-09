@@ -23,7 +23,8 @@ async function setSchedule(conn, req, res) {
     try {
 
         let query, rows;
-        for (const areaTxt of area.split(',')) {
+        // area 는 선택한 스토어 ID(SHOP_ID) 목록을 콤마로 연결한 문자열, 스토어 단위로 1행씩 등록
+        for (const shopId of area.split(',')) {
 
             query =`
                 INSERT INTO T_SHPR_SCHD_MAG (
@@ -47,7 +48,7 @@ async function setSchedule(conn, req, res) {
                 )
             `;
 
-            [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY, date, areaTxt, schedule]);
+            [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY, date, shopId, schedule]);
         }
 
         res.status(200).json(result(rows.insertId));

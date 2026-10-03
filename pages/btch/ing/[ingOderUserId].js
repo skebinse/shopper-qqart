@@ -59,7 +59,7 @@ export default function IngOderUserId() {
                     switch (item.ODER_PGRS_STAT) {
                         case '03': setBtnText(item.ODER_KD === 'DELY' ? '장보기 시작' : '배달 시작'); setTitle('스토어로 이동 중'); break;
                         case '04': setBtnText('배달 시작'); setTitle('장보는 중'); break;
-                        case '05': setBtnText((item.ODER_DRC_LDTN_YN === 'N' && item.ODER_DRC_LDTN_AMT > 0 && item.ODER_CARD_DRC_LDTN_CPL_YN !== 'Y') ? '결제 하기' : '배달 완료'); setTitle('배달하는 중'); break;
+                        case '05': setBtnText('배달 완료'); setTitle('배달하는 중'); break;
                     }
 
                     let oderDelySlctVal;
@@ -95,11 +95,6 @@ export default function IngOderUserId() {
         // 배달 완료
         if(btchInfo.ODER_PGRS_STAT === '05') {
 
-            if(btnText === '결제 하기') {
-
-                goPage('/btch/ldtn/' + ingOderUserId);
-                return;
-            }
             if(cplImgList.length === 0) {
 
                 cmm.alert('아직 사진을 등록하지 않았습니다.\n사진을 등록해주세요.', () => {
@@ -107,7 +102,7 @@ export default function IngOderUserId() {
                     inpFile.click();
                 });
             } else {
-                cmm.confirm(`<span>${btchInfo.USER_FULL_ADDR}\n\n벨누르기 완료</span>하셨나요?\n벨누르기 하지 않으면 배달 완료로\n 인정이 되지 않을 수 있으니 꼭 벨을 눌러주세요`, () => {
+                cmm.confirm(`<span>${cmm.util.escapeHtml(btchInfo.USER_FULL_ADDR)}\n\n벨누르기 완료</span>하셨나요?\n벨누르기 하지 않으면 배달 완료로\n 인정이 되지 않을 수 있으니 꼭 벨을 눌러주세요`, () => {
 
                     // 업로드
                     shopS3Upload(cplImgList, res => {

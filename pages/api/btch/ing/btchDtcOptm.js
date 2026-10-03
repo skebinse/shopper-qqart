@@ -17,16 +17,31 @@ export default async function handler(req, res) {
             const [shprIdRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
             const shprId = shprIdRow[0].SHPR_ID;
 
+            if(!shprId) {
+
+                res.status(200).json(result('', '9000', '로그인 후 이용가능합니다.'));
+                return;
+            }
+
+            // 주문 ID 는 숫자만 허용 (쿼리 바인딩)
+            const oderUserIds = String(param.oderUserIds ?? '').split(',').map(id => id.trim()).filter(id => /^\d+$/.test(id));
+
+            if(oderUserIds.length === 0) {
+
+                res.status(200).json(result('', '9999', '잘못된 요청입니다.'));
+                return;
+            }
+
             query = `
                 SELECT ODER_USER_ID
                      , ODER_DELY_ADDR_LAT
                      , ODER_DELY_ADDR_LOT
                   FROM T_ODER_USER_INFO
                  WHERE SHPR_ID = ?
-                   AND ODER_USER_ID IN (${param.oderUserIds})
+                   AND ODER_USER_ID IN (?)
             `;
 
-            const [rows] = await conn.query(query, [shprId]);
+            const [rows] = await conn.query(query, [shprId, oderUserIds]);
 
             const data = {
                 shopper: {
@@ -55,32 +70,50 @@ export default async function handler(req, res) {
                 });
             }
 
-            cmm.ajax({
-                url: 'http://road.qqcart.shop/api/v1/eta/route',
-                isExtr: true,
-                dataType: 'json',
-                headers: {
-                    'x-api-key': 'r7!JbD*Qi4'
-                },
-                data,
-                success: apiRes => {
+            // 커넥션 반환 전에 UPDATE 가 끝나도록 외부 호출 완료까지 대기
+            await new Promise(resolve => {
 
-                    if(!!apiRes.steps && apiRes.steps.length > 0) {
+                cmm.ajax({
+                    url: process.env.ROAD_API_URL,
+                    isExtr: true,
+                    dataType: 'json',
+                    headers: {
+                        'x-api-key': process.env.ROAD_API_KEY
+                    },
+                    data,
+                    success: async apiRes => {
 
-                        apiRes.steps.forEach((item, idx) => {
+                        try {
 
-                            const query = `
-                                    UPDATE T_ODER_USER_INFO
-                                       SET ODER_OPTM_DTC_SEQ = ?
-                                     WHERE SHPR_ID = ?
-                                       AND ODER_USER_ID = ?
-                                `;
+                            if(!!apiRes?.steps && apiRes.steps.length > 0) {
 
-                            conn.query(query, [idx, shprId, item.name]);
-                        });
+                                const query = `
+                                        UPDATE T_ODER_USER_INFO
+                                           SET ODER_OPTM_DTC_SEQ = ?
+                                         WHERE SHPR_ID = ?
+                                           AND ODER_USER_ID = ?
+                                    `;
+
+                                for(const [idx, item] of apiRes.steps.entries()) {
+
+                                    await conn.query(query, [idx, shprId, item.name]);
+                                }
+                            }
+                            res.status(200).json(result(apiRes));
+                        } catch (e) {
+
+                            console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
+                            console.log(e);
+                            res.status(500).json(result('', '9999', '오류가 발생했습니다.'));
+                        }
+                        resolve();
+                    },
+                    error: () => {
+
+                        res.status(200).json(result('', '9999', '최적 경로 조회에 실패했습니다.'));
+                        resolve();
                     }
-                    res.status(200).json(result(apiRes));
-                }
+                });
             });
 
         } catch (e) {

@@ -1,5 +1,6 @@
 import {getConnectPool, result} from "../db";
 import {getCookie, setCookie} from "cookies-next";
+import {getKakaoUserId} from "../../../util/kakaoUtil";
 
 export default async function handler(req, res) {
 
@@ -32,6 +33,20 @@ export default async function handler(req, res) {
 
                 res.status(200).json(result(item));
             } else {
+
+                // 카카오 로그인: 클라이언트가 보낸 회원번호 대신 액세스 토큰으로 카카오에서 확인한 회원번호 사용
+                if(param.userSnsType === 'KAKAO') {
+
+                    const kakaoUserId = await getKakaoUserId(param.kakaoAccessToken);
+
+                    if(!kakaoUserId) {
+
+                        res.status(200).json(result('', '9999', '카카오 인증정보가 유효하지 않습니다.\n다시 로그인해 주세요.'));
+                        return;
+                    }
+
+                    param.userCrctno = kakaoUserId;
+                }
 
                 const [rows] = await conn.query(`call spGetShprLogin(?, ?, ?, ?, ?, ?, ?, ?)`, [encShprId, param.userCrctno, param.userSnsType, process.env.ENC_KEY, param.userId, param.userPw, (param.appToken === 'null' ? '' : param.appToken), process.env.NEXT_PUBLIC_SYSTEM]);
                 const item = rows[0][0];

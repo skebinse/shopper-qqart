@@ -40,6 +40,8 @@ export default function Login(props) {
                         const param = {
                             userCrctno: res.id,
                             userSnsType: 'KAKAO',
+                            // 서버에서 카카오 회원번호를 직접 확인하는 데 사용 (로그인/가입)
+                            kakaoAccessToken: authObj.access_token,
                         };
 
                         if(!!res.kakao_account) {

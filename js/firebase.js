@@ -55,20 +55,8 @@ export default function firebaseInit() {
                                 cmm.util.setLs(cmm.Cont.WEB_TOKEN, currentToken);
                             }
                         });
-                        const topic = process.env.NEXT_PUBLIC_RUN_MODE;
-
-                        fetch(`https://iid.googleapis.com/iid/v1/${currentToken}/rel/topics/${topic}shopper`, {
-                            method: 'POST',
-                            headers: new Headers({
-                                'Authorization': 'key=AAAAuBa2I_o:APA91bH_7Qw0NrVmAORWB-VebcFbzVy9D_A5SHnGj3tO6rT9n2pKyuO_ZleUCWNiHCIK_6mqZSZcbCK8w9UJz8h19O7YS2GWCiqt0pUD-gcgCV9e26uFggFh_6ZYjILT8bZcv3qZmsjT'
-                            })
-                        }).then(response => {
-                            if (response.status < 200 || response.status >= 400) {
-                                throw 'Error subscribing to topic: '+response.status + ' - ' + response.text();
-                            }
-                        }).catch(error => {
-                            console.error(error);
-                        });
+                        // 토픽(`${RUN_MODE}shopper`) 구독은 FCM 서버키가 필요하므로 클라이언트에서 하지 않는다.
+                        // 웹푸시 재사용 시 서버 API 에서 구독 처리할 것 (firebaseInit 은 현재 _app.js 에서 미사용)
                     }
                 });
             }

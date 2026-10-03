@@ -1,13 +1,35 @@
 import { getConnectPool, result } from "../db";
-import {getCookie} from "cookies-next";
+import {getAuthShprId} from "../../../util/authUtil";
 
 export default async function handler(req, res) {
     await getConnectPool(async conn => {
+
+        let shprId;
+
+        if(['POST', 'GET'].includes(req.method)) {
+
+            try {
+
+                shprId = await getAuthShprId(conn, req, res);
+            } catch (e) {
+
+                console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
+                console.log(e);
+                res.status(500).json(result('', '9999', '오류가 발생했습니다.'));
+                return;
+            }
+
+            if(!shprId) {
+
+                return;
+            }
+        }
+
         switch (req.method) {
             case 'POST':
-                return setSchedule(conn, req, res);
+                return setSchedule(conn, req, res, shprId);
             case 'GET':
-                return getSchedules(conn, req, res);
+                return getSchedules(conn, req, res, shprId);
             case 'PATCH':
             case 'DELETE':
             default:
@@ -16,9 +38,8 @@ export default async function handler(req, res) {
     });
 }
 
-async function setSchedule(conn, req, res) {
+async function setSchedule(conn, req, res, shprId) {
     const { date, area, schedule } = req.body;
-    const encShprId = getCookie('enc_sh', {req, res});
 
     try {
 
@@ -37,7 +58,7 @@ async function setSchedule(conn, req, res) {
                         MDFC_DT,
                         MDFC_ID
                 ) VALUES (
-                        fnDecrypt(?, ?),
+                        ?,
                         DATE_FORMAT(?, '%Y-%m-%d'),
                         ?,
                         ?,
@@ -48,7 +69,7 @@ async function setSchedule(conn, req, res) {
                 )
             `;
 
-            [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY, date, shopId, schedule]);
+            [rows] = await conn.query(query, [shprId, date, shopId, schedule]);
         }
 
         res.status(200).json(result(rows.insertId));
@@ -59,9 +80,8 @@ async function setSchedule(conn, req, res) {
     }
 }
 
-async function getSchedules(conn, req, res) {
+async function getSchedules(conn, req, res, shprId) {
     const { startdate, enddate } = req.query;
-    const encShprId = getCookie('enc_sh', {req, res});
 
     try {
         const query = `
@@ -70,7 +90,7 @@ async function getSchedules(conn, req, res) {
                     SHPR_SCHD_HH,
                     SHPR_SCHD_APV_STAT
                FROM T_SHPR_SCHD_MAG
-              WHERE SHPR_ID = fnDecrypt(?, ?)
+              WHERE SHPR_ID = ?
                 AND SHPR_SCHD_YMD IS NOT NULL
                 AND SHPR_SCHD_YMD BETWEEN ? AND ?
            GROUP BY SHPR_SCHD_YMD,
@@ -78,7 +98,7 @@ async function getSchedules(conn, req, res) {
                     SHPR_SCHD_APV_STAT
         `;
 
-        const [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY, startdate, enddate]);
+        const [rows] = await conn.query(query, [shprId, startdate, enddate]);
         res.status(200).json(result(rows));
     } catch (e) {
         console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));

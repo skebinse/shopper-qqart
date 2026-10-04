@@ -1,23 +1,30 @@
 import {getConnectPool, result, resultOne} from "../db";
 import {adminSendNtfy} from "../../../util/smsUtil";
-import {getCookie} from "cookies-next";
+import {getAuthShprId} from "../../../util/authUtil";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         const param = req.body;
-        const encShprId = getCookie('enc_sh', {req, res});
 
         try {
+
+            const shprId = await getAuthShprId(conn, req, res);
+
+            if(!shprId) {
+
+                return;
+            }
+
             if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
                 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
             }
 
             // 배치 수락
-            const query = 'CALL spInsShprBtchAcp(fnDecrypt(?, ?), ?, ?, ?, ?)';
+            const query = 'CALL spInsShprBtchAcp(?, ?, ?, ?, ?)';
 
-            const [rows, fields] = await conn.query(query, [encShprId, process.env.ENC_KEY, param.oderUserId, param.oderPiupFrcsMi, param.shprPsitLat, param.shprPsitLot]);
+            const [rows, fields] = await conn.query(query, [shprId, param.oderUserId, param.oderPiupFrcsMi, param.shprPsitLat, param.shprPsitLot]);
 
             if(!rows[0]) {
 

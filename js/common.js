@@ -9,6 +9,7 @@ const cmm = {
         WEB_TOKEN: 'webToken',
         APP_TOKEN: 'appToken',
         SHPR_PS_PSIT: 'shprPsPsit',
+        NOTICE_ADJ_GRADE: 'noticeShown_202610_adjGrade',
         DAY_OF_WEEK: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
         APP_MESSAGE_TYPE: {
             NOTIFICATION: 'NOTIFICATION',

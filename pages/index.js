@@ -7,6 +7,7 @@ import BtchList from "../components/btchListMain";
 import BottomMenu from "../components/bottomMenu";
 import {useGlobal} from "../context/globalContext";
 import useCommon from "../hooks/useCommon";
+import NoticePopup, {isNoticeShow} from "../components/noticePopup";
 
 export default function Index(props) {
 
@@ -20,6 +21,7 @@ export default function Index(props) {
     const [isDutjStrt, setIsDutjStrt] = useState(false);
     const [isEntApv, setIsEntApv] = useState(true);
     const [entRefuRsn, setEntRefuRsn] = useState('');
+    const [isNotice, setIsNotice] = useState(false);
     const [isDtcOptmBtn, setIsDtcOptmBtn] = useState(false);
     const [mapShopId, setMapShopId] = useState(null);
     const [mapPsitInfo, setMapPsitInfo] = useState(null);
@@ -373,6 +375,12 @@ export default function Index(props) {
                     setIsDutjStrt(res.isDutjStrt);
                     setIsEntApv(res.isEntApv);
                     setEntRefuRsn(res.shprEntRefuRsn);
+
+                    // 공지 팝업 (입점 승인 쇼퍼, 기기당 1회)
+                    if(!!res.isEntApv && isNoticeShow()) {
+
+                        setIsNotice(true);
+                    }
                 }
             });
         }
@@ -697,6 +705,7 @@ export default function Index(props) {
     };
 
     return (
+        <>
         <div className={styles.index + ' ' + dnone} style={{transform: 'translate3d(0, 0, 0)'}}>
             {!!isEntApv &&
                 <>
@@ -842,6 +851,10 @@ export default function Index(props) {
                 </div>
             }
         </div>
+        {isNotice &&
+            <NoticePopup onClose={() => setIsNotice(false)}/>
+        }
+        </>
     )
 }
 

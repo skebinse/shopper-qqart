@@ -112,6 +112,7 @@ export default async function handler(req, res) {
                 url: process.env.QQCART_URL + `/sendSmsNtfy.ax`,
                 isLoaing: false,
                 isExtr: true,
+                headers: !!process.env.QQCART_INTERNAL_API_TOKEN ? {'X-Internal-Token': process.env.QQCART_INTERNAL_API_TOKEN} : {},
                 data: {
                     pgrsStat: 'comp',
                     oderUserId: param.oderUserId,

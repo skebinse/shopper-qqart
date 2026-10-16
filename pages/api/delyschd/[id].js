@@ -1,15 +1,37 @@
 import { getConnectPool, result } from "../db";
-import {getCookie} from "cookies-next";
+import {getAuthShprId} from "../../../util/authUtil";
 
 export default async function handler(req, res) {
     await getConnectPool(async conn => {
+
+        let shprId;
+
+        if(['GET', 'PATCH', 'DELETE'].includes(req.method)) {
+
+            try {
+
+                shprId = await getAuthShprId(conn, req, res);
+            } catch (e) {
+
+                console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
+                console.log(e);
+                res.status(500).json(result('', '9999', '오류가 발생했습니다.'));
+                return;
+            }
+
+            if(!shprId) {
+
+                return;
+            }
+        }
+
         switch (req.method) {
             case 'GET':
-                return getSchedule(conn, req, res);
+                return getSchedule(conn, req, res, shprId);
             case 'PATCH':
-                return setSchedule(conn, req, res);
+                return setSchedule(conn, req, res, shprId);
             case 'DELETE':
-                return deleteSchedule(conn, req, res);
+                return deleteSchedule(conn, req, res, shprId);
             case 'POST':
             default:
                 res.status(500).json(result('', '9999', 'Method not supported'));
@@ -17,7 +39,7 @@ export default async function handler(req, res) {
     });
 }
 
-async function getSchedule(conn, req, res) {
+async function getSchedule(conn, req, res, shprId) {
     const { id } = req.query;
 
     try {
@@ -33,9 +55,10 @@ async function getSchedule(conn, req, res) {
                 MDFC_ID
             FROM T_SHPR_SCHD_MAG
             WHERE SHPR_SCHD_ID = ?
+              AND SHPR_ID = ?
         `;
 
-        const [rows] = await conn.query(query, [id]);
+        const [rows] = await conn.query(query, [id, shprId]);
         res.status(200).json(result(rows[0]));
     } catch (e) {
         console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
@@ -44,7 +67,7 @@ async function getSchedule(conn, req, res) {
     }
 }
 
-async function setSchedule(conn, req, res) {
+async function setSchedule(conn, req, res, shprId) {
     const { query: { id }, body: { area, schedule } } = req;
 
     try {
@@ -53,9 +76,10 @@ async function setSchedule(conn, req, res) {
                 SET SHPR_SCHD_AREA = ?,
                     SHPR_SCHD_HH = ?
               WHERE SHPR_SCHD_ID = ?
+                AND SHPR_ID = ?
         `;
 
-        await conn.query(query, [area, schedule, id]);
+        await conn.query(query, [area, schedule, id, shprId]);
         res.status(200).json(result(id));
     } catch (e) {
         console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
@@ -64,18 +88,17 @@ async function setSchedule(conn, req, res) {
     }
 }
 
-async function deleteSchedule(conn, req, res) {
+async function deleteSchedule(conn, req, res, shprId) {
     const { id } = req.query;
-    const encShprId = getCookie('enc_sh', {req, res});
 
     try {
         const query =`
             DELETE FROM T_SHPR_SCHD_MAG
              WHERE SHPR_SCHD_YMD = ?
-               AND SHPR_ID = fnDecrypt(?, ?)
+               AND SHPR_ID = ?
         `;
 
-        await conn.query(query, [id, encShprId, process.env.ENC_KEY]);
+        await conn.query(query, [id, shprId]);
         res.status(200).json(result(id));
     } catch (e) {
         console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));

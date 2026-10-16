@@ -1,8 +1,8 @@
 import {getConnectPool, result} from "../db";
 import cmm from "../../../js/common";
 import iconv from "iconv-lite";
-import bcrypt from 'bcrypt';
 import {getCookie} from "cookies-next";
+import {setJoinSession} from "../../../util/joinSession";
 
 export default async function handler(req, res) {
 
@@ -20,6 +20,13 @@ export default async function handler(req, res) {
         success: async data => {
 
             const dataJson = cmm.util.queryStringToJSON(iconv.decode(data, 'utf-8').toString());
+
+            // 본인인증 실패 (확인 결과 없음) - 기존 정보를 NULL 로 덮어쓰지 않도록 중단
+            if(!dataJson.NAME || !dataJson.IDEN || !dataJson.PHONE) {
+
+                res.redirect(!!dataJson.ORDERID ? `/join/info` : `/join/essInfoInpt?error=9999`);
+                return;
+            }
 
             if(!!dataJson.ORDERID) {
 
@@ -55,7 +62,14 @@ export default async function handler(req, res) {
 
             } else {
 
-                res.redirect(`/join/essInfoInpt?name=${encodeURI(dataJson.NAME)}&nameHash=${encodeURI(await bcrypt.hash(dataJson.NAME, 10))}&iden=${dataJson.IDEN}&cphoneNo=${dataJson.PHONE}`);
+                // 가입: 본인인증 결과는 서명 쿠키에만 보관 (URL/클라이언트로 개인정보 전달하지 않음)
+                setJoinSession(req, res, {
+                    name: dataJson.NAME,
+                    iden: dataJson.IDEN,
+                    cphoneNo: dataJson.PHONE,
+                });
+
+                res.redirect(`/join/essInfoInpt`);
             }
         },
         error: () => {

@@ -3,8 +3,8 @@ const popbill = require('popbill');
 popbill.config( {
 
     // 링크허브에서 발급받은 링크아이디, 비밀키
-    LinkID :'VERYBUSYBEE',
-    SecretKey : 'U6kWl5TthWbi5+DNWte20qcTlrNhP2KGlHNI/KLrqDk=',
+    LinkID : process.env.POPBILL_LINK_ID,
+    SecretKey : process.env.POPBILL_SECRET_KEY,
 
     // 연동환경 설정값, (true-개발용, false-상업용)
     IsTest : false,

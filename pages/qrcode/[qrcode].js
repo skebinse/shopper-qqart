@@ -21,7 +21,7 @@ export default function QrCode(props) {
 
                     const oderNo = res?.ODER_RPRE_NO?.length === 11 ? cmm.util.getNumber(res.ODER_RPRE_NO.substring(6)) : res?.ODER_RPRE_NO;
 
-                    cmm.alert(`주문번호 ${oderNo}의 박스 수는 ${res?.ODER_BOX_NCN}개 입니다.<br/>배달 시작으로 상태가 변경됐습니다.`, () => {
+                    cmm.alert(`주문번호 ${cmm.util.escapeHtml(oderNo)}의 박스 수는 ${cmm.util.escapeHtml(res?.ODER_BOX_NCN)}개 입니다.<br/>배달 시작으로 상태가 변경됐습니다.`, () => {
 
                         router.replace('/');
                     });
@@ -30,18 +30,18 @@ export default function QrCode(props) {
 
                     if(res.resultCode === '9002') {
 
-                        cmm.alert(res.resultMsg, () => {
+                        cmm.alert(cmm.util.escapeHtml(res.resultMsg), () => {
 
                             router.replace('/');
                         });
                     } else if(res.resultCode === '9003') {
-                        cmm.alert(`<span style="color: #02B763;font-weight: 700;">${res.resultMsg}</span>`, () => {
+                        cmm.alert(`<span style="color: #02B763;font-weight: 700;">${cmm.util.escapeHtml(res.resultMsg)}</span>`, () => {
 
                             router.replace('/');
                         }, '완료');
                     } else {
 
-                        cmm.alert(`<span style="color: red;font-weight: 700;">${res.resultMsg}</span>`, () => {
+                        cmm.alert(`<span style="color: red;font-weight: 700;">${cmm.util.escapeHtml(res.resultMsg)}</span>`, () => {
 
                             router.replace('/');
                         }, '실패');

@@ -15,14 +15,14 @@ export function smsSend(receiver, msg, callback) {
     } else {
 
         cmm.ajax({
-            url: 'http://3.39.208.157:8080/send/',
+            url: process.env.SMS_API_URL,
             isLoaing: false,
             isExtr: true,
             data: {
                 msg,
                 receiver,
-                user_id: 'justdoeng',
-                key: 'pe1a6ws0h5z4f2zqj3ewm4xt3whqnto3',
+                user_id: process.env.SMS_API_USER_ID,
+                key: process.env.SMS_API_KEY,
                 sender: '1533-9171',
                 rdate: '',
                 rtime: '',
@@ -151,7 +151,7 @@ export async function adminSendNtfy(conn, options) {
         fetch('https://fcm.googleapis.com/fcm/send', {
             'method': 'POST',
             'headers': {
-                'Authorization': 'key=' + process.env.NEXT_PUBLIC_FCM_KEY,
+                'Authorization': 'key=' + process.env.FCM_KEY,
                 'Content-Type': 'application/json'
             },
             'body': JSON.stringify({

@@ -338,7 +338,7 @@ export default function  BtchList({ulRef, list, href, classNm = '', noDataTxt = 
 
                     if(btnType === '배달 완료') {
 
-                        cmm.confirm(`<span>${item.ODER_DELY_FULL_ADDR}\n\n벨누르기 완료</span>하셨나요?\n벨누르기 하지 않으면 배달 완료로\n 인정이 되지 않을 수 있으니 꼭 벨을 눌러주세요`, () => {
+                        cmm.confirm(`<span>${cmm.util.escapeHtml(item.ODER_DELY_FULL_ADDR)}\n\n벨누르기 완료</span>하셨나요?\n벨누르기 하지 않으면 배달 완료로\n 인정이 되지 않을 수 있으니 꼭 벨을 눌러주세요`, () => {
 
                             // 업로드
                             shopS3Upload(atchImgList[idx], res => {

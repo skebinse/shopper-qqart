@@ -21,6 +21,8 @@ export default function Login(props) {
             const param = {
                 userCrctno: props.profile.id,
                 userSnsType: 'KAKAO',
+                // 서버에서 카카오 회원번호를 직접 확인하는 데 사용 (로그인/가입)
+                kakaoAccessToken: props.accessToken,
             };
 
             if(!!cmm.util.getLs(cmm.Cont.APP_TOKEN)) {
@@ -118,6 +120,7 @@ export async function getServerSideProps(context) {
         props: {
             profile,
             error,
+            accessToken: accessToken || null,
         },
     }
 }

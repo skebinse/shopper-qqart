@@ -1,36 +1,46 @@
 import {getConnectPool, result} from "../db";
-import {getCookie} from "cookies-next";
+import {getAuthShprId} from "../../../util/authUtil";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         const param = req.body;
-        const encShprId = getCookie('enc_sh', {req, res});
 
         try {
-            let query = `SELECT fnDecrypt(?, ?) AS SHPR_ID`;
-            const resultMap = {};
 
-            const [shprIdRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
-            const shprId = shprIdRow[0].SHPR_ID;
+            const shprId = await getAuthShprId(conn, req, res);
 
-            query = `
+            if(!shprId) {
+
+                return;
+            }
+
+            // 본인에게 배차된 주문만 등록
+            const query = `
                 INSERT INTO T_ODER_EXCP (
                     ODER_USER_ID, -- 주문사용자 ID
                     ODER_EXCP_KD, -- 주문 예외 종류(과적, 주차비)
                     ODER_EXCP_ATCH_FILE_UUID, -- 주문 예외 첨부파일 UUID
                     RGI_DT, -- 등록 일시
                     RGI_ID -- 등록 ID
-                    ) VALUES (
-                    ?,
-                    ?,
-                    ?,
-                    NOW(),
-                    ?
-                )`;
+                )
+                SELECT ODER_USER_ID
+                     , ?
+                     , ?
+                     , NOW()
+                     , ?
+                  FROM T_ODER_USER_INFO
+                 WHERE ODER_USER_ID = ?
+                   AND SHPR_ID = ?`;
 
-            const [rows, fields] = await conn.query(query, [param.oderUserId, param.oderExcpKd, param.atchFileUuid, shprId]);
+            const [rows, fields] = await conn.query(query, [param.oderExcpKd, param.atchFileUuid, shprId, param.oderUserId, shprId]);
+
+            if(rows.affectedRows === 0) {
+
+                res.status(200).json(result('', '9999', '배차된 주문이 아닙니다.'));
+                return;
+            }
 
             res.status(200).json(result(rows));
         } catch (e) {

@@ -1,37 +1,59 @@
 import {getConnectPool, result} from "../../db";
 import cmm from "../../../../js/common";
 import {adminSendNtfy} from "../../../../util/smsUtil";
-import {getCookie} from "cookies-next";
+import {getAuthShprId} from "../../../../util/authUtil";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         const param = req.body;
-        const encShprId = getCookie('enc_sh', {req, res});
         let isError = false;
+
+        let shprId;
+
+        try {
+
+            shprId = await getAuthShprId(conn, req, res);
+        } catch (e) {
+
+            console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
+            console.log(e);
+            res.status(500).json(result('', '9999', '오류가 발생했습니다.'));
+            return;
+        }
+
+        if(!shprId) {
+
+            return;
+        }
 
         try {
 
             await conn.beginTransaction();
 
-            let query = `SELECT fnDecrypt(?, ?) AS SHPR_ID`;
-
-            const [shprIdRow] = await conn.query(query, [encShprId, process.env.ENC_KEY]);
-            const shprId = shprIdRow[0].SHPR_ID;
-
             if(process.env.NEXT_PUBLIC_RUN_MODE === 'local') {
                 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
             }
 
-            query =`
+            // 동시 요청 시 정산 중복 방지를 위해 행 잠금
+            let query =`
                 SELECT ODER_PGRS_STAT
                   FROM T_ODER_USER_INFO
                  WHERE ODER_USER_ID = ?
                    AND SHPR_ID = ?
+                   FOR UPDATE
                 `;
 
             let [rows] = await conn.query(query, [param.oderUserId, shprId]);
+
+            if(rows.length === 0) {
+
+                await conn.rollback();
+                res.status(200).json(result('', '9999', '배차된 주문이 아닙니다.'));
+
+                return;
+            }
 
             if(cmm.util.getNumber(rows[0].ODER_PGRS_STAT) >= 6) {
 
@@ -41,6 +63,7 @@ export default async function handler(req, res) {
                 return;
             }
 
+            // 배달 완료는 배달중(05)에서만 가능 (화면 노출 조건과 동일)
             query =`
                 UPDATE T_ODER_USER_INFO
                    SET ODER_PGRS_STAT = '06'
@@ -48,9 +71,18 @@ export default async function handler(req, res) {
                      , ODER_DELY_CPL_DT = NOW()
                  WHERE ODER_USER_ID = ?
                    AND SHPR_ID = ?
+                   AND ODER_PGRS_STAT = '05'
                 `;
 
             [rows] = await conn.query(query, [param.atchFileUuid, param.oderUserId, shprId]);
+
+            if(rows.affectedRows !== 1) {
+
+                await conn.rollback();
+                res.status(200).json(result('', '9999', '배달중 상태에서만 배달 완료할 수 있습니다.'));
+
+                return;
+            }
 
             // 픽업 자동정산
             query = `CALL spInsPiupAtmtAdj(?, ?, 'N')`;
@@ -80,6 +112,7 @@ export default async function handler(req, res) {
                 url: process.env.QQCART_URL + `/sendSmsNtfy.ax`,
                 isLoaing: false,
                 isExtr: true,
+                headers: !!process.env.QQCART_INTERNAL_API_TOKEN ? {'X-Internal-Token': process.env.QQCART_INTERNAL_API_TOKEN} : {},
                 data: {
                     pgrsStat: 'comp',
                     oderUserId: param.oderUserId,

@@ -93,13 +93,13 @@ const cmm = {
                         }
                     } else if(res.resultCode === '9000') {
 
-                        cmm.alert(res.resultMsg, () => {
+                        cmm.alert(cmm.util.escapeHtml(res.resultMsg), () => {
 
                             location.href = '/cmm/login';
                         });
                     } else if(res.resultCode === '8000') {
 
-                        cmm.alert(res.resultMsg, () => {
+                        cmm.alert(cmm.util.escapeHtml(res.resultMsg), () => {
 
                             location.href = '/';
                         });
@@ -110,7 +110,7 @@ const cmm = {
                             _options.error(res);
                         } else {
 
-                            cmm.alert(res.resultMsg);
+                            cmm.alert(cmm.util.escapeHtml(res.resultMsg));
                         }
                     }
                 }
@@ -588,6 +588,20 @@ const cmm = {
      * Util
      */
     util: {
+
+        /**
+         * HTML 이스케이프 (cmm.alert / cmm.confirm 등 innerHTML 에 데이터 값을 넣을 때 사용)
+         * @param str
+         * @returns {string}
+         */
+        escapeHtml: function(str) {
+            return String(str ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        },
 
         /**
          * 아이디 체크

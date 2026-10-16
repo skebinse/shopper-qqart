@@ -8,6 +8,9 @@ import WeekDate from "../../components/date/WeekDate";
 import KakaoTalkChat from "../../components/kakaoTalkChat";
 import MonthHalfDate from "../../components/date/MonthHalfDate";
 
+// 정산 출금 미사용 (2026-10-04) - 재사용 시 true 로 바꾸기 전에 /api/btch/btchAdjPet 의 서버 금액 검증(보안 C7)부터 적용할 것
+const IS_WID_USE = false;
+
 export default function BtchAdj() {
 
     const [btchList, setBtchList] = useState({summ: {amt: 0, adjAmt: 0}});
@@ -258,7 +261,7 @@ export default function BtchAdj() {
             <div className={styles.btchArea}>
                 <MonthHalfDate onSelectDate={date => setSearchDate(date)} title={'배송일'}/>
                 <div className={styles.adjDiv}>
-                    {(isWidBtn && shprGrdList.length > 0 && !!widReqInfo.SHPR_ADJ_CHCK_YMD && !widReqInfo.SHPR_ADJ_REQ_DT && btchList?.summ?.adjAmt > 0) &&
+                    {(IS_WID_USE && isWidBtn && shprGrdList.length > 0 && !!widReqInfo.SHPR_ADJ_CHCK_YMD && !widReqInfo.SHPR_ADJ_REQ_DT && btchList?.summ?.adjAmt > 0) &&
                         <>
                             <h5>정산금액</h5>
                             <p>0원</p>

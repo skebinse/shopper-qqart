@@ -1,14 +1,21 @@
 import {getConnectPool, result} from "../db";
-import {getCookie} from "cookies-next";
+import {getAuthShprId} from "../../../util/authUtil";
 
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
 
         const {oderUserId} = req.query;
-        const encShprId = getCookie('enc_sh', {req, res});
-        
+
         try {
+
+            const shprId = await getAuthShprId(conn, req, res);
+
+            if(!shprId) {
+
+                return;
+            }
+
             let query = `
                SELECT EE.SHOP_ID
                      , BB.SHOP_NM
@@ -64,9 +71,9 @@ export default async function handler(req, res) {
                      , EE.ODER_DELY_MENS
                      , EE.ODER_DELY_ARTG
                      , IFNULL(EE.ODER_BOX_NCN, 1) AS ODER_BOX_NCN
-                     , fnGetPromPoin(EE.SHOP_ID, fnDecrypt(?, ?)) AS SHPR_ADJ_POIN
+                     , fnGetPromPoin(EE.SHOP_ID, ?) AS SHPR_ADJ_POIN
                      , IFNULL(EE.ODER_DRC_LDTN_AMT, 0) AS ODER_DRC_LDTN_AMT
-                     , FORMAT(fnGetShprDelyDtcAmt(EE.ODER_USER_ID, fnDecrypt(?, ?), EE.ODER_DELY_DTC) + EE.ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
+                     , FORMAT(fnGetShprDelyDtcAmt(EE.ODER_USER_ID, ?, EE.ODER_DELY_DTC) + EE.ODER_SHPR_TIP_AMT, 0) AS DELY_AMT
                      , DATE_FORMAT(fnGetOderReqYmd(EE.ODER_MNGR_RGI_YN, EE.ODER_REQ_YMD), '%y년 %m월 %d일 %H:%i') AS ODER_REQ_YMD
                      , CASE WHEN EE.ODER_URG_DELY_MI != '' THEN 
                         EE.ODER_URG_DELY_MI - TIMESTAMPDIFF(MINUTE, fnGetOderReqYmd(EE.ODER_MNGR_RGI_YN, EE.ODER_REQ_YMD), DATE_ADD(NOW(), INTERVAL 9 HOUR))
@@ -89,7 +96,7 @@ export default async function handler(req, res) {
             ORDER BY AA.SPBK_HNDC_PROD_NM
             `;
 
-            const [rows] = await conn.query(query, [encShprId, process.env.ENC_KEY, encShprId, process.env.ENC_KEY, oderUserId]);
+            const [rows] = await conn.query(query, [shprId, shprId, oderUserId]);
 
             res.status(200).json(result(rows));
         } catch (e) {

@@ -20,7 +20,17 @@ export default function TimeSlotList(props) {
             onChangeSelection(selectedSlots.concat([slot]));
         }
     }
- 
+
+    // 전체 선택 여부
+    const isAllChecked = !!slots && slots.length > 0 && slots.every(slot => selectedSlots.includes(slot));
+
+    /**
+     * 전체 선택 클릭 시, 전체 선택 상태면 전체 해제, 아니면 전체 선택하여 부모 화면에 전달
+     */
+    const onClickAll = checked => {
+        onChangeSelection(checked ? [] : [...slots]);
+    }
+
     // 전달 받은 시간 선택 옵션들로 항목 생성
     // slot: '07', '09' 등의 시작 시각을 나타내는 두 자리의 문자열
     const checkboxes = slots?.map(slot => {
@@ -43,6 +53,10 @@ export default function TimeSlotList(props) {
         <div className={styles.timeSlotList}>
             <label className={styles.headerText}>시간 선택</label>
             <ul>
+                <li key='all' className={styles.allItem} onClick={() => onClickAll(isAllChecked)}>
+                    <input type='checkbox' checked={isAllChecked} onChange={() => onClickAll(isAllChecked)}/>
+                    <label className={styles.labelText}>전체 선택</label>
+                </li>
                 {checkboxes}
             </ul>
         </div>

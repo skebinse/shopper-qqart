@@ -128,6 +128,10 @@
     padding-bottom: 12px;
 }
 
+.timeSlotList ul li.allItem {
+    border-bottom: 1px solid #EEEEEE;
+}
+
 .timeSlotList ul li.footer {
     height: 96px;
 }

@@ -22,6 +22,7 @@ export default function IngOderUserId() {
     const [vchrPrvImgList, setVchrPrvImgList] = useState([]);
     const [cplImgList, setCplImgList] = useState([]);
     const [cplPrvImgList, setCplPrvImgList] = useState([]);
+    const [isPiupZone, setIsPiupZone] = useState(false);
     const {goPage} = useCommon();
     const shopS3Upload = useShopS3Upload();
     const {ingOderUserId} = router.query;
@@ -73,6 +74,20 @@ export default function IngOderUserId() {
                     }
 
                     item.oderDelySlctVal = oderDelySlctVal;
+
+                    // 스토어 이동 중일 때 픽업존 안내 여부 (이마트 매장)
+                    if(item.ODER_PGRS_STAT === '03' && !!item.SHOP_ID) {
+
+                        cmm.ajax({
+                            url: `/api/btch/piupZone/${item.SHOP_ID}`,
+                            isLoaing: false,
+                            data: {
+                                existYn: 'Y'
+                            },
+                            success: res => setIsPiupZone(!!res?.isExist),
+                            error: () => setIsPiupZone(false),
+                        });
+                    }
 
                     // 배치 정보
                     setBtchInfo(item);
@@ -350,6 +365,10 @@ export default function IngOderUserId() {
                                     }
                                 </h5>
                                 <p>{btchInfo.SHOP_NM}</p>
+                                {isPiupZone &&
+                                    <button type={'button'} className={'button white ' + styles.btnPiupZone}
+                                            onClick={() => goPage(`/btch/piupZone/${btchInfo.SHOP_ID}`)}>픽업존 안내</button>
+                                }
                             </li>
                             <li>
                                 <h5>박스 수</h5>

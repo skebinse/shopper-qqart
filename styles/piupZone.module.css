@@ -1,0 +1,164 @@
+/* 픽업존 안내 */
+
+/* 헤더 + 섹션 칩을 함께 고정 (칩을 top 0 에 따로 붙이면 헤더를 가린다) */
+.top {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: #FFFFFF;
+}
+
+.top :global(.headTitle) {
+    position: static;
+}
+
+.chips {
+    display: flex;
+    padding: 8px 13px 10px;
+    overflow-x: auto;
+    border-bottom: 1px solid #E4E4E4;
+}
+
+.chips button {
+    flex: none;
+    min-height: 36px;
+    padding: 0 14px;
+    border: 1.5px solid #CDCDCD;
+    border-radius: 18px;
+    background-color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 700;
+    color: #333333;
+}
+
+/* 칩 사이만 띄움 (flex gap 대신 — 마지막 칩 뒤에 여백이 생기지 않게) */
+.chips button + button {
+    margin-left: 6px;
+}
+
+.body {
+    padding: 17px 17px 40px;
+    background-color: #F8F8F8;
+    min-height: calc(100vh - 120px);
+}
+
+.empty {
+    padding: 40px 0;
+    text-align: center;
+    color: #999999;
+}
+
+.section + .section {
+    margin-top: 26px;
+    padding-top: 18px;
+    border-top: 1px solid #E4E4E4;
+}
+
+.section h4 {
+    margin-bottom: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #333333;
+}
+
+.group + .group {
+    margin-top: 18px;
+}
+
+.group h5 {
+    margin-bottom: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #555555;
+}
+
+/* 사진 — 옆으로 넘긴다. 한 장이면 화면 폭을 채운다 */
+.strip {
+    display: flex;
+    gap: 8px;
+    margin: 0 -17px;
+    padding: 0 17px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+}
+
+.strip button {
+    flex: none;
+    padding: 0;
+    border: 1px solid #E4E4E4;
+    border-radius: 8px;
+    background-color: #EEEEEE;
+    scroll-snap-align: start;
+}
+
+.strip img {
+    display: block;
+    width: auto;
+    height: 220px;
+    max-width: calc(100vw - 34px);
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.strip button.only img {
+    width: calc(100vw - 34px);
+    height: auto;
+    max-height: 320px;
+}
+
+.lines {
+    margin-top: 12px;
+    padding: 12px 14px;
+    background-color: #FFFFFF;
+    border: 1px solid #E4E4E4;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555555;
+}
+
+.lineHead {
+    font-size: 13px;
+    font-weight: 700;
+    color: #888888;
+}
+
+.lineHead:not(:first-child) {
+    margin-top: 12px;
+}
+
+.line {
+    display: flex;
+    gap: 6px;
+}
+
+.mark,
+.markCaution {
+    flex: none;
+    width: 14px;
+    text-align: center;
+}
+
+/* 주의는 주황 (빨강은 오류·취소 전용) */
+.markCaution {
+    color: #E8743B;
+}
+
+.strong {
+    font-weight: 700;
+    color: #333333;
+}
+
+.caution {
+    padding: 0 2px;
+    background-color: #FFF1E6;
+    font-weight: 700;
+    color: #C2531A;
+}
+
+.source {
+    margin-top: 26px;
+    font-size: 12px;
+    color: #999999;
+}

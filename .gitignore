@@ -34,3 +34,6 @@ yarn-error.log*
 # tool
 /.idea
 amplify.yml
+
+# claude (.claude 바로 아래 파일만 커밋, 하위 폴더는 제외)
+/.claude/*/

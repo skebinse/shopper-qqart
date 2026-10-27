@@ -143,3 +143,37 @@
 .lvlInfoDiv > ul > li ul li{font-size: 13px;color: #373454;font-weight: 500;padding-bottom: 8px;}
 .lvlInfoDiv > ul > li ul li:nth-child(3n){padding-left: 10px;}
 .lvlInfoDiv > ul > li ul li h3{color: #787E90;font-size: 11px;font-weight: 400;padding-bottom: 3px;}
+
+/* 배송 내역 - 총 남은 정산 금액 · 검수 · 기타 정산 (하루 검수 / 주 출금, 2026-10-27~) */
+.remAdjDiv{display: flex;align-items: center;padding: 16px 20px;background-color: #FFFFFF;border-bottom: solid 8px #F2F2F2;}
+.remAdjDiv > div{flex: 1;}
+.remAdjDiv h5{font-weight: 500;font-size: 13px;color: #707070;}
+.remAdjDiv p{font-weight: 700;font-size: 22px;color: #333333;padding-top: 4px;}
+.remAdjDiv :global .button.short{color: #333333;background-color: #FFFFFF;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.smryDiv p em.chckY,
+.btchAdjDiv .btchArea .compListDiv > ul > li div.smryDiv p em.chckN{display: inline-block;margin-left: 6px;padding: 2px 6px;border-radius: 4px;font-size: 11px;font-weight: 500;line-height: 14px;vertical-align: middle;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.smryDiv p em.chckY{color: #02B763;border: 1px solid #02B763;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.smryDiv p em.chckN{color: #999999;border: 1px solid #CCCCCC;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv li.ohrsAdj span em{color: #707070;font-size: 12px;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv li span.minus{color: #E5483D;}
+.btchAdjDiv .btchArea .compListDiv > ul > li div.dtptDiv p.chckInfo{padding-top: 16px;font-size: 12px;color: #707070;}
+.btchAdjDiv .btchArea .compListDiv p.noData,
+.adjWekDiv p.noData{padding: 40px 0;text-align: center;font-size: 14px;color: #999999;}
+
+/* 주별 정산 내역 팝업 */
+.adjWekDiv{position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: #FFFFFF;z-index: 20;overflow: auto;}
+.adjWekDiv .titleDiv{display: flex;padding: 22.5px 20px;align-items: center;position: sticky;top: 0;background-color: #FFFFFF;z-index: 1;}
+.adjWekDiv .titleDiv h5{font-weight: 700;font-size: 18px;line-height: 19px;color: #333333;flex: 1;}
+.adjWekDiv .adjWekTxt{margin: 0 20px;padding: 10px 12px;background-color: #F2F2F2;border-radius: 8px;font-size: 12px;color: #707070;}
+.adjWekDiv > ul{padding: 0 20px 40px;}
+.adjWekDiv > ul > li{padding: 20px 0;border-bottom: 1px solid #E6E6E6;}
+.adjWekDiv > ul > li h4{display: flex;align-items: center;font-weight: 700;font-size: 15px;color: #333333;}
+.adjWekDiv > ul > li h4 span{margin-left: auto;font-weight: 400;font-size: 12px;color: #707070;}
+.adjWekDiv > ul > li dl{display: grid;grid-template-columns: auto 1fr;row-gap: 8px;padding-top: 12px;font-size: 14px;color: #333333;}
+.adjWekDiv > ul > li dt{color: #707070;}
+.adjWekDiv > ul > li dd{text-align: right;}
+.adjWekDiv > ul > li dd em{display: block;font-style: normal;font-size: 12px;color: #707070;padding-top: 2px;}
+.adjWekDiv > ul > li .strong{font-weight: 700;color: #333333;}
+.adjWekDiv > ul > li dd.rem{color: #02B763;}
+.remAdjDiv p.minus,
+.adjWekDiv > ul > li dd.minus{color: #E5483D;}

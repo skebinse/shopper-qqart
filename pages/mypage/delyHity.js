@@ -1,99 +1,72 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import cmm from "../../js/common";
 import styles from "../../styles/mypage.module.css"
 import Image from "next/image";
 import CompDtpt from "../../components/btch/comp/compDtpt";
 import BottomMenu from "../../components/bottomMenu";
-import WeekDate from "../../components/date/WeekDate";
 import KakaoTalkChat from "../../components/kakaoTalkChat";
 import MonthHalfDate from "../../components/date/MonthHalfDate";
+import AdjWekPopup from "../../components/mypage/adjWekPopup";
 
-export default function BtchAdj() {
+const WEEK_NM = ['일', '월', '화', '수', '목', '금', '토'];
 
-    const [btchList, setBtchList] = useState({summ: {amt: 0, adjAmt: 0}});
-    const [shprGrdList, setShprGrdList] = useState([]);
-    const [ohrsAdjList, setOhrsAdjList] = useState([]);
+export default function DelyHity() {
+
+    const [dayList, setDayList] = useState([]);
+    const [remAmt, setRemAmt] = useState(null);
     const [oderUserId, setOderUserId] = useState(-1);
     const [searchDate, setSearchDate] = useState(null);
-    const [widReqInfo, setWidReqInfo] = useState({});
-    const [widDate, setWidDate] = useState(null);
-    const [isWidPopup, setIsWidPopup] = useState(false);
-    const [isWidBtn, setIsWidBtn] = useState(false);
-    const [adjMaxAmt, setAdjMaxAmt] = useState(0);
+    const [isAdjWekPopup, setIsAdjWekPopup] = useState(false);
 
     /**
-     * 배치 완료 리스트 호출
+     * 배송 내역 호출 (일자별 배송 · 검수 · 기타 정산)
      */
-    const callBtchCompList = () => {
+    const callDelyHity = () => {
 
         cmm.ajax({
-            url: `/api/btch/btchCompList`,
+            url: `/api/shpr/delyHity`,
             data: {
                 fromDt: searchDate.fromDt,
                 toDt: searchDate.toDt,
             },
             success: res => {
 
-                if(!!res) {
+                const dayMap = {};
+                const getDay = ymd => {
 
-                    let date = '';
-                    const compList = [];
+                    if(!dayMap[ymd]) {
 
-                    res.compList.forEach(item => {
+                        dayMap[ymd] = {ymd, cnt: 0, amt: 0, list: [], ohrsAdjList: [], chck: null};
+                    }
 
-                        if(date !== item.ODER_DELY_CPL_DT) {
+                    return dayMap[ymd];
+                };
 
-                            date = item.ODER_DELY_CPL_DT;
-                            compList.push({
-                                date,
-                                cnt: 1,
-                                amt: cmm.util.getNumber(item.ODER_DELY_AMT),
-                                point: cmm.util.getNumber(item.SHPR_ADJ_POIN),
-                                list: [item]
-                            });
-                        } else {
+                res.delyList.forEach(item => {
 
-                            compList[compList.length - 1].cnt += 1;
-                            compList[compList.length - 1].amt += cmm.util.getNumber(item.ODER_DELY_AMT);
-                            compList[compList.length - 1].point += cmm.util.getNumber(item.SHPR_ADJ_POIN);
-                            compList[compList.length - 1].list.push(item);
-                        }
-                    });
+                    const day = getDay(item.DELY_YMD);
+                    day.cnt += 1;
+                    day.amt += cmm.util.getNumber(item.ODER_DELY_AMT);
+                    day.list.push(item);
+                });
 
-                    setBtchList({
-                        compList
-                    });
-                }
+                res.ohrsAdjList.forEach(item => getDay(item.YMD).ohrsAdjList.push(item));
+                res.chckList.forEach(item => getDay(item.YMD).chck = item);
+
+                setDayList(Object.values(dayMap).sort((a, b) => a.ymd < b.ymd ? 1 : -1));
+                setRemAmt(res.remAmt);
             }
         });
     };
 
     /**
-     * 배치 완료 리스트 조회
+     * 배송 내역 조회
      */
     useEffect(() => {
 
         if(!!searchDate) {
 
-            // 출금일자
-            const toDate = cmm.date.parseDate(searchDate.toDt);
-
-            let widDate;
-            if(toDate.getDate() === 15) {
-
-                toDate.setDate(1);
-                widDate = cmm.date.calDate(cmm.date.calDate(toDate, 'M', 1, ''), 'D', -1, '');
-            } else {
-
-                widDate = cmm.date.calDate(toDate, 'D', 15, '');
-            }
-            setWidDate(widDate);
-
-            // 출금 버튼(수 오후 6시부터 금요일 오후 6시까지)
-
-
-            // 배치 완료 리스트 호출
-            callBtchCompList();
+            callDelyHity();
         }
     }, [searchDate]);
 
@@ -112,47 +85,77 @@ export default function BtchAdj() {
      */
     const liClickHandler = _idx => {
 
-        setBtchList(prevState => ({...prevState, compList: prevState.compList.map((item, idx) => {
+        setDayList(prevState => prevState.map((item, idx) => idx === _idx ? {...item, active: !item.active} : item));
+    };
 
-                if(idx === _idx) {
-                    item.active = !item.active;
-                }
+    /**
+     * 일자 표시 (10월 22일 (수))
+     * @param ymd
+     * @returns {string}
+     */
+    const getDayText = ymd => {
 
-                return item;
-            })}));
-    }
+        const date = cmm.date.parseDate(ymd);
+
+        return `${date.getMonth() + 1}월 ${date.getDate()}일 (${WEEK_NM[date.getDay()]})`;
+    };
 
     return (
         <div className={styles.btchAdjDiv}>
             <div className={styles.headTitle}>
                 <h3>내역</h3>
             </div>
+            <div className={styles.remAdjDiv}>
+                <div>
+                    <h5>총 남은 정산 금액</h5>
+                    <p className={remAmt < 0 ? styles.minus : ''}>{remAmt === null ? '-' : cmm.util.comma(remAmt) + '원'}</p>
+                </div>
+                <button type={'button'} className={'button short'} onClick={() => setIsAdjWekPopup(true)}>정산 내역</button>
+            </div>
             <div className={styles.btchArea}>
                 <MonthHalfDate onSelectDate={date => setSearchDate(date)} title={'배송일'}/>
                 <div className={styles.compListDiv}>
+                    {dayList.length === 0 &&
+                        <p className={styles.noData}>배송 내역이 없습니다.</p>
+                    }
                     <ul>
-                        {btchList?.compList?.map((item, idx) =>
-                            <li key={'comp' + idx} className={!!item.active ? styles.active : ''}>
+                        {dayList.map((item, idx) =>
+                            <li key={item.ymd} className={!!item.active ? styles.active : ''}>
                                 <div className={styles.smryDiv} onClick={() => liClickHandler(idx)}>
                                     <p>
-                                        {item.date}
+                                        {getDayText(item.ymd)}
+                                        <em className={!!item.chck ? styles.chckY : styles.chckN}>{!!item.chck ? '검수 완료' : '검수 전'}</em>
                                     </p>
-                                    <span>{item.cnt}건</span>
+                                    <span>{item.cnt}건 · {cmm.util.comma(item.amt)}원</span>
                                     <Image alt={'상세'}
                                            src={!!item.active ? '/assets/images/icon/iconArrowUColor.svg' : '/assets/images/icon/iconArrowL.svg'}
                                            width={24} height={24}/>
                                 </div>
                                 <div className={styles.dtptDiv}>
                                     <ul>
-                                        {item.list.map((itemDtpt, idxDtpt) =>
-                                            <li key={'compDtpt' + idxDtpt}
+                                        {item.list.map(itemDtpt =>
+                                            <li key={'compDtpt' + itemDtpt.ODER_USER_ID}
                                                 onClick={() => setOderUserId(itemDtpt.ODER_USER_ID)}>
-                                                <span>
-                                                </span>
                                                 <span>{itemDtpt.SHOP_NM}({itemDtpt.ODER_RPRE_NO})</span>
+                                                <span>{cmm.util.comma(itemDtpt.ODER_DELY_AMT)}원</span>
+                                            </li>
+                                        )}
+                                        {item.ohrsAdjList.map((ohrsAdj, ohrsIdx) =>
+                                            <li key={'ohrsAdj' + ohrsIdx} className={styles.ohrsAdj}>
+                                                <span>
+                                                    <em>기타 정산</em> {ohrsAdj.SHPR_OHRS_ADJ_NM}
+                                                </span>
+                                                <span className={ohrsAdj.SHPR_OHRS_ADJ_AMT < 0 ? styles.minus : ''}>{cmm.util.comma(ohrsAdj.SHPR_OHRS_ADJ_AMT)}원</span>
                                             </li>
                                         )}
                                     </ul>
+                                    {!!item.chck ?
+                                        <p className={styles.chckInfo}>
+                                            {item.chck.CHCK_DT} 검수 완료 · 지급 {cmm.util.comma(item.chck.PAY_AMT)}원
+                                        </p>
+                                        :
+                                        <p className={styles.chckInfo}>검수 전이라 금액이 확정되지 않았습니다.</p>
+                                    }
                                 </div>
                             </li>
                         )}
@@ -160,6 +163,9 @@ export default function BtchAdj() {
                 </div>
             </div>
             <CompDtpt id={oderUserId} onClose={() => setOderUserId(-1)} isDelyAmt={false}/>
+            {isAdjWekPopup &&
+                <AdjWekPopup onClose={() => setIsAdjWekPopup(false)}/>
+            }
             <KakaoTalkChat/>
             <BottomMenu idx={1}/>
         </div>

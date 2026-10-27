@@ -4,11 +4,13 @@ import {getWekChckQuery} from "../../../util/shprAdjUtil";
 
 /**
  * 주별 정산 내역 (검수 합계 + 출금, 출금만 있는 주도 한 줄)
- * - www getQkShprWthdHity(TP='W') 와 같은 계산. 누적 남은 금액은 화면에서 오래된 주부터 계산
+ * - www getQkShprWthdHity(TP='W') 와 같은 계산. 최근 주부터 12주씩 (page)
  */
 export default async function handler(req, res) {
 
     await getConnectPool(async conn => {
+
+        const param = req.body;
 
         try {
 
@@ -18,9 +20,12 @@ export default async function handler(req, res) {
                 return;
             }
 
-            const [rows] = await conn.query(`
-                SELECT DATE_FORMAT(AA.WK, '%Y-%m-%d') AS WEK_STRT_YMD
-                     , DATE_FORMAT(DATE_ADD(AA.WK, INTERVAL 6 DAY), '%Y-%m-%d') AS WEK_END_YMD
+            const rowCnt = 12;
+            const page = Number(param.page) > 0 ? Number(param.page) : 1;
+
+            // 주별 검수 합계 + 출금 (출금만 있는 주도 한 줄)
+            const wekQuery = `
+                SELECT AA.WK
                      , SUM(AA.DAYS) AS CHCK_DAYS
                      , SUM(AA.PAY) AS PAY_AMT
                      , SUM(AA.FEE) AS FEE_AMT
@@ -37,18 +42,40 @@ export default async function handler(req, res) {
                          WHERE SHPR_ID = ?
                        ) AA
               GROUP BY AA.WK
-              ORDER BY AA.WK DESC
+            `;
+
+            const [rows] = await conn.query(`
+                SELECT DATE_FORMAT(BB.WK, '%Y-%m-%d') AS WEK_STRT_YMD
+                     , DATE_FORMAT(DATE_ADD(BB.WK, INTERVAL 6 DAY), '%Y-%m-%d') AS WEK_END_YMD
+                     , BB.CHCK_DAYS
+                     , BB.PAY_AMT
+                     , BB.FEE_AMT
+                     , BB.TWH_AMT
+                     , BB.NET_AMT
+                     , BB.WTHD_AMT
+                     , BB.WTHD_RMK
+                  FROM (${wekQuery}) BB
+              ORDER BY BB.WK DESC
+                 LIMIT ? OFFSET ?
+            `, [shprId, shprId, rowCnt, (page - 1) * rowCnt]);
+
+            const [totalCntRow] = await conn.query(`
+                SELECT COUNT(1) AS CNT
+                  FROM (${wekQuery}) BB
             `, [shprId, shprId]);
 
-            res.status(200).json(result(rows.map(row => ({
-                ...row,
-                CHCK_DAYS: Number(row.CHCK_DAYS),
-                PAY_AMT: Number(row.PAY_AMT),
-                FEE_AMT: Number(row.FEE_AMT),
-                TWH_AMT: Number(row.TWH_AMT),
-                NET_AMT: Number(row.NET_AMT),
-                WTHD_AMT: Number(row.WTHD_AMT),
-            }))));
+            res.status(200).json(result({
+                list: rows.map(row => ({
+                    ...row,
+                    CHCK_DAYS: Number(row.CHCK_DAYS),
+                    PAY_AMT: Number(row.PAY_AMT),
+                    FEE_AMT: Number(row.FEE_AMT),
+                    TWH_AMT: Number(row.TWH_AMT),
+                    NET_AMT: Number(row.NET_AMT),
+                    WTHD_AMT: Number(row.WTHD_AMT),
+                })),
+                totalCnt: Number(totalCntRow[0].CNT),
+            }));
         } catch (e) {
 
             console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));

@@ -5,7 +5,7 @@ import Image from "next/image";
 import CompDtpt from "../../components/btch/comp/compDtpt";
 import BottomMenu from "../../components/bottomMenu";
 import KakaoTalkChat from "../../components/kakaoTalkChat";
-import MonthHalfDate from "../../components/date/MonthHalfDate";
+import WeekDate from "../../components/date/WeekDate";
 import AdjWekPopup from "../../components/mypage/adjWekPopup";
 
 const WEEK_NM = ['일', '월', '화', '수', '목', '금', '토'];
@@ -113,7 +113,7 @@ export default function DelyHity() {
                 <button type={'button'} className={'button short'} onClick={() => setIsAdjWekPopup(true)}>정산 내역</button>
             </div>
             <div className={styles.btchArea}>
-                <MonthHalfDate onSelectDate={date => setSearchDate(date)} title={'배송일'}/>
+                <WeekDate onSelectDate={date => setSearchDate(date)} title={'배송일'}/>
                 <div className={styles.compListDiv}>
                     {dayList.length === 0 &&
                         <p className={styles.noData}>배송 내역이 없습니다.</p>
@@ -124,7 +124,9 @@ export default function DelyHity() {
                                 <div className={styles.smryDiv} onClick={() => liClickHandler(idx)}>
                                     <p>
                                         {getDayText(item.ymd)}
-                                        <em className={!!item.chck ? styles.chckY : styles.chckN}>{!!item.chck ? '검수 완료' : '검수 전'}</em>
+                                        {!!item.chck &&
+                                            <em className={styles.chckY}>검수 완료</em>
+                                        }
                                     </p>
                                     <span>{item.cnt}건 · {cmm.util.comma(item.amt)}원</span>
                                     <Image alt={'상세'}
@@ -149,12 +151,10 @@ export default function DelyHity() {
                                             </li>
                                         )}
                                     </ul>
-                                    {!!item.chck ?
+                                    {!!item.chck &&
                                         <p className={styles.chckInfo}>
                                             {item.chck.CHCK_DT} 검수 완료 · 지급 {cmm.util.comma(item.chck.PAY_AMT)}원
                                         </p>
-                                        :
-                                        <p className={styles.chckInfo}>검수 전이라 금액이 확정되지 않았습니다.</p>
                                     }
                                 </div>
                             </li>

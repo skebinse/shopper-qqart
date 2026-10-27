@@ -488,7 +488,7 @@ export default function Info() {
                                     </div>
                                 </li>
                                 <li>
-                                    <label>차종</label>
+                                    <label>은행명</label>
                                     <div className={styles.select2}>
                                         <Select placeholder={'은행을 선택해 주세요'}
                                                 value={!!joinInfo.inpBankCd ? {

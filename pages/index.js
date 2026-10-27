@@ -156,11 +156,10 @@ export default function Index(props) {
 
                 if(!!(item.ODER_PGRS_STAT === '02' || item.ODER_PGRS_STAT === '03')) {
 
-                    // 고객 위치 색은 전 프로젝트 공통 기준 (02 픽업대기 회색, 03·04 픽업예정 주황, 05 배달중 파랑)
-                    const isWait = item.ODER_PGRS_STAT === '02';
-                    imageSrc = isWait ? '/assets/images/icon/map/iconMapUserWait.svg' : '/assets/images/icon/map/iconMapUserPrev.svg';
-                    tooltipTxt = (isWait ? '픽업대기 ' : '픽업예정 ') + tooltipInfo[item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT].join(',');
-                    addMarkerTooltip(item, imageSrc, tooltipTxt, isWait ? 'customer_wait' : 'customer_prev');
+                    // 픽업 전(02, 03) 고객 위치는 초록 마커로 구분
+                    imageSrc = '/assets/images/icon/map/iconMapUserPrev.svg';
+                    tooltipTxt = '픽업예정 ' + tooltipInfo[item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT].join(',');
+                    addMarkerTooltip(item, imageSrc, tooltipTxt, 'customer_prev');
 
                     imageSrc = '/assets/images/icon/map/iconMapStore.png';
                     tooltipTxt = tooltipInfo[item.SHOP_ADDR_LAT + item.SHOP_ADDR_LOT].length + '건';
@@ -169,12 +168,6 @@ export default function Index(props) {
                         ODER_DELY_ADDR_LAT: item.SHOP_ADDR_LAT,
                         ODER_DELY_ADDR_LOT: item.SHOP_ADDR_LOT,
                     }, imageSrc, tooltipTxt, 'store');
-                } else if(item.ODER_PGRS_STAT === '04') {
-
-                    // 장보기(04)도 픽업예정
-                    imageSrc = '/assets/images/icon/map/iconMapUserPrev.svg';
-                    tooltipTxt = '픽업예정 ' + tooltipInfo[item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT].join(',');
-                    addMarkerTooltip(item, imageSrc, tooltipTxt, 'customer_prev');
                 } else {
 
                     tooltipTxt = '배달중 ' + tooltipInfo[item.ODER_DELY_ADDR_LAT + item.ODER_DELY_ADDR_LOT].join(',');

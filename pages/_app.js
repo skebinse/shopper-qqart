@@ -1,3 +1,4 @@
+import 'ckeditor5/ckeditor5.css';
 import '../styles/globals.css'
 import '../public/assets/css/blueimp-gallery.min.css';
 import {GlobalProvider} from "../context/globalContext";

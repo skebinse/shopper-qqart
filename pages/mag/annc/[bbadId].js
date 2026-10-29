@@ -17,14 +17,45 @@ export default function AnncDtpt() {
 
     useEffect(() => {
 
+        let editorInstance = null;
+        let destroyed = false;
+
         // 에디터 설정 후 데이터 조회
-        const setEditor = () => {
+        const setEditor = async () => {
+
+            // SSR 에서 window 를 참조하므로 클라이언트에서만 로드
+            const {
+                ClassicEditor, Essentials, Paragraph, Heading, Bold, Italic, FontSize, FontColor, FontBackgroundColor,
+                Link, AutoLink, List, Indent, BlockQuote, Image, ImageCaption, ImageStyle, ImageResize, MediaEmbed,
+                Table, TableToolbar, TableProperties, TableCellProperties, PasteFromOffice,
+            } = await import('ckeditor5');
+
+            if(destroyed) return;
 
             ClassicEditor.create( document.querySelector( '.editor' ), {
-                licenseKey: '',
-                readOnly: true,
+                licenseKey: 'GPL',
+                plugins: [
+                    Essentials, Paragraph, Heading, Bold, Italic, FontSize, FontColor, FontBackgroundColor,
+                    Link, AutoLink, List, Indent, BlockQuote, Image, ImageCaption, ImageStyle, ImageResize, MediaEmbed,
+                    Table, TableToolbar, TableProperties, TableCellProperties, PasteFromOffice,
+                ],
+                toolbar: [],
+                table: {
+                    contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties'],
+                    // 기본값(1px solid)과 같은 테두리가 데이터에서 빠지지 않도록 기본값을 없음으로 둔다
+                    tableProperties: {defaultProperties: {borderStyle: 'none', borderWidth: '0px'}},
+                    tableCellProperties: {defaultProperties: {borderStyle: 'none', borderWidth: '0px'}},
+                },
             })
                 .then( editor => {
+
+                    if(destroyed) {
+
+                        editor.destroy();
+                        return;
+                    }
+
+                    editorInstance = editor;
 
                     // 업체 쇼퍼일 경우
                     if(cmm.getLoginInfo('SHPR_GRD_CD') === 'ETPS') {
@@ -60,24 +91,18 @@ export default function AnncDtpt() {
                 });
         };
 
-        if(!!window.ClassicEditor) {
+        // 에디터 설정 후 데이터 조회
+        setEditor();
 
-            // 에디터 설정 후 데이터 조회
-            setEditor();
-        } else {
+        return () => {
 
-            const cordovaJs = document.createElement('script');
+            destroyed = true;
 
-            cordovaJs.id = "ckeditorjs";
-            cordovaJs.setAttribute('src', `/assets/js/ckeditor5/ckeditor.js`);
-            cordovaJs.addEventListener('load', () => {
+            if(!!editorInstance) {
 
-                // 에디터 설정 후 데이터 조회
-                setEditor();
-            });
-
-            document.querySelector('body').appendChild(cordovaJs);
-        }
+                editorInstance.destroy();
+            }
+        };
 
     }, [bbadId]);
 

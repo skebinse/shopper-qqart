@@ -288,3 +288,4 @@ input[type=radio]:disabled+label{opacity: 0.5;}
 .ck-content ul{padding-left: 40px;}
 .ck-content ul li{list-style-type: disc;}
 .ck-content ol li{list-style-type: decimal;}
+.ck-content strong,.ck-content b,.ck-content h2,.ck-content h3,.ck-content h4{font-weight: 700;}

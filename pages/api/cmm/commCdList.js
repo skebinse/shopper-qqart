@@ -15,6 +15,7 @@ export default async function handler(req, res) {
                      , CD_RMK
                   FROM T_CD_MAG
                  WHERE CD_SPPO_ID = ?
+                   AND CD_USE_YN = 'Y'
             `;
 
             const [rows, fields] = await conn.query(query, [param.cdSppoId]);

@@ -90,6 +90,12 @@ export default async function handler(req, res) {
 
             resultMap.ohrsAdjList = rows;
 
+            // 검수 완료된 날만 배송 금액 · 기타 정산 노출 (검수 전 날은 배송 목록만)
+            const chckYmdSet = new Set(resultMap.chckList.map(item => item.YMD));
+
+            resultMap.delyList = resultMap.delyList.map(item => chckYmdSet.has(item.DELY_YMD) ? item : {...item, ODER_DELY_AMT: null});
+            resultMap.ohrsAdjList = resultMap.ohrsAdjList.filter(item => chckYmdSet.has(item.YMD));
+
             // 총 남은 정산 금액 = 주별 실지급액 합 - 출금 합
             [rows] = await conn.query(`
                 SELECT IFNULL((

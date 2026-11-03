@@ -128,7 +128,7 @@ export default function DelyHity() {
                                             <em className={styles.chckY}>검수 완료</em>
                                         }
                                     </p>
-                                    <span>{item.cnt}건 · {cmm.util.comma(item.amt)}원</span>
+                                    <span>{item.cnt}건{!!item.chck && <> · {cmm.util.comma(item.amt)}원</>}</span>
                                     <Image alt={'상세'}
                                            src={!!item.active ? '/assets/images/icon/iconArrowUColor.svg' : '/assets/images/icon/iconArrowL.svg'}
                                            width={24} height={24}/>
@@ -139,10 +139,13 @@ export default function DelyHity() {
                                             <li key={'compDtpt' + itemDtpt.ODER_USER_ID}
                                                 onClick={() => setOderUserId(itemDtpt.ODER_USER_ID)}>
                                                 <span>{itemDtpt.SHOP_NM}({itemDtpt.ODER_RPRE_NO})</span>
-                                                <span>{cmm.util.comma(itemDtpt.ODER_DELY_AMT)}원</span>
+                                                {/* 검수 완료된 날만 배송 금액 노출 */}
+                                                {!!item.chck &&
+                                                    <span>{cmm.util.comma(itemDtpt.ODER_DELY_AMT)}원</span>
+                                                }
                                             </li>
                                         )}
-                                        {item.ohrsAdjList.map((ohrsAdj, ohrsIdx) =>
+                                        {!!item.chck && item.ohrsAdjList.map((ohrsAdj, ohrsIdx) =>
                                             <li key={'ohrsAdj' + ohrsIdx} className={styles.ohrsAdj}>
                                                 <span>
                                                     <em>기타 정산</em> {ohrsAdj.SHPR_OHRS_ADJ_NM}

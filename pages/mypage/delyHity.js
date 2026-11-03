@@ -131,7 +131,7 @@ export default function DelyHity() {
                                     <p>
                                         {getDayText(item.ymd)}
                                         {!!item.chck &&
-                                            <em className={styles.chckY}>검수 완료</em>
+                                            <em className={styles.chckY}>확정</em>
                                         }
                                     </p>
                                     <span>{item.cnt}건{!!item.chck && <> · {cmm.util.comma(item.amt)}원</>}</span>
@@ -162,7 +162,7 @@ export default function DelyHity() {
                                     </ul>
                                     {!!item.chck &&
                                         <p className={styles.chckInfo}>
-                                            {item.chck.CHCK_DT} 검수 완료 · 지급 {cmm.util.comma(item.chck.PAY_AMT)}원
+                                            {item.chck.CHCK_DT} 확정 · 지급 {cmm.util.comma(item.chck.PAY_AMT)}원
                                         </p>
                                     }
                                 </div>

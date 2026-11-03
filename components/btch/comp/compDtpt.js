@@ -101,22 +101,6 @@ export default function CompDtpt({id, onClose, isDelyAmt = true}) {
                     </li>
                 </ul>
             </div>
-            <div className={styles.divArea}>
-                <ul>
-                    <li>
-                        <label>고객명</label>
-                        <span>{dtptInfo.ODER_ACPP_NM}</span>
-                    </li>
-                    <li>
-                        <label>주소</label>
-                        <span>{dtptInfo.ODER_DELY_ADDR} {dtptInfo.ODER_DELY_DTPT_ADDR}</span>
-                    </li>
-                    <li>
-                        <label>요청사항</label>
-                        <span>{dtptInfo.ODER_DELY_REQ_MATT}</span>
-                    </li>
-                </ul>
-            </div>
             <div className={styles.uploadArea}>
                 <h5>업로드한 사진</h5>
                 <Swiper slidesPerView={'auto'}>

@@ -50,7 +50,13 @@ export default function DelyHity() {
                     day.list.push(item);
                 });
 
-                res.ohrsAdjList.forEach(item => getDay(item.YMD).ohrsAdjList.push(item));
+                // 기타 정산 금액도 일자 금액에 합산 (검수 완료된 날만 내려옴)
+                res.ohrsAdjList.forEach(item => {
+
+                    const day = getDay(item.YMD);
+                    day.amt += cmm.util.getNumber(item.SHPR_OHRS_ADJ_AMT);
+                    day.ohrsAdjList.push(item);
+                });
                 res.chckList.forEach(item => getDay(item.YMD).chck = item);
 
                 setDayList(Object.values(dayMap).sort((a, b) => a.ymd < b.ymd ? 1 : -1));

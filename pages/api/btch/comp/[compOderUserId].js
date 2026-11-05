@@ -29,7 +29,9 @@ export default async function handler(req, res) {
                      , fnGetAtchFileList(BB.SHOP_RRSN_ATCH_FILE_UUID) AS SHOP_IMG
                      , fnGetAtchFileList(CC.PROD_RRSN_ATCH_FILE_UUID) AS PROD_IMG
                      , fnGetAtchFileList(EE.ODER_PIUP_VCHR_ATCH_FILE_UUID) AS PIUP_VCHR_IMG
-                     , fnGetAtchFileList(EE.ODER_DELY_CPL_ATCH_FILE_UUID) AS CPL_VCHR_IMG
+                     -- 배달 완료 사진은 당일(KST) 완료 건만 내려준다 (픽업 영수증은 정산 확인용이라 항상)
+                     , CASE WHEN DATE(DATE_ADD(EE.ODER_DELY_CPL_DT, INTERVAL 9 HOUR)) = DATE(DATE_ADD(NOW(), INTERVAL 9 HOUR))
+                         THEN fnGetAtchFileList(EE.ODER_DELY_CPL_ATCH_FILE_UUID) END AS CPL_VCHR_IMG
                      , AA.SPBK_CCN
                      , AA.SPBK_ID
                      , IFNULL(CC.PROD_NM, AA.SPBK_HNDC_PROD_NM) AS PROD_NM
@@ -47,8 +49,11 @@ export default async function handler(req, res) {
                      , EE.ODER_ACPP_CPHONE_NO
                      , EE.ODER_DELY_STDO_CD
                      , EE.ODER_DELYD_ZIPC
-                     , EE.ODER_DELY_ADDR
-                     , EE.ODER_DELY_DTPT_ADDR
+                     -- 고객 주소 · 박스 수는 당일(KST, 배달완료일시 기준) 완료 건만 내려준다
+                     , CASE WHEN DATE(DATE_ADD(EE.ODER_DELY_CPL_DT, INTERVAL 9 HOUR)) = DATE(DATE_ADD(NOW(), INTERVAL 9 HOUR)) THEN 'Y' ELSE 'N' END AS TDAY_CPL_YN
+                     , CASE WHEN DATE(DATE_ADD(EE.ODER_DELY_CPL_DT, INTERVAL 9 HOUR)) = DATE(DATE_ADD(NOW(), INTERVAL 9 HOUR)) THEN EE.ODER_DELY_ADDR END AS ODER_DELY_ADDR
+                     , CASE WHEN DATE(DATE_ADD(EE.ODER_DELY_CPL_DT, INTERVAL 9 HOUR)) = DATE(DATE_ADD(NOW(), INTERVAL 9 HOUR)) THEN EE.ODER_DELY_DTPT_ADDR END AS ODER_DELY_DTPT_ADDR
+                     , CASE WHEN DATE(DATE_ADD(EE.ODER_DELY_CPL_DT, INTERVAL 9 HOUR)) = DATE(DATE_ADD(NOW(), INTERVAL 9 HOUR)) THEN IFNULL(EE.ODER_BOX_NCN, 1) END AS ODER_BOX_NCN
                      , EE.ODER_DELY_ADDR_LAT
                      , EE.ODER_DELY_ADDR_LOT
                      , EE.ODER_DELY_SLCT_VAL

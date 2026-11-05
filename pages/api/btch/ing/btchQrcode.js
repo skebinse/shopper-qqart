@@ -82,7 +82,7 @@ export default async function handler(req, res) {
             // 주문번호, 박스 수 조회
             query = `
                 SELECT ODER_RPRE_NO
-                     , ODER_BOX_NCN
+                     , IFNULL(ODER_BOX_NCN, 1) AS ODER_BOX_NCN
                   FROM T_ODER_USER_INFO
                  WHERE ODER_USER_ID = ?
                    AND SHPR_ID = ?

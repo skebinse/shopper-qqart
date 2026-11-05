@@ -99,6 +99,19 @@ export default function CompDtpt({id, onClose, isDelyAmt = true}) {
                         <label>배달거리</label>
                         <span>{dtptInfo.ODER_DELY_DTC}Km</span>
                     </li>
+                    {/* 당일 완료 건만 고객 주소 · 박스 수 노출 (API 에서도 당일 건만 내려줌) */}
+                    {dtptInfo.TDAY_CPL_YN === 'Y' &&
+                        <>
+                            <li>
+                                <label>주소</label>
+                                <span>{dtptInfo.ODER_DELY_ADDR} {dtptInfo.ODER_DELY_DTPT_ADDR}</span>
+                            </li>
+                            <li>
+                                <label>박스 수</label>
+                                <span>{dtptInfo.ODER_BOX_NCN}개</span>
+                            </li>
+                        </>
+                    }
                 </ul>
             </div>
             <div className={styles.uploadArea}>

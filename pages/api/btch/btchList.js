@@ -113,7 +113,7 @@ export default async function handler(req, res) {
                  , AA.ODER_DELY_ARTG
                  , AA.EXCP_OVER
                  , AA.EXCP_PKG
-                 , AA.ODER_BOX_NCN
+                 , IFNULL(AA.ODER_BOX_NCN, 1) AS ODER_BOX_NCN
                  , AA.SHOP_ADDR_LAT
                  , AA.SHOP_ADDR_LOT
               FROM (

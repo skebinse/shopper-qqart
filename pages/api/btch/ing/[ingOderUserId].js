@@ -46,7 +46,7 @@ export default async function handler(req, res) {
                      , AA.ODER_ACPP_CPHONE_NO
                      , AA.ODER_DELY_STDO_CD
                      , AA.ODER_DELYD_ZIPC
-                     , AA.ODER_BOX_NCN
+                     , IFNULL(AA.ODER_BOX_NCN, 1) AS ODER_BOX_NCN
                      , AA.ODER_DELY_ADDR
                      , AA.ODER_DELY_DTPT_ADDR
                      , CONCAT(AA.ODER_DELY_ADDR, ' ' , AA.ODER_DELY_DTPT_ADDR) AS USER_FULL_ADDR

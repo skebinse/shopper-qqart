@@ -372,7 +372,7 @@ export default function IngOderUserId() {
                             </li>
                             <li>
                                 <h5>박스 수</h5>
-                                <p>{btchInfo.ODER_BOX_NCN}</p>
+                                <p>{btchInfo.ODER_BOX_NCN}개</p>
                             </li>
                             <li>
                                 <h5>주소</h5>

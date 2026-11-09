@@ -3,13 +3,21 @@ import '../styles/globals.css'
 import '../public/assets/css/blueimp-gallery.min.css';
 import {GlobalProvider} from "../context/globalContext";
 import CmmComponent from "../components/cmmComponent";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import firebaseInit from "../js/firebase";
 import cmm from "../js/common";
 
 export default function MyApp({ Component, pageProps }) {
 
+    // 관리자 대행 중 표시 (쇼퍼명)
+    const [proxyShprNm, setProxyShprNm] = useState(null);
+
     useEffect(() => {
+
+        if(cmm.isProxy()) {
+
+            setProxyShprNm(cmm.getLoginInfo('SHPR_NCNM') || '');
+        }
 
         if(!!("Notification" in window)) {
             // firebaseInit();
@@ -198,8 +206,8 @@ export default function MyApp({ Component, pageProps }) {
         // 현재 위치
         window.getPsPsit = (lat, lot) => {
 
-            // 로그인 시
-            if(cmm.checkLogin()) {
+            // 로그인 시 (관리자 대행 중에는 저장 안 함)
+            if(cmm.checkLogin() && !cmm.isProxy()) {
 
                 // 쇼퍼 현재 위치
                 cmm.util.setLs(cmm.Cont.SHPR_PS_PSIT, {
@@ -300,8 +308,32 @@ export default function MyApp({ Component, pageProps }) {
 
     }, []);
 
+    /**
+     * 관리자 대행 종료: 대행 쿠키와 로그인 정보만 지움 (기존 로그아웃처럼 쇼퍼 푸시 토큰을 지우지 않음)
+     */
+    const proxyEndClick = () => {
+
+        fetch('/api/auth/proxyEnd', {method: 'POST'})
+            .catch(() => {})
+            .finally(() => {
+
+                cmm.util.rmLs(cmm.Cont.LOGIN_INFO);
+                cmm.util.rmLs(cmm.Cont.SHPR_PS_PSIT);
+
+                // www 에서 새 탭으로 열린 경우 탭을 닫고, 닫히지 않으면 로그인 화면으로
+                window.close();
+                location.replace('/cmm/login');
+            });
+    };
+
   return (
     <GlobalProvider>
+      {proxyShprNm !== null &&
+          <div style={{position: 'fixed', top: 0, left: 0, right: 0, zIndex: 2147483647, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '4px 8px', background: 'rgba(220, 38, 38, 0.92)', color: '#fff', fontSize: '12px', lineHeight: '18px', pointerEvents: 'none'}}>
+              <span>관리자 대행 중 · 쇼퍼 {proxyShprNm} · 조회만 가능</span>
+              <button type={'button'} onClick={proxyEndClick} style={{pointerEvents: 'auto', border: '1px solid #fff', borderRadius: '4px', background: 'transparent', color: '#fff', fontSize: '12px', padding: '0 6px', cursor: 'pointer'}}>대행 종료</button>
+          </div>
+      }
       <Component {...pageProps} />
       <CmmComponent />
     </GlobalProvider>

@@ -60,6 +60,12 @@ export function GlobalProvider({children}) {
         if(notLoginList.indexOf(router.route) === -1) {
 
             // 로그인 체크
+            // 관리자 대행 세션 시간이 지났으면 로그인 정보 삭제 (쿠키는 같은 시간에 만료됨)
+            if(cmm.isProxy() && !(cmm.getLoginInfo('PROXY_EXPR') > Date.now())) {
+
+                cmm.util.rmLs(cmm.Cont.LOGIN_INFO);
+            }
+
             if(!cmm.checkLogin()) {
 
                 setSAlert(prevState => ({
@@ -70,7 +76,8 @@ export function GlobalProvider({children}) {
                 }));
             } else if(cmm.date.getToday('') !== cmm.getLoginInfo('LOING_DT')) {
 
-                if(!cmm.isApp()) {
+                // 관리자 대행 중에는 로그인 SP 를 다시 부르지 않음 (중복로그인 토큰이 바뀌어 쇼퍼 폰이 로그아웃됨)
+                if(!cmm.isApp() && !cmm.isProxy()) {
 
                     // 로그인 정보 갱신
                     loginInfoRnw();

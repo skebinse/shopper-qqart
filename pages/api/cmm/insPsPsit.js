@@ -1,9 +1,11 @@
 import {getConnectPool, result} from "../db";
 import {getAuthShprId} from "../../../util/authUtil";
+import {hasProxyCookie} from "../../../util/proxyUtil";
 
 export default async function handler(req, res) {
 
-    if(process.env.NEXT_PUBLIC_RUN_MODE === 'local' && process.env.DB_PROD_YN === 'Y') {
+    // 관리자 대행 중에는 위치를 저장하지 않음 (관리자 PC 위치가 쇼퍼 위치로 저장되는 것 방지)
+    if((process.env.NEXT_PUBLIC_RUN_MODE === 'local' && process.env.DB_PROD_YN === 'Y') || hasProxyCookie(req, res)) {
 
         res.status(200).json(result(''));
         return;

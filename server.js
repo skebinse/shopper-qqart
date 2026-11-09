@@ -3,10 +3,11 @@ const { parse } = require("url");
 const next = require("next");
 
 const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev });
-const handle = app.getRequestHandler();
-
 const PORT = 3000;
+
+// middleware.js 가 요청 URL 을 만들 때 hostname · port 가 필요함 (없으면 https://undefined:undefined 로 모든 API 500)
+const app = next({ dev, hostname: 'localhost', port: PORT });
+const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
 

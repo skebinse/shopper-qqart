@@ -157,6 +157,12 @@ const cmm = {
                     callAjax();
                 } else if(res.data.result === -1) {
 
+                    // 대행 세션 만료·종료 시 로그인 정보도 지움
+                    if(res.data.proxyYn === 'Y') {
+
+                        cmm.util.rmLs(cmm.Cont.LOGIN_INFO);
+                    }
+
                     cmm.loading(false);
                     cmm.alert('로그인 후 이용가능합니다.\n로그인 화면으로 이동합니다.', () => {
 
@@ -283,6 +289,16 @@ const cmm = {
         const isLogin = !!window && !!cmm.util.getLs(cmm.Cont.LOGIN_INFO) && cmm.util.getLs(cmm.Cont.LOGIN_INFO).LOGIN_VER === 'v1.0';
 
         return isLogin;
+    },
+
+    /**
+     * 관리자 대행 중 여부 (www 관리자 [퀵퀵쇼퍼] → /api/auth/proxy 로 들어온 세션)
+     * - 실제 차단은 서버(middleware.js)가 하고, 화면은 위치 저장·채널톡 등을 생략하는 데만 쓴다.
+     * @returns {boolean}
+     */
+    isProxy: () => {
+
+        return !!window && cmm.checkLogin() && cmm.getLoginInfo('PROXY_YN') === 'Y';
     },
 
     /**
@@ -912,7 +928,8 @@ const cmm = {
                         shprPsitLot: lat
                     });
 
-                    cmm.ajax({
+                    // 관리자 대행 중에는 위치 저장 안 함
+                    !cmm.isProxy() && cmm.ajax({
                         url: '/api/cmm/insPsPsit',
                         isLoaing: false,
                         data: {
@@ -956,6 +973,22 @@ const cmm = {
                 }));
             } else if(cmm.isReactApp()) {
 
+                cmm.ajax({
+                    url: '/api/shpr/getPsPsit',
+                    isLoaing: false,
+                    success: res => {
+
+                        if(res.length > 0) {
+                            callback({lat: res[0].SHPR_PSIT_LOT, lot: res[0].SHPR_PSIT_LAT});
+                        } else {
+                            callback({error: '위치 정보가 없습니다.'});
+                        }
+                    },
+                    error: res => {}
+                });
+            } else if(cmm.isProxy()) {
+
+                // 관리자 대행 중: 관리자 PC 위치를 쓰지 않고 쇼퍼의 마지막 위치로 표시만 함 (저장 안 함)
                 cmm.ajax({
                     url: '/api/shpr/getPsPsit',
                     isLoaing: false,
@@ -1053,6 +1086,12 @@ const cmm = {
          * Channel IO
          */
         channelIO: () => {
+
+            // 관리자 대행 중에는 채널톡을 불러오지 않음 (쇼퍼 이름으로 상담이 열리는 것 방지)
+            if(cmm.isProxy()) {
+
+                return;
+            }
 
             (function() {
                 let w = window;

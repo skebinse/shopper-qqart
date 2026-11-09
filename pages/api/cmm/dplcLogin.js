@@ -1,5 +1,6 @@
 import {getConnectPool, result} from "../db";
 import {getCookie, setCookie} from "cookies-next";
+import {clearProxyCookies, getProxySession, hasProxyCookie} from "../../../util/proxyUtil";
 
 export default async function handler(req, res) {
 
@@ -14,6 +15,28 @@ export default async function handler(req, res) {
         if(process.env.NEXT_PUBLIC_RUN_MODE === 'local' && process.env.DB_PROD_YN === 'Y') {
 
             res.status(200).json(result({result: 1}));
+            return;
+        }
+
+        // 관리자 대행 세션: 대행 토큰이 유효하면 통과(쇼퍼 폰의 중복로그인 토큰과 비교하지 않음), 만료·종료됐으면 쿠키 삭제 후 로그인 화면으로
+        if(hasProxyCookie(req, res)) {
+
+            try {
+
+                const proxy = await getProxySession(conn, req, res);
+
+                if(!proxy) {
+
+                    clearProxyCookies(req, res);
+                }
+
+                res.status(200).json(result({result: !!proxy ? 1 : -1, proxyYn: 'Y'}));
+            } catch (e) {
+
+                console.log(e);
+                res.status(500).json(result('', '9999', '오류가 발생했습니다.'));
+            }
+
             return;
         }
 

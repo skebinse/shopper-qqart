@@ -1,6 +1,7 @@
 import {getConnectPool, result} from "../db";
 import cmm from "../../../js/common";
 import {getCookie} from "cookies-next";
+import {hasProxyCookie} from "../../../util/proxyUtil";
 
 export default async function handler(req, res) {
 
@@ -18,7 +19,10 @@ export default async function handler(req, res) {
             const shprId = shprIdRow[0].SHPR_ID;
 
             // 접속 로그
-            if (param.isLog === 'true' && process.env.DB_PROD_YN !== 'Y') {
+            // 관리자 대행 중에는 접속 로그·앱 푸시 토큰을 남기지 않음 (쇼퍼 기기 통계 오염 방지)
+            const isProxy = hasProxyCookie(req, res);
+
+            if (param.isLog === 'true' && process.env.DB_PROD_YN !== 'Y' && !isProxy) {
 
                 const userAgent = req ? req.headers['user-agent'] : navigator.userAgent;
                 const ip = req.headers["x-real-ip"] || req.connection.remoteAddress;
@@ -59,7 +63,7 @@ export default async function handler(req, res) {
             }
 
             // 앱 토큰 저장
-            if(!!param.appToken) {
+            if(!!param.appToken && !isProxy) {
 
                 query = `SELECT SHPR_APP_PUSH_TKN
                            FROM T_SHPR_INFO

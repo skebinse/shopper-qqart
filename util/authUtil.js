@@ -1,5 +1,6 @@
 import {getCookie} from "cookies-next";
 import {result} from "../pages/api/db";
+import {getProxySession, hasProxyCookie} from "./proxyUtil";
 
 /**
  * 로그인 쇼퍼 ID 조회 (API 공통 인증)
@@ -30,6 +31,26 @@ export async function getAuthShprId(conn, req, res, {checkTkn = true, respond = 
     if(!encShprId) {
 
         return fail();
+    }
+
+    // 관리자 대행 세션: 대행 토큰(T_AUTH_TKN)이 유효하고 enc_sh 가 그 쇼퍼일 때만 통과, 중복로그인 토큰 비교는 하지 않음
+    if(hasProxyCookie(req, res)) {
+
+        const proxy = await getProxySession(conn, req, res);
+
+        if(!proxy) {
+
+            return fail();
+        }
+
+        const [proxyRows] = await conn.query(`
+            SELECT SHPR_ID
+              FROM T_SHPR_INFO
+             WHERE SHPR_ID = fnDecrypt(?, ?)
+               AND SHPR_SCSS_YN = 'N'
+        `, [encShprId, process.env.ENC_KEY]);
+
+        return proxyRows.length > 0 && proxyRows[0].SHPR_ID === proxy.shprId ? proxy.shprId : fail();
     }
 
     const [rows] = await conn.query(`

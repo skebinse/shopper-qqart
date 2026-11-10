@@ -1138,20 +1138,64 @@ const cmm = {
                 }
             })();
 
+            // 로그인 상태(쇼퍼)가 바뀌었을 때만 다시 boot (화면 이동마다 _app 에서 호출)
+            //  - memberId 는 바꿀 수 없어 shutdown 후 다시 boot 한다. 로그아웃하면 익명으로 돌아가 앞 쇼퍼의 상담이 보이지 않는다.
+            const bootKey = cmm.checkLogin() ? (cmm.getLoginInfo('ENC_SHPR_ID') || 'Y') : '';
+
+            if(cmm.plugin._channelBootKey === bootKey) {
+
+                return;
+            }
+
+            if(cmm.plugin._channelBootKey !== undefined) {
+
+                ChannelIO('shutdown');
+            }
+
+            cmm.plugin._channelBootKey = bootKey;
+
+            // 바스키 딜리 쇼퍼 채널 (공개 키, 바꾸면 다시 빌드)
             const options = {
-                "pluginKey": "48f8e99a-d65b-4694-ba1c-a0bf365be854",
+                "pluginKey": process.env.NEXT_PUBLIC_CHANNEL_PLUGIN_KEY || 'be3038af-53c7-4afb-9b66-ea14c4e26059',
+                "language": 'ko',
                 "mobileMarginY": '120'
             };
 
-            if(cmm.checkLogin()) {
+            const boot = () => {
 
-                options.memberId = cmm.getLoginInfo('ENC_SHPR_ID');
-                options.profile = {
-                    name: cmm.getLoginInfo('SHPR_NCNM')
-                };
+                // 응답을 기다리는 사이 로그인 상태가 또 바뀌었으면 그쪽 boot 에 맡김
+                if(cmm.plugin._channelBootKey === bootKey) {
+
+                    ChannelIO('boot', options);
+                }
+            };
+
+            if(!bootKey) {
+
+                boot();
+                return;
             }
 
-            ChannelIO('boot', options);
+            // 사용자 정보 암호화 채널: memberId 는 서버가 memberHash 와 같이 줄 때만 넘긴다
+            fetch('/api/cmm/supportProfile', {credentials: 'same-origin'})
+                .then(res => res.json())
+                .then(res => {
+
+                    const data = res?.data || {};
+
+                    if(!!data.memberId && !!data.memberHash) {
+
+                        options.memberId = data.memberId;
+                        options.memberHash = data.memberHash;
+                    }
+
+                    if(!!data.name) {
+
+                        options.profile = {name: data.name};
+                    }
+                })
+                .catch(() => {})
+                .finally(boot);
         }
     },
 

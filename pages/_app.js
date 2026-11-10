@@ -6,6 +6,7 @@ import CmmComponent from "../components/cmmComponent";
 import {useEffect, useState} from "react";
 import firebaseInit from "../js/firebase";
 import cmm from "../js/common";
+import Router from "next/router";
 
 export default function MyApp({ Component, pageProps }) {
 
@@ -112,8 +113,12 @@ export default function MyApp({ Component, pageProps }) {
             }));
         }
 
-        // 채널톡
+        // 채널톡 (로그인 · 로그아웃 뒤 화면 이동 시 회원/익명으로 다시 boot)
         cmm.plugin.channelIO();
+
+        const channelRouteChange = () => cmm.plugin.channelIO();
+
+        Router.events.on('routeChangeComplete', channelRouteChange);
 
         // PUSH
         window.onPushMessage = data => {
@@ -306,6 +311,7 @@ export default function MyApp({ Component, pageProps }) {
             }
         }
 
+        return () => Router.events.off('routeChangeComplete', channelRouteChange);
     }, []);
 
     /**

@@ -2,6 +2,7 @@ import {getConnectPool, result} from "../../db";
 import cmm from "../../../../js/common";
 import {adminSendNtfy} from "../../../../util/smsUtil";
 import {getAuthShprId} from "../../../../util/authUtil";
+import {releaseSafeNo} from "../../../../util/safeNoUtil";
 
 export default async function handler(req, res) {
 
@@ -124,6 +125,9 @@ export default async function handler(req, res) {
 
             // admin 알림 발송
             adminSendNtfy(conn, {ntfyType: 'delyCpl', oderUserId: param.oderUserId});
+
+            // 050 안심번호 해제 — 완료 응답은 이미 보냈다. 커넥션 반환 전에 끝나도록 대기(실패해도 예외 없음)
+            await releaseSafeNo(conn, param.oderUserId);
         }
     });
 }

@@ -8,7 +8,6 @@ import Image from "next/image";
 import {Swiper, SwiperSlide} from "swiper/react";
 import 'swiper/css';
 import cmm from "../../../js/common";
-
 export default function BtchComp() {
 
     const router = useRouter();
@@ -101,11 +100,8 @@ export default function BtchComp() {
                     </li>
                     <li>
                         <h5>연락처</h5>
-                        <p>
-                            <a className={'colorGreen bold'} href={'tel:' + btchInfo.ODER_ACPP_CPHONE_NO}>
-                                {cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}
-                            </a>
-                        </p>
+                        {/* 배달 완료 시 안심번호가 해제되므로 전화 버튼 없음 */}
+                        <p>번호 비공개</p>
                     </li>
                     {!!btchInfo.ODER_DELY_REQ_MATT &&
                         <li>

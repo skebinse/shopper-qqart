@@ -9,6 +9,7 @@ import {useRouter} from "next/router";
 import styles from "../../../styles/btch.module.css";
 import Head from "next/head";
 import useShopS3Upload from "../../../hooks/useShopS3Upload";
+import SafeNoCall from "../../../components/btch/safeNoCall";
 
 export default function IngOderUserId() {
 
@@ -522,11 +523,7 @@ export default function IngOderUserId() {
                             </li>
                             <li>
                                 <h5>연락처</h5>
-                                <p>
-                                    <a className={'colorGreen bold'} href={'tel:' + btchInfo.ODER_ACPP_CPHONE_NO}>
-                                        {cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}
-                                    </a>
-                                </p>
+                                <SafeNoCall oderUserId={btchInfo.ODER_USER_ID} />
                             </li>
                             {!!btchInfo.ODER_JOIN_ENTH_PW &&
                                 <li>
@@ -562,9 +559,7 @@ export default function IngOderUserId() {
                             </li>
                             <li>
                                 <h5>연락처</h5>
-                                <a className={'colorGreen bold'} href={'tel:' + btchInfo.ODER_ACPP_CPHONE_NO}>
-                                    {cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}
-                                </a>
+                                <SafeNoCall oderUserId={btchInfo.ODER_USER_ID} />
                             </li>
                             <li>
                                 <h5>스토어 적립</h5>

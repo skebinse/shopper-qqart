@@ -101,7 +101,7 @@ export default function BtchComp() {
                     </li>
                     <li>
                         <h5>연락처</h5>
-                        <p className={'colorGreen bold'}>{cmm.util.hyphenTel(btchInfo.ODER_ACPP_CPHONE_NO)}</p>
+                        <p className={'colorGreen bold'}>번호 비공개</p>
                     </li>
                     {!!btchInfo.ODER_DELY_REQ_MATT &&
                         <li>

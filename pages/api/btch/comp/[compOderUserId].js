@@ -41,12 +41,10 @@ export default async function handler(req, res) {
                      , DD.USER_ADDR_LAT
                      , DD.USER_ADDR_LOT
                      , DD.USER_NCNM
-                     , DD.USER_CPHONE_NO
                      , CONCAT(DD.USER_ADDR, ' ' , DD.USER_DTPT_ADDR) AS USER_FULL_ADDR
                      , fnGetCdNm(BB.SHOP_RRV_KD) AS SHOP_RRV_NM
                      , EE.ODER_USER_ID
                      , EE.ODER_ACPP_NM
-                     , EE.ODER_ACPP_CPHONE_NO
                      , EE.ODER_DELY_STDO_CD
                      , EE.ODER_DELYD_ZIPC
                      -- 고객 주소 · 박스 수는 당일(KST, 배달완료일시 기준) 완료 건만 내려준다

@@ -38,12 +38,10 @@ export default async function handler(req, res) {
                      , EE.USER_ADDR_LAT
                      , EE.USER_ADDR_LOT
                      , EE.USER_NCNM
-                     , EE.USER_CPHONE_NO
                      , CONCAT(BB.SHOP_ADDR, ' ' , BB.SHOP_DTPT_ADDR) AS SHOP_FULL_ADDR
                      , fnGetCdNm(BB.SHOP_RRV_KD) AS SHOP_RRV_NM
                      , AA.ODER_USER_ID
                      , AA.ODER_ACPP_NM
-                     , AA.ODER_ACPP_CPHONE_NO
                      , AA.ODER_DELY_STDO_CD
                      , AA.ODER_DELYD_ZIPC
                      , IFNULL(AA.ODER_BOX_NCN, 1) AS ODER_BOX_NCN

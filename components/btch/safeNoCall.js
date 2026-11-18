@@ -19,6 +19,12 @@ export default function SafeNoCall({oderUserId, callable = true}) {
             return;
         }
 
+        // 배송 완료 시 해제(clear)되면 같은 050 이 바로 다른 주문에 갈 수 있어 미리 알린다. 취소 시 API 를 부르지 않는다
+        cmm.confirm('고객에게 전화를 거시겠습니까?\n배송 완료 시 안심번호는 해제됩니다.', requestCall, null, '전화 걸기');
+    };
+
+    const requestCall = () => {
+
         setLoading(true);
 
         cmm.ajax({

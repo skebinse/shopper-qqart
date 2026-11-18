@@ -242,7 +242,7 @@ export default function Reg() {
                 <HeadTitle title={'우편번호 검색'} type={'close'} callbackClose={() => setPopupClass('')} />
                 <div className={styles.daumPost} id={'divDaumPost'}></div>
             </div>
-            <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" defer />
+            <Script src="//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" defer />
         </div>
     );
 }

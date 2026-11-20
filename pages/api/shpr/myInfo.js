@@ -1,5 +1,6 @@
 import {getConnectPool, result} from "../db";
 import {getCookie} from "cookies-next";
+import {maskAcno, readPrvc} from "../../../util/prvcCryptoUtil";
 
 export default async function handler(req, res) {
 
@@ -61,7 +62,7 @@ async function getMyInfo(conn, req, res) {
                      , AA.SHPR_BRDT
                      , AA.SHPR_NAME
                      , BB.CD_NM AS SHPR_GRD_NM
-                     , CASE WHEN LENGTH(IFNULL(AA.SHPR_BANK_ACNO, '') > 4) THEN CONCAT(REPEAT('*', CHAR_LENGTH(AA.SHPR_BANK_ACNO) - 4), RIGHT(AA.SHPR_BANK_ACNO, 4)) ELSE AA.SHPR_BANK_ACNO END AS SHPR_BANK_ACNO
+                     , AA.SHPR_BANK_ACNO
                      , fnGetAtchFileList(AA.SHPR_PRFL_ATCH_FILE_UUID) AS SHPR_PRFL_FILE
                      , fnGetShprPoint(AA.SHPR_ID) AS SHPR_POIN
                      , fnGetHoneyMone(AA.SHPR_ID) AS SHPR_HONEY_MONE
@@ -74,6 +75,12 @@ async function getMyInfo(conn, req, res) {
             `;
 
         const [rows] = await conn.query(query, [shprId]);
+
+        // 계좌번호는 앱에서 복호화(이행 기간 평문 허용)한 뒤 뒤 4자리만 보이게 마스킹. 복호화 실패면 빈 값
+        if(!!rows[0]) {
+
+            rows[0].SHPR_BANK_ACNO = maskAcno(await readPrvc(rows[0].SHPR_BANK_ACNO, shprId));
+        }
 
         res.status(200).json(result(rows[0]));
     } catch (e) {

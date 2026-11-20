@@ -3,6 +3,7 @@ import {getCookie, setCookie} from "cookies-next";
 import {getKakaoUserId} from "../../../util/kakaoUtil";
 import {getAuthShprId} from "../../../util/authUtil";
 import {clearJoinSession, getJoinSession} from "../../../util/joinSession";
+import {encryptPrvc} from "../../../util/prvcCryptoUtil";
 
 /**
  * 빈 값 여부 (form-urlencoded 로 넘어온 'undefined' / 'null' 문자열 포함)
@@ -117,7 +118,19 @@ export default async function handler(req, res) {
                 param.iden = session.iden;
                 param.cphoneNo = session.cphoneNo;
                 param.bankNm = session.bankNm;
-                param.bankNum = session.bankNum;
+
+                // 계좌번호는 암호화해 저장한다. 키를 못 얻으면 평문으로 저장하지 않고 가입을 거부
+                // (spInsShprJoin 은 신규 가입 INSERT 때만 계좌를 쓴다. 정보 수정(isLogin Y)은 계좌를 바꾸지 않음)
+                try {
+
+                    param.bankNum = await encryptPrvc(session.bankNum);
+                } catch (e) {
+
+                    console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
+                    console.log('계좌번호 암호화 실패 (가입)', e?.message);
+                    res.status(200).json(result('', '9999', '가입 정보를 저장하지 못했습니다.\n잠시 후 다시 시도해 주세요.'));
+                    return;
+                }
             }
 
             // 카카오 신규 가입: 클라이언트가 보낸 회원번호 대신 액세스 토큰으로 카카오에서 확인한 회원번호 사용

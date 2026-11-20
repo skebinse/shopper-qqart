@@ -3,6 +3,7 @@ import {deleteCookie, getCookie} from "cookies-next";
 import {getAuthShprId} from "../../../util/authUtil";
 import {verifyToken} from "../../../util/securityUtil";
 import {getBankNm} from "../../../js/bankList";
+import {encryptPrvc} from "../../../util/prvcCryptoUtil";
 
 export default async function handler(req, res) {
 
@@ -28,6 +29,20 @@ export default async function handler(req, res) {
                 return;
             }
 
+            // 계좌번호는 암호화해 저장한다. 키를 못 얻으면 평문으로 저장하지 않고 거부
+            let encBankNum;
+
+            try {
+
+                encBankNum = await encryptPrvc(bankVrf.bankNum);
+            } catch (e) {
+
+                console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
+                console.log('계좌번호 암호화 실패 shprId=' + shprId, e?.message);
+                res.status(200).json(result('', '9999', '계좌 정보를 저장하지 못했습니다.\n잠시 후 다시 시도해 주세요.'));
+                return;
+            }
+
             const query =`
                 UPDATE T_SHPR_INFO
                    SET SHPR_BANK_NM = ?
@@ -37,7 +52,7 @@ export default async function handler(req, res) {
                  WHERE SHPR_ID = ?
                    AND SHPR_SCSS_YN = 'N'
             `;
-            const [rows] = await conn.query(query, [getBankNm(bankVrf.bankCd), bankVrf.bankNum, shprId, shprId]);
+            const [rows] = await conn.query(query, [getBankNm(bankVrf.bankCd), encBankNum, shprId, shprId]);
 
             deleteCookie('bank_vrf', {req, res, path: '/'});
 

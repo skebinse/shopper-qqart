@@ -1,6 +1,6 @@
 import {getConnectPool, result} from "../db";
 import {getAuthShprId} from "../../../util/authUtil";
-import {assignSafeNo, getKstYmd, getSafeNoDays, hashRcvNo, isSafeNoConfigured, isValidRcvNo} from "../../../util/safeNoUtil";
+import {assignSafeNo, checkSafeNoMapping, getKstYmd, logSafeNoMismatch, getSafeNoDays, hashRcvNo, isSafeNoConfigured, isValidRcvNo} from "../../../util/safeNoUtil";
 
 /**
  * 고객 전화 걸기용 050 안심번호 조회
@@ -103,8 +103,27 @@ export default async function handler(req, res) {
 
             if(safeRows.length > 0) {
 
-                res.status(200).json(result({safeNo: safeRows[0].SAFE_VNO}));
-                return;
+                // 세종에서 먼저 풀려 다른 고객에게 갔을 수 있어, 지금도 이 고객에게 연결돼 있을 때만 재사용한다
+                const vno = safeRows[0].SAFE_VNO;
+                const mapping = await checkSafeNoMapping(vno, rcvNoHash);
+
+                if(mapping === 'MATCH') {
+
+                    res.status(200).json(result({safeNo: vno}));
+                    return;
+                }
+
+                // 다른 고객 · 해제 상태면 이 행은 더 이상 우리 번호가 아니다(해제하지 않고 지운다). 조회 실패면 행은 두고 새로 받는다(아래 INSERT 가 덮어씀)
+                if(mapping === 'OTHER') {
+
+                    logSafeNoMismatch('전화 걸기 재사용', oderUserId, vno);
+
+                    await conn.query(`
+                        DELETE FROM T_ODER_SAFE_NO
+                         WHERE ODER_USER_ID = ?
+                           AND SAFE_VNO = ?
+                    `, [oderUserId, vno]);
+                }
             }
 
             const {endDays, agingDays} = getSafeNoDays();

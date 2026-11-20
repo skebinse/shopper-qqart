@@ -83,12 +83,12 @@ export function isSafeNoConfigured() {
  * @param body
  * @returns {Promise<{code: string, message?: string, data?: any}>}
  */
-async function callSafeNoApi(path, body, timeoutMs = 10000) {
+async function callSafeNoApi(path, body, timeoutMs = 10000, method = 'POST') {
 
     const baseUrl = process.env.SAFE_NO_API_URL.replace(/\/+$/, '');
 
     const res = await fetch(`${baseUrl}/${path}`, {
-        method: 'POST',
+        method,
         headers: {
             'Authorization': 'Bearer ' + process.env.SAFE_NO_API_TOKEN,
             'Content-Type': 'application/json',
@@ -148,13 +148,65 @@ export async function clearSafeNo(vno, timeoutMs = 10000) {
 }
 
 /**
+ * 저장해 둔 050 번호가 세종에서 지금도 이 고객 번호로 연결돼 있는지 (050서비스 조회 2.1.2)
+ * DB 기록만 믿으면, 세종에서 먼저 풀려 다른 고객에게 간 번호를 재사용 · 해제할 수 있다
+ * - MATCH: 사용 중(status Y) · 같은 채널 · 착신번호 해시가 같음
+ * - OTHER: 할당 안 됨(6005) · 해제 상태 · 다른 번호로 연결됨
+ * - UNKNOWN: 조회 실패(접속 오류 · 그 외 코드)
+ * @param vno
+ * @param rcvNoHash
+ * @returns {Promise<'MATCH'|'OTHER'|'UNKNOWN'>}
+ */
+export async function checkSafeNoMapping(vno, rcvNoHash) {
+
+    try {
+
+        const res = await callSafeNoApi(`050biz/v1/service/${encodeURIComponent(vno)}`, undefined, 5000, 'GET');
+        const code = String(res?.code ?? '');
+
+        if(code === '6005') {
+
+            return 'OTHER';
+        }
+
+        if(code !== '0000') {
+
+            return 'UNKNOWN';
+        }
+
+        const data = res?.data || {};
+        const sameChannel = !data.channelId || data.channelId === process.env.SAFE_NO_CHANNEL_ID;
+
+        return data.status === 'Y' && sameChannel && !!data.rcvNo1 && hashRcvNo(data.rcvNo1) === rcvNoHash ? 'MATCH' : 'OTHER';
+    } catch (e) {
+
+        return 'UNKNOWN';
+    }
+}
+
+/**
+ * 저장된 번호가 다른 고객에게 넘어가 있던 경우 — 원인 추적용으로 눈에 띄게 남긴다(고객 번호는 남기지 않음)
+ * @param where
+ * @param oderUserId
+ * @param vno
+ */
+export function logSafeNoMismatch(where, oderUserId, vno) {
+
+    const now = new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date());
+
+    console.error(`[SAFE_NO_MISMATCH] ${now} ${where} — 저장된 050 이 이 고객에게 연결돼 있지 않음 oderUserId=${oderUserId} vno=${vno}`);
+}
+
+/**
  * 배달 완료 후 그 주문의 안심번호 해제 — 응답을 보낸 뒤 호출한다
- * - 해제 성공(0000) 또는 이미 풀림(6005) → T_ODER_SAFE_NO 행 삭제
- * - 실패 → 행은 두고 endDay 자동 해제에 맡김. 예외를 던지지 않는다(배달 완료에 영향 없음)
- * - 로그에 고객 번호는 남기지 않는다
+ * - 해제 전에 세종 조회로 지금도 이 고객에게 연결된 번호인지 확인한다(다른 고객에게 간 번호를 끊지 않게)
+ *   - 연결돼 있음 → 해제, 성공(0000) 또는 이미 풀림(6005)이면 행 삭제
+ *   - 이미 다른 고객 · 해제 상태 → 해제하지 않고 행만 삭제
+ *   - 조회 실패 → 해제하지 않고 행은 둠(endDay 자동 해제에 맡김)
+ * - 예외를 던지지 않는다(배달 완료에 영향 없음). 로그에 고객 번호는 남기지 않는다
  * @param conn
  * @param oderUserId
- * @returns {Promise<'NONE'|'CLEARED'|'FAILED'>}
+ * @returns {Promise<'NONE'|'CLEARED'|'SKIPPED'|'FAILED'>}
  */
 export async function releaseSafeNo(conn, oderUserId) {
 
@@ -162,6 +214,7 @@ export async function releaseSafeNo(conn, oderUserId) {
 
         const [rows] = await conn.query(`
             SELECT SAFE_VNO
+                 , RCV_NO_HASH
               FROM T_ODER_SAFE_NO
              WHERE ODER_USER_ID = ?
         `, [oderUserId]);
@@ -178,6 +231,28 @@ export async function releaseSafeNo(conn, oderUserId) {
         }
 
         const vno = rows[0].SAFE_VNO;
+        const mapping = await checkSafeNoMapping(vno, rows[0].RCV_NO_HASH);
+
+        if(mapping === 'UNKNOWN') {
+
+            console.log(new Intl.DateTimeFormat( 'ko', { dateStyle: 'medium', timeStyle: 'medium'  } ).format(new Date()));
+            console.log('safeNo clear 건너뜀 · 세종 조회 실패', oderUserId, vno);
+            return 'FAILED';
+        }
+
+        if(mapping === 'OTHER') {
+
+            logSafeNoMismatch('배달 완료 해제', oderUserId, vno);
+
+            await conn.query(`
+                DELETE FROM T_ODER_SAFE_NO
+                 WHERE ODER_USER_ID = ?
+                   AND SAFE_VNO = ?
+            `, [oderUserId, vno]);
+
+            return 'SKIPPED';
+        }
+
         const clear = await clearSafeNo(vno, 5000).catch(e => ({code: 'FETCH', message: String(e?.message || e)}));
 
         if(clear.code !== '0000' && clear.code !== '6005') {
